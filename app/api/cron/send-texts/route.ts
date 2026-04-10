@@ -81,6 +81,10 @@ export async function GET(req: NextRequest) {
         to: schedule.phone,
       })
       await db.query(`UPDATE schedules SET last_texted_at = $1 WHERE id = $2`, [now.toISOString(), schedule.id])
+      await db.query(
+        `INSERT INTO messages (user_id, message_text, sent_at) VALUES ($1, $2, $3)`,
+        [schedule.user_id, message, now.toISOString()]
+      )
       results.sent++
     } catch (err) {
       console.error(`Error sending to ${schedule.phone}:`, err)

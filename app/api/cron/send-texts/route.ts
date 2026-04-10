@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getSupabase } from '@/lib/supabase'
+import { getDb } from '@/lib/db'
 import twilio from 'twilio'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
@@ -28,72 +28,59 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const supabase = getSupabase()
+  const db = getDb()
   const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID!, process.env.TWILIO_AUTH_TOKEN!)
   const now = new Date()
   const currentTime = getCurrentTimeString()
 
-  const { data: schedules, error } = await supabase
-    .from('schedules')
-    .select(`
-      id,
-      user_id,
-      frequency_minutes,
-      start_time,
-      end_time,
-      last_texted_at,
-      users ( phone ),
-      goals ( goal_text )
-    `)
-    .eq('active', true)
-
-  if (error) {
-    console.error('Fetch schedules error:', error)
-    return NextResponse.json({ error: 'Failed to fetch schedules' }, { status: 500 })
-  }
+  const { rows: schedules } = await db.query(`
+    SELECT
+      s.id,
+      s.frequency_minutes,
+      s.start_time,
+      s.end_time,
+      s.last_texted_at,
+      u.phone,
+      g.goal_text
+    FROM schedules s
+    JOIN users u ON u.id = s.user_id
+    JOIN goals g ON g.user_id = s.user_id AND g.active = true
+    WHERE s.active = true
+  `)
 
   const results = { sent: 0, skipped: 0, errors: 0 }
 
-  for (const schedule of schedules ?? []) {
+  for (const schedule of schedules) {
     if (!isWithinWindow(currentTime, schedule.start_time, schedule.end_time)) {
       results.skipped++
       continue
     }
 
     if (schedule.last_texted_at) {
-      const lastTexted = new Date(schedule.last_texted_at)
-      const minutesSince = (now.getTime() - lastTexted.getTime()) / 60000
+      const minutesSince = (now.getTime() - new Date(schedule.last_texted_at).getTime()) / 60000
       if (minutesSince < schedule.frequency_minutes) {
         results.skipped++
         continue
       }
     }
 
-    const user = Array.isArray(schedule.users) ? schedule.users[0] : schedule.users
-    const goal = Array.isArray(schedule.goals) ? schedule.goals[0] : schedule.goals
-
-    if (!user?.phone || !goal?.goal_text) {
-      results.skipped++
-      continue
-    }
-
     try {
-      const message = await generateMessage(goal.goal_text)
+      const message = await generateMessage(schedule.goal_text)
 
       await twilioClient.messages.create({
         body: message,
         from: process.env.TWILIO_PHONE_NUMBER!,
-        to: user.phone,
+        to: schedule.phone,
       })
 
-      await supabase
-        .from('schedules')
-        .update({ last_texted_at: now.toISOString() })
-        .eq('id', schedule.id)
+      await db.query(
+        `UPDATE schedules SET last_texted_at = $1 WHERE id = $2`,
+        [now.toISOString(), schedule.id]
+      )
 
       results.sent++
     } catch (err) {
-      console.error(`Error sending to ${user.phone}:`, err)
+      console.error(`Error sending to ${schedule.phone}:`, err)
       results.errors++
     }
   }

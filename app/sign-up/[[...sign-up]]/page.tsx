@@ -12,11 +12,12 @@ export default function SignUpPage() {
     }}>
       <SignUp appearance={{
         variables: {
-          colorBackground: "#111",
+          colorBackground: "#1a1a1a",
           colorText: "#f0f0f0",
           colorPrimary: "#dc2626",
-          colorInputBackground: "#1a1a1a",
-          colorInputText: "#f0f0f0",
+          colorInputBackground: "#2a2a2a",
+          colorInputText: "#ffffff",
+          colorNeutral: "#f0f0f0",
         },
       }} />
     </div>

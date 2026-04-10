@@ -520,7 +520,7 @@ export default function MoggedAI() {
       <div style={styles.root}>
         <div style={styles.grid} />
         <nav style={styles.nav}>
-          <div style={styles.logo}>MOGGED<span style={styles.logoAccent}>AI</span></div>
+          <div style={{ ...styles.logo, cursor: "pointer" }} onClick={() => setPage("landing")}>MOGGED<span style={styles.logoAccent}>AI</span></div>
         </nav>
         <div style={styles.onboard}>
           <div style={styles.stepIndicator}>
@@ -623,7 +623,7 @@ export default function MoggedAI() {
       <div style={styles.root}>
         <div style={styles.grid} />
         <nav style={styles.nav}>
-          <div style={styles.logo}>MOGGED<span style={styles.logoAccent}>AI</span></div>
+          <div style={{ ...styles.logo, cursor: "pointer" }} onClick={() => setPage("landing")}>MOGGED<span style={styles.logoAccent}>AI</span></div>
         </nav>
         <div style={styles.success}>
           <div style={{ fontSize: "3rem", marginBottom: "2rem", color: "#dc2626" }}>⚡</div>

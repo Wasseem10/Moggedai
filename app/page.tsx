@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 const MESSAGES = [
   "bro you've been 'about to start' for 3 hours. get up.",
@@ -81,7 +82,7 @@ export default function MoggedAI() {
         }),
       });
       if (!res.ok) throw new Error("Something went wrong");
-      setPage("success");
+      router.push("/dashboard");
     } catch {
       setSubmitError("Failed to sign up. Try again.");
     } finally {
@@ -89,6 +90,7 @@ export default function MoggedAI() {
     }
   };
 
+  const router = useRouter();
   const noise = Math.sin(ticker * 0.3) * 2;
 
   const styles: Record<string, React.CSSProperties> = {
@@ -651,7 +653,10 @@ export default function MoggedAI() {
       <div style={styles.scanline} />
       <nav style={styles.nav}>
         <div style={styles.logo}>MOGGED<span style={styles.logoAccent}>AI</span></div>
-        <button style={styles.navBtn} onClick={() => setPage("onboard")}>GET STARTED</button>
+        <div style={{ display: "flex", gap: "0.75rem" }}>
+          <button style={{ ...styles.navBtn, borderColor: "#333", color: "#555" }} onClick={() => router.push("/sign-in")}>LOG IN</button>
+          <button style={styles.navBtn} onClick={() => setPage("onboard")}>GET STARTED</button>
+        </div>
       </nav>
       <div style={styles.hero}>
         <div style={styles.tag}>AI ACCOUNTABILITY · SMS · NO MERCY</div>

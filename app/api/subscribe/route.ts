@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { auth } from '@clerk/nextjs/server'
 import { getDb } from '@/lib/db'
 
 export async function POST(req: NextRequest) {
   try {
+    const { userId: clerkId } = await auth()
     const { phone, goal, frequency_minutes, start_time, end_time } = await req.json()
 
     if (!phone || !goal || !frequency_minutes || !start_time || !end_time) {
@@ -11,12 +13,12 @@ export async function POST(req: NextRequest) {
 
     const db = getDb()
 
-    // Upsert user by phone
+    // Upsert user by phone, store clerk_id if logged in
     const { rows: userRows } = await db.query(
-      `INSERT INTO users (phone) VALUES ($1)
-       ON CONFLICT (phone) DO UPDATE SET phone = EXCLUDED.phone
+      `INSERT INTO users (phone, clerk_id) VALUES ($1, $2)
+       ON CONFLICT (phone) DO UPDATE SET clerk_id = COALESCE($2, users.clerk_id)
        RETURNING id`,
-      [phone]
+      [phone, clerkId ?? null]
     )
     const userId = userRows[0].id
 

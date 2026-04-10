@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { getSupabase } from '@/lib/supabase'
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,6 +8,8 @@ export async function POST(req: NextRequest) {
     if (!phone || !goal || !frequency_minutes || !start_time || !end_time) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
+
+    const supabase = getSupabase()
 
     // Upsert user by phone
     const { data: user, error: userError } = await supabase

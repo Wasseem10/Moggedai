@@ -155,7 +155,7 @@ export default function MoggedAI() {
       flexDirection: "column",
       justifyContent: "center",
       alignItems: "flex-start",
-      padding: "8rem 2rem 4rem",
+      padding: "5rem 2rem 2rem",
       maxWidth: "900px",
       margin: "0 auto",
       position: "relative",
@@ -170,7 +170,7 @@ export default function MoggedAI() {
       display: "inline-block",
     },
     h1: {
-      fontSize: "clamp(3.5rem, 10vw, 7rem)",
+      fontSize: "clamp(2.8rem, 8vw, 5.5rem)",
       fontWeight: "700",
       lineHeight: 0.95,
       letterSpacing: "-0.02em",

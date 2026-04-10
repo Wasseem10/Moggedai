@@ -3,15 +3,27 @@ import { getDb } from '@/lib/db'
 import twilio from 'twilio'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
-function getCurrentTimeString(): string {
-  const now = new Date()
-  const hours = now.getUTCHours().toString().padStart(2, '0')
-  const minutes = now.getUTCMinutes().toString().padStart(2, '0')
-  return `${hours}:${minutes}`
+function getLocalTime(timezone: string): string {
+  try {
+    const now = new Date()
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: timezone,
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }).formatToParts(now)
+    const h = parts.find(p => p.type === 'hour')?.value ?? '00'
+    const m = parts.find(p => p.type === 'minute')?.value ?? '00'
+    return `${h.padStart(2, '0')}:${m.padStart(2, '0')}`
+  } catch {
+    // fallback to UTC
+    const now = new Date()
+    return `${now.getUTCHours().toString().padStart(2,'0')}:${now.getUTCMinutes().toString().padStart(2,'0')}`
+  }
 }
 
-function isWithinWindow(currentTime: string, startTime: string, endTime: string): boolean {
-  return currentTime >= startTime && currentTime <= endTime
+function isWithinWindow(current: string, start: string, end: string): boolean {
+  return current >= start && current <= end
 }
 
 async function generateMessage(goalText: string): Promise<string> {
@@ -31,17 +43,11 @@ export async function GET(req: NextRequest) {
   const db = getDb()
   const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID!, process.env.TWILIO_AUTH_TOKEN!)
   const now = new Date()
-  const currentTime = getCurrentTimeString()
 
   const { rows: schedules } = await db.query(`
-    SELECT
-      s.id,
-      s.frequency_minutes,
-      s.start_time,
-      s.end_time,
-      s.last_texted_at,
-      u.phone,
-      g.goal_text
+    SELECT s.id, s.frequency_minutes, s.start_time, s.end_time,
+           s.last_texted_at, s.timezone,
+           u.phone, g.goal_text
     FROM schedules s
     JOIN users u ON u.id = s.user_id
     JOIN goals g ON g.user_id = s.user_id AND g.active = true
@@ -51,7 +57,10 @@ export async function GET(req: NextRequest) {
   const results = { sent: 0, skipped: 0, errors: 0 }
 
   for (const schedule of schedules) {
-    if (!isWithinWindow(currentTime, schedule.start_time, schedule.end_time)) {
+    const tz = schedule.timezone || 'America/New_York'
+    const localTime = getLocalTime(tz)
+
+    if (!isWithinWindow(localTime, schedule.start_time, schedule.end_time)) {
       results.skipped++
       continue
     }
@@ -66,18 +75,12 @@ export async function GET(req: NextRequest) {
 
     try {
       const message = await generateMessage(schedule.goal_text)
-
       await twilioClient.messages.create({
         body: message,
         from: process.env.TWILIO_PHONE_NUMBER!,
         to: schedule.phone,
       })
-
-      await db.query(
-        `UPDATE schedules SET last_texted_at = $1 WHERE id = $2`,
-        [now.toISOString(), schedule.id]
-      )
-
+      await db.query(`UPDATE schedules SET last_texted_at = $1 WHERE id = $2`, [now.toISOString(), schedule.id])
       results.sent++
     } catch (err) {
       console.error(`Error sending to ${schedule.phone}:`, err)

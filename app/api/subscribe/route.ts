@@ -5,7 +5,7 @@ import { getDb } from '@/lib/db'
 export async function POST(req: NextRequest) {
   try {
     const { userId: clerkId } = await auth()
-    const { phone, goal, frequency_minutes, start_time, end_time } = await req.json()
+    const { phone, goal, frequency_minutes, start_time, end_time, timezone } = await req.json()
 
     if (!phone || !goal || !frequency_minutes || !start_time || !end_time) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
@@ -13,7 +13,6 @@ export async function POST(req: NextRequest) {
 
     const db = getDb()
 
-    // Upsert user by phone, store clerk_id if logged in
     const { rows: userRows } = await db.query(
       `INSERT INTO users (phone, clerk_id) VALUES ($1, $2)
        ON CONFLICT (phone) DO UPDATE SET clerk_id = COALESCE($2, users.clerk_id)
@@ -22,21 +21,18 @@ export async function POST(req: NextRequest) {
     )
     const userId = userRows[0].id
 
-    // Deactivate existing goals and schedules
     await db.query(`UPDATE goals SET active = false WHERE user_id = $1`, [userId])
     await db.query(`UPDATE schedules SET active = false WHERE user_id = $1`, [userId])
 
-    // Insert new goal
     await db.query(
       `INSERT INTO goals (user_id, goal_text, active) VALUES ($1, $2, true)`,
       [userId, goal]
     )
 
-    // Insert new schedule
     await db.query(
-      `INSERT INTO schedules (user_id, frequency_minutes, start_time, end_time, active)
-       VALUES ($1, $2, $3, $4, true)`,
-      [userId, frequency_minutes, start_time, end_time]
+      `INSERT INTO schedules (user_id, frequency_minutes, start_time, end_time, timezone, active)
+       VALUES ($1, $2, $3, $4, $5, true)`,
+      [userId, frequency_minutes, start_time, end_time, timezone || 'America/New_York']
     )
 
     return NextResponse.json({ success: true })

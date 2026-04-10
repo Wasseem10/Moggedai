@@ -128,7 +128,7 @@ export default function MoggedAI() {
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      padding: "1.25rem 2rem",
+      padding: "1rem 1.25rem",
       borderBottom: "1px solid rgba(220,38,38,0.2)",
       background: "rgba(8,8,8,0.9)",
       backdropFilter: "blur(8px)",
@@ -150,6 +150,7 @@ export default function MoggedAI() {
       cursor: "pointer",
       fontFamily: "inherit",
       transition: "all 0.15s",
+      whiteSpace: "nowrap",
     },
     hero: {
       minHeight: "100vh",

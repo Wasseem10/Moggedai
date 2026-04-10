@@ -23,3 +23,19 @@ body {
   margin: 0;
   padding: 0;
 }
+
+/* Mobile responsive fixes */
+@media (max-width: 480px) {
+  /* Shrink nav buttons on small screens */
+  nav button {
+    padding: 0.35rem 0.6rem !important;
+    font-size: 0.6rem !important;
+    letter-spacing: 0.05em !important;
+    white-space: nowrap;
+  }
+
+  /* Reduce hero top padding */
+  .hero-section {
+    padding-top: 4rem !important;
+  }
+}

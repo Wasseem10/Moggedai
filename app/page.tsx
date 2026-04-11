@@ -336,6 +336,15 @@ export default function MoggedAI() {
   // ── LANDING PAGE ──────────────────────────────────────────────────────────
   return (
     <div style={root}>
+      <style>{`
+        .who-grid { grid-template-columns: repeat(4, 1fr); }
+        .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
+        @media (max-width: 640px) {
+          .who-grid { grid-template-columns: repeat(2, 1fr); }
+          .footer-grid { grid-template-columns: 1fr 1fr 1fr; }
+          .footer-brand { grid-column: 1 / -1; }
+        }
+      `}</style>
       <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
       <div style={grid}/>
       <div style={{ position:"fixed", top:`${(ticker*2)%100}%`, left:0, right:0, height:"2px", background:"rgba(220,38,38,0.08)", pointerEvents:"none", transition:"none" }}/>
@@ -437,7 +446,7 @@ export default function MoggedAI() {
         <p style={{ fontSize:"0.85rem", color:"#aaa", lineHeight:"1.8", marginBottom:"2rem", maxWidth:"520px" }}>
           If you know what you should be doing but keep finding reasons not to — this is for you.
         </p>
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"1px", background:"#1a1a1a", border:"1px solid #1a1a1a" }}>
+        <div className="who-grid" style={{ display:"grid", gap:"1px", background:"#1a1a1a", border:"1px solid #1a1a1a" }}>
           {[
             { emoji:"📚", who:"Students",      line:"You study for 15 min then end up on YouTube for 2 hours." },
             { emoji:"💻", who:"Builders",       line:"Always planning the side project. Never actually building it." },
@@ -497,10 +506,10 @@ export default function MoggedAI() {
         <div style={{ maxWidth:"920px", margin:"0 auto" }}>
 
           {/* Top row: brand + columns */}
-          <div style={{ display:"grid", gridTemplateColumns:"2fr 1fr 1fr 1fr", gap:"2rem", marginBottom:"2.5rem" }}>
+          <div className="footer-grid" style={{ display:"grid", gap:"2rem", marginBottom:"2.5rem" }}>
 
             {/* Brand */}
-            <div>
+            <div className="footer-brand">
               <div style={{ fontSize:"1.1rem", fontWeight:"700", letterSpacing:"0.15em", color:"#f0f0f0", marginBottom:"0.75rem" }}>
                 MOGGED<span style={{ color:"#dc2626" }}>AI</span>
               </div>

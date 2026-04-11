@@ -440,8 +440,105 @@ export default function MoggedAI() {
         <p style={{ fontSize:"0.6rem", color:"#1a1a1a", marginTop:"1rem" }}>US numbers only · Reply STOP to unsubscribe anytime</p>
       </div>
 
-      <footer style={{ borderTop:"1px solid #0e0e0e", padding:"1.5rem", textAlign:"center", fontSize:"0.6rem", color:"#1a1a1a", letterSpacing:"0.1em" }}>
-        MOGGEDAI — AI ACCOUNTABILITY VIA SMS · © 2026
+      {/* Footer */}
+      <footer style={{ borderTop:"1px solid #1a1a1a", background:"#050505", padding:"3rem 1.5rem 2rem", fontFamily:"'Space Mono','Courier New',monospace" }}>
+        <div style={{ maxWidth:"920px", margin:"0 auto" }}>
+
+          {/* Top row: brand + columns */}
+          <div style={{ display:"grid", gridTemplateColumns:"2fr 1fr 1fr 1fr", gap:"2rem", marginBottom:"2.5rem" }}>
+
+            {/* Brand */}
+            <div>
+              <div style={{ fontSize:"1.1rem", fontWeight:"700", letterSpacing:"0.15em", color:"#f0f0f0", marginBottom:"0.75rem" }}>
+                MOGGED<span style={{ color:"#dc2626" }}>AI</span>
+              </div>
+              <p style={{ fontSize:"0.65rem", color:"#444", lineHeight:"1.8", margin:"0 0 1.25rem" }}>
+                The AI accountability coach that texts you all day and doesn&apos;t let you make excuses. Set it once. Get mogged forever.
+              </p>
+              <div style={{ display:"flex", gap:"0.75rem" }}>
+                {[
+                  { label:"𝕏", href:"https://twitter.com/moggedai" },
+                  { label:"IG", href:"https://instagram.com/moggedai" },
+                  { label:"TT", href:"https://tiktok.com/@moggedai" },
+                ].map(s => (
+                  <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
+                    style={{ display:"flex", alignItems:"center", justifyContent:"center", width:"32px", height:"32px", border:"1px solid #1a1a1a", color:"#444", fontSize:"0.65rem", fontWeight:"700", textDecoration:"none", letterSpacing:"0.05em" }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor="#dc2626"; (e.currentTarget as HTMLAnchorElement).style.color="#dc2626"; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor="#1a1a1a"; (e.currentTarget as HTMLAnchorElement).style.color="#444"; }}
+                  >{s.label}</a>
+                ))}
+              </div>
+            </div>
+
+            {/* Product */}
+            <div>
+              <div style={{ fontSize:"0.5rem", letterSpacing:"0.25em", color:"#333", marginBottom:"1rem" }}>PRODUCT</div>
+              {[
+                { label:"How It Works", href:"#how-it-works" },
+                { label:"Pricing",      href:"#pricing" },
+                { label:"FAQ",          href:"/faq" },
+                { label:"Get Started",  href:"#", onClick: true },
+              ].map(l => (
+                <div key={l.label} style={{ marginBottom:"0.6rem" }}>
+                  <a href={l.href}
+                    style={{ fontSize:"0.65rem", color:"#444", textDecoration:"none", letterSpacing:"0.05em" }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color="#f0f0f0"; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color="#444"; }}
+                  >{l.label}</a>
+                </div>
+              ))}
+            </div>
+
+            {/* Support */}
+            <div>
+              <div style={{ fontSize:"0.5rem", letterSpacing:"0.25em", color:"#333", marginBottom:"1rem" }}>SUPPORT</div>
+              {[
+                { label:"FAQ",             href:"/faq" },
+                { label:"Contact Us",      href:"mailto:support@moggedai.com" },
+                { label:"SMS Help",        href:"mailto:support@moggedai.com" },
+                { label:"Report a Bug",    href:"mailto:support@moggedai.com?subject=Bug Report" },
+              ].map(l => (
+                <div key={l.label} style={{ marginBottom:"0.6rem" }}>
+                  <a href={l.href}
+                    style={{ fontSize:"0.65rem", color:"#444", textDecoration:"none", letterSpacing:"0.05em" }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color="#f0f0f0"; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color="#444"; }}
+                  >{l.label}</a>
+                </div>
+              ))}
+            </div>
+
+            {/* Legal */}
+            <div>
+              <div style={{ fontSize:"0.5rem", letterSpacing:"0.25em", color:"#333", marginBottom:"1rem" }}>LEGAL</div>
+              {[
+                { label:"Privacy Policy",    href:"/privacy" },
+                { label:"Terms of Service",  href:"/terms" },
+                { label:"SMS Policy",        href:"/sms-policy" },
+                { label:"Unsubscribe",       href:"#unsubscribe" },
+              ].map(l => (
+                <div key={l.label} style={{ marginBottom:"0.6rem" }}>
+                  <a href={l.href}
+                    style={{ fontSize:"0.65rem", color:"#444", textDecoration:"none", letterSpacing:"0.05em" }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color="#f0f0f0"; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color="#444"; }}
+                  >{l.label}</a>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Bottom bar */}
+          <div style={{ borderTop:"1px solid #111", paddingTop:"1.5rem", display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap", gap:"0.75rem" }}>
+            <div style={{ fontSize:"0.55rem", color:"#2a2a2a", letterSpacing:"0.1em" }}>
+              © 2026 MOGGEDAI · ALL RIGHTS RESERVED
+            </div>
+            <div style={{ fontSize:"0.55rem", color:"#2a2a2a", letterSpacing:"0.08em" }}>
+              US NUMBERS ONLY · TEXT STOP TO UNSUBSCRIBE ANYTIME
+            </div>
+          </div>
+
+        </div>
       </footer>
     </div>
   );

@@ -120,7 +120,7 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    const internalId: number = userRes.rows[0].id
+    const internalId: string = userRes.rows[0].id
 
     // Handle pause/resume toggle
     if (typeof body.active === 'boolean') {

@@ -28,14 +28,6 @@ export async function POST(req: NextRequest) {
     )
     const userId = userRows[0].id
 
-    // Also link by clerk_id in case phone changed
-    if (clerkId) {
-      await db.query(
-        `UPDATE users SET clerk_id = $1 WHERE id = $2`,
-        [clerkId, userId]
-      )
-    }
-
     // Deactivate old habits & schedules for clean slate
     await db.query(`UPDATE habits   SET active = false WHERE user_id = $1`, [userId])
     await db.query(`UPDATE schedules SET active = false WHERE user_id = $1`, [userId])

@@ -352,7 +352,7 @@ export default function MoggedAI() {
       <nav style={nav}>
         <div style={logoS}>MOGGED<span style={{ color:"#0ea5e9" }}>AI</span></div>
         <div style={{ display:"flex", gap:"0.5rem" }}>
-          <button style={{ ...navBtn, borderColor:"#222", color:"#444" }} onClick={() => router.push(isSignedIn ? "/dashboard" : "/sign-in")}>
+          <button style={navBtn} onClick={() => router.push(isSignedIn ? "/dashboard" : "/sign-in")}>
             {isSignedIn ? "DASHBOARD" : "LOG IN"}
           </button>
           <button style={navBtn} onClick={() => isSignedIn ? router.push("/dashboard") : setPage("onboard")}>GET STARTED</button>
@@ -369,7 +369,7 @@ export default function MoggedAI() {
           <p style={{ fontSize:"clamp(0.9rem,2vw,1.05rem)", color:"#aaa", lineHeight:"2.5rem", margin:0 }}>{MESSAGES[currentMsg]}</p>
         </div>
         <p style={{ fontSize:"clamp(0.95rem,2vw,1.05rem)", color:"#aaa", maxWidth:"500px", lineHeight:"1.9", marginBottom:"2rem" }}>
-          Set up your habits once. We text you all day, every day. Reply &quot;done&quot; when you finish. No reply? We follow up. No app. No dashboard. Just results.
+          Your AI coach lives in your texts. It checks in on your habits all day, calls you out when you go quiet, and never lets you off the hook. Two minutes to set up. Zero excuses after.
         </p>
         <div style={{ display:"flex", gap:"1rem", flexWrap:"wrap", marginBottom:"5rem" }}>
           <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem 2.5rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : setPage("onboard")}>

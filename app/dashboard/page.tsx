@@ -101,7 +101,7 @@ export default function Dashboard() {
   const { user: clerkUser } = useUser()
 
   const [view, setView] = useState<View>('overview')
-  const [selectedCampaign, setSelectedCampaign] = useState<Habit | null>(null)
+  const [selectedMission, setSelectedMission] = useState<Habit | null>(null)
 
   const [userData, setUserData] = useState<UserData | null>(null)
   const [habits, setHabits] = useState<Habit[]>([])
@@ -206,17 +206,17 @@ export default function Dashboard() {
               habits={habits}
               stats={stats}
               greeting={greeting()}
-              onSelectCampaign={(h) => { setSelectedCampaign(h); setView('detail') }}
-              onAddCampaign={() => { setView('add'); setAddStep(1); setAddDraft(defaultDraft()) }}
+              onSelectMission={(h) => { setSelectedMission(h); setView('detail') }}
+              onAddMission={() => { setView('add'); setAddStep(1); setAddDraft(defaultDraft()) }}
               onToggleActive={handleToggleActive}
             />
           )}
-          {view === 'detail' && selectedCampaign && (
+          {view === 'detail' && selectedMission && (
             <DetailView
-              habit={selectedCampaign}
-              messages={recentMessages.filter(m => m.habit_id === selectedCampaign.id)}
+              habit={selectedMission}
+              messages={recentMessages.filter(m => m.habit_id === selectedMission.id)}
               onBack={() => setView('overview')}
-              onDelete={() => handleDeleteHabit(selectedCampaign.id)}
+              onDelete={() => handleDeleteHabit(selectedMission.id)}
             />
           )}
           {view === 'add' && (
@@ -292,8 +292,8 @@ function OverviewView({
   habits,
   stats,
   greeting,
-  onSelectCampaign,
-  onAddCampaign,
+  onSelectMission,
+  onAddMission,
   onToggleActive,
 }: {
   clerkUser: ReturnType<typeof useUser>['user']
@@ -301,8 +301,8 @@ function OverviewView({
   habits: Habit[]
   stats: Stats
   greeting: string
-  onSelectCampaign: (h: Habit) => void
-  onAddCampaign: () => void
+  onSelectMission: (h: Habit) => void
+  onAddMission: () => void
   onToggleActive: () => void
 }) {
   const displayName = clerkUser?.firstName || userData?.phone || ''
@@ -344,11 +344,11 @@ function OverviewView({
         />
       </div>
 
-      {/* Campaigns */}
+      {/* Missions */}
       <div style={{ marginBottom: '2rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
           <span style={{ fontFamily: MONO, fontSize: '0.55rem', letterSpacing: '0.2em', color: C.text3 }}>
-            MY CAMPAIGNS
+            MY MISSIONS
           </span>
           <span style={{
             background: C.s2,
@@ -364,11 +364,11 @@ function OverviewView({
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {habits.map(h => (
-            <CampaignCard key={h.id} habit={h} onClick={() => onSelectCampaign(h)} />
+            <MissionCard key={h.id} habit={h} onClick={() => onSelectMission(h)} />
           ))}
           {habits.length < 5 && (
             <button
-              onClick={onAddCampaign}
+              onClick={onAddMission}
               style={{
                 width: '100%',
                 border: `1px dashed ${C.border}`,
@@ -385,7 +385,7 @@ function OverviewView({
             >
               <span style={{ fontSize: '1.4rem', color: C.red, lineHeight: 1 }}>+</span>
               <span style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.1em' }}>
-                Add a campaign
+                Add a mission
               </span>
             </button>
           )}
@@ -454,7 +454,7 @@ function StatBox({ label, value, borderLeft, valueColor }: {
   )
 }
 
-function CampaignCard({ habit, onClick }: { habit: Habit; onClick: () => void }) {
+function MissionCard({ habit, onClick }: { habit: Habit; onClick: () => void }) {
   const timeLabel = habit.time_of_day
     ? TIME_OPTIONS.find(t => t.value === habit.time_of_day)?.sub ?? ''
     : ''
@@ -579,10 +579,10 @@ function DetailView({
           transition: 'all 0.2s',
         }}
       >
-        ← MY CAMPAIGNS
+        ← MY MISSIONS
       </button>
 
-      {/* Campaign Hero */}
+      {/* Mission Hero */}
       <div style={{ marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
           <span style={{ fontSize: '2rem', lineHeight: 1 }}>{habit.emoji}</span>

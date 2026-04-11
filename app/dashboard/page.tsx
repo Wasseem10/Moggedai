@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { useUser, useClerk } from '@clerk/nextjs'
+import { useUser, useClerk, UserButton } from '@clerk/nextjs'
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 

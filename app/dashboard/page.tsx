@@ -320,6 +320,7 @@ export default function Dashboard() {
   const [tagInput, setTagInput] = useState('')
   const [deleteConfirm, setDeleteConfirm] = useState('')
   const [phoneInput, setPhoneInput] = useState('')
+  const [apiError, setApiError] = useState<string | null>(null)
 
   // Saved values for dirty check
   const savedData = useRef<ProfileData | null>(null)
@@ -339,7 +340,13 @@ export default function Dashboard() {
   const loadData = useCallback(async () => {
     try {
       const res = await fetch('/api/user/profile')
-      const d: ProfileData = await res.json()
+      const d = await res.json()
+      if (!res.ok) {
+        setApiError(d.error ?? 'API error')
+        setLoading(false)
+        return
+      }
+      setApiError(null)
       savedData.current = d
       if (d.user) {
         setUserData(d.user)
@@ -352,6 +359,7 @@ export default function Dashboard() {
       }
     } catch (err) {
       console.error('Failed to load profile:', err)
+      setApiError(err instanceof Error ? err.message : 'Network error')
     } finally {
       setLoading(false)
     }
@@ -501,6 +509,25 @@ export default function Dashboard() {
         }}
       >
         loading...
+      </div>
+    )
+  }
+
+  if (apiError) {
+    return (
+      <div style={{ minHeight: '100vh', background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+        <div style={{ background: C.s1, border: `1px solid ${C.red}`, padding: '2rem', maxWidth: '500px', width: '100%', fontFamily: MONO }}>
+          <div style={{ fontSize: '0.6rem', color: C.red, letterSpacing: '0.2em', marginBottom: '0.75rem' }}>DATABASE ERROR</div>
+          <p style={{ color: C.text, fontSize: '0.85rem', marginBottom: '0.5rem' }}>Something went wrong loading your account:</p>
+          <code style={{ display: 'block', background: C.bg, border: `1px solid ${C.border}`, padding: '0.75rem', fontSize: '0.72rem', color: '#f59e0b', marginBottom: '1.5rem', wordBreak: 'break-all', lineHeight: 1.6 }}>{apiError}</code>
+          <p style={{ color: C.text3, fontSize: '0.72rem', marginBottom: '1.5rem', lineHeight: 1.7 }}>
+            If this says <strong style={{color:C.text}}>&quot;column clerk_id does not exist&quot;</strong> — run the SQL from the chat in Railway Postgres Query tab, then refresh.
+          </p>
+          <div style={{ display: 'flex', gap: '0.75rem' }}>
+            <button style={redBtnStyle} onClick={() => { setLoading(true); setApiError(null); loadData(); }}>RETRY</button>
+            <button style={ghostBtnStyle} onClick={() => router.push('/')}>← HOME</button>
+          </div>
+        </div>
       </div>
     )
   }

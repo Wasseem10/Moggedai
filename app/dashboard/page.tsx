@@ -68,17 +68,23 @@ export default function Dashboard() {
   const [customHabitEmoji, setCustomHabitEmoji] = useState("");
 
   const loadData = async () => {
-    const d = await fetch("/api/user").then(r => r.json());
-    if (d.user) {
-      setUserData(d.user);
-      setFreqDraft(d.user.frequency_minutes ?? 60);
-      setStartDraft(d.user.start_time ?? "08:00");
-      setEndDraft(d.user.end_time ?? "22:00");
+    try {
+      const res = await fetch("/api/user");
+      const d = await res.json();
+      if (d.user) {
+        setUserData(d.user);
+        setFreqDraft(d.user.frequency_minutes ?? 60);
+        setStartDraft(d.user.start_time ?? "08:00");
+        setEndDraft(d.user.end_time ?? "22:00");
+      }
+      setHabits(d.habits ?? []);
+      setStats(d.stats ?? { total_texts: 0, total_completions: 0 });
+      setMessages(d.recent_messages ?? []);
+    } catch (err) {
+      console.error("Failed to load user data:", err);
+    } finally {
+      setLoading(false);
     }
-    setHabits(d.habits ?? []);
-    setStats(d.stats ?? { total_texts: 0, total_completions: 0 });
-    setMessages(d.recent_messages ?? []);
-    setLoading(false);
   };
 
   useEffect(() => { loadData(); }, []);

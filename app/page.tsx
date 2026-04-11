@@ -431,22 +431,27 @@ export default function MoggedAI() {
 
       {/* WHO IT'S FOR */}
       <div style={{ padding:"5rem 1.5rem", maxWidth:"920px", margin:"0 auto" }}>
-        <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#555", marginBottom:"2rem", display:"flex", alignItems:"center", gap:"1rem" }}>
+        <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#555", marginBottom:"0.5rem", display:"flex", alignItems:"center", gap:"1rem" }}>
           WHO IT&apos;S FOR <div style={{ flex:1, height:"1px", background:"#1a1a1a" }}/>
         </div>
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))", gap:"1px", background:"#111", border:"1px solid #111" }}>
+        <p style={{ fontSize:"0.85rem", color:"#aaa", lineHeight:"1.8", marginBottom:"2rem", maxWidth:"520px" }}>
+          If you know what you should be doing but keep finding reasons not to — this is for you.
+        </p>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"1px", background:"#1a1a1a", border:"1px solid #1a1a1a" }}>
           {[
-            { emoji:"📚", who:"Students", line:"You study for 15 min then end up on YouTube for 2 hours." },
-            { emoji:"💻", who:"Builders", line:"Always planning the side project. Never actually building it." },
-            { emoji:"💪", who:"Athletes", line:"You skip workouts then feel bad about it all day." },
-            { emoji:"📋", who:"Professionals", line:"Putting off the one task that actually matters." },
-            { emoji:"🎨", who:"Creatives", line:"Waiting for motivation instead of just starting." },
-            { emoji:"🎯", who:"Anyone", line:"Who knows exactly what they should be doing and still doesn't do it." },
+            { emoji:"📚", who:"Students",      line:"You study for 15 min then end up on YouTube for 2 hours." },
+            { emoji:"💻", who:"Builders",       line:"Always planning the side project. Never actually building it." },
+            { emoji:"💪", who:"Athletes",       line:"You skip workouts and feel guilty about it all day." },
+            { emoji:"📋", who:"Professionals",  line:"Putting off the one task that actually matters." },
+            { emoji:"🎨", who:"Creatives",      line:"Waiting for motivation instead of just starting." },
+            { emoji:"🚀", who:"Entrepreneurs",  line:"Busy with everything except the thing that moves the needle." },
+            { emoji:"💆", who:"Anyone Stressed",line:"Overwhelmed, avoiding, and telling yourself tomorrow." },
+            { emoji:"🎯", who:"Everyone Else",  line:"Who knows exactly what they should do and still doesn't do it." },
           ].map(f => (
-            <div key={f.who} style={{ background:"#080808", padding:"1.5rem 1.25rem" }}>
-              <div style={{ fontSize:"1.4rem", marginBottom:"0.6rem" }}>{f.emoji}</div>
-              <div style={{ fontSize:"0.8rem", fontWeight:"700", marginBottom:"0.35rem", letterSpacing:"0.05em" }}>{f.who.toUpperCase()}</div>
-              <div style={{ fontSize:"0.8rem", color:"#aaa", lineHeight:"1.7" }}>{f.line}</div>
+            <div key={f.who} style={{ background:"#080808", padding:"1.75rem 1.25rem" }}>
+              <div style={{ fontSize:"1.6rem", marginBottom:"0.75rem" }}>{f.emoji}</div>
+              <div style={{ fontSize:"0.78rem", fontWeight:"700", marginBottom:"0.5rem", letterSpacing:"0.08em", color:"#f0f0f0" }}>{f.who.toUpperCase()}</div>
+              <div style={{ fontSize:"0.78rem", color:"#aaa", lineHeight:"1.75" }}>{f.line}</div>
             </div>
           ))}
         </div>

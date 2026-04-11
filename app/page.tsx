@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@clerk/nextjs";
 
 const MESSAGES = [
   "you've been 'about to start' for 3 hours. get up.",
@@ -59,6 +60,7 @@ export default function MoggedAI() {
   const [currentMsg, setCurrentMsg] = useState(0);
   const [ticker, setTicker]     = useState(0);
   const router = useRouter();
+  const { isSignedIn } = useAuth();
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
@@ -323,8 +325,10 @@ export default function MoggedAI() {
       <nav style={nav}>
         <div style={logoS}>MOGGED<span style={{ color:"#dc2626" }}>AI</span></div>
         <div style={{ display:"flex", gap:"0.5rem" }}>
-          <button style={{ ...navBtn, borderColor:"#222", color:"#444" }} onClick={() => router.push("/sign-in")}>LOG IN</button>
-          <button style={navBtn} onClick={() => setPage("onboard")}>GET STARTED</button>
+          <button style={{ ...navBtn, borderColor:"#222", color:"#444" }} onClick={() => router.push(isSignedIn ? "/dashboard" : "/sign-in")}>
+            {isSignedIn ? "DASHBOARD" : "LOG IN"}
+          </button>
+          <button style={navBtn} onClick={() => isSignedIn ? router.push("/dashboard") : setPage("onboard")}>GET STARTED</button>
         </div>
       </nav>
 

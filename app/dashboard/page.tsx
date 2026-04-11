@@ -37,7 +37,7 @@ const C = {
   s1: '#131313',
   s2: '#191919',
   border: '#1f1f1f',
-  red: '#38bdf8',
+  red: '#0ea5e9',
   text: '#f0f0f0',
   text2: '#b0b0b0',
   text3: '#707070',

@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 
 const mono = "'Space Mono','Courier New',monospace";
-const C = { bg: "#080808", text: "#f0f0f0", red: "#38bdf8", muted: "#444", border: "#1a1a1a", card: "#0d0d0d" };
+const C = { bg: "#080808", text: "#f0f0f0", red: "#0ea5e9", muted: "#444", border: "#1a1a1a", card: "#0d0d0d" };
 
 const STEPS = [
   {
@@ -88,7 +88,7 @@ export default function HowItWorks() {
   return (
     <div style={{ minHeight: "100vh", background: C.bg, color: C.text, fontFamily: mono }}>
       {/* Nav */}
-      <nav style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 1.5rem", borderBottom: `1px solid rgba(56,189,248,0.2)`, background: "rgba(8,8,8,0.97)", position: "sticky", top: 0, zIndex: 10 }}>
+      <nav style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 1.5rem", borderBottom: `1px solid rgba(14,165,233,0.2)`, background: "rgba(8,8,8,0.97)", position: "sticky", top: 0, zIndex: 10 }}>
         <div style={{ fontSize: "1.1rem", fontWeight: "700", letterSpacing: "0.15em", cursor: "pointer" }} onClick={() => router.push("/")}>
           MOGGED<span style={{ color: C.red }}>AI</span>
         </div>
@@ -103,7 +103,7 @@ export default function HowItWorks() {
       <div style={{ maxWidth: "760px", margin: "0 auto", padding: "3rem 1.25rem 6rem" }}>
         {/* Header */}
         <div style={{ marginBottom: "4rem" }}>
-          <div style={{ fontSize: "0.55rem", letterSpacing: "0.25em", color: C.red, border: `1px solid rgba(56,189,248,0.3)`, padding: "0.25rem 0.7rem", display: "inline-block", marginBottom: "1rem" }}>HOW IT WORKS</div>
+          <div style={{ fontSize: "0.55rem", letterSpacing: "0.25em", color: C.red, border: `1px solid rgba(14,165,233,0.3)`, padding: "0.25rem 0.7rem", display: "inline-block", marginBottom: "1rem" }}>HOW IT WORKS</div>
           <h1 style={{ fontSize: "clamp(2rem,5vw,3rem)", fontWeight: "700", lineHeight: 1.1, margin: "0 0 1rem" }}>
             Set it once.<br /><span style={{ color: C.red }}>Stay accountable forever.</span>
           </h1>
@@ -138,7 +138,7 @@ export default function HowItWorks() {
                         </div>
                       )}
                       {step.sms.reply && (
-                        <div style={{ background: "rgba(56,189,248,0.12)", border: "1px solid rgba(56,189,248,0.2)", borderRadius: "8px 8px 0 8px", padding: "0.6rem 0.8rem", alignSelf: "flex-end", maxWidth: "85%" }}>
+                        <div style={{ background: "rgba(14,165,233,0.12)", border: "1px solid rgba(14,165,233,0.2)", borderRadius: "8px 8px 0 8px", padding: "0.6rem 0.8rem", alignSelf: "flex-end", maxWidth: "85%" }}>
                           <div style={{ fontSize: "0.65rem", color: C.red }}>{step.sms.reply}</div>
                           <div style={{ fontSize: "0.42rem", color: "#555", textAlign: "right", marginTop: "4px" }}>you</div>
                         </div>

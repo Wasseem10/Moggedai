@@ -158,6 +158,12 @@ export async function PATCH(req: NextRequest) {
   if (body.remove_habit_id) {
     await db.query(`UPDATE habits SET active = false WHERE id = $1 AND user_id = $2`, [body.remove_habit_id, uid]);
   }
+  if (body.update_phone) {
+    const clean = body.update_phone.replace(/\D/g, '');
+    if (clean.length === 10) {
+      await db.query(`UPDATE users SET phone = $1 WHERE id = $2`, [`+1${clean}`, uid]);
+    }
+  }
 
   return NextResponse.json({ success: true });
 }

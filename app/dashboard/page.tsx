@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { useUser, UserButton } from '@clerk/nextjs'
+import { useUser, useClerk } from '@clerk/nextjs'
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -99,6 +99,7 @@ const defaultDraft = (): AddDraft => ({
 export default function Dashboard() {
   const router = useRouter()
   const { user: clerkUser } = useUser()
+  const { signOut } = useClerk()
 
   const [view, setView] = useState<View>('overview')
   const [selectedMission, setSelectedMission] = useState<Habit | null>(null)
@@ -182,6 +183,17 @@ export default function Dashboard() {
     await loadData()
   }
 
+  const handleUpdatePhone = async (newPhone: string) => {
+    await fetch('/api/user', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ update_phone: newPhone }),
+    })
+    await loadData()
+  }
+
+  const handleSignOut = () => signOut(() => router.push('/'))
+
   if (loading) {
     return (
       <>
@@ -209,6 +221,8 @@ export default function Dashboard() {
               onSelectMission={(h) => { setSelectedMission(h); setView('detail') }}
               onAddMission={() => { setView('add'); setAddStep(1); setAddDraft(defaultDraft()) }}
               onToggleActive={handleToggleActive}
+              onUpdatePhone={handleUpdatePhone}
+              onSignOut={handleSignOut}
             />
           )}
           {view === 'detail' && selectedMission && (
@@ -295,6 +309,8 @@ function OverviewView({
   onSelectMission,
   onAddMission,
   onToggleActive,
+  onUpdatePhone,
+  onSignOut,
 }: {
   clerkUser: ReturnType<typeof useUser>['user']
   userData: UserData | null
@@ -304,9 +320,14 @@ function OverviewView({
   onSelectMission: (h: Habit) => void
   onAddMission: () => void
   onToggleActive: () => void
+  onUpdatePhone: (phone: string) => Promise<void>
+  onSignOut: () => void
 }) {
   const displayName = clerkUser?.firstName || userData?.phone || ''
   const isActive = userData?.active ?? false
+  const [editingPhone, setEditingPhone] = useState(false)
+  const [phoneInput, setPhoneInput] = useState('')
+  const [phoneLoading, setPhoneLoading] = useState(false)
 
   return (
     <div>
@@ -394,8 +415,75 @@ function OverviewView({
 
       {/* Account Section */}
       <div style={{ borderTop: `1px solid ${C.border}` }}>
-        <AccountRow label="PHONE" value={userData?.phone ?? '—'} />
-        <div style={{ borderTop: `1px solid ${C.border}`, padding: '1rem 0' }}>
+
+        {/* Phone row */}
+        <div style={{ borderBottom: `1px solid ${C.border}`, padding: '1rem 0' }}>
+          <div style={{ fontFamily: MONO, fontSize: '0.5rem', color: C.text3, letterSpacing: '0.15em', marginBottom: '0.4rem' }}>PHONE NUMBER</div>
+          {editingPhone ? (
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+              <input
+                type="tel"
+                value={phoneInput}
+                onChange={e => setPhoneInput(e.target.value)}
+                placeholder="(555) 000-0000"
+                style={{
+                  background: C.s2,
+                  border: `1px solid ${C.border}`,
+                  color: C.text,
+                  fontFamily: MONO,
+                  fontSize: '0.75rem',
+                  padding: '0.5rem 0.75rem',
+                  outline: 'none',
+                  borderRadius: 0,
+                  width: '160px',
+                }}
+              />
+              <button
+                onClick={async () => {
+                  setPhoneLoading(true)
+                  await onUpdatePhone(phoneInput)
+                  setPhoneLoading(false)
+                  setEditingPhone(false)
+                  setPhoneInput('')
+                }}
+                disabled={phoneLoading || phoneInput.replace(/\D/g,'').length !== 10}
+                style={{
+                  background: '#0ea5e9',
+                  border: 'none',
+                  color: '#fff',
+                  fontFamily: MONO,
+                  fontSize: '0.6rem',
+                  letterSpacing: '0.1em',
+                  padding: '0.5rem 0.75rem',
+                  cursor: 'pointer',
+                  opacity: phoneInput.replace(/\D/g,'').length !== 10 ? 0.4 : 1,
+                  borderRadius: 0,
+                }}
+              >
+                {phoneLoading ? 'SAVING...' : 'SAVE'}
+              </button>
+              <button
+                onClick={() => { setEditingPhone(false); setPhoneInput('') }}
+                style={{ background: 'none', border: 'none', color: C.text3, fontFamily: MONO, fontSize: '0.6rem', cursor: 'pointer', padding: '0.5rem' }}
+              >
+                CANCEL
+              </button>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <span style={{ fontFamily: MONO, fontSize: '0.78rem', color: C.text }}>{userData?.phone ?? '—'}</span>
+              <button
+                onClick={() => setEditingPhone(true)}
+                style={{ background: 'none', border: `1px solid ${C.border}`, color: C.text3, fontFamily: MONO, fontSize: '0.55rem', letterSpacing: '0.1em', padding: '0.3rem 0.6rem', cursor: 'pointer', borderRadius: 0 }}
+              >
+                CHANGE
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Pause/Resume */}
+        <div style={{ borderBottom: `1px solid ${C.border}`, padding: '1rem 0' }}>
           <button
             onClick={onToggleActive}
             style={{
@@ -407,17 +495,31 @@ function OverviewView({
               letterSpacing: '0.1em',
               padding: '0.6rem 1rem',
               cursor: 'pointer',
-              transition: 'all 0.2s',
               borderRadius: 0,
             }}
           >
             {isActive ? 'PAUSE ALL TEXTS' : 'RESUME TEXTS'}
           </button>
         </div>
-        <div style={{ borderTop: `1px solid ${C.border}`, padding: '1rem 0' }}>
-          <span style={{ fontFamily: MONO, fontSize: '0.65rem', letterSpacing: '0.1em', color: C.text3, cursor: 'pointer' }}>
+
+        {/* Sign out */}
+        <div style={{ padding: '1rem 0' }}>
+          <button
+            onClick={onSignOut}
+            style={{
+              background: 'none',
+              border: `1px solid ${C.border}`,
+              color: C.text3,
+              fontFamily: MONO,
+              fontSize: '0.65rem',
+              letterSpacing: '0.1em',
+              padding: '0.6rem 1rem',
+              cursor: 'pointer',
+              borderRadius: 0,
+            }}
+          >
             SIGN OUT
-          </span>
+          </button>
         </div>
       </div>
     </div>

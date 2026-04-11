@@ -380,7 +380,7 @@ export default function MoggedAI() {
                 {/* Coach message */}
                 <div style={{ background:"#141414", borderRadius:"10px 10px 10px 0", padding:"0.7rem 0.85rem" }}>
                   <div style={{ fontSize:"0.68rem", color:"#bbb", lineHeight:"1.55" }}>{c.msg}</div>
-                  <div style={{ fontSize:"0.45rem", color:"#333", textAlign:"right", marginTop:"6px" }}>{c.time1}</div>
+                  <div style={{ fontSize:"0.45rem", color:"#666", textAlign:"right", marginTop:"6px" }}>{c.time1}</div>
                 </div>
                 {/* User reply */}
                 <div style={{ background:"rgba(220,38,38,0.12)", border:"1px solid rgba(220,38,38,0.2)", borderRadius:"10px 10px 0 10px", padding:"0.6rem 0.85rem", alignSelf:"flex-end", maxWidth:"80%" }}>
@@ -390,7 +390,7 @@ export default function MoggedAI() {
                 {/* Coach response */}
                 <div style={{ background:"#141414", borderRadius:"10px 10px 10px 0", padding:"0.7rem 0.85rem" }}>
                   <div style={{ fontSize:"0.68rem", color:"#bbb", lineHeight:"1.55" }}>{c.response}</div>
-                  <div style={{ fontSize:"0.45rem", color:"#333", textAlign:"right", marginTop:"6px" }}>{c.time3}</div>
+                  <div style={{ fontSize:"0.45rem", color:"#666", textAlign:"right", marginTop:"6px" }}>{c.time3}</div>
                 </div>
               </div>
             ))}
@@ -405,7 +405,7 @@ export default function MoggedAI() {
             ].map(s => (
               <div key={s.label} style={{ background:"#080808", padding:"1.25rem", textAlign:"center" }}>
                 <div style={{ fontSize:"1.5rem", fontWeight:"700", color:"#dc2626", lineHeight:1 }}>{s.num}</div>
-                <div style={{ fontSize:"0.5rem", color:"#333", letterSpacing:"0.15em", marginTop:"0.3rem" }}>{s.label}</div>
+                <div style={{ fontSize:"0.5rem", color:"#666", letterSpacing:"0.15em", marginTop:"0.3rem" }}>{s.label}</div>
               </div>
             ))}
           </div>
@@ -414,8 +414,8 @@ export default function MoggedAI() {
 
       {/* WHO IT'S FOR */}
       <div style={{ padding:"5rem 1.5rem", maxWidth:"920px", margin:"0 auto" }}>
-        <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#2a2a2a", marginBottom:"2rem", display:"flex", alignItems:"center", gap:"1rem" }}>
-          WHO IT&apos;S FOR <div style={{ flex:1, height:"1px", background:"#111" }}/>
+        <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#555", marginBottom:"2rem", display:"flex", alignItems:"center", gap:"1rem" }}>
+          WHO IT&apos;S FOR <div style={{ flex:1, height:"1px", background:"#1a1a1a" }}/>
         </div>
         <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))", gap:"1px", background:"#111", border:"1px solid #111" }}>
           {[
@@ -429,7 +429,7 @@ export default function MoggedAI() {
             <div key={f.who} style={{ background:"#080808", padding:"1.5rem 1.25rem" }}>
               <div style={{ fontSize:"1.4rem", marginBottom:"0.6rem" }}>{f.emoji}</div>
               <div style={{ fontSize:"0.8rem", fontWeight:"700", marginBottom:"0.35rem", letterSpacing:"0.05em" }}>{f.who.toUpperCase()}</div>
-              <div style={{ fontSize:"0.7rem", color:"#2a2a2a", lineHeight:"1.6" }}>{f.line}</div>
+              <div style={{ fontSize:"0.7rem", color:"#888", lineHeight:"1.6" }}>{f.line}</div>
             </div>
           ))}
         </div>
@@ -437,8 +437,8 @@ export default function MoggedAI() {
 
       {/* HOW IT WORKS */}
       <div style={{ padding:"0 1.5rem 5rem", maxWidth:"920px", margin:"0 auto" }}>
-        <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#2a2a2a", marginBottom:"2rem", display:"flex", alignItems:"center", gap:"1rem" }}>
-          HOW IT WORKS <div style={{ flex:1, height:"1px", background:"#111" }}/>
+        <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#555", marginBottom:"2rem", display:"flex", alignItems:"center", gap:"1rem" }}>
+          HOW IT WORKS <div style={{ flex:1, height:"1px", background:"#1a1a1a" }}/>
         </div>
         <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:"1px", background:"#111", border:"1px solid #111" }}>
           {[
@@ -450,7 +450,7 @@ export default function MoggedAI() {
             <div key={f.n} style={{ background:"#080808", padding:"1.5rem 1.25rem" }}>
               <div style={{ fontSize:"0.7rem", color:"#dc2626", fontWeight:"700", marginBottom:"0.75rem", letterSpacing:"0.1em" }}>{f.n} ——</div>
               <div style={{ fontSize:"0.8rem", fontWeight:"700", marginBottom:"0.4rem", letterSpacing:"0.05em" }}>{f.title.toUpperCase()}</div>
-              <div style={{ fontSize:"0.7rem", color:"#2a2a2a", lineHeight:"1.6" }}>{f.desc}</div>
+              <div style={{ fontSize:"0.7rem", color:"#888", lineHeight:"1.6" }}>{f.desc}</div>
             </div>
           ))}
         </div>
@@ -467,7 +467,7 @@ export default function MoggedAI() {
         <button style={{ background:"#dc2626", border:"none", color:"#fff", padding:"1.1rem 3rem", fontSize:"0.9rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => setPage("onboard")}>
           GET MOGGED — IT&apos;S FREE
         </button>
-        <p style={{ fontSize:"0.6rem", color:"#1a1a1a", marginTop:"1rem" }}>US numbers only · Reply STOP to unsubscribe anytime</p>
+        <p style={{ fontSize:"0.6rem", color:"#555", marginTop:"1rem" }}>US numbers only · Reply STOP to unsubscribe anytime</p>
       </div>
 
       {/* Footer */}
@@ -502,7 +502,7 @@ export default function MoggedAI() {
 
             {/* Product */}
             <div>
-              <div style={{ fontSize:"0.5rem", letterSpacing:"0.25em", color:"#333", marginBottom:"1rem" }}>PRODUCT</div>
+              <div style={{ fontSize:"0.5rem", letterSpacing:"0.25em", color:"#666", marginBottom:"1rem" }}>PRODUCT</div>
               {[
                 { label:"How It Works", href:"/how-it-works" },
                 { label:"Pricing",      href:"/#pricing" },
@@ -521,7 +521,7 @@ export default function MoggedAI() {
 
             {/* Support */}
             <div>
-              <div style={{ fontSize:"0.5rem", letterSpacing:"0.25em", color:"#333", marginBottom:"1rem" }}>SUPPORT</div>
+              <div style={{ fontSize:"0.5rem", letterSpacing:"0.25em", color:"#666", marginBottom:"1rem" }}>SUPPORT</div>
               {[
                 { label:"FAQ",             href:"/faq" },
                 { label:"Contact Us",      href:"mailto:support@moggedai.com" },
@@ -540,7 +540,7 @@ export default function MoggedAI() {
 
             {/* Legal */}
             <div>
-              <div style={{ fontSize:"0.5rem", letterSpacing:"0.25em", color:"#333", marginBottom:"1rem" }}>LEGAL</div>
+              <div style={{ fontSize:"0.5rem", letterSpacing:"0.25em", color:"#666", marginBottom:"1rem" }}>LEGAL</div>
               {[
                 { label:"Privacy Policy",    href:"/privacy" },
                 { label:"Terms of Service",  href:"/terms" },
@@ -560,10 +560,10 @@ export default function MoggedAI() {
 
           {/* Bottom bar */}
           <div style={{ borderTop:"1px solid #111", paddingTop:"1.5rem", display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap", gap:"0.75rem" }}>
-            <div style={{ fontSize:"0.55rem", color:"#2a2a2a", letterSpacing:"0.1em" }}>
+            <div style={{ fontSize:"0.55rem", color:"#555", letterSpacing:"0.1em" }}>
               © 2026 MOGGEDAI · ALL RIGHTS RESERVED
             </div>
-            <div style={{ fontSize:"0.55rem", color:"#2a2a2a", letterSpacing:"0.08em" }}>
+            <div style={{ fontSize:"0.55rem", color:"#555", letterSpacing:"0.08em" }}>
               US NUMBERS ONLY · TEXT STOP TO UNSUBSCRIBE ANYTIME
             </div>
           </div>

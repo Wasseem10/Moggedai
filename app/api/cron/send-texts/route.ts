@@ -22,7 +22,15 @@ function isWithinWindow(current: string, start: string, end: string): boolean {
   return current >= start && current <= end
 }
 
-async function generateMessage(habitName: string, coachStyle: string, biggestDistraction: string): Promise<string> {
+type HabitContext = {
+  name: string
+  why?: string | null
+  biggest_excuse?: string | null
+  stakes?: string | null
+  coach_style?: string | null
+}
+
+async function generateMessage(habit: HabitContext, scheduleCoachStyle: string): Promise<string> {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
   const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
 
@@ -30,13 +38,18 @@ async function generateMessage(habitName: string, coachStyle: string, biggestDis
     brutal: 'Be brutal and harsh. No sympathy. Call them out hard.',
     direct: 'Be direct and no-nonsense. Sharp, clear, no fluff.',
     motivating: 'Be intense but motivating. Push them forward with energy.',
+    savage: 'Maximum pressure. No mercy. Absolutely ruthless. Not for the weak.',
   }
 
+  const coachStyle = habit.coach_style || scheduleCoachStyle || 'direct'
+
   const prompt = `You are an AI accountability coach sending an SMS check-in.
-Habit: "${habitName}"
-${biggestDistraction ? `Their biggest distraction: ${biggestDistraction}` : ''}
-Style: ${styleGuide[coachStyle] || styleGuide.direct}
-Write ONE short accountability text (1-2 sentences max). Reference the specific habit. Ask if they're doing it. No emojis. No hashtags. Sound human. Reply ONLY with the message text.`
+Habit: "${habit.name}"
+${habit.why ? `Why they want to do this: ${habit.why}` : ''}
+${habit.biggest_excuse ? `Their go-to excuse: ${habit.biggest_excuse}` : ''}
+${habit.stakes ? `What's at stake: ${habit.stakes}` : ''}
+Coach style: ${styleGuide[coachStyle] || styleGuide.direct}
+Write ONE short accountability text (1-2 sentences max). Be specific to their situation. No emojis. Sound human. Reply ONLY with the message.`
 
   const result = await model.generateContent(prompt)
   return result.response.text().trim()
@@ -115,12 +128,12 @@ export async function GET(req: NextRequest) {
 
     // Pick the habit that was checked in on least recently
     const { rows: habits } = await db.query(`
-      SELECT h.id, h.name, h.emoji,
+      SELECT h.id, h.name, h.emoji, h.why, h.biggest_excuse, h.stakes, h.coach_style,
              MAX(m.sent_at) as last_checked
       FROM habits h
       LEFT JOIN messages m ON m.habit_id = h.id AND m.user_id = h.user_id
       WHERE h.user_id = $1 AND h.active = true
-      GROUP BY h.id, h.name, h.emoji
+      GROUP BY h.id, h.name, h.emoji, h.why, h.biggest_excuse, h.stakes, h.coach_style
       ORDER BY last_checked ASC NULLS FIRST
       LIMIT 1
     `, [schedule.user_id])
@@ -131,9 +144,8 @@ export async function GET(req: NextRequest) {
 
     try {
       const message = await generateMessage(
-        habit.name,
-        schedule.coach_style || 'direct',
-        schedule.biggest_distraction || ''
+        habit,
+        schedule.coach_style || 'direct'
       )
 
       await twilioClient.messages.create({

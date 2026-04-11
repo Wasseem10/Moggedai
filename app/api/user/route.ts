@@ -35,33 +35,55 @@ export async function GET() {
   if (!userRows.length) return NextResponse.json({ user: null });
   const user = userRows[0];
 
-  // Get habits with streaks and completion counts
+  // Get habits with streaks, completion counts, and last message
   const { rows: habits } = await db.query(
-    `SELECT h.id, h.name, h.emoji,
-            COUNT(c.id) as total_completions
+    `SELECT h.id, h.name, h.emoji, h.active,
+            h.why, h.biggest_excuse, h.stakes, h.time_of_day, h.coach_style,
+            COUNT(DISTINCT c.id) as total_completions,
+            MAX(m.sent_at) as last_message_at,
+            (SELECT message_text FROM messages WHERE habit_id = h.id ORDER BY sent_at DESC LIMIT 1) as last_message
      FROM habits h
      LEFT JOIN completions c ON c.habit_id = h.id
+     LEFT JOIN messages m ON m.habit_id = h.id
      WHERE h.user_id = $1 AND h.active = true
-     GROUP BY h.id, h.name, h.emoji
+     GROUP BY h.id
      ORDER BY h.created_at ASC`,
     [user.id]
   );
 
   // Get streak per habit
-  const habitsWithStreaks = await Promise.all(habits.map(async (h: { id: string; name: string; emoji: string; total_completions: string }) => {
+  const habitsWithStreaks = await Promise.all(habits.map(async (h: {
+    id: string;
+    name: string;
+    emoji: string;
+    active: boolean;
+    why: string | null;
+    biggest_excuse: string | null;
+    stakes: string | null;
+    time_of_day: string | null;
+    coach_style: string | null;
+    total_completions: string;
+    last_message_at: string | null;
+    last_message: string | null;
+  }) => {
     const { rows: comps } = await db.query(
       `SELECT completed_at FROM completions WHERE habit_id = $1 ORDER BY completed_at DESC LIMIT 365`,
       [h.id]
     );
-    return { ...h, streak: getStreak(comps), total_completions: parseInt(h.total_completions) };
+    return {
+      ...h,
+      streak: getStreak(comps),
+      total_completions: parseInt(h.total_completions),
+    };
   }));
 
-  // Recent messages
+  // Recent messages with habit_id
   const { rows: recentMessages } = await db.query(
-    `SELECT m.message_text, m.sent_at, m.responded_at, h.name as habit_name, h.emoji as habit_emoji
+    `SELECT m.message_text, m.sent_at, m.responded_at, m.habit_id,
+            h.name as habit_name, h.emoji as habit_emoji
      FROM messages m
      LEFT JOIN habits h ON h.id = m.habit_id
-     WHERE m.user_id = $1 ORDER BY m.sent_at DESC LIMIT 10`,
+     WHERE m.user_id = $1 ORDER BY m.sent_at DESC LIMIT 20`,
     [user.id]
   );
 
@@ -73,6 +95,13 @@ export async function GET() {
     `SELECT COUNT(*) as total_completions FROM completions WHERE user_id = $1`, [user.id]
   );
 
+  // Overall streak (days with at least one completion)
+  const { rows: allComps } = await db.query(
+    `SELECT completed_at FROM completions WHERE user_id = $1 ORDER BY completed_at DESC LIMIT 365`,
+    [user.id]
+  );
+  const overallStreak = getStreak(allComps);
+
   return NextResponse.json({
     user,
     habits: habitsWithStreaks,
@@ -80,6 +109,7 @@ export async function GET() {
     stats: {
       total_texts: parseInt(statsRows[0]?.total_texts ?? "0"),
       total_completions: parseInt(compRows[0]?.total_completions ?? "0"),
+      streak: overallStreak,
     },
   });
 }
@@ -109,9 +139,20 @@ export async function PATCH(req: NextRequest) {
     await db.query(`UPDATE schedules SET ${fields.join(",")} WHERE user_id = $${i}`, vals);
   }
   if (body.add_habit) {
+    const h = body.add_habit;
     await db.query(
-      `INSERT INTO habits (user_id, name, emoji, active) VALUES ($1, $2, $3, true)`,
-      [uid, body.add_habit.name, body.add_habit.emoji || '🎯']
+      `INSERT INTO habits (user_id, name, emoji, active, why, biggest_excuse, stakes, time_of_day, coach_style)
+       VALUES ($1, $2, $3, true, $4, $5, $6, $7, $8)`,
+      [
+        uid,
+        h.name,
+        h.emoji || '🎯',
+        h.why || '',
+        h.biggest_excuse || '',
+        h.stakes || '',
+        h.time_of_day || 'anytime',
+        h.coach_style || 'direct',
+      ]
     );
   }
   if (body.remove_habit_id) {

@@ -115,7 +115,8 @@ export default function MoggedAI() {
           timezone,
         }),
       });
-      if (!res.ok) throw new Error("failed");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "failed");
       router.push("/dashboard");
     } catch {
       setSubmitError("Something went wrong. Try again.");

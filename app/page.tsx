@@ -346,36 +346,61 @@ export default function MoggedAI() {
           </button>
         </div>
 
-        {/* Phone mockup */}
-        <div style={{ display:"flex", alignItems:"flex-end", gap:"2.5rem", flexWrap:"wrap" }}>
-          <div style={{ width:"200px", background:"#0d0d0d", border:"1px solid #1a1a1a", borderRadius:"20px", padding:"1.25rem 1rem" }}>
-            <div style={{ fontSize:"0.5rem", color:"#dc2626", marginBottom:"0.75rem", letterSpacing:"0.15em" }}>MOGGEDAI</div>
-            <div style={{ background:"#161616", border:"1px solid rgba(220,38,38,0.15)", borderRadius:"10px 10px 10px 0", padding:"0.65rem 0.75rem", fontSize:"0.6rem", color:"#ccc", lineHeight:"1.5", marginBottom:"0.5rem" }}>
-              yo have you hit the gym yet? you said you would this morning.
-              <div style={{ fontSize:"0.45rem", color:"#333", textAlign:"right", marginTop:"0.25rem" }}>10:00 AM</div>
-            </div>
-            <div style={{ background:"rgba(220,38,38,0.15)", border:"1px solid rgba(220,38,38,0.25)", borderRadius:"10px 10px 0 10px", padding:"0.5rem 0.75rem", fontSize:"0.6rem", color:"#dc2626", textAlign:"right", marginBottom:"0.5rem" }}>
-              done
-              <div style={{ fontSize:"0.45rem", color:"#555", marginTop:"0.2rem" }}>you · 10:03 AM</div>
-            </div>
-            <div style={{ background:"#161616", border:"1px solid rgba(220,38,38,0.15)", borderRadius:"10px 10px 10px 0", padding:"0.65rem 0.75rem", fontSize:"0.6rem", color:"#ccc", lineHeight:"1.5", marginBottom:"0.5rem" }}>
-              3 day streak. keep going. don&apos;t break it now.
-              <div style={{ fontSize:"0.45rem", color:"#333", textAlign:"right", marginTop:"0.25rem" }}>10:03 AM</div>
-            </div>
-            <div style={{ background:"#161616", border:"1px solid rgba(220,38,38,0.15)", borderRadius:"10px 10px 10px 0", padding:"0.65rem 0.75rem", fontSize:"0.6rem", color:"#ccc", lineHeight:"1.5" }}>
-              you haven&apos;t opened that textbook all day. what are you doing?
-              <div style={{ fontSize:"0.45rem", color:"#333", textAlign:"right", marginTop:"0.25rem" }}>2:00 PM</div>
-            </div>
+        {/* SMS Conversation showcase */}
+        <div style={{ width:"100%" }}>
+          {/* 3 conversation cards */}
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))", gap:"12px", marginBottom:"12px" }}>
+            {[
+              {
+                habit:"💪 GYM", time1:"8:14 AM", time2:"8:17 AM", time3:"8:17 AM",
+                msg:"you said you'd hit the gym this morning. it's 8am. you still in bed?",
+                reply:"done just got back",
+                response:"7 day streak. that's what it looks like. don't stop now.",
+              },
+              {
+                habit:"📚 STUDY", time1:"2:00 PM", time2:"2:06 PM", time3:"2:06 PM",
+                msg:"you haven't opened that textbook all day. what are you doing?",
+                reply:"done studying now",
+                response:"good. stay off your phone. two hours minimum.",
+              },
+              {
+                habit:"🚀 SIDE PROJECT", time1:"7:30 PM", time2:"7:35 PM", time3:"7:35 PM",
+                msg:"did you work on the side project today or did you just think about it?",
+                reply:"done shipped a feature",
+                response:"3 day streak. keep shipping. this is how it gets built.",
+              },
+            ].map(c => (
+              <div key={c.habit} style={{ background:"#0a0a0a", border:"1px solid #1a1a1a", borderRadius:"16px", padding:"1.25rem", display:"flex", flexDirection:"column", gap:"8px" }}>
+                <div style={{ fontSize:"0.5rem", color:"#dc2626", letterSpacing:"0.2em", marginBottom:"4px" }}>{c.habit}</div>
+                {/* Coach message */}
+                <div style={{ background:"#141414", borderRadius:"10px 10px 10px 0", padding:"0.7rem 0.85rem" }}>
+                  <div style={{ fontSize:"0.68rem", color:"#bbb", lineHeight:"1.55" }}>{c.msg}</div>
+                  <div style={{ fontSize:"0.45rem", color:"#333", textAlign:"right", marginTop:"6px" }}>{c.time1}</div>
+                </div>
+                {/* User reply */}
+                <div style={{ background:"rgba(220,38,38,0.12)", border:"1px solid rgba(220,38,38,0.2)", borderRadius:"10px 10px 0 10px", padding:"0.6rem 0.85rem", alignSelf:"flex-end", maxWidth:"80%" }}>
+                  <div style={{ fontSize:"0.68rem", color:"#dc2626" }}>{c.reply}</div>
+                  <div style={{ fontSize:"0.45rem", color:"#555", textAlign:"right", marginTop:"4px" }}>{c.time2}</div>
+                </div>
+                {/* Coach response */}
+                <div style={{ background:"#141414", borderRadius:"10px 10px 10px 0", padding:"0.7rem 0.85rem" }}>
+                  <div style={{ fontSize:"0.68rem", color:"#bbb", lineHeight:"1.55" }}>{c.response}</div>
+                  <div style={{ fontSize:"0.45rem", color:"#333", textAlign:"right", marginTop:"6px" }}>{c.time3}</div>
+                </div>
+              </div>
+            ))}
           </div>
-          <div style={{ display:"flex", flexDirection:"column", gap:"1.5rem" }}>
+
+          {/* Stats bar */}
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"1px", background:"#111", border:"1px solid #111" }}>
             {[
               { num:"5", label:"HABITS TRACKED" },
               { num:"5 MIN", label:"FOLLOW-UP TIME" },
               { num:"2-WAY", label:"AI COACHING" },
             ].map(s => (
-              <div key={s.label} style={{ borderLeft:"2px solid #dc2626", paddingLeft:"1rem" }}>
-                <div style={{ fontSize:"1.8rem", fontWeight:"700", lineHeight:1 }}>{s.num}</div>
-                <div style={{ fontSize:"0.6rem", color:"#333", letterSpacing:"0.1em", marginTop:"0.2rem" }}>{s.label}</div>
+              <div key={s.label} style={{ background:"#080808", padding:"1.25rem", textAlign:"center" }}>
+                <div style={{ fontSize:"1.5rem", fontWeight:"700", color:"#dc2626", lineHeight:1 }}>{s.num}</div>
+                <div style={{ fontSize:"0.5rem", color:"#333", letterSpacing:"0.15em", marginTop:"0.3rem" }}>{s.label}</div>
               </div>
             ))}
           </div>
@@ -474,10 +499,10 @@ export default function MoggedAI() {
             <div>
               <div style={{ fontSize:"0.5rem", letterSpacing:"0.25em", color:"#333", marginBottom:"1rem" }}>PRODUCT</div>
               {[
-                { label:"How It Works", href:"#how-it-works" },
-                { label:"Pricing",      href:"#pricing" },
+                { label:"How It Works", href:"/how-it-works" },
+                { label:"Pricing",      href:"/#pricing" },
                 { label:"FAQ",          href:"/faq" },
-                { label:"Get Started",  href:"#", onClick: true },
+                { label:"Get Started",  href:"/#get-started" },
               ].map(l => (
                 <div key={l.label} style={{ marginBottom:"0.6rem" }}>
                   <a href={l.href}

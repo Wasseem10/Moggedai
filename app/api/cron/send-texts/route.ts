@@ -24,7 +24,7 @@ function isWithinWindow(current: string, start: string, end: string): boolean {
 
 async function generateMessage(habitName: string, coachStyle: string, biggestDistraction: string): Promise<string> {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
 
   const styleGuide: Record<string, string> = {
     brutal: 'Be brutal and harsh. No sympathy. Call them out hard.',
@@ -44,7 +44,7 @@ Write ONE short accountability text (1-2 sentences max). Reference the specific 
 
 async function generateFollowUp(habitName: string, coachStyle: string): Promise<string> {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
   const prompt = `You are an AI accountability coach. You texted someone about "${habitName}" 5 minutes ago and they haven't replied.
 Send a short follow-up (1 sentence). Ask if they did it. Be ${coachStyle}. No emojis. Reply ONLY with the message.`
   const result = await model.generateContent(prompt)

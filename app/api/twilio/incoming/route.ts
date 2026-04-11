@@ -5,7 +5,7 @@ import twilio from 'twilio'
 
 async function generateCoachReply(userMessage: string, habitName: string, coachStyle: string): Promise<string> {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
   const styleGuide: Record<string, string> = {
     brutal: 'Be brutal and harsh. No sympathy.',
     direct: 'Be direct and no-nonsense.',

@@ -39,7 +39,7 @@ export default function ConsentPage() {
         <div style={{ background: C.card, border: `1px solid ${C.border}`, padding: "1.75rem", marginBottom: "1rem" }}>
           <div style={{ fontSize: "0.55rem", letterSpacing: "0.2em", color: C.red, marginBottom: "0.75rem" }}>WHAT YOU ARE AGREEING TO</div>
           <p style={{ fontSize: "0.82rem", color: C.muted, lineHeight: "1.9", margin: "0 0 1rem" }}>
-            By entering your phone number on <strong style={{ color: C.text }}>moggedai.com</strong> and clicking <strong style={{ color: C.text }}>"Start Getting Mogged"</strong>, you expressly consent to receive recurring automated SMS text messages from MoggedAI at the phone number you provide.
+            By entering your phone number on <strong style={{ color: C.text }}>moggedai.com</strong> and clicking <strong style={{ color: C.text }}>"Activate My Account"</strong>, you expressly consent to receive recurring automated SMS text messages from MoggedAI at the phone number you provide.
           </p>
           <p style={{ fontSize: "0.82rem", color: C.muted, lineHeight: "1.9", margin: 0 }}>
             These messages include AI-generated accountability check-ins, habit reminders, follow-up messages, and responses to your replies. Message frequency varies based on the schedule you select (up to several messages per day).
@@ -115,7 +115,7 @@ export default function ConsentPage() {
               "User visits moggedai.com and clicks GET STARTED",
               "User enters their US mobile phone number",
               "User selects their habits, coach style, and schedule",
-              "User clicks \"Start Getting Mogged\" — this is the explicit opt-in action",
+              "User clicks \"Activate My Account\" — this is the explicit opt-in action",
               "User receives a confirmation SMS and begins receiving accountability check-ins",
               "User can reply STOP at any time to immediately unsubscribe",
             ].map((step, i) => (

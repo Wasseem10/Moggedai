@@ -323,7 +323,7 @@ export default function MoggedAI() {
 
               {submitError && <p style={{ fontSize:"0.7rem", color:"#dc2626", margin:"0.4rem 0" }}>{submitError}</p>}
               <button style={primaryBtn(loading || !smsConsent)} onClick={handleSubmit} disabled={loading || !smsConsent}>
-                {loading ? "ACTIVATING..." : "START GETTING MOGGED →"}
+                {loading ? "ACTIVATING..." : "ACTIVATE MY ACCOUNT →"}
               </button>
               <button style={backBtn} onClick={() => setStep(3)}>← back</button>
             </div>
@@ -364,7 +364,7 @@ export default function MoggedAI() {
         </p>
         <div style={{ display:"flex", gap:"1rem", flexWrap:"wrap", marginBottom:"5rem" }}>
           <button style={{ background:"#dc2626", border:"none", color:"#fff", padding:"1rem 2.5rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => setPage("onboard")}>
-            GET MOGGED FREE →
+            GET STARTED FREE →
           </button>
         </div>
 
@@ -482,7 +482,7 @@ export default function MoggedAI() {
           </p>
         </div>
         <button style={{ background:"#dc2626", border:"none", color:"#fff", padding:"1.1rem 3rem", fontSize:"0.9rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => setPage("onboard")}>
-          GET MOGGED — IT&apos;S FREE
+          GET STARTED — IT&apos;S FREE
         </button>
         <p style={{ fontSize:"0.6rem", color:"#555", marginTop:"1rem" }}>US numbers only · Reply STOP to unsubscribe anytime</p>
       </div>
@@ -500,7 +500,7 @@ export default function MoggedAI() {
                 MOGGED<span style={{ color:"#dc2626" }}>AI</span>
               </div>
               <p style={{ fontSize:"0.72rem", color:"#999", lineHeight:"1.8", margin:"0 0 1.25rem" }}>
-                The AI accountability coach that texts you all day and doesn&apos;t let you make excuses. Set it once. Get mogged forever.
+                The AI accountability coach that texts you all day and doesn&apos;t let you make excuses. Set it once. Stay accountable forever.
               </p>
               <div style={{ display:"flex", gap:"0.75rem" }}>
                 {[

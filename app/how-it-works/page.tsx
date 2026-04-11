@@ -105,7 +105,7 @@ export default function HowItWorks() {
         <div style={{ marginBottom: "4rem" }}>
           <div style={{ fontSize: "0.55rem", letterSpacing: "0.25em", color: C.red, border: `1px solid rgba(220,38,38,0.3)`, padding: "0.25rem 0.7rem", display: "inline-block", marginBottom: "1rem" }}>HOW IT WORKS</div>
           <h1 style={{ fontSize: "clamp(2rem,5vw,3rem)", fontWeight: "700", lineHeight: 1.1, margin: "0 0 1rem" }}>
-            Set it once.<br /><span style={{ color: C.red }}>Get mogged forever.</span>
+            Set it once.<br /><span style={{ color: C.red }}>Stay accountable forever.</span>
           </h1>
           <p style={{ fontSize: "0.82rem", color: C.muted, lineHeight: "1.9", maxWidth: "520px", margin: 0 }}>
             MoggedAI works entirely over SMS. No app to open. No dashboard to check. Just your phone buzzing all day reminding you to actually do the things you said you would.
@@ -174,7 +174,7 @@ export default function HowItWorks() {
             style={{ background: C.red, border: "none", color: "#fff", padding: "1rem 2.5rem", fontSize: "0.82rem", letterSpacing: "0.15em", cursor: "pointer", fontFamily: mono, fontWeight: "700" }}
             onClick={() => router.push("/")}
           >
-            GET MOGGED — IT&apos;S FREE →
+            GET STARTED — IT&apos;S FREE →
           </button>
           <p style={{ fontSize: "0.55rem", color: "#1a1a1a", marginTop: "0.75rem" }}>US numbers only · Text STOP to unsubscribe anytime</p>
         </div>

@@ -57,6 +57,7 @@ export default function MoggedAI() {
   const [endTime, setEndTime]   = useState("22:00");
   const [loading, setLoading]   = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [smsConsent, setSmsConsent]   = useState(false);
   const [currentMsg, setCurrentMsg] = useState(0);
   const [ticker, setTicker]     = useState(0);
   const router = useRouter();
@@ -301,11 +302,27 @@ export default function MoggedAI() {
                   <input style={inputS} type="time" value={endTime} onChange={e => setEndTime(e.target.value)}/>
                 </div>
               </div>
-              <p style={{ fontSize:"0.6rem", color:"#2a2a2a", marginBottom:"0.5rem" }}>
-                ⚡ Timezone auto-detected · Reply &quot;done&quot; to mark complete · Text STOP to unsubscribe
+              <p style={{ fontSize:"0.6rem", color:"#555", marginBottom:"1rem" }}>
+                ⚡ Timezone auto-detected · Reply DONE to mark complete · Text STOP to unsubscribe
               </p>
+
+              {/* SMS Consent checkbox */}
+              <div style={{ background:"#111", border:`1px solid ${smsConsent ? "#dc2626" : "#222"}`, padding:"1rem", marginBottom:"1rem", cursor:"pointer" }} onClick={() => setSmsConsent(!smsConsent)}>
+                <div style={{ display:"flex", gap:"0.75rem", alignItems:"flex-start" }}>
+                  <div style={{ width:"16px", height:"16px", border:`2px solid ${smsConsent ? "#dc2626" : "#444"}`, background:smsConsent ? "#dc2626" : "transparent", flexShrink:0, marginTop:"1px", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                    {smsConsent && <span style={{ color:"#fff", fontSize:"10px", fontWeight:"700", lineHeight:1 }}>✓</span>}
+                  </div>
+                  <p style={{ fontSize:"0.65rem", color:"#888", lineHeight:"1.7", margin:0 }}>
+                    I agree to receive recurring automated SMS accountability messages from MoggedAI at the number above. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to unsubscribe anytime. View our{" "}
+                    <a href="/consent" target="_blank" style={{ color:"#dc2626", textDecoration:"none" }} onClick={e => e.stopPropagation()}>SMS Consent Policy</a>
+                    {" "}and{" "}
+                    <a href="/privacy" target="_blank" style={{ color:"#dc2626", textDecoration:"none" }} onClick={e => e.stopPropagation()}>Privacy Policy</a>.
+                  </p>
+                </div>
+              </div>
+
               {submitError && <p style={{ fontSize:"0.7rem", color:"#dc2626", margin:"0.4rem 0" }}>{submitError}</p>}
-              <button style={primaryBtn(loading)} onClick={handleSubmit} disabled={loading}>
+              <button style={primaryBtn(loading || !smsConsent)} onClick={handleSubmit} disabled={loading || !smsConsent}>
                 {loading ? "ACTIVATING..." : "START GETTING MOGGED →"}
               </button>
               <button style={backBtn} onClick={() => setStep(3)}>← back</button>
@@ -544,8 +561,8 @@ export default function MoggedAI() {
               {[
                 { label:"Privacy Policy",    href:"/privacy" },
                 { label:"Terms of Service",  href:"/terms" },
-                { label:"SMS Policy",        href:"/sms-policy" },
-                { label:"Unsubscribe",       href:"#unsubscribe" },
+                { label:"SMS Consent",       href:"/consent" },
+                { label:"Unsubscribe",       href:"mailto:support@moggedai.com?subject=Unsubscribe" },
               ].map(l => (
                 <div key={l.label} style={{ marginBottom:"0.6rem" }}>
                   <a href={l.href}

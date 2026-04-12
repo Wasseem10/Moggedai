@@ -659,8 +659,8 @@ function OverviewView({
         </div>
       </div>
 
-      {/* Weekly Recap */}
-      {(weeklyRecap.total > 0 || stats.total_completions > 0) && (
+      {/* Weekly Recap — always show once they have at least one mission */}
+      {habits.length > 0 && (
         <WeeklyRecapCard recap={weeklyRecap} streak={stats.streak} totalCompletions={stats.total_completions} />
       )}
 

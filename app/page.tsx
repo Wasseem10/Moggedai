@@ -133,11 +133,11 @@ export default function MoggedAI() {
   const grid: React.CSSProperties  = { position:"fixed", inset:0, backgroundImage:`linear-gradient(var(--c-grid) 1px,transparent 1px),linear-gradient(90deg,var(--c-grid) 1px,transparent 1px)`, backgroundSize:"48px 48px", pointerEvents:"none" };
   const nav: React.CSSProperties   = { position:"fixed", top:0, left:0, right:0, zIndex:100, display:"flex", justifyContent:"space-between", alignItems:"center", padding:"1rem 1.5rem", borderBottom:"1px solid var(--c-accent-bdr)", background:"var(--c-nav)", backdropFilter:"blur(8px)" };
   const logoS: React.CSSProperties = { fontSize:"1.1rem", fontWeight:"700", letterSpacing:"0.15em", color:"var(--c-text)", cursor:"pointer" };
-  const navBtn: React.CSSProperties = { background:"transparent", border:"1px solid #0ea5e9", color:"#0ea5e9", padding:"0.4rem 1rem", fontSize:"0.7rem", letterSpacing:"0.1em", cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap" };
-  const primaryBtn = (disabled=false): React.CSSProperties => ({ width:"100%", background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:disabled?"not-allowed":"pointer", fontFamily:"inherit", fontWeight:"700", marginTop:"1rem", opacity:disabled?0.4:1 });
+  const navBtn: React.CSSProperties = { background:"transparent", border:"1px solid #eab308", color:"#eab308", padding:"0.4rem 1rem", fontSize:"0.7rem", letterSpacing:"0.1em", cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap" };
+  const primaryBtn = (disabled=false): React.CSSProperties => ({ width:"100%", background:"#eab308", border:"none", color:"#fff", padding:"1rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:disabled?"not-allowed":"pointer", fontFamily:"inherit", fontWeight:"700", marginTop:"1rem", opacity:disabled?0.4:1 });
   const backBtn: React.CSSProperties = { background:"transparent", border:"none", color:"var(--c-text3)", fontSize:"0.7rem", cursor:"pointer", fontFamily:"inherit", padding:"0.5rem 0", letterSpacing:"0.1em", marginTop:"0.5rem", display:"block" };
   const inputS: React.CSSProperties = { width:"100%", background:"var(--c-input)", border:"1px solid var(--c-input-bdr)", color:"var(--c-text)", padding:"0.9rem 1rem", fontSize:"1rem", fontFamily:"inherit", outline:"none", boxSizing:"border-box" };
-  const tag: React.CSSProperties = { fontSize:"0.6rem", letterSpacing:"0.25em", color:"#0ea5e9", border:"1px solid rgba(14,165,233,0.4)", padding:"0.3rem 0.8rem", marginBottom:"1.5rem", display:"inline-block" };
+  const tag: React.CSSProperties = { fontSize:"0.6rem", letterSpacing:"0.25em", color:"#eab308", border:"1px solid rgba(234,179,8,0.4)", padding:"0.3rem 0.8rem", marginBottom:"1.5rem", display:"inline-block" };
   const lbl: React.CSSProperties = { fontSize:"0.6rem", letterSpacing:"0.2em", color:"var(--c-text3)", display:"block", marginBottom:"0.5rem" };
 
   // ── ONBOARDING ────────────────────────────────────────────────────────────
@@ -147,7 +147,7 @@ export default function MoggedAI() {
         <div style={grid}/>
         <nav style={nav}>
           <div style={logoS} onClick={() => { setPage("landing"); setStep(1); }}>
-            MOGGED<span style={{ color:"#0ea5e9" }}>AI</span>
+            MOGGED<span style={{ color:"#eab308" }}>AI</span>
           </div>
         </nav>
         <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", justifyContent:"center", padding:"5rem 1.5rem 3rem", maxWidth:"580px", margin:"0 auto" }}>
@@ -155,7 +155,7 @@ export default function MoggedAI() {
           {/* Progress */}
           <div style={{ display:"flex", gap:"6px", marginBottom:"2.5rem" }}>
             {[1,2,3,4].map(s => (
-              <div key={s} style={{ height:"3px", flex:1, background:s<=step?"#0ea5e9":"#1e1e1e", opacity:s<step?0.5:1, transition:"all 0.3s" }}/>
+              <div key={s} style={{ height:"3px", flex:1, background:s<=step?"#eab308":"#1e1e1e", opacity:s<step?0.5:1, transition:"all 0.3s" }}/>
             ))}
           </div>
 
@@ -164,15 +164,15 @@ export default function MoggedAI() {
             <div>
               <div style={tag}>STEP 01 / 04</div>
               <h2 style={{ fontSize:"clamp(1.8rem,4vw,2.4rem)", fontWeight:"700", lineHeight:1.15, marginBottom:"0.5rem" }}>
-                your number.<br/><span style={{ color:"#0ea5e9" }}>no excuses.</span>
+                your number.<br/><span style={{ color:"#eab308" }}>no excuses.</span>
               </h2>
               <p style={{ fontSize:"0.8rem", color:"#555", marginBottom:"1.5rem", lineHeight:"1.6" }}>US numbers only. This is where your coach will text you.</p>
               <label style={lbl}>PHONE NUMBER</label>
-              <input style={{ ...inputS, fontSize:"1.2rem", borderColor:phoneError?"#0ea5e9":"#222" }}
+              <input style={{ ...inputS, fontSize:"1.2rem", borderColor:phoneError?"#eab308":"#222" }}
                 type="tel" placeholder="(555) 000-0000" value={phone}
                 onChange={e => setPhone(formatPhone(e.target.value))}
                 onKeyDown={e => e.key==="Enter" && validatePhone() && setStep(2)} autoFocus/>
-              {phoneError && <p style={{ fontSize:"0.7rem", color:"#0ea5e9", marginTop:"0.4rem" }}>{phoneError}</p>}
+              {phoneError && <p style={{ fontSize:"0.7rem", color:"#eab308", marginTop:"0.4rem" }}>{phoneError}</p>}
               <button style={primaryBtn()} onClick={() => validatePhone() && setStep(2)}>NEXT →</button>
             </div>
           )}
@@ -182,7 +182,7 @@ export default function MoggedAI() {
             <div>
               <div style={tag}>STEP 02 / 04</div>
               <h2 style={{ fontSize:"clamp(1.8rem,4vw,2.4rem)", fontWeight:"700", lineHeight:1.15, marginBottom:"0.5rem" }}>
-                how should we<br/><span style={{ color:"#0ea5e9" }}>talk to you?</span>
+                how should we<br/><span style={{ color:"#eab308" }}>talk to you?</span>
               </h2>
               <p style={{ fontSize:"0.8rem", color:"#555", marginBottom:"1.5rem", lineHeight:"1.6" }}>
                 This shapes every message we send. Be honest.
@@ -190,7 +190,7 @@ export default function MoggedAI() {
               <div style={{ display:"flex", flexDirection:"column", gap:"8px", marginBottom:"1.5rem" }}>
                 {COACH_STYLES.map(s => (
                   <button key={s.id}
-                    style={{ background:coachStyle===s.id?"rgba(14,165,233,0.12)":"#111", border:coachStyle===s.id?"1px solid #0ea5e9":"1px solid #1e1e1e", color:coachStyle===s.id?"#f0f0f0":"#555", padding:"1.1rem 1.25rem", cursor:"pointer", fontFamily:"inherit", textAlign:"left", transition:"all 0.15s" }}
+                    style={{ background:coachStyle===s.id?"rgba(234,179,8,0.12)":"#111", border:coachStyle===s.id?"1px solid #eab308":"1px solid #1e1e1e", color:coachStyle===s.id?"#f0f0f0":"#555", padding:"1.1rem 1.25rem", cursor:"pointer", fontFamily:"inherit", textAlign:"left", transition:"all 0.15s" }}
                     onClick={() => setCoachStyle(s.id)}
                   >
                     <div style={{ display:"flex", alignItems:"center", gap:"0.75rem" }}>
@@ -213,7 +213,7 @@ export default function MoggedAI() {
             <div>
               <div style={tag}>STEP 03 / 04</div>
               <h2 style={{ fontSize:"clamp(1.8rem,4vw,2.4rem)", fontWeight:"700", lineHeight:1.15, marginBottom:"0.5rem" }}>
-                what do you need<br/><span style={{ color:"#0ea5e9" }}>to stay on top of?</span>
+                what do you need<br/><span style={{ color:"#eab308" }}>to stay on top of?</span>
               </h2>
               <p style={{ fontSize:"0.8rem", color:"#555", marginBottom:"1.5rem", lineHeight:"1.6" }}>
                 Pick up to 5. We&apos;ll text you about each one. Tap to add or remove.
@@ -225,7 +225,7 @@ export default function MoggedAI() {
                   const selected = !!habits.find(x => x.name === h.name);
                   return (
                     <button key={h.name}
-                      style={{ background:selected?"rgba(14,165,233,0.12)":"#111", border:selected?"1px solid #0ea5e9":"1px solid #1e1e1e", color:selected?"#f0f0f0":"#555", padding:"0.75rem 0.5rem", cursor:habits.length>=5&&!selected?"not-allowed":"pointer", fontFamily:"inherit", textAlign:"center", transition:"all 0.15s", opacity:habits.length>=5&&!selected?0.4:1 }}
+                      style={{ background:selected?"rgba(234,179,8,0.12)":"#111", border:selected?"1px solid #eab308":"1px solid #1e1e1e", color:selected?"#f0f0f0":"#555", padding:"0.75rem 0.5rem", cursor:habits.length>=5&&!selected?"not-allowed":"pointer", fontFamily:"inherit", textAlign:"center", transition:"all 0.15s", opacity:habits.length>=5&&!selected?0.4:1 }}
                       onClick={() => toggleHabit(h)}
                     >
                       <div style={{ fontSize:"1.1rem", marginBottom:"0.25rem" }}>{h.emoji}</div>
@@ -243,7 +243,7 @@ export default function MoggedAI() {
                   onKeyDown={e => e.key==="Enter" && addCustom()}
                   disabled={habits.length >= 5}/>
                 <button
-                  style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"0.7rem 1.25rem", cursor:"pointer", fontFamily:"inherit", fontSize:"0.8rem", fontWeight:"700" }}
+                  style={{ background:"#eab308", border:"none", color:"#fff", padding:"0.7rem 1.25rem", cursor:"pointer", fontFamily:"inherit", fontSize:"0.8rem", fontWeight:"700" }}
                   onClick={addCustom} disabled={habits.length >= 5}>ADD</button>
               </div>
 
@@ -254,7 +254,7 @@ export default function MoggedAI() {
                   <div style={{ display:"flex", gap:"6px", flexWrap:"wrap" }}>
                     {habits.map(h => (
                       <span key={h.name}
-                        style={{ background:"rgba(14,165,233,0.12)", border:"1px solid #0ea5e9", color:"var(--c-text)", padding:"0.35rem 0.75rem", fontSize:"0.7rem", cursor:"pointer" }}
+                        style={{ background:"rgba(234,179,8,0.12)", border:"1px solid #eab308", color:"var(--c-text)", padding:"0.35rem 0.75rem", fontSize:"0.7rem", cursor:"pointer" }}
                         onClick={() => toggleHabit(h)}>
                         {h.emoji} {h.name} ✕
                       </span>
@@ -273,7 +273,7 @@ export default function MoggedAI() {
             <div>
               <div style={tag}>STEP 04 / 04</div>
               <h2 style={{ fontSize:"clamp(1.8rem,4vw,2.4rem)", fontWeight:"700", lineHeight:1.15, marginBottom:"0.5rem" }}>
-                how often should<br/><span style={{ color:"#0ea5e9" }}>we check in?</span>
+                how often should<br/><span style={{ color:"#eab308" }}>we check in?</span>
               </h2>
               <p style={{ fontSize:"0.8rem", color:"#555", marginBottom:"1.5rem", lineHeight:"1.6" }}>
                 We&apos;ll rotate through your habits. Reply &quot;done&quot; to mark complete. No reply = follow-up in 5 min.
@@ -283,10 +283,10 @@ export default function MoggedAI() {
               <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"8px", marginBottom:"1.5rem" }}>
                 {INTENSITIES.map(f => (
                   <button key={f.value}
-                    style={{ background:freq===f.value?"rgba(14,165,233,0.12)":"#111", border:freq===f.value?"1px solid #0ea5e9":"1px solid #1e1e1e", color:freq===f.value?"#f0f0f0":"#555", padding:"1rem", cursor:"pointer", fontFamily:"inherit", textAlign:"left", transition:"all 0.15s" }}
+                    style={{ background:freq===f.value?"rgba(234,179,8,0.12)":"#111", border:freq===f.value?"1px solid #eab308":"1px solid #1e1e1e", color:freq===f.value?"#f0f0f0":"#555", padding:"1rem", cursor:"pointer", fontFamily:"inherit", textAlign:"left", transition:"all 0.15s" }}
                     onClick={() => setFreq(f.value)}>
                     <div style={{ fontSize:"0.85rem", fontWeight:"700", marginBottom:"0.2rem" }}>{f.label}</div>
-                    <div style={{ fontSize:"0.6rem", color:freq===f.value?"#0ea5e9":"#333" }}>{f.desc}</div>
+                    <div style={{ fontSize:"0.6rem", color:freq===f.value?"#eab308":"#333" }}>{f.desc}</div>
                   </button>
                 ))}
               </div>
@@ -307,21 +307,21 @@ export default function MoggedAI() {
               </p>
 
               {/* SMS Consent checkbox */}
-              <div style={{ background:"var(--c-s1)", border:`1px solid ${smsConsent ? "#0ea5e9" : "#222"}`, padding:"1rem", marginBottom:"1rem", cursor:"pointer" }} onClick={() => setSmsConsent(!smsConsent)}>
+              <div style={{ background:"var(--c-s1)", border:`1px solid ${smsConsent ? "#eab308" : "#222"}`, padding:"1rem", marginBottom:"1rem", cursor:"pointer" }} onClick={() => setSmsConsent(!smsConsent)}>
                 <div style={{ display:"flex", gap:"0.75rem", alignItems:"flex-start" }}>
-                  <div style={{ width:"16px", height:"16px", border:`2px solid ${smsConsent ? "#0ea5e9" : "#444"}`, background:smsConsent ? "#0ea5e9" : "transparent", flexShrink:0, marginTop:"1px", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                  <div style={{ width:"16px", height:"16px", border:`2px solid ${smsConsent ? "#eab308" : "#444"}`, background:smsConsent ? "#eab308" : "transparent", flexShrink:0, marginTop:"1px", display:"flex", alignItems:"center", justifyContent:"center" }}>
                     {smsConsent && <span style={{ color:"#fff", fontSize:"10px", fontWeight:"700", lineHeight:1 }}>✓</span>}
                   </div>
                   <p style={{ fontSize:"0.65rem", color:"#888", lineHeight:"1.7", margin:0 }}>
                     I agree to receive recurring automated SMS accountability messages from MoggedAI at the number above. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to unsubscribe anytime. View our{" "}
-                    <a href="/consent" target="_blank" style={{ color:"#0ea5e9", textDecoration:"none" }} onClick={e => e.stopPropagation()}>SMS Consent Policy</a>
+                    <a href="/consent" target="_blank" style={{ color:"#eab308", textDecoration:"none" }} onClick={e => e.stopPropagation()}>SMS Consent Policy</a>
                     {" "}and{" "}
-                    <a href="/privacy" target="_blank" style={{ color:"#0ea5e9", textDecoration:"none" }} onClick={e => e.stopPropagation()}>Privacy Policy</a>.
+                    <a href="/privacy" target="_blank" style={{ color:"#eab308", textDecoration:"none" }} onClick={e => e.stopPropagation()}>Privacy Policy</a>.
                   </p>
                 </div>
               </div>
 
-              {submitError && <p style={{ fontSize:"0.7rem", color:"#0ea5e9", margin:"0.4rem 0" }}>{submitError}</p>}
+              {submitError && <p style={{ fontSize:"0.7rem", color:"#eab308", margin:"0.4rem 0" }}>{submitError}</p>}
               <button style={primaryBtn(loading || !smsConsent)} onClick={handleSubmit} disabled={loading || !smsConsent}>
                 {loading ? "ACTIVATING..." : "ACTIVATE MY ACCOUNT →"}
               </button>
@@ -347,10 +347,10 @@ export default function MoggedAI() {
       `}</style>
       <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
       <div style={grid}/>
-      <div style={{ position:"fixed", top:`${(ticker*2)%100}%`, left:0, right:0, height:"2px", background:"rgba(14,165,233,0.08)", pointerEvents:"none", transition:"none" }}/>
+      <div style={{ position:"fixed", top:`${(ticker*2)%100}%`, left:0, right:0, height:"2px", background:"rgba(234,179,8,0.08)", pointerEvents:"none", transition:"none" }}/>
 
       <nav style={nav}>
-        <div style={logoS}>MOGGED<span style={{ color:"#0ea5e9" }}>AI</span></div>
+        <div style={logoS}>MOGGED<span style={{ color:"#eab308" }}>AI</span></div>
         <div style={{ display:"flex", gap:"0.5rem" }}>
           <button style={navBtn} onClick={() => router.push(isSignedIn ? "/dashboard" : "/sign-in")}>
             {isSignedIn ? "DASHBOARD" : "LOG IN"}
@@ -363,16 +363,16 @@ export default function MoggedAI() {
       <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", justifyContent:"center", padding:"5rem 1.5rem 2rem", maxWidth:"920px", margin:"0 auto" }}>
         <div style={tag}>AI ACCOUNTABILITY · SMS · BUILT FOR RESULTS</div>
         <h1 style={{ fontSize:"clamp(2.8rem,8vw,5.5rem)", fontWeight:"700", lineHeight:0.95, letterSpacing:"-0.02em", marginBottom:"1rem", transform:`translateX(${noise*0.3}px)` }}>
-          STOP<br/><span style={{ color:"#0ea5e9" }}>SLACKING.</span><br/>START NOW.
+          STOP<br/><span style={{ color:"#eab308" }}>SLACKING.</span><br/>START NOW.
         </h1>
-        <div style={{ height:"2.5rem", overflow:"hidden", marginBottom:"1.5rem", borderLeft:"3px solid #0ea5e9", paddingLeft:"1rem" }}>
+        <div style={{ height:"2.5rem", overflow:"hidden", marginBottom:"1.5rem", borderLeft:"3px solid #eab308", paddingLeft:"1rem" }}>
           <p style={{ fontSize:"clamp(0.9rem,2vw,1.05rem)", color:"var(--c-text4)", lineHeight:"2.5rem", margin:0 }}>{MESSAGES[currentMsg]}</p>
         </div>
         <p style={{ fontSize:"clamp(0.95rem,2vw,1.05rem)", color:"var(--c-text4)", maxWidth:"500px", lineHeight:"1.9", marginBottom:"2rem" }}>
           Get daily habit reminders by text.<br/>Built to make sure you follow through.
         </p>
         <div style={{ display:"flex", gap:"1rem", flexWrap:"wrap", marginBottom:"5rem" }}>
-          <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem 2.5rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : setPage("onboard")}>
+          <button style={{ background:"#eab308", border:"none", color:"#fff", padding:"1rem 2.5rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : setPage("onboard")}>
             GET STARTED FREE →
           </button>
         </div>
@@ -402,15 +402,15 @@ export default function MoggedAI() {
               },
             ].map(c => (
               <div key={c.habit} style={{ background:"#0a0a0a", border:"1px solid var(--c-border2)", borderRadius:"16px", padding:"1.25rem", display:"flex", flexDirection:"column", gap:"8px" }}>
-                <div style={{ fontSize:"0.5rem", color:"#0ea5e9", letterSpacing:"0.2em", marginBottom:"4px" }}>{c.habit}</div>
+                <div style={{ fontSize:"0.5rem", color:"#eab308", letterSpacing:"0.2em", marginBottom:"4px" }}>{c.habit}</div>
                 {/* Coach message */}
                 <div style={{ background:"#141414", borderRadius:"10px 10px 10px 0", padding:"0.7rem 0.85rem" }}>
                   <div style={{ fontSize:"0.75rem", color:"#ccc", lineHeight:"1.6" }}>{c.msg}</div>
                   <div style={{ fontSize:"0.45rem", color:"#666", textAlign:"right", marginTop:"6px" }}>{c.time1}</div>
                 </div>
                 {/* User reply */}
-                <div style={{ background:"rgba(14,165,233,0.12)", border:"1px solid rgba(14,165,233,0.2)", borderRadius:"10px 10px 0 10px", padding:"0.6rem 0.85rem", alignSelf:"flex-end", maxWidth:"80%" }}>
-                  <div style={{ fontSize:"0.68rem", color:"#0ea5e9" }}>{c.reply}</div>
+                <div style={{ background:"rgba(234,179,8,0.12)", border:"1px solid rgba(234,179,8,0.2)", borderRadius:"10px 10px 0 10px", padding:"0.6rem 0.85rem", alignSelf:"flex-end", maxWidth:"80%" }}>
+                  <div style={{ fontSize:"0.68rem", color:"#eab308" }}>{c.reply}</div>
                   <div style={{ fontSize:"0.45rem", color:"#555", textAlign:"right", marginTop:"4px" }}>{c.time2}</div>
                 </div>
                 {/* Coach response */}
@@ -430,7 +430,7 @@ export default function MoggedAI() {
               { num:"2-WAY", label:"AI COACHING" },
             ].map(s => (
               <div key={s.label} style={{ background:"var(--c-root)", padding:"1.25rem", textAlign:"center" }}>
-                <div style={{ fontSize:"1.5rem", fontWeight:"700", color:"#0ea5e9", lineHeight:1 }}>{s.num}</div>
+                <div style={{ fontSize:"1.5rem", fontWeight:"700", color:"#eab308", lineHeight:1 }}>{s.num}</div>
                 <div style={{ fontSize:"0.5rem", color:"#666", letterSpacing:"0.15em", marginTop:"0.3rem" }}>{s.label}</div>
               </div>
             ))}
@@ -479,7 +479,7 @@ export default function MoggedAI() {
             { n:"04", title:'Reply "done"', desc:"Mark it complete. We track your streak. No reply? We follow up in 5 minutes." },
           ].map(f => (
             <div key={f.n} style={{ background:"var(--c-root)", padding:"1.5rem 1.25rem" }}>
-              <div style={{ fontSize:"0.7rem", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.75rem", letterSpacing:"0.1em" }}>{f.n} ——</div>
+              <div style={{ fontSize:"0.7rem", color:"#eab308", fontWeight:"700", marginBottom:"0.75rem", letterSpacing:"0.1em" }}>{f.n} ——</div>
               <div style={{ fontSize:"0.8rem", fontWeight:"700", marginBottom:"0.4rem", letterSpacing:"0.05em" }}>{f.title.toUpperCase()}</div>
               <div style={{ fontSize:"0.8rem", color:"var(--c-text4)", lineHeight:"1.7" }}>{f.desc}</div>
             </div>
@@ -492,10 +492,10 @@ export default function MoggedAI() {
         <div style={{ borderTop:"1px solid #111", borderBottom:"1px solid #111", padding:"2.5rem 0", marginBottom:"3rem" }}>
           <p style={{ fontSize:"clamp(1.2rem,3vw,2rem)", fontWeight:"700", lineHeight:1.4, margin:0 }}>
             &ldquo;You already know what you should be doing.<br/>
-            <span style={{ color:"#0ea5e9" }}>You just need someone who won&apos;t let you forget it.&rdquo;</span>
+            <span style={{ color:"#eab308" }}>You just need someone who won&apos;t let you forget it.&rdquo;</span>
           </p>
         </div>
-        <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1.1rem 3rem", fontSize:"0.9rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : setPage("onboard")}>
+        <button style={{ background:"#eab308", border:"none", color:"#fff", padding:"1.1rem 3rem", fontSize:"0.9rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : setPage("onboard")}>
           GET STARTED — IT&apos;S FREE
         </button>
         <p style={{ fontSize:"0.6rem", color:"#555", marginTop:"1rem" }}>US numbers only · Reply STOP to unsubscribe anytime</p>
@@ -511,7 +511,7 @@ export default function MoggedAI() {
             {/* Brand */}
             <div className="footer-brand">
               <div style={{ fontSize:"1.1rem", fontWeight:"700", letterSpacing:"0.15em", color:"var(--c-text)", marginBottom:"0.75rem" }}>
-                MOGGED<span style={{ color:"#0ea5e9" }}>AI</span>
+                MOGGED<span style={{ color:"#eab308" }}>AI</span>
               </div>
               <p style={{ fontSize:"0.72rem", color:"var(--c-text4)", lineHeight:"1.8", margin:"0 0 1.25rem" }}>
                 The AI accountability coach that texts you all day and doesn&apos;t let you make excuses. Set it once. Stay accountable forever.
@@ -524,7 +524,7 @@ export default function MoggedAI() {
                 ].map(s => (
                   <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
                     style={{ display:"flex", alignItems:"center", justifyContent:"center", width:"32px", height:"32px", border:"1px solid var(--c-border2)", color:"#444", fontSize:"0.65rem", fontWeight:"700", textDecoration:"none", letterSpacing:"0.05em" }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor="#0ea5e9"; (e.currentTarget as HTMLAnchorElement).style.color="#0ea5e9"; }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor="#eab308"; (e.currentTarget as HTMLAnchorElement).style.color="#eab308"; }}
                     onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor="#1a1a1a"; (e.currentTarget as HTMLAnchorElement).style.color="#444"; }}
                   >{s.label}</a>
                 ))}

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const mono = "'Space Mono','Courier New',monospace";
-const C = { bg: "#080808", text: "#f0f0f0", red: "#0ea5e9", muted: "#444", border: "#1a1a1a", card: "#0d0d0d" };
+const C = { bg: "#080808", text: "#f0f0f0", red: "#eab308", muted: "#444", border: "#1a1a1a", card: "#0d0d0d" };
 
 const FAQS = [
   {
@@ -112,7 +112,7 @@ export default function FAQ() {
   return (
     <div style={{ minHeight: "100vh", background: C.bg, color: C.text, fontFamily: mono }}>
       {/* Nav */}
-      <nav style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 1.5rem", borderBottom: `1px solid rgba(14,165,233,0.2)`, background: "rgba(8,8,8,0.97)", position: "sticky", top: 0, zIndex: 10 }}>
+      <nav style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 1.5rem", borderBottom: `1px solid rgba(234,179,8,0.2)`, background: "rgba(8,8,8,0.97)", position: "sticky", top: 0, zIndex: 10 }}>
         <div style={{ fontSize: "1.1rem", fontWeight: "700", letterSpacing: "0.15em", cursor: "pointer" }} onClick={() => router.push("/")}>
           MOGGED<span style={{ color: C.red }}>AI</span>
         </div>
@@ -127,7 +127,7 @@ export default function FAQ() {
       <div style={{ maxWidth: "720px", margin: "0 auto", padding: "3rem 1.25rem 6rem" }}>
         {/* Header */}
         <div style={{ marginBottom: "3rem" }}>
-          <div style={{ fontSize: "0.55rem", letterSpacing: "0.25em", color: C.red, border: `1px solid rgba(14,165,233,0.3)`, padding: "0.25rem 0.7rem", display: "inline-block", marginBottom: "1rem" }}>FAQ</div>
+          <div style={{ fontSize: "0.55rem", letterSpacing: "0.25em", color: C.red, border: `1px solid rgba(234,179,8,0.3)`, padding: "0.25rem 0.7rem", display: "inline-block", marginBottom: "1rem" }}>FAQ</div>
           <h1 style={{ fontSize: "clamp(2rem,5vw,3rem)", fontWeight: "700", lineHeight: 1.1, margin: "0 0 0.75rem" }}>
             Frequently asked<br /><span style={{ color: C.red }}>questions.</span>
           </h1>

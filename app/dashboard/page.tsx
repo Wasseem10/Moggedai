@@ -72,7 +72,7 @@ const COACH_OPTIONS = [
   { value: 'savage', label: 'SAVAGE', sub: 'Maximum pressure. Not for the weak.' },
 ]
 
-type View = 'overview' | 'detail' | 'add'
+type View = 'overview' | 'detail' | 'add' | 'confirm'
 
 interface AddDraft {
   name: string
@@ -102,6 +102,7 @@ export default function Dashboard() {
   const { signOut } = useClerk()
 
   const [view, setView] = useState<View>('overview')
+  const [confirmedDraft, setConfirmedDraft] = useState<AddDraft | null>(null)
   const [selectedMission, setSelectedMission] = useState<Habit | null>(null)
 
   const [userData, setUserData] = useState<UserData | null>(null)
@@ -153,7 +154,8 @@ export default function Dashboard() {
         body: JSON.stringify({ add_habit: addDraft }),
       })
       await loadData()
-      setView('overview')
+      setConfirmedDraft({ ...addDraft })
+      setView('confirm')
       setAddDraft(defaultDraft())
       setAddStep(1)
     } catch (e) {
@@ -231,6 +233,12 @@ export default function Dashboard() {
               messages={recentMessages.filter(m => m.habit_id === selectedMission.id)}
               onBack={() => setView('overview')}
               onDelete={() => handleDeleteHabit(selectedMission.id)}
+            />
+          )}
+          {view === 'confirm' && confirmedDraft && (
+            <ConfirmView
+              draft={confirmedDraft}
+              onDone={() => setView('overview')}
             />
           )}
           {view === 'add' && (
@@ -642,6 +650,93 @@ function AccountRow({ label, value }: { label: string; value: string }) {
     }}>
       <span style={{ fontFamily: MONO, fontSize: '0.55rem', color: C.text3, letterSpacing: '0.15em' }}>{label}</span>
       <span style={{ fontFamily: MONO, fontSize: '0.75rem', color: C.text2 }}>{value}</span>
+    </div>
+  )
+}
+
+// ─── Confirm View ──────────────────────────────────────────────────────────────
+
+function ConfirmView({ draft, onDone }: { draft: AddDraft; onDone: () => void }) {
+  const timeLabel = TIME_OPTIONS.find(t => t.value === draft.time_of_day)?.label ?? draft.time_of_day
+  const coachLabel = COACH_OPTIONS.find(c => c.value === draft.coach_style)?.label ?? draft.coach_style
+
+  return (
+    <div style={{ paddingTop: '3rem' }}>
+
+      {/* Success badge */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '2.5rem' }}>
+        <div style={{
+          width: '64px', height: '64px', borderRadius: '50%',
+          background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.3)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '1.75rem', marginBottom: '1.25rem',
+        }}>
+          {draft.emoji}
+        </div>
+        <div style={{ fontFamily: MONO, fontSize: '0.55rem', letterSpacing: '0.25em', color: '#22c55e', marginBottom: '0.5rem' }}>
+          MISSION ACTIVATED
+        </div>
+        <h2 style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.3rem,5vw,1.6rem)', margin: 0, color: C.text }}>
+          {draft.name} is live
+        </h2>
+      </div>
+
+      {/* Summary card */}
+      <div style={{ border: `1px solid ${C.border}`, background: C.s1, marginBottom: '1.5rem' }}>
+        <div style={{ padding: '1rem 1.25rem', borderBottom: `1px solid ${C.border}` }}>
+          <div style={{ fontFamily: MONO, fontSize: '0.5rem', color: C.text3, letterSpacing: '0.15em', marginBottom: '0.35rem' }}>WHAT YOU SET UP</div>
+        </div>
+        {[
+          { label: 'HABIT',       value: `${draft.emoji} ${draft.name}` },
+          { label: 'CHECK-IN TIME', value: timeLabel },
+          { label: 'COACH STYLE', value: coachLabel },
+          ...(draft.why        ? [{ label: 'YOUR WHY',     value: draft.why }]           : []),
+          ...(draft.stakes     ? [{ label: 'STAKES',       value: draft.stakes }]        : []),
+        ].map((row, i, arr) => (
+          <div key={row.label} style={{
+            display: 'flex', gap: '1rem', padding: '0.85rem 1.25rem',
+            borderBottom: i < arr.length - 1 ? `1px solid ${C.border}` : undefined,
+            alignItems: 'flex-start',
+          }}>
+            <span style={{ fontFamily: MONO, fontSize: '0.5rem', color: C.text3, letterSpacing: '0.12em', minWidth: '100px', paddingTop: '2px' }}>{row.label}</span>
+            <span style={{ fontFamily: GROTESK, fontSize: '0.85rem', color: C.text, lineHeight: 1.5 }}>{row.value}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Next steps */}
+      <div style={{ border: `1px solid ${C.border}`, background: C.s1, marginBottom: '2rem' }}>
+        <div style={{ padding: '1rem 1.25rem', borderBottom: `1px solid ${C.border}` }}>
+          <div style={{ fontFamily: MONO, fontSize: '0.5rem', color: C.text3, letterSpacing: '0.15em' }}>WHAT HAPPENS NEXT</div>
+        </div>
+        {[
+          { n: '01', text: `You'll start receiving texts for ${draft.name} during your chosen time window.` },
+          { n: '02', text: 'Each message is AI-generated — different every time, based on your why and stakes.' },
+          { n: '03', text: 'Reply "done" when you complete it. Your streak starts building immediately.' },
+          { n: '04', text: "No reply? We follow up in 5 minutes. No excuses." },
+        ].map((step, i, arr) => (
+          <div key={step.n} style={{
+            display: 'flex', gap: '1rem', padding: '0.85rem 1.25rem',
+            borderBottom: i < arr.length - 1 ? `1px solid ${C.border}` : undefined,
+            alignItems: 'flex-start',
+          }}>
+            <span style={{ fontFamily: MONO, fontSize: '0.6rem', color: '#0ea5e9', minWidth: '24px', paddingTop: '2px' }}>{step.n}</span>
+            <span style={{ fontFamily: GROTESK, fontSize: '0.83rem', color: C.text2, lineHeight: 1.6 }}>{step.text}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* CTA */}
+      <button
+        onClick={onDone}
+        style={{
+          width: '100%', background: '#0ea5e9', border: 'none', color: '#fff',
+          fontFamily: MONO, fontSize: '0.7rem', letterSpacing: '0.15em',
+          padding: '1rem', cursor: 'pointer', borderRadius: 0,
+        }}
+      >
+        GO TO DASHBOARD →
+      </button>
     </div>
   )
 }

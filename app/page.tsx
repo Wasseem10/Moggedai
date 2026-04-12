@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, useClerk } from "@clerk/nextjs";
 
 const MESSAGES = [
   "you've been 'about to start' for 3 hours. get up.",
@@ -22,6 +22,7 @@ export default function MoggedAI() {
   const [ticker, setTicker]         = useState(0);
   const router = useRouter();
   const { isSignedIn } = useAuth();
+  const { signOut } = useClerk();
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
@@ -67,10 +68,17 @@ export default function MoggedAI() {
       <nav style={nav}>
         <div style={logoS}>MOGGED<span style={{ color:"#0ea5e9" }}>AI</span></div>
         <div style={{ display:"flex", gap:"0.5rem" }}>
-          <button style={navBtn} onClick={() => router.push(isSignedIn ? "/dashboard" : "/sign-in")}>
-            {isSignedIn ? "DASHBOARD" : "LOG IN"}
-          </button>
-          <button style={navBtn} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>GET STARTED</button>
+          {isSignedIn ? (
+            <>
+              <button style={navBtn} onClick={() => router.push("/dashboard")}>DASHBOARD</button>
+              <button style={{ ...navBtn, borderColor:"var(--c-border)", color:"var(--c-text3)" }} onClick={() => signOut({ redirectUrl: "/" })}>SIGN OUT</button>
+            </>
+          ) : (
+            <>
+              <button style={navBtn} onClick={() => router.push("/sign-in")}>LOG IN</button>
+              <button style={navBtn} onClick={() => router.push("/sign-up")}>GET STARTED</button>
+            </>
+          )}
         </div>
       </nav>
 

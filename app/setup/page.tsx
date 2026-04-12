@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 const MONO = "'Space Mono','Courier New',monospace";
@@ -14,6 +14,7 @@ const INTENSITIES = [
 export default function SetupPage() {
   const router = useRouter();
   const [step, setStep]           = useState(1);
+  const [checking, setChecking]   = useState(true);
   const [phone, setPhone]         = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [freq, setFreq]           = useState(60);
@@ -22,6 +23,20 @@ export default function SetupPage() {
   const [consent, setConsent]     = useState(false);
   const [loading, setLoading]     = useState(false);
   const [error, setError]         = useState("");
+
+  // Redirect to dashboard if already set up
+  useEffect(() => {
+    fetch("/api/user")
+      .then(r => r.json())
+      .then(d => {
+        if (d.user?.phone) {
+          router.replace("/dashboard");
+        } else {
+          setChecking(false);
+        }
+      })
+      .catch(() => setChecking(false));
+  }, [router]);
 
   const formatPhone = (v: string) => {
     const d = v.replace(/\D/g, "").slice(0, 10);
@@ -64,6 +79,14 @@ export default function SetupPage() {
       setLoading(false);
     }
   };
+
+  if (checking) {
+    return (
+      <div style={{ minHeight: "100vh", background: "var(--c-root)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <span style={{ fontFamily: MONO, fontSize: "0.7rem", letterSpacing: "0.2em", color: "var(--c-text3)" }}>LOADING...</span>
+      </div>
+    );
+  }
 
   const root: React.CSSProperties = {
     minHeight: "100vh",

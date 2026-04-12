@@ -397,7 +397,7 @@ function OverviewView({
       {/* Hero */}
       <div style={{ paddingTop: '2rem', paddingBottom: '1.5rem' }}>
         <p style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.2em', margin: 0, marginBottom: '0.4rem' }}>
-          {greeting}
+          {greeting} · {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }).toUpperCase()}
         </p>
         <h1 style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.3rem,5vw,1.6rem)', margin: 0, marginBottom: '0.5rem', color: C.text }}>
           {displayName}
@@ -472,7 +472,49 @@ function OverviewView({
           {habits.map(h => (
             <MissionCard key={h.id} habit={h} onClick={() => onSelectMission(h)} />
           ))}
-          {habits.length < 5 && (
+
+          {/* Empty state — shown when no missions yet */}
+          {habits.length === 0 && (
+            <div style={{
+              border: `1px solid ${C.border}`,
+              background: C.s1,
+              padding: '2.5rem 1.5rem',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '1rem',
+            }}>
+              <div style={{ fontSize: '2.5rem', lineHeight: 1 }}>🎯</div>
+              <div>
+                <p style={{ fontFamily: MONO, fontSize: '0.7rem', letterSpacing: '0.15em', color: C.text, margin: 0, marginBottom: '0.4rem', fontWeight: 700 }}>
+                  NO MISSIONS YET
+                </p>
+                <p style={{ fontFamily: MONO, fontSize: '0.58rem', color: C.text3, margin: 0, lineHeight: 1.7, letterSpacing: '0.05em' }}>
+                  Add your first mission and your AI coach<br />will start texting you to make sure you do it.
+                </p>
+              </div>
+              <button
+                onClick={onAddMission}
+                style={{
+                  background: '#0ea5e9',
+                  border: 'none',
+                  color: '#fff',
+                  fontFamily: MONO,
+                  fontSize: '0.7rem',
+                  letterSpacing: '0.15em',
+                  fontWeight: 700,
+                  padding: '0.85rem 1.75rem',
+                  cursor: 'pointer',
+                }}
+              >
+                + ADD YOUR FIRST MISSION
+              </button>
+            </div>
+          )}
+
+          {/* Add button — shown when missions exist but under the limit */}
+          {habits.length > 0 && habits.length < 5 && (
             <button
               onClick={onAddMission}
               style={{
@@ -701,7 +743,7 @@ function MissionCard({ habit, onClick }: { habit: Habit; onClick: () => void }) 
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
           }}>
-            {habit.last_message || 'No check-ins yet'}
+            {habit.last_message || "You haven't started. Don't fall behind."}
           </p>
         </div>
         <span style={{ color: C.text3, fontSize: '0.9rem', flexShrink: 0 }}>›</span>

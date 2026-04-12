@@ -1,21 +1,97 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getDb } from '@/lib/db'
 import { GoogleGenerativeAI } from '@google/generative-ai'
-import twilio from 'twilio'
 
-async function generateCoachReply(userMessage: string, habitName: string, coachStyle: string): Promise<string> {
+type HabitRow = {
+  id: string
+  name: string
+  emoji: string
+  why: string | null
+  biggest_excuse: string | null
+  stakes: string | null
+  coach_style: string | null
+}
+
+async function generateCoachReply(
+  userMessage: string,
+  habit: HabitRow,
+  coachStyle: string,
+  recentCheckIns: string[]
+): Promise<string> {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
   const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+
   const styleGuide: Record<string, string> = {
-    brutal: 'Be brutal and harsh. No sympathy.',
-    direct: 'Be direct and no-nonsense.',
-    motivating: 'Be intense but motivating.',
+    direct: `no-nonsense, real, short. like a friend who doesn't sugarcoat but actually wants them to win.`,
+    brutal: `tough love. zero sympathy. calls out their pattern directly. reminds them of what's at stake.`,
+    savage: `ruthless and relentless. says the thing nobody else will say to them. maximum pressure.`,
+    motivating: `hype energy but grounded. pulls from their "why". makes them feel like they can actually do this.`,
   }
-  const prompt = `You are an AI accountability coach via SMS.
-Habit: "${habitName}"
-Style: ${styleGuide[coachStyle] || styleGuide.direct}
-User replied: "${userMessage}"
-Respond in 1-2 sentences max. Be sharp. No emojis. Reply ONLY with your message.`
+
+  const contextBlock = recentCheckIns.length
+    ? `\nlast few things you texted them:\n${recentCheckIns.map(m => `- "${m}"`).join('\n')}\n`
+    : ''
+
+  const prompt = `you're their accountability coach texting back. you text like a real gen z person — short, lowercase, casual, no corporate speak. this is a real text conversation, not a chatbot interaction.
+
+their habit: "${habit.name}"
+${habit.why ? `why they care: ${habit.why}` : ''}
+${habit.biggest_excuse ? `their go-to excuse: ${habit.biggest_excuse}` : ''}
+${habit.stakes ? `what's at stake: ${habit.stakes}` : ''}
+your energy: ${styleGuide[coachStyle] || styleGuide.direct}
+${contextBlock}
+they just texted: "${userMessage}"
+
+reply in 1-2 sentences MAX. react to exactly what they said. if they're making an excuse, call it out using what you know about them. if they're giving you a reason they can't, push back on it. if they did the thing, react to that. keep it human — no emojis unless it actually fits, no "great job!" type energy unless you're on motivating mode. reply ONLY with the message.`
+
+  const result = await model.generateContent(prompt)
+  return result.response.text().trim()
+}
+
+async function generateDoneReply(
+  habit: HabitRow,
+  coachStyle: string,
+  streak: number
+): Promise<string> {
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+
+  const styleGuide: Record<string, string> = {
+    direct: `real and clean. acknowledge it without making it a big thing. keep them locked in.`,
+    brutal: `give credit but don't let them celebrate too hard. remind them consistency is what matters.`,
+    savage: `minimal praise. one line max. pivot to what's next.`,
+    motivating: `let them feel it. they're building something. ${streak > 1 ? `the streak is real, hype it.` : `tell them this is how it starts.`}`,
+  }
+
+  const streakLine = streak > 1 ? ` they're on a ${streak}-day streak right now.` : ''
+
+  const prompt = `your client just said they did their "${habit.name}" habit.${streakLine}
+
+${habit.why ? `why this matters to them: ${habit.why}` : ''}
+
+send a short reply. be ${styleGuide[coachStyle] || styleGuide.direct} 1-2 sentences MAX. text like a real person — short, lowercase, casual. no "great job!" or "awesome!" unless it's genuine hype. reply ONLY with the message.`
+
+  const result = await model.generateContent(prompt)
+  return result.response.text().trim()
+}
+
+async function generateSkipReply(habit: HabitRow, coachStyle: string): Promise<string> {
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+
+  const styleGuide: Record<string, string> = {
+    direct: 'call it out cleanly. no drama but make them feel it.',
+    brutal: 'no mercy. remind them exactly what they keep doing and what it costs them.',
+    savage: 'one sentence. make it sting. say the thing they don\'t want to hear.',
+    motivating: 'show disappointment but redirect. tomorrow is still there.',
+  }
+
+  const prompt = `your client just texted "skip" for their "${habit.name}" habit.
+${habit.stakes ? `what's at stake for them: ${habit.stakes}` : ''}
+${habit.biggest_excuse ? `their usual excuse: ${habit.biggest_excuse}` : ''}
+
+reply in 1 sentence. ${styleGuide[coachStyle] || styleGuide.direct} lowercase, short, real. reply ONLY with the message.`
+
   const result = await model.generateContent(prompt)
   return result.response.text().trim()
 }
@@ -50,7 +126,7 @@ export async function POST(req: NextRequest) {
     const db = getDb()
     const digits = from.replace(/\D/g, '')
 
-    // Get user
+    // Get user + profile
     const { rows: userRows } = await db.query(
       `SELECT u.id, p.coach_style, p.biggest_distraction
        FROM users u
@@ -64,7 +140,7 @@ export async function POST(req: NextRequest) {
       if (userRows.length) {
         await db.query(`UPDATE schedules SET active = false WHERE user_id = $1`, [userRows[0].id])
       }
-      return twiml("You've been unsubscribed. Text START anytime to get back on track.")
+      return twiml("you've been unsubscribed. text START anytime to get back on track.")
     }
 
     // ── START ──────────────────────────────────────────────────────────────
@@ -72,141 +148,113 @@ export async function POST(req: NextRequest) {
       if (userRows.length) {
         await db.query(`UPDATE schedules SET active = true WHERE user_id = $1`, [userRows[0].id])
       }
-      return twiml("You're back. No more excuses.")
+      return twiml("you're back. let's get it.")
     }
 
     if (!userRows.length) {
-      return twiml("I don't have you in the system. Sign up at moggedai.com")
+      return twiml("i don't have you in the system. sign up at moggedai.com")
     }
 
     const user = userRows[0]
+    const coachStyle = user.coach_style || 'direct'
+
+    // Get active habits with full context
+    const { rows: habits } = await db.query(
+      `SELECT id, name, emoji, why, biggest_excuse, stakes, coach_style
+       FROM habits WHERE user_id = $1 AND active = true`,
+      [user.id]
+    )
+
+    // Get last outbound message to know which habit we were talking about
+    const { rows: lastOutbound } = await db.query(
+      `SELECT m.habit_id, m.message_text
+       FROM messages m
+       WHERE m.user_id = $1
+       ORDER BY m.sent_at DESC LIMIT 1`,
+      [user.id]
+    )
+
+    const activeHabitId = lastOutbound[0]?.habit_id
+    const activeHabit: HabitRow =
+      habits.find((h: HabitRow) => h.id === activeHabitId) ||
+      habits[0] || {
+        id: null,
+        name: 'your goal',
+        emoji: '🎯',
+        why: null,
+        biggest_excuse: null,
+        stakes: null,
+        coach_style: null,
+      }
+
+    // Get recent outbound check-ins as context (last 4)
+    const { rows: recentMsgs } = await db.query(
+      `SELECT message_text FROM messages
+       WHERE user_id = $1
+       ORDER BY sent_at DESC LIMIT 4`,
+      [user.id]
+    )
+    const recentCheckIns = recentMsgs.reverse().map((m: { message_text: string }) => m.message_text)
+
+    // Mark any pending outbound as responded
+    await db.query(
+      `UPDATE messages SET responded_at = NOW(), follow_up_sent = true
+       WHERE user_id = $1 AND responded_at IS NULL`,
+      [user.id]
+    )
 
     // ── HABITS ─────────────────────────────────────────────────────────────
     if (/^habits?$/i.test(body)) {
-      const { rows: habits } = await db.query(
-        `SELECT h.name, h.emoji,
-                COUNT(c.id) as total,
-                MAX(c.completed_at) as last_done
-         FROM habits h
-         LEFT JOIN completions c ON c.habit_id = h.id
-         WHERE h.user_id = $1 AND h.active = true
-         GROUP BY h.id, h.name, h.emoji`,
-        [user.id]
-      )
-      if (!habits.length) return twiml("No habits set up yet. Go to moggedai.com to add some.")
-      const list = habits.map((h: { emoji: string; name: string; total: string }) => `${h.emoji} ${h.name} (${h.total} done)`).join('\n')
-      return twiml(`Your habits:\n${list}`)
+      if (!habits.length) return twiml("no habits set up yet. go to moggedai.com to add some.")
+      const list = habits.map((h: HabitRow) => `${h.emoji} ${h.name}`).join('\n')
+      return twiml(`your missions:\n${list}`)
     }
 
     // ── STREAK ─────────────────────────────────────────────────────────────
     if (/^streak$/i.test(body)) {
-      const { rows: habits } = await db.query(
-        `SELECT h.name, h.emoji FROM habits h WHERE h.user_id = $1 AND h.active = true`,
-        [user.id]
-      )
       const lines: string[] = []
       for (const h of habits) {
         const { rows: comps } = await db.query(
-          `SELECT completed_at FROM completions WHERE user_id = $1 AND habit_id = (SELECT id FROM habits WHERE user_id = $1 AND name = $2 LIMIT 1) ORDER BY completed_at DESC LIMIT 365`,
-          [user.id, h.name]
+          `SELECT completed_at FROM completions WHERE user_id = $1 AND habit_id = $2 ORDER BY completed_at DESC LIMIT 365`,
+          [user.id, h.id]
         )
         const streak = getStreak(comps)
         lines.push(`${h.emoji} ${h.name}: ${streak} day streak`)
       }
-      return twiml(lines.join('\n') || "No streaks yet. Get moving.")
+      return twiml(lines.join('\n') || "no streaks yet. get moving.")
     }
 
     // ── DONE ───────────────────────────────────────────────────────────────
-    if (/^done/i.test(body)) {
-      // Find most recent message to get habit
-      const { rows: lastMsg } = await db.query(
-        `SELECT m.habit_id, h.name, h.emoji FROM messages m
-         LEFT JOIN habits h ON h.id = m.habit_id
-         WHERE m.user_id = $1
-         ORDER BY m.sent_at DESC LIMIT 1`,
-        [user.id]
-      )
-
-      const habitId = lastMsg[0]?.habit_id
-      const habitName = lastMsg[0]?.name || 'your habit'
-      const habitEmoji = lastMsg[0]?.emoji || '✓'
-
-      // Mark message as responded
-      await db.query(
-        `UPDATE messages SET responded_at = NOW(), follow_up_sent = true
-         WHERE user_id = $1 AND responded_at IS NULL
-         ORDER BY sent_at DESC LIMIT 1`,
-        [user.id]
-      )
-
-      // Log completion
-      if (habitId) {
+    if (/^(done|finished|completed|did it|just did|i did it)/i.test(body)) {
+      if (activeHabitId) {
         await db.query(
           `INSERT INTO completions (user_id, habit_id, completed_at) VALUES ($1, $2, NOW())`,
-          [user.id, habitId]
+          [user.id, activeHabitId]
         )
       }
 
-      // Calculate streak
       const { rows: comps } = await db.query(
         `SELECT completed_at FROM completions WHERE user_id = $1 AND habit_id = $2 ORDER BY completed_at DESC LIMIT 365`,
-        [user.id, habitId]
+        [user.id, activeHabitId]
       )
       const streak = getStreak(comps)
 
-      const coachStyle = user.coach_style || 'direct'
-      const streakMsg = streak > 1 ? ` ${streak} day streak.` : ''
-
-      const replies: Record<string, string[]> = {
-        brutal: [`${habitEmoji} Done.${streakMsg} Don't get comfortable.`, `Good.${streakMsg} Now stay focused.`],
-        direct: [`${habitEmoji} Marked done.${streakMsg} Keep it up.`, `Got it.${streakMsg} Stay on it.`],
-        motivating: [`${habitEmoji} Let's go!${streakMsg} You're building something real.`, `Yes!${streakMsg} That's how it's done.`],
-      }
-
-      const pool = replies[coachStyle] || replies.direct
-      const reply = pool[Math.floor(Math.random() * pool.length)]
+      const reply = await generateDoneReply(activeHabit, coachStyle, streak)
       return twiml(reply)
     }
 
     // ── SKIP ───────────────────────────────────────────────────────────────
     if (/^skip$/i.test(body)) {
-      await db.query(
-        `UPDATE messages SET responded_at = NOW(), follow_up_sent = true
-         WHERE user_id = $1 AND responded_at IS NULL
-         ORDER BY sent_at DESC LIMIT 1`,
-        [user.id]
-      )
-      const style = user.coach_style || 'direct'
-      const msgs: Record<string, string> = {
-        brutal: "Skipped. Again. That's why you're not where you want to be.",
-        direct: "Skipped. Don't make it a habit.",
-        motivating: "Skipped this one. Make sure you get back to it.",
-      }
-      return twiml(msgs[style] || msgs.direct)
+      const reply = await generateSkipReply(activeHabit, coachStyle)
+      return twiml(reply)
     }
 
-    // ── AI COACH REPLY ─────────────────────────────────────────────────────
-    const { rows: lastMsg } = await db.query(
-      `SELECT m.habit_id, h.name FROM messages m
-       LEFT JOIN habits h ON h.id = m.habit_id
-       WHERE m.user_id = $1 ORDER BY m.sent_at DESC LIMIT 1`,
-      [user.id]
-    )
-
-    // Mark as responded
-    await db.query(
-      `UPDATE messages SET responded_at = NOW()
-       WHERE user_id = $1 AND responded_at IS NULL
-       ORDER BY sent_at DESC LIMIT 1`,
-      [user.id]
-    )
-
-    const habitName = lastMsg[0]?.name || 'your goal'
-    const reply = await generateCoachReply(body, habitName, user.coach_style || 'direct')
+    // ── AI COACH REPLY (catch-all for everything else) ─────────────────────
+    const reply = await generateCoachReply(body, activeHabit, coachStyle, recentCheckIns)
     return twiml(reply)
 
   } catch (err) {
     console.error('Incoming webhook error:', err)
-    return twiml("Something went wrong on our end. Try again.")
+    return twiml("something went wrong on our end. try again.")
   }
 }

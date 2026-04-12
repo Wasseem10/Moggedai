@@ -34,32 +34,58 @@ async function generateMessage(habit: HabitContext, scheduleCoachStyle: string):
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
   const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
 
-  const styleGuide: Record<string, string> = {
-    brutal: 'Be brutal and harsh. No sympathy. Call them out hard.',
-    direct: 'Be direct and no-nonsense. Sharp, clear, no fluff.',
-    motivating: 'Be intense but motivating. Push them forward with energy.',
-    savage: 'Maximum pressure. No mercy. Absolutely ruthless. Not for the weak.',
-  }
-
   const coachStyle = habit.coach_style || scheduleCoachStyle || 'direct'
 
-  const prompt = `You are an AI accountability coach sending an SMS check-in.
-Habit: "${habit.name}"
-${habit.why ? `Why they want to do this: ${habit.why}` : ''}
-${habit.biggest_excuse ? `Their go-to excuse: ${habit.biggest_excuse}` : ''}
-${habit.stakes ? `What's at stake: ${habit.stakes}` : ''}
-Coach style: ${styleGuide[coachStyle] || styleGuide.direct}
-Write ONE short accountability text (1-2 sentences max). Be specific to their situation. No emojis. Sound human. Reply ONLY with the message.`
+  const styleGuide: Record<string, string> = {
+    direct: `no-nonsense. short, real, gets to the point. like a friend who doesn't sugarcoat things but actually wants you to win.`,
+    brutal: `tough love. zero sympathy. calls out their BS directly. reminds them what they said they wanted and why they keep fumbling it.`,
+    savage: `ruthless. maximum pressure. says the uncomfortable thing out loud. if they have a pattern of excuses, name it. no softness.`,
+    motivating: `hype energy but grounded. makes them feel like they can actually do it. pulls from their "why". more hype coach than drill sergeant.`,
+  }
+
+  const prompt = `you're texting someone as their personal accountability coach. you text exactly like a gen z friend who actually cares — short, casual, lowercase, real. NOT a notification. NOT a marketing text. NOT a bot.
+
+their habit: "${habit.name}"
+${habit.why ? `why they care about it: ${habit.why}` : ''}
+${habit.biggest_excuse ? `their go-to excuse when they skip: ${habit.biggest_excuse}` : ''}
+${habit.stakes ? `what's at stake if they keep slacking: ${habit.stakes}` : ''}
+your energy: ${styleGuide[coachStyle] || styleGuide.direct}
+
+write ONE check-in text. 1-2 sentences MAX. use their specific context — don't be generic. if they have a known excuse, you can call it out. mix it up in tone (sometimes a question, sometimes a statement, sometimes calling them out). do NOT start with "hey" every time. do NOT say things like "friendly reminder" or "checking in" or "hope you're doing well". do NOT use exclamation points unless it's genuinely hype. just sound like a real person.
+
+good examples (do NOT copy — just match the energy):
+- "yo you hitting the gym today or are we doing the excuse thing again"
+- "it's leg day. you going or nah"
+- "bro you said this matters to you. so what's the move"
+- "haven't seen you skip yet this week. don't start now"
+- "real talk — you doing it today or not"
+- "your future self is watching. what are you doing rn"
+
+reply ONLY with the message. nothing else.`
 
   const result = await model.generateContent(prompt)
   return result.response.text().trim()
 }
 
-async function generateFollowUp(habitName: string, coachStyle: string): Promise<string> {
+async function generateFollowUp(habitName: string, coachStyle: string, excuse?: string | null): Promise<string> {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
   const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
-  const prompt = `You are an AI accountability coach. You texted someone about "${habitName}" 5 minutes ago and they haven't replied.
-Send a short follow-up (1 sentence). Ask if they did it. Be ${coachStyle}. No emojis. Reply ONLY with the message.`
+
+  const styleGuide: Record<string, string> = {
+    direct: 'direct and real',
+    brutal: 'harsh, no sympathy',
+    savage: 'ruthless, maximum pressure',
+    motivating: 'intense but pushing them forward',
+  }
+
+  const prompt = `you texted someone about their "${habitName}" habit a few minutes ago. no reply yet.
+
+send a follow-up. 1 sentence only. be ${styleGuide[coachStyle] || styleGuide.direct}. text like a real person — short, casual, lowercase. ${excuse ? `their usual excuse is "${excuse}" — if it fits naturally, call it out without being weird about it.` : ''}
+
+do NOT say "just checking in" or "following up" or anything corporate. sound like a friend who's lowkey annoyed they haven't heard back.
+
+reply ONLY with the message.`
+
   const result = await model.generateContent(prompt)
   return result.response.text().trim()
 }

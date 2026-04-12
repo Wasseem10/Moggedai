@@ -1,10 +1,5 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -12,30 +7,78 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─── Theme Variables ──────────────────────────────────────────────────────── */
+
+:root {
+  --c-bg:           #0c0c0c;
+  --c-root:         #080808;
+  --c-s1:           #131313;
+  --c-s2:           #191919;
+  --c-border:       #1f1f1f;
+  --c-border2:      #1a1a1a;
+  --c-text:         #f0f0f0;
+  --c-text2:        #b0b0b0;
+  --c-text3:        #707070;
+  --c-text4:        #aaaaaa;
+  --c-text5:        #555555;
+  --c-accent:       #0ea5e9;
+  --c-accent-dim:   rgba(14,165,233,0.08);
+  --c-accent-bdr:   rgba(14,165,233,0.2);
+  --c-grid:         rgba(14,165,233,0.04);
+  --c-nav:          rgba(8,8,8,0.95);
+  --c-input:        #111111;
+  --c-input-bdr:    #222222;
 }
+
+[data-theme="light"] {
+  --c-bg:           #f2f2f2;
+  --c-root:         #fafafa;
+  --c-s1:           #ffffff;
+  --c-s2:           #ececec;
+  --c-border:       #dcdcdc;
+  --c-border2:      #e5e5e5;
+  --c-text:         #111111;
+  --c-text2:        #444444;
+  --c-text3:        #888888;
+  --c-text4:        #555555;
+  --c-text5:        #999999;
+  --c-accent:       #0ea5e9;
+  --c-accent-dim:   rgba(14,165,233,0.08);
+  --c-accent-bdr:   rgba(14,165,233,0.25);
+  --c-grid:         rgba(14,165,233,0.05);
+  --c-nav:          rgba(250,250,250,0.95);
+  --c-input:        #f5f5f5;
+  --c-input-bdr:    #d0d0d0;
+}
+
+/* ─── Base ─────────────────────────────────────────────────────────────────── */
 
 body {
   margin: 0;
   padding: 0;
 }
 
-/* Mobile responsive fixes */
+/* ─── Mobile ───────────────────────────────────────────────────────────────── */
+
 @media (max-width: 480px) {
-  /* Shrink nav buttons on small screens */
   nav button {
     padding: 0.35rem 0.6rem !important;
     font-size: 0.6rem !important;
     letter-spacing: 0.05em !important;
     white-space: nowrap;
   }
-
-  /* Reduce hero top padding */
   .hero-section {
     padding-top: 4rem !important;
   }
+}
+
+/* ─── Who-grid / Footer responsive ────────────────────────────────────────── */
+
+.who-grid  { grid-template-columns: repeat(4, 1fr); }
+.footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
+
+@media (max-width: 640px) {
+  .who-grid    { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr 1fr; }
+  .footer-brand { grid-column: 1 / -1; }
 }

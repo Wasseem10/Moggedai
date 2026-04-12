@@ -33,14 +33,13 @@ type Message = {
 // ─── Constants ─────────────────────────────────────────────────────────────────
 
 const C = {
-  bg: '#0c0c0c',
-  s1: '#131313',
-  s2: '#191919',
-  border: '#1f1f1f',
-  red: '#0ea5e9',
-  text: '#f0f0f0',
-  text2: '#b0b0b0',
-  text3: '#707070',
+  bg:     'var(--c-bg)',
+  s1:     'var(--c-s1)',
+  s2:     'var(--c-s2)',
+  border: 'var(--c-border)',
+  text:   'var(--c-text)',
+  text2:  'var(--c-text2)',
+  text3:  'var(--c-text3)',
 }
 
 const MONO = "'Space Mono', 'Courier New', monospace"
@@ -110,6 +109,19 @@ export default function Dashboard() {
   const [stats, setStats] = useState<Stats>({ total_texts: 0, streak: 0, total_completions: 0 })
   const [recentMessages, setRecentMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(true)
+  const [theme, setTheme] = useState<'dark'|'light'>('dark')
+
+  useEffect(() => {
+    const stored = (localStorage.getItem('mogged-theme') || 'dark') as 'dark'|'light'
+    setTheme(stored)
+  }, [])
+
+  const toggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark'
+    setTheme(next)
+    localStorage.setItem('mogged-theme', next)
+    document.documentElement.setAttribute('data-theme', next)
+  }
 
   // Add flow state
   const [addStep, setAddStep] = useState(1)
@@ -211,7 +223,7 @@ export default function Dashboard() {
     <>
       <FontLoader />
       <div style={{ background: C.bg, minHeight: '100vh', color: C.text, fontFamily: GROTESK }}>
-        <Nav onLogoClick={() => router.push('/')} />
+        <Nav onLogoClick={() => router.push('/')} theme={theme} onToggleTheme={toggleTheme} />
         <div style={{ maxWidth: 640, margin: '0 auto', padding: '0 1.25rem', paddingBottom: '4rem' }}>
           {view === 'overview' && (
             <OverviewView
@@ -276,7 +288,7 @@ function FontLoader() {
 
 // ─── Nav ───────────────────────────────────────────────────────────────────────
 
-function Nav({ onLogoClick }: { onLogoClick: () => void }) {
+function Nav({ onLogoClick, theme, onToggleTheme }: { onLogoClick: () => void; theme: 'dark'|'light'; onToggleTheme: () => void }) {
   return (
     <nav style={{
       background: C.bg,
@@ -298,9 +310,32 @@ function Nav({ onLogoClick }: { onLogoClick: () => void }) {
           onClick={onLogoClick}
           style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: MONO, fontSize: '0.85rem', letterSpacing: '0.05em', color: C.text }}
         >
-          MOGGED<span style={{ color: C.red }}>AI</span>
+          MOGGED<span style={{ color: '#0ea5e9' }}>AI</span>
         </button>
-        <UserButton />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          {/* Theme toggle */}
+          <button
+            onClick={onToggleTheme}
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            style={{
+              background: C.s2,
+              border: `1px solid ${C.border}`,
+              cursor: 'pointer',
+              padding: '0.3rem 0.6rem',
+              borderRadius: '999px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              transition: 'all 0.2s',
+            }}
+          >
+            <span style={{ fontSize: '0.85rem', lineHeight: 1 }}>{theme === 'dark' ? '☀️' : '🌙'}</span>
+            <span style={{ fontFamily: MONO, fontSize: '0.45rem', letterSpacing: '0.1em', color: C.text3 }}>
+              {theme === 'dark' ? 'LIGHT' : 'DARK'}
+            </span>
+          </button>
+          <UserButton />
+        </div>
       </div>
     </nav>
   )
@@ -434,7 +469,7 @@ function OverviewView({
                 borderRadius: 0,
               }}
             >
-              <span style={{ fontSize: '1.4rem', color: C.red, lineHeight: 1 }}>+</span>
+              <span style={{ fontSize: '1.4rem', color: '#0ea5e9', lineHeight: 1 }}>+</span>
               <span style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.1em' }}>
                 Add a mission
               </span>
@@ -916,8 +951,8 @@ function DetailView({
         <span style={{
           fontFamily: MONO,
           fontSize: '0.6rem',
-          color: C.red,
-          border: `1px solid ${C.red}`,
+          color: '#0ea5e9',
+          border: `1px solid ${'#0ea5e9'}`,
           padding: '0.25rem 0.6rem',
           letterSpacing: '0.1em',
         }}>
@@ -967,7 +1002,7 @@ function DetailView({
                 style={{
                   background: C.s1,
                   border: `1px solid ${C.border}`,
-                  borderLeft: `3px solid ${m.responded_at ? C.red : C.border}`,
+                  borderLeft: `3px solid ${m.responded_at ? '#0ea5e9' : C.border}`,
                   padding: '0.75rem 1rem',
                 }}
               >
@@ -980,7 +1015,7 @@ function DetailView({
                   </span>
                 </div>
                 {m.responded_at && (
-                  <span style={{ fontFamily: MONO, fontSize: '0.55rem', color: C.red, letterSpacing: '0.1em', marginTop: '0.4rem', display: 'block' }}>
+                  <span style={{ fontFamily: MONO, fontSize: '0.55rem', color: '#0ea5e9', letterSpacing: '0.1em', marginTop: '0.4rem', display: 'block' }}>
                     ✓ replied
                   </span>
                 )}
@@ -1013,8 +1048,8 @@ function DetailView({
             onClick={onDelete}
             style={{
               flex: 1,
-              background: C.red,
-              border: `1px solid ${C.red}`,
+              background: '#0ea5e9',
+              border: `1px solid ${'#0ea5e9'}`,
               color: '#fff',
               fontFamily: MONO,
               fontSize: '0.6rem',
@@ -1034,8 +1069,8 @@ function DetailView({
             style={{
               flex: 1,
               background: 'none',
-              border: `1px solid ${C.red}`,
-              color: C.red,
+              border: `1px solid ${'#0ea5e9'}`,
+              color: '#0ea5e9',
               fontFamily: MONO,
               fontSize: '0.6rem',
               letterSpacing: '0.1em',
@@ -1133,7 +1168,7 @@ function AddView({
             style={{
               flex: 1,
               height: 3,
-              background: i < step ? C.red : C.border,
+              background: i < step ? '#0ea5e9' : C.border,
               transition: 'all 0.3s',
             }}
           />
@@ -1153,7 +1188,7 @@ function AddView({
                 onClick={() => onDraftChange({ name: p.name, emoji: p.emoji })}
                 style={{
                   background: draft.name === p.name ? 'rgba(229,40,26,0.08)' : C.s1,
-                  border: `1px solid ${draft.name === p.name ? C.red : C.border}`,
+                  border: `1px solid ${draft.name === p.name ? '#0ea5e9' : C.border}`,
                   color: C.text,
                   padding: '0.85rem',
                   cursor: 'pointer',
@@ -1214,7 +1249,7 @@ function AddView({
               onClick={handleAddCustom}
               disabled={!customName.trim()}
               style={{
-                background: customName.trim() ? C.red : C.s2,
+                background: customName.trim() ? '#0ea5e9' : C.s2,
                 border: 'none',
                 color: '#fff',
                 padding: '0.75rem 1rem',
@@ -1232,7 +1267,7 @@ function AddView({
           </div>
 
           {draft.name && (
-            <div style={{ background: 'rgba(229,40,26,0.06)', border: `1px solid ${C.red}`, padding: '0.75rem 1rem', marginBottom: '1.25rem', fontFamily: MONO, fontSize: '0.7rem', color: C.text }}>
+            <div style={{ background: 'rgba(229,40,26,0.06)', border: `1px solid ${'#0ea5e9'}`, padding: '0.75rem 1rem', marginBottom: '1.25rem', fontFamily: MONO, fontSize: '0.7rem', color: C.text }}>
               Selected: {draft.emoji} {draft.name}
             </div>
           )}
@@ -1307,7 +1342,7 @@ function AddView({
                 onClick={() => onDraftChange({ time_of_day: t.value })}
                 style={{
                   background: draft.time_of_day === t.value ? 'rgba(229,40,26,0.08)' : C.s1,
-                  border: `1px solid ${draft.time_of_day === t.value ? C.red : C.border}`,
+                  border: `1px solid ${draft.time_of_day === t.value ? '#0ea5e9' : C.border}`,
                   color: C.text,
                   padding: '1rem',
                   cursor: 'pointer',
@@ -1345,7 +1380,7 @@ function AddView({
                 onClick={() => onDraftChange({ coach_style: o.value })}
                 style={{
                   background: draft.coach_style === o.value ? 'rgba(229,40,26,0.1)' : C.s1,
-                  border: `1px solid ${draft.coach_style === o.value ? C.red : C.border}`,
+                  border: `1px solid ${draft.coach_style === o.value ? '#0ea5e9' : C.border}`,
                   color: C.text,
                   padding: '1rem 1.25rem',
                   cursor: 'pointer',
@@ -1355,7 +1390,7 @@ function AddView({
                   minHeight: 64,
                 }}
               >
-                <div style={{ fontFamily: MONO, fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.1em', color: draft.coach_style === o.value ? C.red : C.text, marginBottom: '0.3rem' }}>
+                <div style={{ fontFamily: MONO, fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.1em', color: draft.coach_style === o.value ? '#0ea5e9' : C.text, marginBottom: '0.3rem' }}>
                   {o.label}
                 </div>
                 <div style={{ fontFamily: GROTESK, fontSize: '0.8rem', color: C.text3 }}>
@@ -1369,7 +1404,7 @@ function AddView({
             disabled={!draft.coach_style || loading}
             style={{
               width: '100%',
-              background: draft.coach_style && !loading ? C.red : C.s2,
+              background: draft.coach_style && !loading ? '#0ea5e9' : C.s2,
               border: 'none',
               color: '#fff',
               fontFamily: MONO,
@@ -1454,7 +1489,7 @@ function NavBtn({ onClick, disabled, label }: { onClick: () => void; disabled?: 
       disabled={disabled}
       style={{
         width: '100%',
-        background: disabled ? C.s2 : C.red,
+        background: disabled ? C.s2 : '#0ea5e9',
         border: 'none',
         color: '#fff',
         fontFamily: MONO,

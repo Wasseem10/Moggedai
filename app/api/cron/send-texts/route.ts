@@ -43,6 +43,9 @@ async function generateMessage(habit: HabitContext, scheduleCoachStyle: string):
     motivating: `hype energy but grounded. makes them feel like they can actually do it. pulls from their "why". more hype coach than drill sergeant.`,
   }
 
+  // ~25% of messages ask for photo proof to keep it fresh but not annoying
+  const askForPhoto = Math.random() < 0.25
+
   const prompt = `you're texting someone as their personal accountability coach. you text exactly like a gen z friend who actually cares — short, casual, lowercase, real. NOT a notification. NOT a marketing text. NOT a bot.
 
 their habit: "${habit.name}"
@@ -51,7 +54,7 @@ ${habit.biggest_excuse ? `their go-to excuse when they skip: ${habit.biggest_exc
 ${habit.stakes ? `what's at stake if they keep slacking: ${habit.stakes}` : ''}
 your energy: ${styleGuide[coachStyle] || styleGuide.direct}
 
-write ONE check-in text. 1-2 sentences MAX. use their specific context — don't be generic. if they have a known excuse, you can call it out. mix it up in tone (sometimes a question, sometimes a statement, sometimes calling them out). do NOT start with "hey" every time. do NOT say things like "friendly reminder" or "checking in" or "hope you're doing well". do NOT use exclamation points unless it's genuinely hype. just sound like a real person.
+${askForPhoto ? `this time, ask them to send you a photo as proof they did it. make it feel natural — not like a requirement, more like a challenge. e.g. "send me a pic when you're done" or "prove it, show me" or "i want to see it this time". keep it to 1-2 sentences total.` : `write ONE check-in text. 1-2 sentences MAX. use their specific context — don't be generic. if they have a known excuse, you can call it out. mix it up in tone (sometimes a question, sometimes a statement, sometimes calling them out). do NOT start with "hey" every time. do NOT say things like "friendly reminder" or "checking in" or "hope you're doing well". do NOT use exclamation points unless it's genuinely hype. just sound like a real person.
 
 good examples (do NOT copy — just match the energy):
 - "yo you hitting the gym today or are we doing the excuse thing again"
@@ -59,7 +62,7 @@ good examples (do NOT copy — just match the energy):
 - "bro you said this matters to you. so what's the move"
 - "haven't seen you skip yet this week. don't start now"
 - "real talk — you doing it today or not"
-- "your future self is watching. what are you doing rn"
+- "your future self is watching. what are you doing rn"`}
 
 reply ONLY with the message. nothing else.`
 

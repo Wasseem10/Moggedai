@@ -187,6 +187,42 @@ export default function MoggedAI() {
         </div>
       </div>
 
+      {/* SMS PREVIEW */}
+      <div style={{ padding:"0 1.5rem 5rem", maxWidth:"920px", margin:"0 auto" }}>
+        <div style={{ fontSize:"0.85rem", letterSpacing:"0.25em", color:"var(--c-text)", fontWeight:"700", marginBottom:"0.5rem", display:"flex", alignItems:"center", gap:"1rem" }}>
+          WHAT IT LOOKS LIKE <div style={{ flex:1, height:"1px", background:"var(--c-border)" }}/>
+        </div>
+        <p style={{ fontSize:"0.85rem", color:"var(--c-text4)", lineHeight:"1.8", marginBottom:"2rem", maxWidth:"520px" }}>
+          Real texts. No templates. Every message is written by AI based on your context.
+        </p>
+        <div style={{ maxWidth:380, margin:"0 auto", background:"var(--c-s1)", border:"1px solid var(--c-border)", padding:"1.5rem" }}>
+          <div style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.55rem", color:"var(--c-text3)", letterSpacing:"0.15em", textAlign:"center", marginBottom:"1.25rem" }}>💪 GYM — TODAY</div>
+          {[
+            { from:"ai",   text:"yo did you actually go today or are we doing the excuse thing again" },
+            { from:"user", text:"nah not yet, been busy" },
+            { from:"ai",   text:"you said that last tuesday too. you have 45 mins before you lose it. go." },
+            { from:"user", text:"fine going now" },
+            { from:"ai",   text:"prove it. send me a pic when you're done 📸" },
+            { from:"user", text:"[sends gym selfie]" },
+            { from:"ai",   text:"that's what i'm talking about. 4 day streak. don't break it tomorrow." },
+          ].map((m, i) => (
+            <div key={i} style={{ display:"flex", justifyContent: m.from === "user" ? "flex-end" : "flex-start", marginBottom:"0.6rem" }}>
+              <div style={{
+                maxWidth:"75%",
+                background: m.from === "ai" ? "var(--c-s2)" : "#0ea5e9",
+                color: m.from === "ai" ? "var(--c-text2)" : "#fff",
+                padding:"0.6rem 0.85rem",
+                fontSize:"0.8rem",
+                lineHeight:1.5,
+                borderRadius: m.from === "ai" ? "0 12px 12px 12px" : "12px 0 12px 12px",
+              }}>
+                {m.text}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* CTA */}
       <div style={{ padding:"3rem 1.5rem 4rem", maxWidth:"920px", margin:"0 auto", textAlign:"center" }}>
         <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1.1rem 3rem", fontSize:"0.9rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
@@ -264,9 +300,7 @@ export default function MoggedAI() {
               </p>
               <div style={{ display:"flex", gap:"0.75rem" }}>
                 {[
-                  { label:"𝕏", href:"https://twitter.com/moggedai" },
-                  { label:"IG", href:"https://instagram.com/moggedai" },
-                  { label:"TT", href:"https://tiktok.com/@moggedai" },
+                  { label:"EMAIL", href:"mailto:wasseem@moggedai.com" },
                 ].map(s => (
                   <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
                     style={{ display:"flex", alignItems:"center", justifyContent:"center", width:"32px", height:"32px", border:"1px solid var(--c-border2)", color:"#444", fontSize:"0.65rem", fontWeight:"700", textDecoration:"none", letterSpacing:"0.05em" }}

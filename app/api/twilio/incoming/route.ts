@@ -116,11 +116,40 @@ function twiml(msg: string) {
   })
 }
 
+async function generatePhotoReply(
+  habit: HabitRow,
+  coachStyle: string,
+  streak: number
+): Promise<string> {
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+
+  const styleGuide: Record<string, string> = {
+    direct: `acknowledge it cleanly. no hype, just respect. they proved it.`,
+    brutal: `give credit but don't let them get comfortable. remind them consistency is what actually matters.`,
+    savage: `minimal words. they did it. now keep that energy.`,
+    motivating: `go hype. they sent proof. they showed up. make them feel it.`,
+  }
+
+  const streakLine = streak > 1 ? ` they're on a ${streak}-day streak.` : ''
+
+  const prompt = `your client just sent you a photo as proof they completed their "${habit.name}" habit.${streakLine}
+
+${habit.why ? `why this matters to them: ${habit.why}` : ''}
+
+react to the photo proof. be ${styleGuide[coachStyle] || styleGuide.direct} 1-2 sentences MAX. casual, lowercase, real. acknowledge that they actually showed up and proved it. reply ONLY with the message.`
+
+  const result = await model.generateContent(prompt)
+  return result.response.text().trim()
+}
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData()
     const from = formData.get('From') as string
     const body = ((formData.get('Body') as string) || '').trim()
+    const numMedia = parseInt((formData.get('NumMedia') as string) || '0')
+    const mediaUrl = formData.get('MediaUrl0') as string | null
     if (!from) return twiml('')
 
     const db = getDb()
@@ -202,6 +231,33 @@ export async function POST(req: NextRequest) {
        WHERE user_id = $1 AND responded_at IS NULL`,
       [user.id]
     )
+
+    // ── PHOTO PROOF ────────────────────────────────────────────────────────
+    if (numMedia > 0 && mediaUrl) {
+      // Log completion with photo note
+      if (activeHabitId) {
+        await db.query(
+          `INSERT INTO completions (user_id, habit_id, completed_at) VALUES ($1, $2, NOW())`,
+          [user.id, activeHabitId]
+        )
+      }
+
+      // Store the photo submission in messages table
+      await db.query(
+        `INSERT INTO messages (user_id, habit_id, message_text, sent_at, follow_up_sent, responded_at)
+         VALUES ($1, $2, $3, NOW(), true, NOW())
+         ON CONFLICT DO NOTHING`,
+        [user.id, activeHabitId || null, `[photo proof sent] ${body || ''}`.trim()]
+      )
+
+      const { rows: comps } = await db.query(
+        `SELECT completed_at FROM completions WHERE user_id = $1 AND habit_id = $2 ORDER BY completed_at DESC LIMIT 365`,
+        [user.id, activeHabitId]
+      )
+      const streak = getStreak(comps)
+      const reply = await generatePhotoReply(activeHabit, coachStyle, streak)
+      return twiml(reply)
+    }
 
     // ── HABITS ─────────────────────────────────────────────────────────────
     if (/^habits?$/i.test(body)) {

@@ -135,17 +135,25 @@ export default function Dashboard() {
       const res = await fetch('/api/user')
       const d = await res.json()
       if (d.user) {
+        // If user exists but has no phone, send them to setup
+        if (!d.user.phone) {
+          router.push('/setup')
+          return
+        }
         setUserData(d.user)
         setHabits(d.habits ?? [])
         setStats(d.stats ?? { total_texts: 0, streak: 0, total_completions: 0 })
         setRecentMessages(d.recent_messages ?? [])
+      } else {
+        // No user record at all — send to setup
+        router.push('/setup')
       }
     } catch (e) {
       console.error(e)
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [router])
 
   useEffect(() => { loadData() }, [loadData])
 

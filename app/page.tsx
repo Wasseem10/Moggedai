@@ -16,50 +16,10 @@ const MESSAGES = [
   "nobody is coming to save you. get back to work.",
 ];
 
-const COACH_STYLES = [
-  { id: "brutal", emoji: "🔥", label: "Brutal", desc: "No mercy. No sympathy. Get called out hard." },
-  { id: "direct", emoji: "💪", label: "Direct", desc: "Sharp, clear, no BS. Just get it done." },
-  { id: "motivating", emoji: "⚡", label: "Motivating", desc: "Intense but positive. Pushed forward, not down." },
-];
-
-const COMMON_HABITS = [
-  { name: "Study", emoji: "📚" },
-  { name: "Gym", emoji: "💪" },
-  { name: "Work", emoji: "💼" },
-  { name: "Read", emoji: "📖" },
-  { name: "Meditate", emoji: "🧘" },
-  { name: "Sleep Early", emoji: "😴" },
-  { name: "Diet", emoji: "🥗" },
-  { name: "Side Project", emoji: "🚀" },
-  { name: "No Phone", emoji: "📵" },
-  { name: "Water", emoji: "💧" },
-];
-
-const INTENSITIES = [
-  { label: "Every 30 min", value: 30, desc: "Relentless" },
-  { label: "Every hour", value: 60, desc: "Aggressive" },
-  { label: "Every 2 hrs", value: 120, desc: "Steady" },
-  { label: "Every 3 hrs", value: 180, desc: "Light" },
-];
-
-type Habit = { name: string; emoji: string };
 
 export default function MoggedAI() {
-  const [page, setPage]         = useState("landing");
-  const [step, setStep]         = useState(1);
-  const [phone, setPhone]       = useState("");
-  const [phoneError, setPhoneError] = useState("");
-  const [coachStyle, setCoachStyle] = useState("");
-  const [habits, setHabits]     = useState<Habit[]>([]);
-  const [customHabit, setCustomHabit] = useState("");
-  const [freq, setFreq]         = useState(60);
-  const [startTime, setStartTime] = useState("08:00");
-  const [endTime, setEndTime]   = useState("22:00");
-  const [loading, setLoading]   = useState(false);
-  const [submitError, setSubmitError] = useState("");
-  const [smsConsent, setSmsConsent]   = useState(false);
   const [currentMsg, setCurrentMsg] = useState(0);
-  const [ticker, setTicker]     = useState(0);
+  const [ticker, setTicker]         = useState(0);
   const router = useRouter();
   const { isSignedIn } = useAuth();
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -74,56 +34,6 @@ export default function MoggedAI() {
     return () => clearInterval(t);
   }, []);
 
-  const formatPhone = (v: string) => {
-    const d = v.replace(/\D/g, "").slice(0, 10);
-    if (d.length <= 3) return d;
-    if (d.length <= 6) return `(${d.slice(0,3)}) ${d.slice(3)}`;
-    return `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}`;
-  };
-
-  const validatePhone = () => {
-    if (phone.replace(/\D/g,"").length < 10) { setPhoneError("Enter a valid 10-digit US number"); return false; }
-    setPhoneError(""); return true;
-  };
-
-  const toggleHabit = (h: Habit) => {
-    const exists = habits.find(x => x.name === h.name);
-    if (exists) setHabits(habits.filter(x => x.name !== h.name));
-    else if (habits.length < 5) setHabits([...habits, h]);
-  };
-
-  const addCustom = () => {
-    const name = customHabit.trim();
-    if (!name || habits.length >= 5) return;
-    if (!habits.find(x => x.name === name)) setHabits([...habits, { name, emoji: "🎯" }]);
-    setCustomHabit("");
-  };
-
-  const handleSubmit = async () => {
-    setLoading(true); setSubmitError("");
-    try {
-      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const res = await fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          phone: `+1${phone.replace(/\D/g,"")}`,
-          frequency_minutes: freq,
-          start_time: startTime,
-          end_time: endTime,
-          timezone,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "failed");
-      router.push("/dashboard");
-    } catch {
-      setSubmitError("Something went wrong. Try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const noise = Math.sin(ticker * 0.3) * 2;
 
   // ── shared styles ────────────────────────────────────────────────────────
@@ -137,108 +47,6 @@ export default function MoggedAI() {
   const inputS: React.CSSProperties = { width:"100%", background:"var(--c-input)", border:"1px solid var(--c-input-bdr)", color:"var(--c-text)", padding:"0.9rem 1rem", fontSize:"1rem", fontFamily:"inherit", outline:"none", boxSizing:"border-box" };
   const tag: React.CSSProperties = { fontSize:"0.6rem", letterSpacing:"0.25em", color:"#0ea5e9", border:"1px solid rgba(14,165,233,0.4)", padding:"0.3rem 0.8rem", marginBottom:"1.5rem", display:"inline-block" };
   const lbl: React.CSSProperties = { fontSize:"0.6rem", letterSpacing:"0.2em", color:"var(--c-text3)", display:"block", marginBottom:"0.5rem" };
-
-  // ── ONBOARDING ────────────────────────────────────────────────────────────
-  if (page === "onboard") {
-    return (
-      <div style={root}>
-        <div style={grid}/>
-        <nav style={nav}>
-          <div style={logoS} onClick={() => { setPage("landing"); setStep(1); }}>
-            MOGGED<span style={{ color:"#0ea5e9" }}>AI</span>
-          </div>
-        </nav>
-        <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", justifyContent:"center", padding:"5rem 1.5rem 3rem", maxWidth:"580px", margin:"0 auto" }}>
-
-          {/* Progress */}
-          <div style={{ display:"flex", gap:"6px", marginBottom:"2.5rem" }}>
-            {[1,2].map(s => (
-              <div key={s} style={{ height:"3px", flex:1, background:s<=step?"#0ea5e9":"var(--c-border)", opacity:s<step?0.5:1, transition:"all 0.3s" }}/>
-            ))}
-          </div>
-
-          {/* ── STEP 1: Phone ── */}
-          {step === 1 && (
-            <div>
-              <div style={tag}>STEP 01 / 02</div>
-              <h2 style={{ fontSize:"clamp(1.8rem,4vw,2.4rem)", fontWeight:"700", lineHeight:1.15, marginBottom:"0.5rem" }}>
-                your number.<br/><span style={{ color:"#0ea5e9" }}>no excuses.</span>
-              </h2>
-              <p style={{ fontSize:"0.8rem", color:"var(--c-text3)", marginBottom:"1.5rem", lineHeight:"1.6" }}>
-                US numbers only. This is where your AI coach will text you every day.
-              </p>
-              <label style={lbl}>PHONE NUMBER</label>
-              <input style={{ ...inputS, fontSize:"1.2rem", borderColor:phoneError?"#0ea5e9":"var(--c-input-bdr)" }}
-                type="tel" placeholder="(555) 000-0000" value={phone}
-                onChange={e => setPhone(formatPhone(e.target.value))}
-                onKeyDown={e => e.key==="Enter" && validatePhone() && setStep(2)} autoFocus/>
-              {phoneError && <p style={{ fontSize:"0.7rem", color:"#0ea5e9", marginTop:"0.4rem" }}>{phoneError}</p>}
-              <button style={primaryBtn()} onClick={() => validatePhone() && setStep(2)}>NEXT →</button>
-            </div>
-          )}
-
-          {/* ── STEP 2: Schedule + consent ── */}
-          {step === 2 && (
-            <div>
-              <div style={tag}>STEP 02 / 02</div>
-              <h2 style={{ fontSize:"clamp(1.8rem,4vw,2.4rem)", fontWeight:"700", lineHeight:1.15, marginBottom:"0.5rem" }}>
-                when should we<br/><span style={{ color:"#0ea5e9" }}>check in?</span>
-              </h2>
-              <p style={{ fontSize:"0.8rem", color:"var(--c-text3)", marginBottom:"1.5rem", lineHeight:"1.6" }}>
-                Set your active hours. You&apos;ll add your missions inside the dashboard.
-              </p>
-
-              <label style={lbl}>CHECK-IN FREQUENCY</label>
-              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"8px", marginBottom:"1.5rem" }}>
-                {INTENSITIES.map(f => (
-                  <button key={f.value}
-                    style={{ background:freq===f.value?"rgba(14,165,233,0.12)":"var(--c-input)", border:freq===f.value?"1px solid #0ea5e9":"1px solid var(--c-input-bdr)", color:freq===f.value?"var(--c-text)":"var(--c-text3)", padding:"1rem", cursor:"pointer", fontFamily:"inherit", textAlign:"left", transition:"all 0.15s" }}
-                    onClick={() => setFreq(f.value)}>
-                    <div style={{ fontSize:"0.85rem", fontWeight:"700", marginBottom:"0.2rem" }}>{f.label}</div>
-                    <div style={{ fontSize:"0.6rem", color:freq===f.value?"#0ea5e9":"var(--c-text3)" }}>{f.desc}</div>
-                  </button>
-                ))}
-              </div>
-
-              <label style={lbl}>ACTIVE HOURS</label>
-              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"12px", marginBottom:"0.75rem" }}>
-                <div>
-                  <label style={{ ...lbl, marginBottom:"0.3rem" }}>FROM</label>
-                  <input style={inputS} type="time" value={startTime} onChange={e => setStartTime(e.target.value)}/>
-                </div>
-                <div>
-                  <label style={{ ...lbl, marginBottom:"0.3rem" }}>UNTIL</label>
-                  <input style={inputS} type="time" value={endTime} onChange={e => setEndTime(e.target.value)}/>
-                </div>
-              </div>
-              <p style={{ fontSize:"0.6rem", color:"var(--c-text3)", marginBottom:"1rem" }}>
-                ⚡ Timezone auto-detected · Reply DONE to mark complete · Text STOP to unsubscribe
-              </p>
-
-              {/* SMS Consent */}
-              <div style={{ background:"var(--c-s1)", border:`1px solid ${smsConsent ? "#0ea5e9" : "var(--c-input-bdr)"}`, padding:"1rem", marginBottom:"1rem", cursor:"pointer" }} onClick={() => setSmsConsent(!smsConsent)}>
-                <div style={{ display:"flex", gap:"0.75rem", alignItems:"flex-start" }}>
-                  <div style={{ width:"16px", height:"16px", border:`2px solid ${smsConsent ? "#0ea5e9" : "var(--c-text3)"}`, background:smsConsent ? "#0ea5e9" : "transparent", flexShrink:0, marginTop:"1px", display:"flex", alignItems:"center", justifyContent:"center" }}>
-                    {smsConsent && <span style={{ color:"#fff", fontSize:"10px", fontWeight:"700", lineHeight:1 }}>✓</span>}
-                  </div>
-                  <p style={{ fontSize:"0.65rem", color:"var(--c-text3)", lineHeight:"1.7", margin:0 }}>
-                    I agree to receive recurring automated SMS messages from MoggedAI. Msg &amp; data rates may apply. Reply STOP to unsubscribe.{" "}
-                    <a href="/consent" target="_blank" style={{ color:"#0ea5e9", textDecoration:"none" }} onClick={e => e.stopPropagation()}>SMS Policy</a>
-                  </p>
-                </div>
-              </div>
-
-              {submitError && <p style={{ fontSize:"0.7rem", color:"#0ea5e9", margin:"0.4rem 0" }}>{submitError}</p>}
-              <button style={primaryBtn(loading || !smsConsent)} onClick={handleSubmit} disabled={loading || !smsConsent}>
-                {loading ? "SETTING UP..." : "CREATE MY ACCOUNT →"}
-              </button>
-              <button style={backBtn} onClick={() => setStep(1)}>← back</button>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
 
   // ── LANDING PAGE ──────────────────────────────────────────────────────────
   return (
@@ -262,7 +70,7 @@ export default function MoggedAI() {
           <button style={navBtn} onClick={() => router.push(isSignedIn ? "/dashboard" : "/sign-in")}>
             {isSignedIn ? "DASHBOARD" : "LOG IN"}
           </button>
-          <button style={navBtn} onClick={() => isSignedIn ? router.push("/dashboard") : setPage("onboard")}>GET STARTED</button>
+          <button style={navBtn} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>GET STARTED</button>
         </div>
       </nav>
 
@@ -279,7 +87,7 @@ export default function MoggedAI() {
           Get daily habit reminders by text.<br/>Built to make sure you follow through.
         </p>
         <div style={{ display:"flex", gap:"1rem", flexWrap:"wrap", marginBottom:"5rem" }}>
-          <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem 2.5rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : setPage("onboard")}>
+          <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem 2.5rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
             GET STARTED FREE →
           </button>
         </div>
@@ -402,7 +210,7 @@ export default function MoggedAI() {
             <span style={{ color:"#0ea5e9" }}>You just need someone who won&apos;t let you forget it.&rdquo;</span>
           </p>
         </div>
-        <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1.1rem 3rem", fontSize:"0.9rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : setPage("onboard")}>
+        <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1.1rem 3rem", fontSize:"0.9rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
           GET STARTED — IT&apos;S FREE
         </button>
         <p style={{ fontSize:"0.6rem", color:"#555", marginTop:"1rem" }}>US numbers only · Reply STOP to unsubscribe anytime</p>

@@ -14,7 +14,7 @@ export default function SignUpPage() {
       <div style={{ marginBottom: "2rem", fontSize: "1.1rem", fontWeight: "700", letterSpacing: "0.15em", color: "#f0f0f0" }}>
         MOGGED<span style={{ color: "#0ea5e9" }}>AI</span>
       </div>
-      <SignUp appearance={{
+      <SignUp forceRedirectUrl="/setup" appearance={{
         variables: {
           colorBackground: "#ffffff",
           colorText: "#111111",

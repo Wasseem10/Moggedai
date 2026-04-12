@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
       frequency_minutes, start_time, end_time, timezone
     } = await req.json()
 
-    if (!phone || !habits?.length || !frequency_minutes || !start_time || !end_time) {
+    if (!phone || !frequency_minutes || !start_time || !end_time) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 

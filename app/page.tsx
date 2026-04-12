@@ -107,9 +107,7 @@ export default function MoggedAI() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          phone: phone.replace(/\D/g,""),
-          habits,
-          coach_style: coachStyle,
+          phone: `+1${phone.replace(/\D/g,"")}`,
           frequency_minutes: freq,
           start_time: startTime,
           end_time: endTime,
@@ -154,21 +152,23 @@ export default function MoggedAI() {
 
           {/* Progress */}
           <div style={{ display:"flex", gap:"6px", marginBottom:"2.5rem" }}>
-            {[1,2,3,4].map(s => (
-              <div key={s} style={{ height:"3px", flex:1, background:s<=step?"#0ea5e9":"#1e1e1e", opacity:s<step?0.5:1, transition:"all 0.3s" }}/>
+            {[1,2].map(s => (
+              <div key={s} style={{ height:"3px", flex:1, background:s<=step?"#0ea5e9":"var(--c-border)", opacity:s<step?0.5:1, transition:"all 0.3s" }}/>
             ))}
           </div>
 
           {/* ── STEP 1: Phone ── */}
           {step === 1 && (
             <div>
-              <div style={tag}>STEP 01 / 04</div>
+              <div style={tag}>STEP 01 / 02</div>
               <h2 style={{ fontSize:"clamp(1.8rem,4vw,2.4rem)", fontWeight:"700", lineHeight:1.15, marginBottom:"0.5rem" }}>
                 your number.<br/><span style={{ color:"#0ea5e9" }}>no excuses.</span>
               </h2>
-              <p style={{ fontSize:"0.8rem", color:"#555", marginBottom:"1.5rem", lineHeight:"1.6" }}>US numbers only. This is where your coach will text you.</p>
+              <p style={{ fontSize:"0.8rem", color:"var(--c-text3)", marginBottom:"1.5rem", lineHeight:"1.6" }}>
+                US numbers only. This is where your AI coach will text you every day.
+              </p>
               <label style={lbl}>PHONE NUMBER</label>
-              <input style={{ ...inputS, fontSize:"1.2rem", borderColor:phoneError?"#0ea5e9":"#222" }}
+              <input style={{ ...inputS, fontSize:"1.2rem", borderColor:phoneError?"#0ea5e9":"var(--c-input-bdr)" }}
                 type="tel" placeholder="(555) 000-0000" value={phone}
                 onChange={e => setPhone(formatPhone(e.target.value))}
                 onKeyDown={e => e.key==="Enter" && validatePhone() && setStep(2)} autoFocus/>
@@ -177,116 +177,25 @@ export default function MoggedAI() {
             </div>
           )}
 
-          {/* ── STEP 2: Coach style ── */}
+          {/* ── STEP 2: Schedule + consent ── */}
           {step === 2 && (
             <div>
-              <div style={tag}>STEP 02 / 04</div>
+              <div style={tag}>STEP 02 / 02</div>
               <h2 style={{ fontSize:"clamp(1.8rem,4vw,2.4rem)", fontWeight:"700", lineHeight:1.15, marginBottom:"0.5rem" }}>
-                how should we<br/><span style={{ color:"#0ea5e9" }}>talk to you?</span>
+                when should we<br/><span style={{ color:"#0ea5e9" }}>check in?</span>
               </h2>
-              <p style={{ fontSize:"0.8rem", color:"#555", marginBottom:"1.5rem", lineHeight:"1.6" }}>
-                This shapes every message we send. Be honest.
-              </p>
-              <div style={{ display:"flex", flexDirection:"column", gap:"8px", marginBottom:"1.5rem" }}>
-                {COACH_STYLES.map(s => (
-                  <button key={s.id}
-                    style={{ background:coachStyle===s.id?"rgba(14,165,233,0.12)":"#111", border:coachStyle===s.id?"1px solid #0ea5e9":"1px solid #1e1e1e", color:coachStyle===s.id?"#f0f0f0":"#555", padding:"1.1rem 1.25rem", cursor:"pointer", fontFamily:"inherit", textAlign:"left", transition:"all 0.15s" }}
-                    onClick={() => setCoachStyle(s.id)}
-                  >
-                    <div style={{ display:"flex", alignItems:"center", gap:"0.75rem" }}>
-                      <span style={{ fontSize:"1.3rem" }}>{s.emoji}</span>
-                      <div>
-                        <div style={{ fontSize:"0.9rem", fontWeight:"700", marginBottom:"0.15rem" }}>{s.label}</div>
-                        <div style={{ fontSize:"0.65rem", color:coachStyle===s.id?"#888":"#333" }}>{s.desc}</div>
-                      </div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-              <button style={primaryBtn(!coachStyle)} onClick={() => coachStyle && setStep(3)} disabled={!coachStyle}>NEXT →</button>
-              <button style={backBtn} onClick={() => setStep(1)}>← back</button>
-            </div>
-          )}
-
-          {/* ── STEP 3: Habits ── */}
-          {step === 3 && (
-            <div>
-              <div style={tag}>STEP 03 / 04</div>
-              <h2 style={{ fontSize:"clamp(1.8rem,4vw,2.4rem)", fontWeight:"700", lineHeight:1.15, marginBottom:"0.5rem" }}>
-                what do you need<br/><span style={{ color:"#0ea5e9" }}>to stay on top of?</span>
-              </h2>
-              <p style={{ fontSize:"0.8rem", color:"#555", marginBottom:"1.5rem", lineHeight:"1.6" }}>
-                Pick up to 5. We&apos;ll text you about each one. Tap to add or remove.
-              </p>
-
-              {/* Common habits grid */}
-              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(120px,1fr))", gap:"8px", marginBottom:"1rem" }}>
-                {COMMON_HABITS.map(h => {
-                  const selected = !!habits.find(x => x.name === h.name);
-                  return (
-                    <button key={h.name}
-                      style={{ background:selected?"rgba(14,165,233,0.12)":"#111", border:selected?"1px solid #0ea5e9":"1px solid #1e1e1e", color:selected?"#f0f0f0":"#555", padding:"0.75rem 0.5rem", cursor:habits.length>=5&&!selected?"not-allowed":"pointer", fontFamily:"inherit", textAlign:"center", transition:"all 0.15s", opacity:habits.length>=5&&!selected?0.4:1 }}
-                      onClick={() => toggleHabit(h)}
-                    >
-                      <div style={{ fontSize:"1.1rem", marginBottom:"0.25rem" }}>{h.emoji}</div>
-                      <div style={{ fontSize:"0.65rem", fontWeight:"700" }}>{h.name}</div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Custom habit input */}
-              <div style={{ display:"flex", gap:"8px", marginBottom:"1rem" }}>
-                <input style={{ ...inputS, flex:1, padding:"0.7rem 1rem", fontSize:"0.85rem" }}
-                  placeholder="Add your own..." value={customHabit}
-                  onChange={e => setCustomHabit(e.target.value)}
-                  onKeyDown={e => e.key==="Enter" && addCustom()}
-                  disabled={habits.length >= 5}/>
-                <button
-                  style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"0.7rem 1.25rem", cursor:"pointer", fontFamily:"inherit", fontSize:"0.8rem", fontWeight:"700" }}
-                  onClick={addCustom} disabled={habits.length >= 5}>ADD</button>
-              </div>
-
-              {/* Selected habits */}
-              {habits.length > 0 && (
-                <div style={{ marginBottom:"1rem" }}>
-                  <div style={lbl}>SELECTED ({habits.length}/5)</div>
-                  <div style={{ display:"flex", gap:"6px", flexWrap:"wrap" }}>
-                    {habits.map(h => (
-                      <span key={h.name}
-                        style={{ background:"rgba(14,165,233,0.12)", border:"1px solid #0ea5e9", color:"var(--c-text)", padding:"0.35rem 0.75rem", fontSize:"0.7rem", cursor:"pointer" }}
-                        onClick={() => toggleHabit(h)}>
-                        {h.emoji} {h.name} ✕
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <button style={primaryBtn(!habits.length)} onClick={() => habits.length && setStep(4)} disabled={!habits.length}>NEXT →</button>
-              <button style={backBtn} onClick={() => setStep(2)}>← back</button>
-            </div>
-          )}
-
-          {/* ── STEP 4: Schedule ── */}
-          {step === 4 && (
-            <div>
-              <div style={tag}>STEP 04 / 04</div>
-              <h2 style={{ fontSize:"clamp(1.8rem,4vw,2.4rem)", fontWeight:"700", lineHeight:1.15, marginBottom:"0.5rem" }}>
-                how often should<br/><span style={{ color:"#0ea5e9" }}>we check in?</span>
-              </h2>
-              <p style={{ fontSize:"0.8rem", color:"#555", marginBottom:"1.5rem", lineHeight:"1.6" }}>
-                We&apos;ll rotate through your habits. Reply &quot;done&quot; to mark complete. No reply = follow-up in 5 min.
+              <p style={{ fontSize:"0.8rem", color:"var(--c-text3)", marginBottom:"1.5rem", lineHeight:"1.6" }}>
+                Set your active hours. You&apos;ll add your missions inside the dashboard.
               </p>
 
               <label style={lbl}>CHECK-IN FREQUENCY</label>
               <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"8px", marginBottom:"1.5rem" }}>
                 {INTENSITIES.map(f => (
                   <button key={f.value}
-                    style={{ background:freq===f.value?"rgba(14,165,233,0.12)":"#111", border:freq===f.value?"1px solid #0ea5e9":"1px solid #1e1e1e", color:freq===f.value?"#f0f0f0":"#555", padding:"1rem", cursor:"pointer", fontFamily:"inherit", textAlign:"left", transition:"all 0.15s" }}
+                    style={{ background:freq===f.value?"rgba(14,165,233,0.12)":"var(--c-input)", border:freq===f.value?"1px solid #0ea5e9":"1px solid var(--c-input-bdr)", color:freq===f.value?"var(--c-text)":"var(--c-text3)", padding:"1rem", cursor:"pointer", fontFamily:"inherit", textAlign:"left", transition:"all 0.15s" }}
                     onClick={() => setFreq(f.value)}>
                     <div style={{ fontSize:"0.85rem", fontWeight:"700", marginBottom:"0.2rem" }}>{f.label}</div>
-                    <div style={{ fontSize:"0.6rem", color:freq===f.value?"#0ea5e9":"#333" }}>{f.desc}</div>
+                    <div style={{ fontSize:"0.6rem", color:freq===f.value?"#0ea5e9":"var(--c-text3)" }}>{f.desc}</div>
                   </button>
                 ))}
               </div>
@@ -302,30 +211,28 @@ export default function MoggedAI() {
                   <input style={inputS} type="time" value={endTime} onChange={e => setEndTime(e.target.value)}/>
                 </div>
               </div>
-              <p style={{ fontSize:"0.6rem", color:"#555", marginBottom:"1rem" }}>
+              <p style={{ fontSize:"0.6rem", color:"var(--c-text3)", marginBottom:"1rem" }}>
                 ⚡ Timezone auto-detected · Reply DONE to mark complete · Text STOP to unsubscribe
               </p>
 
-              {/* SMS Consent checkbox */}
-              <div style={{ background:"var(--c-s1)", border:`1px solid ${smsConsent ? "#0ea5e9" : "#222"}`, padding:"1rem", marginBottom:"1rem", cursor:"pointer" }} onClick={() => setSmsConsent(!smsConsent)}>
+              {/* SMS Consent */}
+              <div style={{ background:"var(--c-s1)", border:`1px solid ${smsConsent ? "#0ea5e9" : "var(--c-input-bdr)"}`, padding:"1rem", marginBottom:"1rem", cursor:"pointer" }} onClick={() => setSmsConsent(!smsConsent)}>
                 <div style={{ display:"flex", gap:"0.75rem", alignItems:"flex-start" }}>
-                  <div style={{ width:"16px", height:"16px", border:`2px solid ${smsConsent ? "#0ea5e9" : "#444"}`, background:smsConsent ? "#0ea5e9" : "transparent", flexShrink:0, marginTop:"1px", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                  <div style={{ width:"16px", height:"16px", border:`2px solid ${smsConsent ? "#0ea5e9" : "var(--c-text3)"}`, background:smsConsent ? "#0ea5e9" : "transparent", flexShrink:0, marginTop:"1px", display:"flex", alignItems:"center", justifyContent:"center" }}>
                     {smsConsent && <span style={{ color:"#fff", fontSize:"10px", fontWeight:"700", lineHeight:1 }}>✓</span>}
                   </div>
-                  <p style={{ fontSize:"0.65rem", color:"#888", lineHeight:"1.7", margin:0 }}>
-                    I agree to receive recurring automated SMS accountability messages from MoggedAI at the number above. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to unsubscribe anytime. View our{" "}
-                    <a href="/consent" target="_blank" style={{ color:"#0ea5e9", textDecoration:"none" }} onClick={e => e.stopPropagation()}>SMS Consent Policy</a>
-                    {" "}and{" "}
-                    <a href="/privacy" target="_blank" style={{ color:"#0ea5e9", textDecoration:"none" }} onClick={e => e.stopPropagation()}>Privacy Policy</a>.
+                  <p style={{ fontSize:"0.65rem", color:"var(--c-text3)", lineHeight:"1.7", margin:0 }}>
+                    I agree to receive recurring automated SMS messages from MoggedAI. Msg &amp; data rates may apply. Reply STOP to unsubscribe.{" "}
+                    <a href="/consent" target="_blank" style={{ color:"#0ea5e9", textDecoration:"none" }} onClick={e => e.stopPropagation()}>SMS Policy</a>
                   </p>
                 </div>
               </div>
 
               {submitError && <p style={{ fontSize:"0.7rem", color:"#0ea5e9", margin:"0.4rem 0" }}>{submitError}</p>}
               <button style={primaryBtn(loading || !smsConsent)} onClick={handleSubmit} disabled={loading || !smsConsent}>
-                {loading ? "ACTIVATING..." : "ACTIVATE MY ACCOUNT →"}
+                {loading ? "SETTING UP..." : "CREATE MY ACCOUNT →"}
               </button>
-              <button style={backBtn} onClick={() => setStep(3)}>← back</button>
+              <button style={backBtn} onClick={() => setStep(1)}>← back</button>
             </div>
           )}
         </div>

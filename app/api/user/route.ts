@@ -158,6 +158,14 @@ export async function PATCH(req: NextRequest) {
   if (body.remove_habit_id) {
     await db.query(`UPDATE habits SET active = false WHERE id = $1 AND user_id = $2`, [body.remove_habit_id, uid]);
   }
+  if (body.update_habit) {
+    const h = body.update_habit
+    await db.query(
+      `UPDATE habits SET name=$1, emoji=$2, why=$3, biggest_excuse=$4, stakes=$5, time_of_day=$6, coach_style=$7
+       WHERE id=$8 AND user_id=$9`,
+      [h.name, h.emoji, h.why||'', h.biggest_excuse||'', h.stakes||'', h.time_of_day||'anytime', h.coach_style||'direct', h.id, uid]
+    )
+  }
   if (body.update_phone) {
     const clean = body.update_phone.replace(/\D/g, '');
     if (clean.length === 10) {

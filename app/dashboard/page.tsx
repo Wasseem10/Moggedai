@@ -177,6 +177,17 @@ export default function Dashboard() {
     }
   }
 
+  const handleUpdateHabit = async (updated: Partial<Habit> & { id: string }) => {
+    await fetch('/api/user', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ update_habit: updated }),
+    })
+    await loadData()
+    // Refresh selectedMission with updated data
+    setSelectedMission(prev => prev ? { ...prev, ...updated } : prev)
+  }
+
   const handleDeleteHabit = async (habitId: string) => {
     await fetch('/api/user', {
       method: 'PATCH',
@@ -245,6 +256,7 @@ export default function Dashboard() {
               messages={recentMessages.filter(m => m.habit_id === selectedMission.id)}
               onBack={() => setView('overview')}
               onDelete={() => handleDeleteHabit(selectedMission.id)}
+              onUpdate={handleUpdateHabit}
             />
           )}
           {view === 'confirm' && confirmedDraft && (
@@ -904,184 +916,233 @@ function DetailView({
   messages,
   onBack,
   onDelete,
+  onUpdate,
 }: {
   habit: Habit
   messages: Message[]
   onBack: () => void
   onDelete: () => void
+  onUpdate: (updated: Partial<Habit> & { id: string }) => Promise<void>
 }) {
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [editing, setEditing] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [edit, setEdit] = useState({
+    name: habit.name,
+    emoji: habit.emoji,
+    why: habit.why || '',
+    biggest_excuse: habit.biggest_excuse || '',
+    stakes: habit.stakes || '',
+    time_of_day: habit.time_of_day || 'anytime',
+    coach_style: habit.coach_style || 'direct',
+  })
 
-  const coachBadge = habit.coach_style?.toUpperCase() ?? 'DIRECT'
-  const lastReply = messages.find(m => m.responded_at)
+  const handleSave = async () => {
+    setSaving(true)
+    await onUpdate({ id: habit.id, ...edit })
+    setSaving(false)
+    setEditing(false)
+  }
+
+  const replied = messages.filter(m => m.responded_at).length
+  const replyRate = messages.length > 0 ? Math.round((replied / messages.length) * 100) : 0
+  const timeLabel = TIME_OPTIONS.find(t => t.value === (edit.time_of_day || habit.time_of_day))?.label ?? ''
+
+  const fieldStyle = {
+    width: '100%', background: C.s2, border: `1px solid ${C.border}`,
+    color: C.text, fontFamily: GROTESK, fontSize: '0.85rem',
+    padding: '0.65rem 0.75rem', outline: 'none', borderRadius: 0,
+    boxSizing: 'border-box' as const, lineHeight: 1.5,
+  }
+  const labelStyle = { fontFamily: MONO, fontSize: '0.5rem', color: C.text3, letterSpacing: '0.15em', display: 'block', marginBottom: '0.3rem' }
 
   return (
     <div style={{ paddingTop: '1.5rem' }}>
-      <button
-        onClick={onBack}
-        style={{
-          background: 'none',
-          border: 'none',
-          color: C.text3,
-          fontFamily: MONO,
-          fontSize: '0.65rem',
-          letterSpacing: '0.1em',
-          cursor: 'pointer',
-          padding: '0 0 1.5rem 0',
-          display: 'block',
-          transition: 'all 0.2s',
-        }}
-      >
+      <button onClick={onBack} style={{ background:'none', border:'none', color:C.text3, fontFamily:MONO, fontSize:'0.65rem', letterSpacing:'0.1em', cursor:'pointer', padding:'0 0 1.5rem 0', display:'block' }}>
         ← MY MISSIONS
       </button>
 
-      {/* Mission Hero */}
-      <div style={{ marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-          <span style={{ fontSize: '2rem', lineHeight: 1 }}>{habit.emoji}</span>
+      {/* Hero */}
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'1.25rem' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:'0.75rem' }}>
+          <span style={{ fontSize:'2.2rem', lineHeight:1 }}>{habit.emoji}</span>
           <div>
-            <h2 style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.2rem,4vw,1.4rem)', margin: 0, marginBottom: '0.3rem', color: C.text }}>
-              {habit.name}
-            </h2>
-            {habit.streak > 0 && (
-              <span style={{ fontFamily: MONO, fontSize: '0.6rem', color: '#f59e0b' }}>🔥 {habit.streak} day streak</span>
+            <h2 style={{ fontFamily:GROTESK, fontWeight:700, fontSize:'clamp(1.2rem,4vw,1.4rem)', margin:0, color:C.text }}>{habit.name}</h2>
+            {habit.streak > 0 && <span style={{ fontFamily:MONO, fontSize:'0.6rem', color:'#f59e0b' }}>🔥 {habit.streak} day streak</span>}
+          </div>
+        </div>
+        <button
+          onClick={() => setEditing(e => !e)}
+          style={{ background: editing ? '#0ea5e9' : C.s2, border:`1px solid ${editing ? '#0ea5e9' : C.border}`, color: editing ? '#fff' : C.text2, fontFamily:MONO, fontSize:'0.55rem', letterSpacing:'0.1em', padding:'0.45rem 0.85rem', cursor:'pointer', borderRadius:0 }}
+        >
+          {editing ? 'CANCEL' : 'EDIT'}
+        </button>
+      </div>
+
+      {/* Stats row */}
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', border:`1px solid ${C.border}`, marginBottom:'1.5rem' }}>
+        {[
+          { label:'COMPLETED', value: habit.total_completions },
+          { label:'REPLY RATE', value: messages.length > 0 ? `${replyRate}%` : '—' },
+          { label:'STREAK', value: habit.streak > 0 ? `🔥 ${habit.streak}` : '—' },
+        ].map((s, i) => (
+          <div key={s.label} style={{ padding:'0.85rem 0.5rem', textAlign:'center', borderRight: i < 2 ? `1px solid ${C.border}` : undefined }}>
+            <div style={{ fontFamily:GROTESK, fontWeight:700, fontSize:'clamp(1rem,3vw,1.25rem)', color:C.text, marginBottom:'0.25rem' }}>{s.value}</div>
+            <div style={{ fontFamily:MONO, fontSize:'0.45rem', color:C.text3, letterSpacing:'0.12em' }}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* ── EDIT MODE ── */}
+      {editing && (
+        <div style={{ border:`1px solid ${C.border}`, background:C.s1, marginBottom:'1.5rem' }}>
+          <div style={{ padding:'0.85rem 1.25rem', borderBottom:`1px solid ${C.border}` }}>
+            <span style={{ fontFamily:MONO, fontSize:'0.5rem', color:C.text3, letterSpacing:'0.15em' }}>EDIT MISSION</span>
+          </div>
+          <div style={{ padding:'1.25rem', display:'flex', flexDirection:'column', gap:'1rem' }}>
+
+            {/* Name + emoji */}
+            <div style={{ display:'flex', gap:'0.75rem' }}>
+              <div style={{ flex:'0 0 64px' }}>
+                <label style={labelStyle}>EMOJI</label>
+                <input value={edit.emoji} onChange={e => setEdit(p=>({...p, emoji:e.target.value}))} style={{ ...fieldStyle, textAlign:'center', fontSize:'1.4rem', padding:'0.4rem' }} maxLength={2}/>
+              </div>
+              <div style={{ flex:1 }}>
+                <label style={labelStyle}>HABIT NAME</label>
+                <input value={edit.name} onChange={e => setEdit(p=>({...p, name:e.target.value}))} style={fieldStyle} placeholder="e.g. Gym, Study, Read"/>
+              </div>
+            </div>
+
+            {/* Why */}
+            <div>
+              <label style={labelStyle}>WHY IT MATTERS TO YOU</label>
+              <textarea value={edit.why} onChange={e => setEdit(p=>({...p, why:e.target.value}))} style={{ ...fieldStyle, minHeight:'72px', resize:'vertical' }} placeholder="What's the real reason you want this habit?"/>
+            </div>
+
+            {/* Excuse */}
+            <div>
+              <label style={labelStyle}>YOUR BIGGEST EXCUSE</label>
+              <textarea value={edit.biggest_excuse} onChange={e => setEdit(p=>({...p, biggest_excuse:e.target.value}))} style={{ ...fieldStyle, minHeight:'60px', resize:'vertical' }} placeholder="What do you tell yourself to skip it?"/>
+            </div>
+
+            {/* Stakes */}
+            <div>
+              <label style={labelStyle}>WHAT'S AT STAKE</label>
+              <textarea value={edit.stakes} onChange={e => setEdit(p=>({...p, stakes:e.target.value}))} style={{ ...fieldStyle, minHeight:'60px', resize:'vertical' }} placeholder="What do you lose if you don't follow through?"/>
+            </div>
+
+            {/* Time of day */}
+            <div>
+              <label style={labelStyle}>CHECK-IN TIME</label>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0.5rem' }}>
+                {TIME_OPTIONS.map(t => (
+                  <button key={t.value} onClick={() => setEdit(p=>({...p, time_of_day:t.value}))}
+                    style={{ background:edit.time_of_day===t.value?'rgba(14,165,233,0.12)':C.s2, border:`1px solid ${edit.time_of_day===t.value?'#0ea5e9':C.border}`, color:edit.time_of_day===t.value?C.text:C.text3, fontFamily:MONO, fontSize:'0.55rem', padding:'0.6rem', cursor:'pointer', textAlign:'left', borderRadius:0 }}>
+                    {t.label}<br/><span style={{ fontSize:'0.45rem', color:C.text3 }}>{t.sub}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Coach style */}
+            <div>
+              <label style={labelStyle}>COACH STYLE</label>
+              <div style={{ display:'flex', flexDirection:'column', gap:'0.4rem' }}>
+                {COACH_OPTIONS.map(c => (
+                  <button key={c.value} onClick={() => setEdit(p=>({...p, coach_style:c.value}))}
+                    style={{ background:edit.coach_style===c.value?'rgba(14,165,233,0.12)':C.s2, border:`1px solid ${edit.coach_style===c.value?'#0ea5e9':C.border}`, color:edit.coach_style===c.value?C.text:C.text3, fontFamily:MONO, fontSize:'0.55rem', padding:'0.65rem 0.85rem', cursor:'pointer', textAlign:'left', borderRadius:0 }}>
+                    <span style={{ fontWeight:700 }}>{c.label}</span> — <span style={{ fontSize:'0.5rem' }}>{c.sub}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button onClick={handleSave} disabled={saving || !edit.name}
+              style={{ background:'#0ea5e9', border:'none', color:'#fff', fontFamily:MONO, fontSize:'0.65rem', letterSpacing:'0.12em', padding:'0.85rem', cursor:saving?'wait':'pointer', opacity:!edit.name?0.4:1, borderRadius:0 }}>
+              {saving ? 'SAVING...' : 'SAVE CHANGES'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── VIEW MODE: Context ── */}
+      {!editing && (
+        <>
+          {/* Coach + time badges */}
+          <div style={{ display:'flex', gap:'0.5rem', flexWrap:'wrap', marginBottom:'1.5rem' }}>
+            <span style={{ fontFamily:MONO, fontSize:'0.55rem', color:'#0ea5e9', border:'1px solid #0ea5e9', padding:'0.25rem 0.6rem', letterSpacing:'0.1em' }}>
+              {(habit.coach_style || 'direct').toUpperCase()}
+            </span>
+            {habit.time_of_day && (
+              <span style={{ fontFamily:MONO, fontSize:'0.55rem', color:C.text3, border:`1px solid ${C.border}`, padding:'0.25rem 0.6rem', letterSpacing:'0.08em' }}>
+                {timeLabel}
+              </span>
             )}
           </div>
-        </div>
-        <span style={{
-          fontFamily: MONO,
-          fontSize: '0.6rem',
-          color: '#0ea5e9',
-          border: `1px solid ${'#0ea5e9'}`,
-          padding: '0.25rem 0.6rem',
-          letterSpacing: '0.1em',
-        }}>
-          {coachBadge}
-        </span>
-      </div>
 
-      {/* Quick Stats */}
-      <div style={{ display: 'flex', border: `1px solid ${C.border}`, marginBottom: '1.5rem' }}>
-        <StatBox label="CHECK-INS" value={habit.total_completions} />
-        <StatBox label="STREAK" value={habit.streak > 0 ? `🔥 ${habit.streak}` : habit.streak} borderLeft />
-        <StatBox
-          label="LAST REPLY"
-          value={lastReply ? new Date(lastReply.sent_at).toLocaleDateString('en', { month: 'short', day: 'numeric' }) : '—'}
-          borderLeft
-        />
-      </div>
-
-      {/* Why I'm Doing This */}
-      {(habit.why || habit.biggest_excuse || habit.stakes) && (
-        <div style={{ background: C.s1, border: `1px solid ${C.border}`, padding: '1.25rem', marginBottom: '1.5rem' }}>
-          <p style={{ fontFamily: MONO, fontSize: '0.55rem', color: C.text3, letterSpacing: '0.2em', margin: 0, marginBottom: '1rem' }}>
-            WHY I&apos;M DOING THIS
-          </p>
-          {habit.why && (
-            <ContextField label="MY WHY" value={habit.why} />
-          )}
-          {habit.biggest_excuse && (
-            <ContextField label="MY GO-TO EXCUSE" value={habit.biggest_excuse} />
-          )}
-          {habit.stakes && (
-            <ContextField label="WHAT&apos;S AT STAKE" value={habit.stakes} />
-          )}
-        </div>
-      )}
-
-      {/* Recent Messages */}
-      {messages.length > 0 && (
-        <div style={{ marginBottom: '1.5rem' }}>
-          <p style={{ fontFamily: MONO, fontSize: '0.55rem', color: C.text3, letterSpacing: '0.2em', marginBottom: '0.75rem' }}>
-            RECENT MESSAGES
-          </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {messages.slice(0, 8).map((m, i) => (
-              <div
-                key={i}
-                style={{
-                  background: C.s1,
-                  border: `1px solid ${C.border}`,
-                  borderLeft: `3px solid ${m.responded_at ? '#0ea5e9' : C.border}`,
-                  padding: '0.75rem 1rem',
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem' }}>
-                  <p style={{ fontFamily: GROTESK, fontSize: '0.8rem', color: C.text2, margin: 0, lineHeight: 1.6, flex: 1 }}>
-                    {m.message_text}
-                  </p>
-                  <span style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, flexShrink: 0, marginTop: '0.15rem' }}>
-                    {new Date(m.sent_at).toLocaleDateString('en', { month: 'short', day: 'numeric' })}
-                  </span>
-                </div>
-                {m.responded_at && (
-                  <span style={{ fontFamily: MONO, fontSize: '0.55rem', color: '#0ea5e9', letterSpacing: '0.1em', marginTop: '0.4rem', display: 'block' }}>
-                    ✓ replied
-                  </span>
-                )}
+          {/* Context card */}
+          {(habit.why || habit.biggest_excuse || habit.stakes) ? (
+            <div style={{ background:C.s1, border:`1px solid ${C.border}`, marginBottom:'1.5rem' }}>
+              <div style={{ padding:'0.85rem 1.25rem', borderBottom:`1px solid ${C.border}` }}>
+                <span style={{ fontFamily:MONO, fontSize:'0.5rem', color:C.text3, letterSpacing:'0.15em' }}>YOUR CONTEXT</span>
               </div>
-            ))}
+              {[
+                { label:'WHY IT MATTERS', value: habit.why },
+                { label:'YOUR GO-TO EXCUSE', value: habit.biggest_excuse },
+                { label:"WHAT'S AT STAKE", value: habit.stakes },
+              ].filter(r => r.value).map((r, i, arr) => (
+                <div key={r.label} style={{ padding:'0.85rem 1.25rem', borderBottom: i < arr.length-1 ? `1px solid ${C.border}` : undefined }}>
+                  <div style={{ fontFamily:MONO, fontSize:'0.48rem', color:C.text3, letterSpacing:'0.12em', marginBottom:'0.3rem' }}>{r.label}</div>
+                  <div style={{ fontFamily:GROTESK, fontSize:'0.85rem', color:C.text2, lineHeight:1.6 }}>{r.value}</div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{ background:C.s1, border:`1px solid ${C.border}`, padding:'1.25rem', marginBottom:'1.5rem', textAlign:'center' }}>
+              <div style={{ fontFamily:MONO, fontSize:'0.55rem', color:C.text3, letterSpacing:'0.1em', marginBottom:'0.4rem' }}>NO CONTEXT SET</div>
+              <div style={{ fontFamily:GROTESK, fontSize:'0.8rem', color:C.text3 }}>Hit EDIT to add your why, excuses and stakes — this is what makes the AI messages personal.</div>
+            </div>
+          )}
+
+          {/* Recent messages */}
+          <div style={{ marginBottom:'1.5rem' }}>
+            <div style={{ fontFamily:MONO, fontSize:'0.5rem', color:C.text3, letterSpacing:'0.15em', marginBottom:'0.75rem' }}>RECENT MESSAGES</div>
+            {messages.length === 0 ? (
+              <div style={{ background:C.s1, border:`1px solid ${C.border}`, padding:'1.5rem', textAlign:'center' }}>
+                <div style={{ fontSize:'1.5rem', marginBottom:'0.5rem' }}>📭</div>
+                <div style={{ fontFamily:MONO, fontSize:'0.55rem', color:C.text3, letterSpacing:'0.1em', marginBottom:'0.3rem' }}>NO TEXTS YET</div>
+                <div style={{ fontFamily:GROTESK, fontSize:'0.8rem', color:C.text3 }}>Messages will appear here once check-ins start.</div>
+              </div>
+            ) : (
+              <div style={{ display:'flex', flexDirection:'column', gap:'0.5rem' }}>
+                {messages.slice(0,10).map((m, i) => (
+                  <div key={i} style={{ background:C.s1, border:`1px solid ${C.border}`, borderLeft:`3px solid ${m.responded_at?'#0ea5e9':C.border}`, padding:'0.75rem 1rem' }}>
+                    <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:'0.5rem' }}>
+                      <p style={{ fontFamily:GROTESK, fontSize:'0.82rem', color:C.text2, margin:0, lineHeight:1.6, flex:1 }}>{m.message_text}</p>
+                      <span style={{ fontFamily:MONO, fontSize:'0.55rem', color:C.text3, flexShrink:0, marginTop:'0.15rem' }}>
+                        {new Date(m.sent_at).toLocaleDateString('en',{month:'short',day:'numeric'})}
+                      </span>
+                    </div>
+                    {m.responded_at && (
+                      <span style={{ fontFamily:MONO, fontSize:'0.5rem', color:'#0ea5e9', letterSpacing:'0.1em', marginTop:'0.35rem', display:'block' }}>✓ replied done</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-        </div>
+        </>
       )}
 
-      {/* Danger Row */}
-      <div style={{ display: 'flex', gap: '0.75rem', paddingTop: '0.5rem', borderTop: `1px solid ${C.border}` }}>
-        <button style={{
-          flex: 1,
-          background: 'none',
-          border: `1px solid ${C.border}`,
-          color: C.text3,
-          fontFamily: MONO,
-          fontSize: '0.6rem',
-          letterSpacing: '0.1em',
-          padding: '0.75rem',
-          cursor: 'pointer',
-          transition: 'all 0.2s',
-          borderRadius: 0,
-          minHeight: 44,
-        }}>
-          PAUSE THIS CAMPAIGN
-        </button>
+      {/* Delete */}
+      <div style={{ borderTop:`1px solid ${C.border}`, paddingTop:'1rem' }}>
         {confirmDelete ? (
-          <button
-            onClick={onDelete}
-            style={{
-              flex: 1,
-              background: '#0ea5e9',
-              border: `1px solid ${'#0ea5e9'}`,
-              color: '#fff',
-              fontFamily: MONO,
-              fontSize: '0.6rem',
-              letterSpacing: '0.1em',
-              padding: '0.75rem',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              borderRadius: 0,
-              minHeight: 44,
-            }}
-          >
-            CONFIRM DELETE
+          <button onClick={onDelete} style={{ width:'100%', background:'#ef4444', border:'none', color:'#fff', fontFamily:MONO, fontSize:'0.6rem', letterSpacing:'0.1em', padding:'0.75rem', cursor:'pointer', borderRadius:0 }}>
+            CONFIRM — DELETE THIS MISSION
           </button>
         ) : (
-          <button
-            onClick={() => setConfirmDelete(true)}
-            style={{
-              flex: 1,
-              background: 'none',
-              border: `1px solid ${'#0ea5e9'}`,
-              color: '#0ea5e9',
-              fontFamily: MONO,
-              fontSize: '0.6rem',
-              letterSpacing: '0.1em',
-              padding: '0.75rem',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              borderRadius: 0,
-              minHeight: 44,
-            }}
-          >
-            DELETE CAMPAIGN
+          <button onClick={() => setConfirmDelete(true)} style={{ background:'none', border:`1px solid ${C.border}`, color:C.text3, fontFamily:MONO, fontSize:'0.6rem', letterSpacing:'0.1em', padding:'0.65rem 1rem', cursor:'pointer', borderRadius:0 }}>
+            DELETE MISSION
           </button>
         )}
       </div>

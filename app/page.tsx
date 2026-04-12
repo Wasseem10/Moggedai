@@ -163,8 +163,8 @@ export default function MoggedAI() {
 
       {/* WHO IT'S FOR */}
       <div style={{ padding:"5rem 1.5rem", maxWidth:"920px", margin:"0 auto" }}>
-        <div style={{ fontSize:"0.85rem", letterSpacing:"0.25em", color:"#e0e0e0", fontWeight:"700", marginBottom:"0.5rem", display:"flex", alignItems:"center", gap:"1rem" }}>
-          WHO IT&apos;S FOR <div style={{ flex:1, height:"1px", background:"#2a2a2a" }}/>
+        <div style={{ fontSize:"0.85rem", letterSpacing:"0.25em", color:"var(--c-text)", fontWeight:"700", marginBottom:"0.5rem", display:"flex", alignItems:"center", gap:"1rem" }}>
+          WHO IT&apos;S FOR <div style={{ flex:1, height:"1px", background:"var(--c-border)" }}/>
         </div>
         <p style={{ fontSize:"0.85rem", color:"var(--c-text4)", lineHeight:"1.8", marginBottom:"2rem", maxWidth:"520px" }}>
           If you know what you should be doing but keep finding reasons not to — this is for you.
@@ -191,8 +191,8 @@ export default function MoggedAI() {
 
       {/* HOW IT WORKS */}
       <div style={{ padding:"0 1.5rem 5rem", maxWidth:"920px", margin:"0 auto" }}>
-        <div style={{ fontSize:"0.85rem", letterSpacing:"0.25em", color:"#e0e0e0", fontWeight:"700", marginBottom:"2rem", display:"flex", alignItems:"center", gap:"1rem" }}>
-          HOW IT WORKS <div style={{ flex:1, height:"1px", background:"#2a2a2a" }}/>
+        <div style={{ fontSize:"0.85rem", letterSpacing:"0.25em", color:"var(--c-text)", fontWeight:"700", marginBottom:"2rem", display:"flex", alignItems:"center", gap:"1rem" }}>
+          HOW IT WORKS <div style={{ flex:1, height:"1px", background:"var(--c-border)" }}/>
         </div>
         <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:"1px", background:"var(--c-s1)", border:"1px solid var(--c-border)" }}>
           {[

@@ -358,19 +358,41 @@ function OverviewView({
       </div>
 
       {/* Stats Row */}
-      <div style={{ display: 'flex', border: `1px solid ${C.border}`, marginBottom: '2rem' }}>
-        <StatBox label="TEXTS SENT" value={stats.total_texts} />
-        <StatBox
-          label="STREAK"
-          value={stats.streak > 0 ? `🔥 ${stats.streak}` : `${stats.streak}`}
-          borderLeft
-        />
-        <StatBox
-          label="STATUS"
-          value={isActive ? 'ON' : 'OFF'}
-          valueColor={isActive ? '#22c55e' : C.text3}
-          borderLeft
-        />
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', border: `1px solid ${C.border}`, marginBottom: '2rem' }}>
+
+        {/* Active Missions */}
+        <div style={{ padding: '1rem 0.75rem', textAlign: 'center', borderRight: `1px solid ${C.border}` }}>
+          <div style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.1rem,4vw,1.4rem)', color: C.text, lineHeight: 1, marginBottom: '0.3rem' }}>
+            {habits.length}
+          </div>
+          <div style={{ fontFamily: MONO, fontSize: '0.48rem', color: C.text3, letterSpacing: '0.12em' }}>MISSIONS</div>
+          <div style={{ fontFamily: MONO, fontSize: '0.42rem', color: habits.length > 0 ? '#22c55e' : C.text3, letterSpacing: '0.08em', marginTop: '0.2rem' }}>
+            {habits.length > 0 ? 'ACTIVE' : 'NONE YET'}
+          </div>
+        </div>
+
+        {/* Streak */}
+        <div style={{ padding: '1rem 0.75rem', textAlign: 'center', borderRight: `1px solid ${C.border}` }}>
+          <div style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.1rem,4vw,1.4rem)', color: stats.streak > 0 ? '#f59e0b' : C.text, lineHeight: 1, marginBottom: '0.3rem' }}>
+            {stats.streak > 0 ? `🔥 ${stats.streak}` : '—'}
+          </div>
+          <div style={{ fontFamily: MONO, fontSize: '0.48rem', color: C.text3, letterSpacing: '0.12em' }}>DAY STREAK</div>
+          <div style={{ fontFamily: MONO, fontSize: '0.42rem', color: C.text3, letterSpacing: '0.08em', marginTop: '0.2rem' }}>
+            {stats.streak > 0 ? 'KEEP GOING' : 'REPLY DONE TO START'}
+          </div>
+        </div>
+
+        {/* Completions */}
+        <div style={{ padding: '1rem 0.75rem', textAlign: 'center' }}>
+          <div style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.1rem,4vw,1.4rem)', color: C.text, lineHeight: 1, marginBottom: '0.3rem' }}>
+            {stats.total_completions}
+          </div>
+          <div style={{ fontFamily: MONO, fontSize: '0.48rem', color: C.text3, letterSpacing: '0.12em' }}>COMPLETED</div>
+          <div style={{ fontFamily: MONO, fontSize: '0.42rem', color: C.text3, letterSpacing: '0.08em', marginTop: '0.2rem' }}>
+            {stats.total_completions > 0 ? 'TOTAL DONE' : 'NONE YET'}
+          </div>
+        </div>
+
       </div>
 
       {/* Missions */}

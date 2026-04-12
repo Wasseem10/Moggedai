@@ -794,6 +794,38 @@ function OverviewView({
           </button>
         </div>
 
+        {/* Subscription */}
+        <div style={{ borderBottom: `1px solid ${C.border}`, padding: '1rem 0' }}>
+          <div style={{ fontFamily: MONO, fontSize: '0.7rem', color: C.text2, letterSpacing: '0.12em', marginBottom: '0.75rem', fontWeight: 700 }}>SUBSCRIPTION</div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                <span style={{ fontFamily: MONO, fontSize: '0.75rem', color: C.text, fontWeight: 700 }}>FREE PLAN</span>
+                <span style={{ fontFamily: MONO, fontSize: '0.5rem', color: '#f59e0b', border: '1px solid #f59e0b', padding: '0.1rem 0.4rem', letterSpacing: '0.1em' }}>CURRENT</span>
+              </div>
+              <div style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.05em' }}>1 mission · check-ins every 2hrs</div>
+            </div>
+            <button
+              onClick={() => window.location.href = '/pricing'}
+              style={{
+                background: '#0ea5e9',
+                border: 'none',
+                color: '#fff',
+                fontFamily: MONO,
+                fontSize: '0.6rem',
+                letterSpacing: '0.12em',
+                fontWeight: 700,
+                padding: '0.6rem 1rem',
+                cursor: 'pointer',
+                borderRadius: 0,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              UPGRADE TO PRO →
+            </button>
+          </div>
+        </div>
+
         {/* Sign out */}
         <div style={{ padding: '1rem 0' }}>
           <button

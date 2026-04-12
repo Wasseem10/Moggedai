@@ -224,6 +224,58 @@ export default function MoggedAI() {
         <p style={{ fontSize:"0.6rem", color:"#555", marginTop:"1rem" }}>US numbers only · Reply STOP to unsubscribe anytime</p>
       </div>
 
+      {/* PRICING */}
+      <div style={{ padding:"5rem 1.5rem", maxWidth:"920px", margin:"0 auto" }}>
+        <div style={{ fontSize:"0.85rem", letterSpacing:"0.25em", color:"var(--c-text)", fontWeight:"700", marginBottom:"0.5rem", display:"flex", alignItems:"center", gap:"1rem" }}>
+          PRICING <div style={{ flex:1, height:"1px", background:"var(--c-border)" }}/>
+        </div>
+        <p style={{ fontSize:"0.85rem", color:"var(--c-text4)", lineHeight:"1.8", marginBottom:"3rem", maxWidth:"520px" }}>
+          Less than a coffee. No excuses.
+        </p>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))", gap:"1px", background:"var(--c-border)" }}>
+          {/* Free */}
+          <div style={{ background:"var(--c-root)", padding:"2rem 1.5rem" }}>
+            <div style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.55rem", letterSpacing:"0.2em", color:"var(--c-text3)", marginBottom:"0.75rem" }}>FREE</div>
+            <div style={{ fontFamily:"'Space Mono',monospace", fontWeight:700, fontSize:"2.5rem", color:"var(--c-text)", lineHeight:1, marginBottom:"0.25rem" }}>$0</div>
+            <div style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.55rem", color:"var(--c-text3)", marginBottom:"1.5rem" }}>forever</div>
+            {["1 active mission","Check-ins every 2 hours","Direct coach style","Basic AI responses"].map(f => (
+              <div key={f} style={{ display:"flex", gap:"0.6rem", alignItems:"center", marginBottom:"0.6rem" }}>
+                <span style={{ color:"#22c55e", fontSize:"0.75rem", lineHeight:1 }}>✓</span>
+                <span style={{ fontSize:"0.8rem", color:"var(--c-text2)" }}>{f}</span>
+              </div>
+            ))}
+            <button
+              onClick={() => router.push("/sign-up")}
+              style={{ width:"100%", background:"transparent", border:"1px solid var(--c-border2)", color:"var(--c-text)", padding:"0.85rem", fontSize:"0.7rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700", marginTop:"1.5rem" }}
+            >
+              GET STARTED FREE →
+            </button>
+          </div>
+          {/* Pro */}
+          <div style={{ background:"var(--c-root)", padding:"2rem 1.5rem", position:"relative", outline:"2px solid #0ea5e9", outlineOffset:"-1px" }}>
+            <div style={{ position:"absolute", top:0, right:"1.5rem", background:"#0ea5e9", color:"#fff", fontFamily:"'Space Mono',monospace", fontSize:"0.5rem", letterSpacing:"0.15em", fontWeight:700, padding:"0.25rem 0.65rem" }}>MOST POPULAR</div>
+            <div style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.55rem", letterSpacing:"0.2em", color:"#0ea5e9", marginBottom:"0.75rem" }}>PRO</div>
+            <div style={{ display:"flex", alignItems:"flex-end", gap:"0.25rem", marginBottom:"0.25rem" }}>
+              <span style={{ fontFamily:"'Space Mono',monospace", fontWeight:700, fontSize:"2.5rem", color:"var(--c-text)", lineHeight:1 }}>$2.99</span>
+              <span style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.55rem", color:"var(--c-text3)", paddingBottom:"0.4rem" }}>/mo</span>
+            </div>
+            <div style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.55rem", color:"var(--c-text3)", marginBottom:"1.5rem" }}>or $1.99/mo billed yearly</div>
+            {["Up to 5 missions","Check-ins every 30 min","All 4 coach styles","Full AI personalization","Weekly & monthly recap","Mission complete history"].map(f => (
+              <div key={f} style={{ display:"flex", gap:"0.6rem", alignItems:"center", marginBottom:"0.6rem" }}>
+                <span style={{ color:"#0ea5e9", fontSize:"0.75rem", lineHeight:1 }}>✓</span>
+                <span style={{ fontSize:"0.8rem", color:"var(--c-text2)" }}>{f}</span>
+              </div>
+            ))}
+            <button
+              onClick={() => router.push("/sign-up")}
+              style={{ width:"100%", background:"#0ea5e9", border:"none", color:"#fff", padding:"0.85rem", fontSize:"0.7rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700", marginTop:"1.5rem" }}
+            >
+              GET PRO →
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Footer */}
       <footer style={{ borderTop:"1px solid #1a1a1a", background:"var(--c-bg)", padding:"3rem 1.5rem 2rem", fontFamily:"'Space Mono','Courier New',monospace" }}>
         <div style={{ maxWidth:"920px", margin:"0 auto" }}>

@@ -259,7 +259,7 @@ export default function MoggedAI() {
               <div style={{ fontSize:"0.5rem", letterSpacing:"0.25em", color:"#666", marginBottom:"1rem" }}>PRODUCT</div>
               {[
                 { label:"How It Works", href:"/how-it-works" },
-                { label:"Pricing",      href:"/#pricing" },
+                { label:"Pricing",      href:"/pricing" },
                 { label:"FAQ",          href:"/faq" },
                 { label:"Get Started",  href:"/#get-started" },
               ].map(l => (

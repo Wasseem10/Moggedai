@@ -396,7 +396,7 @@ function OverviewView({
     <div>
       {/* Hero */}
       <div style={{ paddingTop: '2rem', paddingBottom: '1.5rem' }}>
-        <p style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.2em', margin: 0, marginBottom: '0.4rem' }}>
+        <p style={{ fontFamily: MONO, fontSize: '0.75rem', color: C.text2, letterSpacing: '0.15em', margin: 0, marginBottom: '0.4rem' }}>
           {greeting} · {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }).toUpperCase()}
         </p>
         <h1 style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.3rem,5vw,1.6rem)', margin: 0, marginBottom: '0.5rem', color: C.text }}>
@@ -420,8 +420,8 @@ function OverviewView({
           <div style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.1rem,4vw,1.4rem)', color: C.text, lineHeight: 1, marginBottom: '0.3rem' }}>
             {habits.length}
           </div>
-          <div style={{ fontFamily: MONO, fontSize: '0.48rem', color: C.text3, letterSpacing: '0.12em' }}>MISSIONS</div>
-          <div style={{ fontFamily: MONO, fontSize: '0.42rem', color: habits.length > 0 ? '#22c55e' : C.text3, letterSpacing: '0.08em', marginTop: '0.2rem' }}>
+          <div style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.12em' }}>MISSIONS</div>
+          <div style={{ fontFamily: MONO, fontSize: '0.55rem', color: habits.length > 0 ? '#22c55e' : C.text3, letterSpacing: '0.08em', marginTop: '0.2rem' }}>
             {habits.length > 0 ? 'ACTIVE' : 'NONE YET'}
           </div>
         </div>
@@ -431,8 +431,8 @@ function OverviewView({
           <div style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.1rem,4vw,1.4rem)', color: stats.streak > 0 ? '#f59e0b' : C.text, lineHeight: 1, marginBottom: '0.3rem' }}>
             {stats.streak > 0 ? `🔥 ${stats.streak}` : '—'}
           </div>
-          <div style={{ fontFamily: MONO, fontSize: '0.48rem', color: C.text3, letterSpacing: '0.12em' }}>DAY STREAK</div>
-          <div style={{ fontFamily: MONO, fontSize: '0.42rem', color: C.text3, letterSpacing: '0.08em', marginTop: '0.2rem' }}>
+          <div style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.12em' }}>DAY STREAK</div>
+          <div style={{ fontFamily: MONO, fontSize: '0.55rem', color: C.text3, letterSpacing: '0.08em', marginTop: '0.2rem' }}>
             {stats.streak > 0 ? 'KEEP GOING' : 'REPLY DONE TO START'}
           </div>
         </div>
@@ -442,8 +442,8 @@ function OverviewView({
           <div style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.1rem,4vw,1.4rem)', color: C.text, lineHeight: 1, marginBottom: '0.3rem' }}>
             {stats.total_completions}
           </div>
-          <div style={{ fontFamily: MONO, fontSize: '0.48rem', color: C.text3, letterSpacing: '0.12em' }}>COMPLETED</div>
-          <div style={{ fontFamily: MONO, fontSize: '0.42rem', color: C.text3, letterSpacing: '0.08em', marginTop: '0.2rem' }}>
+          <div style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.12em' }}>COMPLETED</div>
+          <div style={{ fontFamily: MONO, fontSize: '0.55rem', color: C.text3, letterSpacing: '0.08em', marginTop: '0.2rem' }}>
             {stats.total_completions > 0 ? 'TOTAL DONE' : 'NONE YET'}
           </div>
         </div>
@@ -453,16 +453,16 @@ function OverviewView({
       {/* Missions */}
       <div style={{ marginBottom: '2rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-          <span style={{ fontFamily: MONO, fontSize: '0.55rem', letterSpacing: '0.2em', color: C.text3 }}>
+          <span style={{ fontFamily: MONO, fontSize: '0.75rem', letterSpacing: '0.15em', color: C.text2, fontWeight: 700 }}>
             MY MISSIONS
           </span>
           <span style={{
             background: C.s2,
             border: `1px solid ${C.border}`,
-            color: C.text3,
+            color: C.text2,
             fontFamily: MONO,
-            fontSize: '0.55rem',
-            padding: '0.1rem 0.4rem',
+            fontSize: '0.7rem',
+            padding: '0.1rem 0.5rem',
           }}>
             {habits.length}
           </span>
@@ -545,7 +545,7 @@ function OverviewView({
 
         {/* Phone row */}
         <div style={{ borderBottom: `1px solid ${C.border}`, padding: '1rem 0' }}>
-          <div style={{ fontFamily: MONO, fontSize: '0.5rem', color: C.text3, letterSpacing: '0.15em', marginBottom: '0.4rem' }}>PHONE NUMBER</div>
+          <div style={{ fontFamily: MONO, fontSize: '0.7rem', color: C.text2, letterSpacing: '0.12em', marginBottom: '0.4rem', fontWeight: 700 }}>PHONE NUMBER</div>
           {editingPhone ? (
             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
               <input

@@ -188,13 +188,7 @@ export default function MoggedAI() {
       </div>
 
       {/* CTA */}
-      <div style={{ padding:"3rem 1.5rem 6rem", maxWidth:"920px", margin:"0 auto", textAlign:"center" }}>
-        <div style={{ borderTop:"1px solid #111", borderBottom:"1px solid #111", padding:"2.5rem 0", marginBottom:"3rem" }}>
-          <p style={{ fontSize:"clamp(1.2rem,3vw,2rem)", fontWeight:"700", lineHeight:1.4, margin:0 }}>
-            &ldquo;You already know what you should be doing.<br/>
-            <span style={{ color:"#0ea5e9" }}>You just need someone who won&apos;t let you forget it.&rdquo;</span>
-          </p>
-        </div>
+      <div style={{ padding:"3rem 1.5rem 4rem", maxWidth:"920px", margin:"0 auto", textAlign:"center" }}>
         <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1.1rem 3rem", fontSize:"0.9rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
           GET STARTED — IT&apos;S FREE
         </button>

@@ -1,35 +1,15 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth, useClerk } from "@clerk/nextjs";
 
-const MESSAGES = [
-  "you've been 'about to start' for 3 hours. get up.",
-  "your competition isn't taking breaks. why are you?",
-  "you told yourself today would be different. prove it.",
-  "every second you waste, someone else is getting ahead.",
-  "log off. phone down. get back to it. now.",
-  "discipline is doing it even when you don't feel like it.",
-  "stop planning. start doing.",
-  "you're not tired. you're avoiding it.",
-  "one hour of real focus beats 5 hours of pretending to work.",
-  "nobody is coming to save you. get back to work.",
-];
 
 
 export default function MoggedAI() {
-  const [currentMsg, setCurrentMsg] = useState(0);
-  const [ticker, setTicker]         = useState(0);
+  const [ticker, setTicker] = useState(0);
   const router = useRouter();
   const { isSignedIn } = useAuth();
   const { signOut } = useClerk();
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  useEffect(() => {
-    intervalRef.current = setInterval(() => setCurrentMsg(p => (p + 1) % MESSAGES.length), 3000);
-    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
-  }, []);
-
   useEffect(() => {
     const t = setInterval(() => setTicker(p => p + 1), 50);
     return () => clearInterval(t);
@@ -88,9 +68,6 @@ export default function MoggedAI() {
         <h1 style={{ fontSize:"clamp(2.8rem,8vw,5.5rem)", fontWeight:"700", lineHeight:0.95, letterSpacing:"-0.02em", wordSpacing:"-0.15em", marginBottom:"1rem", transform:`translateX(${noise*0.3}px)` }}>
           STOP<br/><span style={{ color:"#0ea5e9" }}>SLACKING.</span><br/>START NOW.
         </h1>
-        <div style={{ height:"2.5rem", overflow:"hidden", marginBottom:"1.5rem", borderLeft:"3px solid #0ea5e9", paddingLeft:"1rem" }}>
-          <p style={{ fontSize:"clamp(0.9rem,2vw,1.05rem)", color:"var(--c-text4)", lineHeight:"2.5rem", margin:0 }}>{MESSAGES[currentMsg]}</p>
-        </div>
         <p style={{ fontSize:"clamp(0.95rem,2vw,1.05rem)", color:"var(--c-text4)", maxWidth:"500px", lineHeight:"1.9", marginBottom:"2rem" }}>
           Get daily habit reminders by text.<br/>Built to make sure you follow through.
         </p>

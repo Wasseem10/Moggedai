@@ -29,6 +29,18 @@ type Message = {
   responded_at: string | null
   habit_id?: string
 }
+type CompletedHabit = {
+  id: string
+  name: string
+  emoji: string
+  completed_at: string
+  total_completions: number
+}
+type WeeklyRecap = {
+  total: number
+  monthly_total: number
+  by_habit: { name: string; emoji: string; count: number }[]
+}
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 
@@ -106,6 +118,8 @@ export default function Dashboard() {
 
   const [userData, setUserData] = useState<UserData | null>(null)
   const [habits, setHabits] = useState<Habit[]>([])
+  const [completedHabits, setCompletedHabits] = useState<CompletedHabit[]>([])
+  const [weeklyRecap, setWeeklyRecap] = useState<WeeklyRecap>({ total: 0, monthly_total: 0, by_habit: [] })
   const [stats, setStats] = useState<Stats>({ total_texts: 0, streak: 0, total_completions: 0 })
   const [recentMessages, setRecentMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(true)
@@ -142,6 +156,8 @@ export default function Dashboard() {
         }
         setUserData(d.user)
         setHabits(d.habits ?? [])
+        setCompletedHabits(d.completed_habits ?? [])
+        setWeeklyRecap(d.weekly_recap ?? { total: 0, monthly_total: 0, by_habit: [] })
         setStats(d.stats ?? { total_texts: 0, streak: 0, total_completions: 0 })
         setRecentMessages(d.recent_messages ?? [])
       } else {
@@ -206,6 +222,16 @@ export default function Dashboard() {
     setView('overview')
   }
 
+  const handleCompleteHabit = async (habitId: string) => {
+    await fetch('/api/user', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ complete_habit_id: habitId }),
+    })
+    await loadData()
+    setView('overview')
+  }
+
   const handleToggleActive = async () => {
     if (!userData) return
     await fetch('/api/user', {
@@ -249,6 +275,8 @@ export default function Dashboard() {
               clerkUser={clerkUser}
               userData={userData}
               habits={habits}
+              completedHabits={completedHabits}
+              weeklyRecap={weeklyRecap}
               stats={stats}
               greeting={greeting()}
               onSelectMission={(h) => { setSelectedMission(h); setView('detail') }}
@@ -264,6 +292,7 @@ export default function Dashboard() {
               messages={recentMessages.filter(m => m.habit_id === selectedMission.id)}
               onBack={() => setView('overview')}
               onDelete={() => handleDeleteHabit(selectedMission.id)}
+              onComplete={() => handleCompleteHabit(selectedMission.id)}
               onUpdate={handleUpdateHabit}
             />
           )}
@@ -363,10 +392,98 @@ function Nav({ onLogoClick, theme, onToggleTheme }: { onLogoClick: () => void; t
 
 // ─── Overview View ─────────────────────────────────────────────────────────────
 
+// ─── Weekly Recap Card ────────────────────────────────────────────────────────
+
+function WeeklyRecapCard({ recap, streak, totalCompletions }: { recap: WeeklyRecap; streak: number; totalCompletions: number }) {
+  const topHabit = recap.by_habit[0]
+  return (
+    <div style={{
+      border: `1px solid var(--c-accent-bdr)`,
+      background: 'var(--c-accent-dim)',
+      marginBottom: '2rem',
+      overflow: 'hidden',
+    }}>
+      <style>{`
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(16px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes barGrow {
+          from { width: 0; }
+        }
+      `}</style>
+
+      {/* Header */}
+      <div style={{ padding: '0.85rem 1.25rem', borderBottom: `1px solid var(--c-accent-bdr)`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={{ fontFamily: MONO, fontSize: '0.65rem', letterSpacing: '0.2em', color: '#0ea5e9', fontWeight: 700 }}>THIS WEEK</span>
+        <span style={{ fontFamily: MONO, fontSize: '0.55rem', color: 'var(--c-text3)', letterSpacing: '0.1em' }}>
+          {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} recap
+        </span>
+      </div>
+
+      {/* Stats row */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', borderBottom: `1px solid var(--c-accent-bdr)` }}>
+        {[
+          { label: 'THIS WEEK', value: recap.total, sub: 'completions' },
+          { label: 'THIS MONTH', value: recap.monthly_total, sub: 'completions' },
+          { label: 'STREAK', value: streak > 0 ? `🔥 ${streak}` : '—', sub: 'days' },
+        ].map((s, i) => (
+          <div
+            key={s.label}
+            style={{
+              padding: '1rem 0.75rem', textAlign: 'center',
+              borderRight: i < 2 ? `1px solid var(--c-accent-bdr)` : undefined,
+              opacity: 0, animation: `slideUp 0.4s ease forwards`, animationDelay: `${i * 100}ms`,
+            }}
+          >
+            <div style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.1rem,4vw,1.5rem)', color: '#0ea5e9', lineHeight: 1, marginBottom: '0.25rem' }}>{s.value}</div>
+            <div style={{ fontFamily: MONO, fontSize: '0.5rem', color: 'var(--c-text3)', letterSpacing: '0.1em' }}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Per-habit breakdown */}
+      {recap.by_habit.length > 0 && (
+        <div style={{ padding: '1rem 1.25rem' }}>
+          <div style={{ fontFamily: MONO, fontSize: '0.55rem', color: 'var(--c-text3)', letterSpacing: '0.15em', marginBottom: '0.75rem' }}>BREAKDOWN</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+            {recap.by_habit.map((h, i) => {
+              const pct = topHabit ? Math.round((h.count / topHabit.count) * 100) : 0
+              return (
+                <div key={h.name} style={{ opacity: 0, animation: `slideUp 0.4s ease forwards`, animationDelay: `${300 + i * 80}ms` }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.3rem' }}>
+                    <span style={{ fontFamily: GROTESK, fontSize: '0.85rem', color: 'var(--c-text)' }}>{h.emoji} {h.name}</span>
+                    <span style={{ fontFamily: MONO, fontSize: '0.6rem', color: '#0ea5e9' }}>{h.count}×</span>
+                  </div>
+                  <div style={{ height: '3px', background: 'var(--c-border)', borderRadius: '2px', overflow: 'hidden' }}>
+                    <div style={{
+                      height: '100%', background: '#0ea5e9', borderRadius: '2px',
+                      width: `${pct}%`, animation: `barGrow 0.6s ease forwards`, animationDelay: `${400 + i * 80}ms`,
+                    }} />
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+          {totalCompletions > 0 && (
+            <div style={{ marginTop: '0.85rem', fontFamily: MONO, fontSize: '0.55rem', color: 'var(--c-text3)', letterSpacing: '0.1em', opacity: 0, animation: `slideUp 0.4s ease forwards`, animationDelay: '600ms' }}>
+              {totalCompletions} total completions all time
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─── Overview View ─────────────────────────────────────────────────────────────
+
 function OverviewView({
   clerkUser,
   userData,
   habits,
+  completedHabits,
+  weeklyRecap,
   stats,
   greeting,
   onSelectMission,
@@ -378,6 +495,8 @@ function OverviewView({
   clerkUser: ReturnType<typeof useUser>['user']
   userData: UserData | null
   habits: Habit[]
+  completedHabits: CompletedHabit[]
+  weeklyRecap: WeeklyRecap
   stats: Stats
   greeting: string
   onSelectMission: (h: Habit) => void
@@ -539,6 +658,52 @@ function OverviewView({
           )}
         </div>
       </div>
+
+      {/* Weekly Recap */}
+      {(weeklyRecap.total > 0 || stats.total_completions > 0) && (
+        <WeeklyRecapCard recap={weeklyRecap} streak={stats.streak} totalCompletions={stats.total_completions} />
+      )}
+
+      {/* Completed Missions */}
+      {completedHabits.length > 0 && (
+        <div style={{ marginBottom: '2rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+            <span style={{ fontFamily: MONO, fontSize: '0.75rem', letterSpacing: '0.15em', color: C.text2, fontWeight: 700 }}>
+              COMPLETED MISSIONS
+            </span>
+            <span style={{ background: C.s2, border: `1px solid ${C.border}`, color: C.text2, fontFamily: MONO, fontSize: '0.7rem', padding: '0.1rem 0.5rem' }}>
+              {completedHabits.length}
+            </span>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {completedHabits.map((h, i) => (
+              <div
+                key={h.id}
+                style={{
+                  border: `1px solid ${C.border}`,
+                  background: C.s1,
+                  padding: '1rem 1.25rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  opacity: 0,
+                  animation: `slideUp 0.4s ease forwards`,
+                  animationDelay: `${i * 80}ms`,
+                }}
+              >
+                <span style={{ fontSize: '1.5rem', lineHeight: 1 }}>{h.emoji}</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontFamily: GROTESK, fontWeight: 600, fontSize: '0.95rem', color: C.text2 }}>{h.name}</div>
+                  <div style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, marginTop: '0.2rem' }}>
+                    {h.total_completions} completions · finished {new Date(h.completed_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </div>
+                </div>
+                <span style={{ fontSize: '1.2rem' }}>🏆</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Account Section */}
       <div style={{ borderTop: `1px solid ${C.border}` }}>
@@ -966,15 +1131,18 @@ function DetailView({
   messages,
   onBack,
   onDelete,
+  onComplete,
   onUpdate,
 }: {
   habit: Habit
   messages: Message[]
   onBack: () => void
   onDelete: () => void
+  onComplete: () => void
   onUpdate: (updated: Partial<Habit> & { id: string }) => Promise<void>
 }) {
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [confirmComplete, setConfirmComplete] = useState(false)
   const [editing, setEditing] = useState(false)
   const [saving, setSaving] = useState(false)
   const [edit, setEdit] = useState({
@@ -1184,16 +1352,44 @@ function DetailView({
         </>
       )}
 
-      {/* Delete */}
-      <div style={{ borderTop:`1px solid ${C.border}`, paddingTop:'1rem' }}>
-        {confirmDelete ? (
-          <button onClick={onDelete} style={{ width:'100%', background:'#ef4444', border:'none', color:'#fff', fontFamily:MONO, fontSize:'0.6rem', letterSpacing:'0.1em', padding:'0.75rem', cursor:'pointer', borderRadius:0 }}>
-            CONFIRM — DELETE THIS MISSION
-          </button>
+      {/* Complete / Delete */}
+      <div style={{ borderTop:`1px solid ${C.border}`, paddingTop:'1.25rem', display:'flex', flexDirection:'column', gap:'0.75rem' }}>
+
+        {/* Mark as complete */}
+        {confirmComplete ? (
+          <div style={{ background: C.s1, border:`1px solid #22c55e`, padding:'1rem 1.25rem' }}>
+            <p style={{ fontFamily:MONO, fontSize:'0.6rem', color:'#22c55e', letterSpacing:'0.1em', margin:'0 0 0.75rem 0' }}>
+              MARK AS COMPLETE — this will move it to your completed missions.
+            </p>
+            <div style={{ display:'flex', gap:'0.5rem' }}>
+              <button onClick={onComplete} style={{ flex:1, background:'#22c55e', border:'none', color:'#000', fontFamily:MONO, fontSize:'0.65rem', letterSpacing:'0.1em', fontWeight:700, padding:'0.7rem', cursor:'pointer', borderRadius:0 }}>
+                🏆 YES, MISSION COMPLETE
+              </button>
+              <button onClick={() => setConfirmComplete(false)} style={{ background:'none', border:`1px solid ${C.border}`, color:C.text3, fontFamily:MONO, fontSize:'0.6rem', padding:'0.7rem 1rem', cursor:'pointer', borderRadius:0 }}>
+                CANCEL
+              </button>
+            </div>
+          </div>
         ) : (
-          <button onClick={() => setConfirmDelete(true)} style={{ background:'none', border:`1px solid ${C.border}`, color:C.text3, fontFamily:MONO, fontSize:'0.6rem', letterSpacing:'0.1em', padding:'0.65rem 1rem', cursor:'pointer', borderRadius:0 }}>
-            DELETE MISSION
+          <button
+            onClick={() => setConfirmComplete(true)}
+            style={{ width:'100%', background:'transparent', border:`1px solid #22c55e`, color:'#22c55e', fontFamily:MONO, fontSize:'0.65rem', letterSpacing:'0.12em', fontWeight:700, padding:'0.85rem', cursor:'pointer', borderRadius:0 }}
+          >
+            🏆 MARK MISSION COMPLETE
           </button>
+        )}
+
+        {/* Delete (smaller, less prominent) */}
+        {!confirmComplete && (
+          confirmDelete ? (
+            <button onClick={onDelete} style={{ width:'100%', background:'#ef4444', border:'none', color:'#fff', fontFamily:MONO, fontSize:'0.6rem', letterSpacing:'0.1em', padding:'0.65rem', cursor:'pointer', borderRadius:0 }}>
+              CONFIRM — DELETE PERMANENTLY
+            </button>
+          ) : (
+            <button onClick={() => setConfirmDelete(true)} style={{ background:'none', border:'none', color:C.text3, fontFamily:MONO, fontSize:'0.55rem', letterSpacing:'0.1em', padding:'0.3rem 0', cursor:'pointer', textDecoration:'underline' }}>
+              delete mission
+            </button>
+          )
         )}
       </div>
     </div>

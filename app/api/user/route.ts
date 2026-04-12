@@ -35,7 +35,10 @@ export async function GET() {
   if (!userRows.length) return NextResponse.json({ user: null });
   const user = userRows[0];
 
-  // Get habits with streaks, completion counts, and last message
+  // Ensure completed_at column exists (safe migration)
+  await db.query(`ALTER TABLE habits ADD COLUMN IF NOT EXISTS completed_at TIMESTAMP`).catch(() => {});
+
+  // Get active habits with streaks, completion counts, and last message
   const { rows: habits } = await db.query(
     `SELECT h.id, h.name, h.emoji, h.active,
             h.why, h.biggest_excuse, h.stakes, h.time_of_day, h.coach_style,
@@ -77,6 +80,37 @@ export async function GET() {
     };
   }));
 
+  // Completed (archived) habits
+  const { rows: completedHabits } = await db.query(
+    `SELECT h.id, h.name, h.emoji, h.completed_at,
+            COUNT(DISTINCT c.id) as total_completions
+     FROM habits h
+     LEFT JOIN completions c ON c.habit_id = h.id
+     WHERE h.user_id = $1 AND h.active = false AND h.completed_at IS NOT NULL
+     GROUP BY h.id
+     ORDER BY h.completed_at DESC`,
+    [user.id]
+  );
+
+  // Weekly recap — completions in last 7 days grouped by habit
+  const { rows: weeklyRows } = await db.query(
+    `SELECT h.name, h.emoji, COUNT(c.id) as count
+     FROM completions c
+     JOIN habits h ON h.id = c.habit_id
+     WHERE c.user_id = $1 AND c.completed_at >= NOW() - INTERVAL '7 days'
+     GROUP BY h.id, h.name, h.emoji
+     ORDER BY count DESC`,
+    [user.id]
+  );
+  const { rows: weeklyTotal } = await db.query(
+    `SELECT COUNT(*) as count FROM completions WHERE user_id = $1 AND completed_at >= NOW() - INTERVAL '7 days'`,
+    [user.id]
+  );
+  const { rows: monthlyTotal } = await db.query(
+    `SELECT COUNT(*) as count FROM completions WHERE user_id = $1 AND completed_at >= NOW() - INTERVAL '30 days'`,
+    [user.id]
+  );
+
   // Recent messages with habit_id
   const { rows: recentMessages } = await db.query(
     `SELECT m.message_text, m.sent_at, m.responded_at, m.habit_id,
@@ -105,6 +139,19 @@ export async function GET() {
   return NextResponse.json({
     user,
     habits: habitsWithStreaks,
+    completed_habits: completedHabits.map((h: { id: string; name: string; emoji: string; completed_at: string; total_completions: string }) => ({
+      ...h,
+      total_completions: parseInt(h.total_completions),
+    })),
+    weekly_recap: {
+      total: parseInt(weeklyTotal[0]?.count ?? "0"),
+      monthly_total: parseInt(monthlyTotal[0]?.count ?? "0"),
+      by_habit: weeklyRows.map((r: { name: string; emoji: string; count: string }) => ({
+        name: r.name,
+        emoji: r.emoji,
+        count: parseInt(r.count),
+      })),
+    },
     recent_messages: recentMessages,
     stats: {
       total_texts: parseInt(statsRows[0]?.total_texts ?? "0"),
@@ -157,6 +204,12 @@ export async function PATCH(req: NextRequest) {
   }
   if (body.remove_habit_id) {
     await db.query(`UPDATE habits SET active = false WHERE id = $1 AND user_id = $2`, [body.remove_habit_id, uid]);
+  }
+  if (body.complete_habit_id) {
+    await db.query(
+      `UPDATE habits SET active = false, completed_at = NOW() WHERE id = $1 AND user_id = $2`,
+      [body.complete_habit_id, uid]
+    );
   }
   if (body.update_habit) {
     const h = body.update_habit

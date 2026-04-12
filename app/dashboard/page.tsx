@@ -1143,6 +1143,7 @@ function DetailView({
 }) {
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [confirmComplete, setConfirmComplete] = useState(false)
+  const [showCompleteAnim, setShowCompleteAnim] = useState(false)
   const [editing, setEditing] = useState(false)
   const [saving, setSaving] = useState(false)
   const [edit, setEdit] = useState({
@@ -1362,7 +1363,7 @@ function DetailView({
               MARK AS COMPLETE — this will move it to your completed missions.
             </p>
             <div style={{ display:'flex', gap:'0.5rem' }}>
-              <button onClick={onComplete} style={{ flex:1, background:'#22c55e', border:'none', color:'#000', fontFamily:MONO, fontSize:'0.65rem', letterSpacing:'0.1em', fontWeight:700, padding:'0.7rem', cursor:'pointer', borderRadius:0 }}>
+              <button onClick={() => setShowCompleteAnim(true)} style={{ flex:1, background:'#22c55e', border:'none', color:'#000', fontFamily:MONO, fontSize:'0.65rem', letterSpacing:'0.1em', fontWeight:700, padding:'0.7rem', cursor:'pointer', borderRadius:0 }}>
                 🏆 YES, MISSION COMPLETE
               </button>
               <button onClick={() => setConfirmComplete(false)} style={{ background:'none', border:`1px solid ${C.border}`, color:C.text3, fontFamily:MONO, fontSize:'0.6rem', padding:'0.7rem 1rem', cursor:'pointer', borderRadius:0 }}>
@@ -1392,6 +1393,182 @@ function DetailView({
           )
         )}
       </div>
+
+      {/* Mission Complete Animation Overlay */}
+      {showCompleteAnim && (
+        <MissionCompleteOverlay
+          habit={habit}
+          onFinish={() => {
+            setShowCompleteAnim(false)
+            onComplete()
+          }}
+        />
+      )}
+    </div>
+  )
+}
+
+// ─── Mission Complete Overlay ─────────────────────────────────────────────────
+
+const PARTICLES = Array.from({ length: 30 }, (_, i) => {
+  const angle = (i / 30) * 360
+  const dist = 120 + Math.random() * 180
+  const x = Math.cos((angle * Math.PI) / 180) * dist
+  const y = Math.sin((angle * Math.PI) / 180) * dist
+  const colors = ['#22c55e', '#0ea5e9', '#f59e0b', '#ffffff', '#a855f7', '#ec4899']
+  return { x, y, color: colors[i % colors.length], size: 4 + Math.random() * 6, delay: Math.random() * 0.3 }
+})
+
+function MissionCompleteOverlay({ habit, onFinish }: { habit: Habit; onFinish: () => void }) {
+  const [phase, setPhase] = useState(0)
+
+  useEffect(() => {
+    const t1 = setTimeout(() => setPhase(1), 100)
+    const t2 = setTimeout(() => setPhase(2), 600)
+    const t3 = setTimeout(() => setPhase(3), 1100)
+    const t4 = setTimeout(() => setPhase(4), 1600)
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4) }
+  }, [])
+
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 999,
+      background: '#000',
+      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+      overflow: 'hidden',
+    }}>
+      <style>{`
+        @keyframes particleFly {
+          0%   { transform: translate(0,0) scale(1); opacity: 1; }
+          100% { transform: translate(var(--px), var(--py)) scale(0); opacity: 0; }
+        }
+        @keyframes trophyDrop {
+          0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+          60%  { transform: scale(1.35) rotate(8deg); opacity: 1; }
+          80%  { transform: scale(0.9) rotate(-4deg); }
+          100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        @keyframes slamIn {
+          0%   { transform: translateY(-60px) scaleY(1.3); opacity: 0; }
+          60%  { transform: translateY(6px) scaleY(0.95); opacity: 1; }
+          100% { transform: translateY(0) scaleY(1); opacity: 1; }
+        }
+        @keyframes glowPulseGreen {
+          0%, 100% { text-shadow: 0 0 20px rgba(34,197,94,0.8), 0 0 60px rgba(34,197,94,0.4); }
+          50%       { text-shadow: 0 0 40px rgba(34,197,94,1),   0 0 100px rgba(34,197,94,0.6); }
+        }
+        @keyframes statPop {
+          0%   { transform: scale(0.6); opacity: 0; }
+          70%  { transform: scale(1.1); opacity: 1; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes continuePulse {
+          0%, 100% { opacity: 0.7; }
+          50%       { opacity: 1; }
+        }
+        @keyframes bgPulse {
+          0%, 100% { background: #000; }
+          30%      { background: #001a0a; }
+          60%      { background: #000; }
+        }
+      `}</style>
+
+      {/* bg pulse */}
+      <div style={{ position:'absolute', inset:0, animation:'bgPulse 1.5s ease forwards' }} />
+
+      {/* Particles */}
+      {phase >= 1 && PARTICLES.map((p, i) => (
+        <div key={i} style={{
+          position: 'absolute',
+          top: '50%', left: '50%',
+          width: p.size, height: p.size,
+          background: p.color,
+          borderRadius: '50%',
+          // @ts-expect-error CSS custom properties
+          '--px': `${p.x}px`,
+          '--py': `${p.y}px`,
+          animation: `particleFly 0.9s cubic-bezier(0.2,0.8,0.4,1) ${p.delay}s both`,
+        }} />
+      ))}
+
+      {/* Trophy */}
+      {phase >= 1 && (
+        <div style={{
+          fontSize: '5rem', lineHeight: 1, marginBottom: '1.5rem',
+          animation: 'trophyDrop 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards',
+          filter: 'drop-shadow(0 0 30px rgba(245,158,11,0.9))',
+        }}>
+          🏆
+        </div>
+      )}
+
+      {/* MISSION text */}
+      {phase >= 2 && (
+        <div style={{
+          fontFamily: MONO, fontWeight: 700,
+          fontSize: 'clamp(2rem,10vw,3.5rem)',
+          letterSpacing: '0.15em',
+          color: '#ffffff',
+          animation: 'slamIn 0.4s cubic-bezier(0.22,1,0.36,1) forwards',
+          marginBottom: '0.1rem',
+        }}>
+          MISSION
+        </div>
+      )}
+
+      {/* COMPLETE text */}
+      {phase >= 2 && (
+        <div style={{
+          fontFamily: MONO, fontWeight: 700,
+          fontSize: 'clamp(2rem,10vw,3.5rem)',
+          letterSpacing: '0.15em',
+          color: '#22c55e',
+          animation: 'slamIn 0.4s cubic-bezier(0.22,1,0.36,1) 0.1s both, glowPulseGreen 2s ease 0.5s infinite',
+          marginBottom: '2rem',
+        }}>
+          COMPLETE
+        </div>
+      )}
+
+      {/* Habit name + stats */}
+      {phase >= 3 && (
+        <div style={{ textAlign: 'center', animation: 'statPop 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards' }}>
+          <div style={{ fontFamily: GROTESK, fontSize: 'clamp(1rem,4vw,1.25rem)', color: '#aaa', marginBottom: '1.25rem' }}>
+            {habit.emoji} {habit.name}
+          </div>
+          <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
+            {habit.total_completions > 0 && (
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontFamily: MONO, fontWeight: 700, fontSize: '1.5rem', color: '#22c55e' }}>{habit.total_completions}</div>
+                <div style={{ fontFamily: MONO, fontSize: '0.5rem', color: '#555', letterSpacing: '0.15em' }}>COMPLETIONS</div>
+              </div>
+            )}
+            {habit.streak > 0 && (
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontFamily: MONO, fontWeight: 700, fontSize: '1.5rem', color: '#f59e0b' }}>🔥 {habit.streak}</div>
+                <div style={{ fontFamily: MONO, fontSize: '0.5rem', color: '#555', letterSpacing: '0.15em' }}>DAY STREAK</div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Continue button */}
+      {phase >= 4 && (
+        <button
+          onClick={onFinish}
+          style={{
+            position: 'absolute', bottom: '3rem',
+            background: 'transparent', border: '1px solid #333',
+            color: '#555', fontFamily: MONO, fontSize: '0.65rem',
+            letterSpacing: '0.15em', padding: '0.75rem 2rem',
+            cursor: 'pointer', borderRadius: 0,
+            animation: 'continuePulse 1.5s ease infinite',
+          }}
+        >
+          → CONTINUE
+        </button>
+      )}
     </div>
   )
 }

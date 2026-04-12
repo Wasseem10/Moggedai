@@ -660,83 +660,182 @@ function ConfirmView({ draft, onDone }: { draft: AddDraft; onDone: () => void })
   const timeLabel = TIME_OPTIONS.find(t => t.value === draft.time_of_day)?.label ?? draft.time_of_day
   const coachLabel = COACH_OPTIONS.find(c => c.value === draft.coach_style)?.label ?? draft.coach_style
 
-  return (
-    <div style={{ paddingTop: '3rem' }}>
+  const TYPED_TEXT = 'MISSION ACTIVATED'
+  const [phase, setPhase] = useState(0)       // 0=scan 1=badge 2=type 3=content 4=done
+  const [typed, setTyped] = useState(0)
+  const [visible, setVisible] = useState(false)
 
-      {/* Success badge */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '2.5rem' }}>
+  useEffect(() => {
+    const t1 = setTimeout(() => setPhase(1), 600)
+    const t2 = setTimeout(() => setPhase(2), 1100)
+    const t3 = setTimeout(() => setVisible(true), 1100)
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3) }
+  }, [])
+
+  useEffect(() => {
+    if (phase < 2) return
+    if (typed >= TYPED_TEXT.length) { setTimeout(() => setPhase(3), 200); return }
+    const t = setTimeout(() => setTyped(n => n + 1), 55)
+    return () => clearTimeout(t)
+  }, [phase, typed])
+
+  const rows = [
+    { label: 'HABIT',         value: `${draft.emoji} ${draft.name}` },
+    { label: 'CHECK-IN TIME', value: timeLabel },
+    { label: 'COACH STYLE',   value: coachLabel },
+    ...(draft.why    ? [{ label: 'YOUR WHY', value: draft.why }]    : []),
+    ...(draft.stakes ? [{ label: 'STAKES',   value: draft.stakes }] : []),
+  ]
+
+  const steps = [
+    { n: '01', text: `You'll start receiving texts for ${draft.name} during your chosen time window.` },
+    { n: '02', text: 'Each message is AI-generated — different every time, based on your why and stakes.' },
+    { n: '03', text: 'Reply "done" when you complete it. Your streak starts building immediately.' },
+    { n: '04', text: 'No reply? We follow up in 5 minutes. No excuses.' },
+  ]
+
+  return (
+    <div style={{ paddingTop: '2rem', position: 'relative', overflow: 'hidden' }}>
+      <style>{`
+        @keyframes scanDown {
+          0%   { top: 0; opacity: 1; }
+          80%  { opacity: 1; }
+          100% { top: 100%; opacity: 0; }
+        }
+        @keyframes ring {
+          0%   { transform: scale(1); opacity: 0.6; }
+          100% { transform: scale(3); opacity: 0; }
+        }
+        @keyframes badgeIn {
+          0%   { transform: scale(0.3); opacity: 0; }
+          70%  { transform: scale(1.12); opacity: 1; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(18px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50%      { opacity: 0; }
+        }
+        @keyframes glowPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(14,165,233,0); }
+          50%      { box-shadow: 0 0 24px 4px rgba(14,165,233,0.25); }
+        }
+      `}</style>
+
+      {/* Scan line */}
+      {phase === 0 && (
         <div style={{
-          width: '64px', height: '64px', borderRadius: '50%',
-          background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.3)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '1.75rem', marginBottom: '1.25rem',
-        }}>
-          {draft.emoji}
+          position: 'fixed', left: 0, right: 0, height: '3px',
+          background: 'linear-gradient(90deg, transparent, #0ea5e9, #0ea5e9, transparent)',
+          boxShadow: '0 0 20px 4px rgba(14,165,233,0.6)',
+          animation: 'scanDown 0.6s ease-in forwards',
+          zIndex: 999, pointerEvents: 'none',
+        }} />
+      )}
+
+      {/* Badge */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '2rem', minHeight: '160px', justifyContent: 'center' }}>
+        {phase >= 1 && (
+          <div style={{ position: 'relative', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {/* Expanding rings */}
+            {[0, 1, 2].map(i => (
+              <div key={i} style={{
+                position: 'absolute',
+                width: '72px', height: '72px', borderRadius: '50%',
+                border: '1px solid rgba(14,165,233,0.4)',
+                animation: `ring 2s ease-out ${i * 0.55}s infinite`,
+                pointerEvents: 'none',
+              }} />
+            ))}
+            {/* Emoji badge */}
+            <div style={{
+              width: '72px', height: '72px', borderRadius: '50%',
+              background: 'rgba(14,165,233,0.1)', border: '1px solid rgba(14,165,233,0.4)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '2rem',
+              animation: 'badgeIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards, glowPulse 3s ease-in-out 1s infinite',
+            }}>
+              {draft.emoji}
+            </div>
+          </div>
+        )}
+
+        {/* Typewriter label */}
+        <div style={{ fontFamily: MONO, fontSize: '0.6rem', letterSpacing: '0.25em', color: '#0ea5e9', marginBottom: '0.5rem', minHeight: '1em' }}>
+          {TYPED_TEXT.slice(0, typed)}
+          {phase === 2 && (
+            <span style={{ animation: 'blink 0.7s step-end infinite', opacity: 1 }}>█</span>
+          )}
         </div>
-        <div style={{ fontFamily: MONO, fontSize: '0.55rem', letterSpacing: '0.25em', color: '#22c55e', marginBottom: '0.5rem' }}>
-          MISSION ACTIVATED
-        </div>
-        <h2 style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.3rem,5vw,1.6rem)', margin: 0, color: C.text }}>
-          {draft.name} is live
-        </h2>
+
+        {phase >= 3 && (
+          <h2 style={{
+            fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.3rem,5vw,1.6rem)',
+            margin: 0, color: C.text,
+            animation: 'fadeUp 0.4s ease forwards',
+          }}>
+            {draft.name} is live
+          </h2>
+        )}
       </div>
 
       {/* Summary card */}
-      <div style={{ border: `1px solid ${C.border}`, background: C.s1, marginBottom: '1.5rem' }}>
-        <div style={{ padding: '1rem 1.25rem', borderBottom: `1px solid ${C.border}` }}>
-          <div style={{ fontFamily: MONO, fontSize: '0.5rem', color: C.text3, letterSpacing: '0.15em', marginBottom: '0.35rem' }}>WHAT YOU SET UP</div>
-        </div>
-        {[
-          { label: 'HABIT',       value: `${draft.emoji} ${draft.name}` },
-          { label: 'CHECK-IN TIME', value: timeLabel },
-          { label: 'COACH STYLE', value: coachLabel },
-          ...(draft.why        ? [{ label: 'YOUR WHY',     value: draft.why }]           : []),
-          ...(draft.stakes     ? [{ label: 'STAKES',       value: draft.stakes }]        : []),
-        ].map((row, i, arr) => (
-          <div key={row.label} style={{
-            display: 'flex', gap: '1rem', padding: '0.85rem 1.25rem',
-            borderBottom: i < arr.length - 1 ? `1px solid ${C.border}` : undefined,
-            alignItems: 'flex-start',
-          }}>
-            <span style={{ fontFamily: MONO, fontSize: '0.5rem', color: C.text3, letterSpacing: '0.12em', minWidth: '100px', paddingTop: '2px' }}>{row.label}</span>
-            <span style={{ fontFamily: GROTESK, fontSize: '0.85rem', color: C.text, lineHeight: 1.5 }}>{row.value}</span>
+      {phase >= 3 && (
+        <div style={{ border: `1px solid ${C.border}`, background: C.s1, marginBottom: '1.5rem', animation: 'fadeUp 0.5s ease 0.1s both' }}>
+          <div style={{ padding: '0.85rem 1.25rem', borderBottom: `1px solid ${C.border}` }}>
+            <span style={{ fontFamily: MONO, fontSize: '0.5rem', color: C.text3, letterSpacing: '0.15em' }}>WHAT YOU SET UP</span>
           </div>
-        ))}
-      </div>
+          {rows.map((row, i) => (
+            <div key={row.label} style={{
+              display: 'flex', gap: '1rem', padding: '0.85rem 1.25rem',
+              borderBottom: i < rows.length - 1 ? `1px solid ${C.border}` : undefined,
+              alignItems: 'flex-start',
+              animation: `fadeUp 0.4s ease ${0.15 + i * 0.07}s both`,
+            }}>
+              <span style={{ fontFamily: MONO, fontSize: '0.5rem', color: C.text3, letterSpacing: '0.12em', minWidth: '100px', paddingTop: '2px' }}>{row.label}</span>
+              <span style={{ fontFamily: GROTESK, fontSize: '0.85rem', color: C.text, lineHeight: 1.5 }}>{row.value}</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Next steps */}
-      <div style={{ border: `1px solid ${C.border}`, background: C.s1, marginBottom: '2rem' }}>
-        <div style={{ padding: '1rem 1.25rem', borderBottom: `1px solid ${C.border}` }}>
-          <div style={{ fontFamily: MONO, fontSize: '0.5rem', color: C.text3, letterSpacing: '0.15em' }}>WHAT HAPPENS NEXT</div>
-        </div>
-        {[
-          { n: '01', text: `You'll start receiving texts for ${draft.name} during your chosen time window.` },
-          { n: '02', text: 'Each message is AI-generated — different every time, based on your why and stakes.' },
-          { n: '03', text: 'Reply "done" when you complete it. Your streak starts building immediately.' },
-          { n: '04', text: "No reply? We follow up in 5 minutes. No excuses." },
-        ].map((step, i, arr) => (
-          <div key={step.n} style={{
-            display: 'flex', gap: '1rem', padding: '0.85rem 1.25rem',
-            borderBottom: i < arr.length - 1 ? `1px solid ${C.border}` : undefined,
-            alignItems: 'flex-start',
-          }}>
-            <span style={{ fontFamily: MONO, fontSize: '0.6rem', color: '#0ea5e9', minWidth: '24px', paddingTop: '2px' }}>{step.n}</span>
-            <span style={{ fontFamily: GROTESK, fontSize: '0.83rem', color: C.text2, lineHeight: 1.6 }}>{step.text}</span>
+      {phase >= 3 && (
+        <div style={{ border: `1px solid ${C.border}`, background: C.s1, marginBottom: '2rem', animation: 'fadeUp 0.5s ease 0.3s both' }}>
+          <div style={{ padding: '0.85rem 1.25rem', borderBottom: `1px solid ${C.border}` }}>
+            <span style={{ fontFamily: MONO, fontSize: '0.5rem', color: C.text3, letterSpacing: '0.15em' }}>WHAT HAPPENS NEXT</span>
           </div>
-        ))}
-      </div>
+          {steps.map((step, i) => (
+            <div key={step.n} style={{
+              display: 'flex', gap: '1rem', padding: '0.85rem 1.25rem',
+              borderBottom: i < steps.length - 1 ? `1px solid ${C.border}` : undefined,
+              alignItems: 'flex-start',
+              animation: `fadeUp 0.4s ease ${0.35 + i * 0.08}s both`,
+            }}>
+              <span style={{ fontFamily: MONO, fontSize: '0.6rem', color: '#0ea5e9', minWidth: '24px', paddingTop: '2px' }}>{step.n}</span>
+              <span style={{ fontFamily: GROTESK, fontSize: '0.83rem', color: C.text2, lineHeight: 1.6 }}>{step.text}</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* CTA */}
-      <button
-        onClick={onDone}
-        style={{
-          width: '100%', background: '#0ea5e9', border: 'none', color: '#fff',
-          fontFamily: MONO, fontSize: '0.7rem', letterSpacing: '0.15em',
-          padding: '1rem', cursor: 'pointer', borderRadius: 0,
-        }}
-      >
-        GO TO DASHBOARD →
-      </button>
+      {phase >= 3 && (
+        <button
+          onClick={onDone}
+          style={{
+            width: '100%', background: '#0ea5e9', border: 'none', color: '#fff',
+            fontFamily: MONO, fontSize: '0.7rem', letterSpacing: '0.15em',
+            padding: '1rem', cursor: 'pointer', borderRadius: 0,
+            animation: 'fadeUp 0.4s ease 0.7s both',
+          }}
+        >
+          GO TO DASHBOARD →
+        </button>
+      )}
     </div>
   )
 }

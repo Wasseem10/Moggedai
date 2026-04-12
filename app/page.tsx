@@ -369,7 +369,7 @@ export default function MoggedAI() {
           <p style={{ fontSize:"clamp(0.9rem,2vw,1.05rem)", color:"#aaa", lineHeight:"2.5rem", margin:0 }}>{MESSAGES[currentMsg]}</p>
         </div>
         <p style={{ fontSize:"clamp(0.95rem,2vw,1.05rem)", color:"#aaa", maxWidth:"500px", lineHeight:"1.9", marginBottom:"2rem" }}>
-          Your AI coach lives in your texts. It checks in on your habits all day, calls you out when you go quiet, and never lets you off the hook. Two minutes to set up. Zero excuses after.
+          Get daily habit reminders by text.<br/>Built to make sure you follow through.
         </p>
         <div style={{ display:"flex", gap:"1rem", flexWrap:"wrap", marginBottom:"5rem" }}>
           <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem 2.5rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : setPage("onboard")}>

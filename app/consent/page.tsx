@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 
 const mono = "'Space Mono','Courier New',monospace";
-const C = { bg: "#080808", text: "#f0f0f0", red: "#eab308", muted: "#888", border: "#1a1a1a", card: "#0d0d0d" };
+const C = { bg: "#080808", text: "#f0f0f0", red: "#0ea5e9", muted: "#888", border: "#1a1a1a", card: "#0d0d0d" };
 
 export default function ConsentPage() {
   const router = useRouter();
@@ -10,7 +10,7 @@ export default function ConsentPage() {
   return (
     <div style={{ minHeight: "100vh", background: C.bg, color: C.text, fontFamily: mono }}>
       {/* Nav */}
-      <nav style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 1.5rem", borderBottom: `1px solid rgba(234,179,8,0.2)`, background: "rgba(8,8,8,0.97)" }}>
+      <nav style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 1.5rem", borderBottom: `1px solid rgba(14,165,233,0.2)`, background: "rgba(8,8,8,0.97)" }}>
         <div style={{ fontSize: "1.1rem", fontWeight: "700", letterSpacing: "0.15em", cursor: "pointer" }} onClick={() => router.push("/")}>
           MOGGED<span style={{ color: C.red }}>AI</span>
         </div>
@@ -26,7 +26,7 @@ export default function ConsentPage() {
 
         {/* Header */}
         <div style={{ marginBottom: "3rem" }}>
-          <div style={{ fontSize: "0.55rem", letterSpacing: "0.25em", color: C.red, border: `1px solid rgba(234,179,8,0.3)`, padding: "0.25rem 0.7rem", display: "inline-block", marginBottom: "1rem" }}>SMS CONSENT & OPT-IN</div>
+          <div style={{ fontSize: "0.55rem", letterSpacing: "0.25em", color: C.red, border: `1px solid rgba(14,165,233,0.3)`, padding: "0.25rem 0.7rem", display: "inline-block", marginBottom: "1rem" }}>SMS CONSENT & OPT-IN</div>
           <h1 style={{ fontSize: "clamp(1.8rem,4vw,2.5rem)", fontWeight: "700", lineHeight: 1.1, margin: "0 0 1rem" }}>
             SMS Messaging<br /><span style={{ color: C.red }}>Consent & Opt-In</span>
           </h1>

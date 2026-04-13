@@ -25,7 +25,7 @@ export default function ConsentPage() {
     },
     {
       title: "How to Get Help",
-      body: `Text HELP to +1 (844) 991-1147, or email wasseem@moggedai.com`,
+      body: `Text HELP to +1 (844) 991-1147, or email wasseem800@gmail.com`,
     },
     {
       title: "Your Privacy",

@@ -138,10 +138,10 @@ export default function FAQPage() {
             STILL HAVE QUESTIONS?
           </p>
           <a
-            href="mailto:wasseem@moggedai.com"
+            href="mailto:wasseem800@gmail.com"
             style={{ fontFamily: MONO, fontSize: "0.7rem", color: "#0ea5e9", letterSpacing: "0.1em", textDecoration: "none" }}
           >
-            wasseem@moggedai.com
+            wasseem800@gmail.com
           </a>
         </div>
       </div>

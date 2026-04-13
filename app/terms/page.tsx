@@ -41,7 +41,7 @@ THE SERVICE IS PROVIDED FOR PERSONAL MOTIVATIONAL PURPOSES ONLY. It is not a hea
 You agree to provide accurate, current, and complete information during registration and to keep your account information updated. You are responsible for all activity that occurs under your account.
 
 ACCOUNT SECURITY
-You are solely responsible for maintaining the confidentiality of your account credentials. You agree to notify us immediately at wasseem@moggedai.com if you suspect unauthorized access to your account. We are not liable for any loss resulting from unauthorized use of your account.
+You are solely responsible for maintaining the confidentiality of your account credentials. You agree to notify us immediately at wasseem800@gmail.com if you suspect unauthorized access to your account. We are not liable for any loss resulting from unauthorized use of your account.
 
 PHONE NUMBER RESPONSIBILITY
 You represent and warrant that the mobile phone number you provide belongs to you. You agree not to provide a number belonging to another person without their explicit consent. You accept full responsibility and liability for any SMS messages sent to a number you provide.
@@ -163,7 +163,7 @@ We reserve the right to assume exclusive defense of any matter subject to indemn
     body: `PLEASE READ THIS SECTION CAREFULLY. IT WAIVES YOUR RIGHT TO A JURY TRIAL AND TO PARTICIPATE IN CLASS ACTION LAWSUITS.
 
 INFORMAL RESOLUTION
-Before initiating any formal dispute, you agree to contact us at wasseem@moggedai.com and attempt to resolve the issue informally for a period of 30 days.
+Before initiating any formal dispute, you agree to contact us at wasseem800@gmail.com and attempt to resolve the issue informally for a period of 30 days.
 
 BINDING ARBITRATION
 If informal resolution fails, any dispute, claim, or controversy arising out of or relating to these Terms or the Service shall be resolved exclusively through final and binding individual arbitration. The arbitration shall be conducted by a neutral arbitrator under applicable arbitration rules. The arbitrator's decision shall be final and binding and may be entered as a judgment in any court of competent jurisdiction.
@@ -186,7 +186,7 @@ To the extent any dispute is not subject to arbitration, you consent to the excl
   {
     title: "14. Termination",
     body: `TERMINATION BY YOU
-You may stop using the Service at any time. To delete your account, contact wasseem@moggedai.com.
+You may stop using the Service at any time. To delete your account, contact wasseem800@gmail.com.
 
 TERMINATION BY US
 We reserve the right to suspend or permanently terminate your access to the Service at any time, for any reason or no reason, with or without notice, including but not limited to violations of these Terms, suspected fraudulent activity, abuse, or inactivity.
@@ -212,7 +212,7 @@ Our failure to enforce any provision of these Terms shall not be construed as a 
 
 MoggedAI
 Operator: Wasseem Dabbas
-Email: wasseem@moggedai.com
+Email: wasseem800@gmail.com
 Website: moggedai.com`,
   },
 ];
@@ -260,7 +260,7 @@ export default function TermsPage() {
 
         <div style={{ marginTop: "3rem", padding: "1.25rem", border: "1px solid var(--c-border)", background: "var(--c-s1)" }}>
           <p style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--c-text3)", letterSpacing: "0.1em", margin: 0, lineHeight: 1.8 }}>
-            These Terms were last reviewed and updated on April 12, 2025. Questions? Contact wasseem@moggedai.com.
+            These Terms were last reviewed and updated on April 12, 2025. Questions? Contact wasseem800@gmail.com.
           </p>
         </div>
       </div>

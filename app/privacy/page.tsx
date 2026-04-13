@@ -76,7 +76,7 @@ You may revoke consent and opt out of all SMS messages at any time by:
 Upon receipt of STOP, we will send one final confirmation message and cease all further SMS communications. Opting out does not delete your account.
 
 HELP
-Text HELP to +1 (844) 991-1147 for assistance, or email wasseem@moggedai.com.
+Text HELP to +1 (844) 991-1147 for assistance, or email wasseem800@gmail.com.
 
 YOUR REPRESENTATIONS
 By providing your phone number, you represent and warrant that: (a) you are the account holder or have explicit authorization from the account holder to provide the number; (b) you are 18 years of age or older; (c) you have the legal capacity to consent to these terms.`,
@@ -115,7 +115,7 @@ Upon account deletion:
 • SMS message logs may be retained for up to 90 days for legal compliance purposes, then deleted
 • Backups may retain data for up to 60 additional days after deletion from active systems
 
-You may request deletion of your data at any time by contacting wasseem@moggedai.com. We will respond within 30 days.`,
+You may request deletion of your data at any time by contacting wasseem800@gmail.com. We will respond within 30 days.`,
   },
   {
     title: "7. Data Security",
@@ -148,7 +148,7 @@ If you are experiencing a mental health crisis, please contact the 988 Suicide a
     title: "9. Children's Privacy",
     body: `The Service is not directed to individuals under the age of 18. We do not knowingly collect personal information from anyone under 18. If we become aware that we have collected personal information from a minor, we will take immediate steps to delete such information.
 
-If you believe we have inadvertently collected information from a minor, contact us immediately at wasseem@moggedai.com.`,
+If you believe we have inadvertently collected information from a minor, contact us immediately at wasseem800@gmail.com.`,
   },
   {
     title: "10. Your Rights and Choices",
@@ -164,7 +164,7 @@ OPT-OUT OF SMS: Text STOP to +1 (844) 991-1147 at any time.
 
 DATA PORTABILITY: You may request your data in a portable format.
 
-To exercise any of these rights, email wasseem@moggedai.com. We will respond within 30 days. We may require identity verification before fulfilling requests.
+To exercise any of these rights, email wasseem800@gmail.com. We will respond within 30 days. We may require identity verification before fulfilling requests.
 
 We will not discriminate against you for exercising any of these rights.`,
   },
@@ -221,7 +221,7 @@ Your continued use of the Service after the effective date of any changes consti
 
 MoggedAI
 Operator: Wasseem Dabbas
-Email: wasseem@moggedai.com
+Email: wasseem800@gmail.com
 Website: moggedai.com
 
 We aim to respond to all privacy inquiries within 30 days.`,
@@ -271,7 +271,7 @@ export default function PrivacyPage() {
 
         <div style={{ marginTop: "3rem", padding: "1.25rem", border: "1px solid var(--c-border)", background: "var(--c-s1)" }}>
           <p style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--c-text3)", letterSpacing: "0.1em", margin: 0, lineHeight: 1.8 }}>
-            This Privacy Policy was last reviewed and updated on April 12, 2025. If you have any questions, contact wasseem@moggedai.com.
+            This Privacy Policy was last reviewed and updated on April 12, 2025. If you have any questions, contact wasseem800@gmail.com.
           </p>
         </div>
       </div>

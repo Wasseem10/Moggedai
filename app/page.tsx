@@ -274,11 +274,11 @@ export default function MoggedAI() {
                   >{s.label}</a>
                 ))}
               </div>
-              <a href="mailto:support@moggedai.com"
+              <a href="mailto:wasseem800@gmail.com"
                 style={{ fontSize:"0.68rem", color:"var(--c-text3)", textDecoration:"none", letterSpacing:"0.05em" }}
                 onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color="#0ea5e9"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color="var(--c-text3)"; }}
-              >support@moggedai.com</a>
+              >wasseem800@gmail.com</a>
             </div>
 
             {/* Product */}
@@ -305,9 +305,9 @@ export default function MoggedAI() {
               <div style={{ fontSize:"0.5rem", letterSpacing:"0.25em", color:"#666", marginBottom:"1rem" }}>SUPPORT</div>
               {[
                 { label:"FAQ",             href:"/faq" },
-                { label:"Contact Us",      href:"mailto:support@moggedai.com" },
-                { label:"SMS Help",        href:"mailto:support@moggedai.com" },
-                { label:"Report a Bug",    href:"mailto:support@moggedai.com?subject=Bug Report" },
+                { label:"Contact Us",      href:"mailto:wasseem800@gmail.com" },
+                { label:"SMS Help",        href:"mailto:wasseem800@gmail.com" },
+                { label:"Report a Bug",    href:"mailto:wasseem800@gmail.com?subject=Bug Report" },
               ].map(l => (
                 <div key={l.label} style={{ marginBottom:"0.6rem" }}>
                   <a href={l.href}
@@ -326,7 +326,7 @@ export default function MoggedAI() {
                 { label:"Privacy Policy",    href:"/privacy" },
                 { label:"Terms of Service",  href:"/terms" },
                 { label:"SMS Consent",       href:"/consent" },
-                { label:"Unsubscribe",       href:"mailto:support@moggedai.com?subject=Unsubscribe" },
+                { label:"Unsubscribe",       href:"mailto:wasseem800@gmail.com?subject=Unsubscribe" },
               ].map(l => (
                 <div key={l.label} style={{ marginBottom:"0.6rem" }}>
                   <a href={l.href}

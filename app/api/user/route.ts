@@ -23,7 +23,7 @@ export async function GET() {
   const db = getDb();
 
   const { rows: userRows } = await db.query(
-    `SELECT u.id, u.phone, s.frequency_minutes, s.start_time, s.end_time, s.active, s.timezone,
+    `SELECT u.id, u.phone, u.plan, s.frequency_minutes, s.start_time, s.end_time, s.active, s.timezone,
             p.coach_style, p.biggest_distraction, p.why
      FROM users u
      LEFT JOIN schedules s ON s.user_id = u.id AND s.active = true
@@ -35,8 +35,11 @@ export async function GET() {
   if (!userRows.length) return NextResponse.json({ user: null });
   const user = userRows[0];
 
-  // Ensure completed_at column exists (safe migration)
+  // Safe migrations
   await db.query(`ALTER TABLE habits ADD COLUMN IF NOT EXISTS completed_at TIMESTAMP`).catch(() => {});
+  await db.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS stripe_customer_id TEXT`).catch(() => {});
+  await db.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS stripe_subscription_id TEXT`).catch(() => {});
+  await db.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS plan TEXT NOT NULL DEFAULT 'free'`).catch(() => {});
 
   // Get active habits with streaks, completion counts, and last message
   const { rows: habits } = await db.query(

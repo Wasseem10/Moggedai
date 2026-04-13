@@ -21,7 +21,7 @@ type Habit = {
   last_message_at?: string
 }
 
-type UserData = { phone: string; active: boolean }
+type UserData = { phone: string; active: boolean; plan?: string }
 type Stats = { total_texts: number; streak: number; total_completions: number }
 type Message = {
   message_text: string
@@ -124,6 +124,7 @@ export default function Dashboard() {
   const [recentMessages, setRecentMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(true)
   const [theme, setTheme] = useState<'dark'|'light'>('dark')
+  const [stripeLoading, setStripeLoading] = useState(false)
 
   useEffect(() => {
     const stored = (localStorage.getItem('mogged-theme') || 'dark') as 'dark'|'light'
@@ -253,6 +254,32 @@ export default function Dashboard() {
 
   const handleSignOut = () => signOut(() => router.push('/'))
 
+  const handleUpgrade = async () => {
+    setStripeLoading(true)
+    try {
+      const res = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: 'monthly' }),
+      })
+      const data = await res.json()
+      if (data.url) window.location.href = data.url
+    } finally {
+      setStripeLoading(false)
+    }
+  }
+
+  const handleManageSubscription = async () => {
+    setStripeLoading(true)
+    try {
+      const res = await fetch('/api/stripe/portal', { method: 'POST' })
+      const data = await res.json()
+      if (data.url) window.location.href = data.url
+    } finally {
+      setStripeLoading(false)
+    }
+  }
+
   if (loading) {
     return (
       <>
@@ -284,6 +311,9 @@ export default function Dashboard() {
               onToggleActive={handleToggleActive}
               onUpdatePhone={handleUpdatePhone}
               onSignOut={handleSignOut}
+              onUpgrade={handleUpgrade}
+              onManageSubscription={handleManageSubscription}
+              stripeLoading={stripeLoading}
             />
           )}
           {view === 'detail' && selectedMission && (
@@ -491,6 +521,9 @@ function OverviewView({
   onToggleActive,
   onUpdatePhone,
   onSignOut,
+  onUpgrade,
+  onManageSubscription,
+  stripeLoading,
 }: {
   clerkUser: ReturnType<typeof useUser>['user']
   userData: UserData | null
@@ -504,9 +537,13 @@ function OverviewView({
   onToggleActive: () => void
   onUpdatePhone: (phone: string) => Promise<void>
   onSignOut: () => void
+  onUpgrade: () => void
+  onManageSubscription: () => void
+  stripeLoading: boolean
 }) {
   const displayName = clerkUser?.firstName || userData?.phone || ''
   const isActive = userData?.active ?? false
+  const isPro = userData?.plan === 'pro'
   const [editingPhone, setEditingPhone] = useState(false)
   const [phoneInput, setPhoneInput] = useState('')
   const [phoneLoading, setPhoneLoading] = useState(false)
@@ -800,29 +837,30 @@ function OverviewView({
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-                <span style={{ fontFamily: MONO, fontSize: '0.75rem', color: C.text, fontWeight: 700 }}>FREE PLAN</span>
-                <span style={{ fontFamily: MONO, fontSize: '0.5rem', color: '#f59e0b', border: '1px solid #f59e0b', padding: '0.1rem 0.4rem', letterSpacing: '0.1em' }}>CURRENT</span>
+                <span style={{ fontFamily: MONO, fontSize: '0.75rem', color: C.text, fontWeight: 700 }}>{isPro ? 'PRO PLAN' : 'FREE PLAN'}</span>
+                <span style={{ fontFamily: MONO, fontSize: '0.5rem', color: isPro ? '#22c55e' : '#f59e0b', border: `1px solid ${isPro ? '#22c55e' : '#f59e0b'}`, padding: '0.1rem 0.4rem', letterSpacing: '0.1em' }}>ACTIVE</span>
               </div>
-              <div style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.05em' }}>1 mission · check-ins every 2hrs</div>
+              <div style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.05em' }}>
+                {isPro ? 'Up to 5 missions · check-ins every 30min' : '1 mission · check-ins every 2hrs'}
+              </div>
             </div>
-            <button
-              onClick={() => window.location.href = '/pricing'}
-              style={{
-                background: '#0ea5e9',
-                border: 'none',
-                color: '#fff',
-                fontFamily: MONO,
-                fontSize: '0.6rem',
-                letterSpacing: '0.12em',
-                fontWeight: 700,
-                padding: '0.6rem 1rem',
-                cursor: 'pointer',
-                borderRadius: 0,
-                whiteSpace: 'nowrap',
-              }}
-            >
-              UPGRADE TO PRO →
-            </button>
+            {isPro ? (
+              <button
+                onClick={onManageSubscription}
+                disabled={stripeLoading}
+                style={{ background: 'none', border: `1px solid ${C.border}`, color: C.text3, fontFamily: MONO, fontSize: '0.6rem', letterSpacing: '0.12em', fontWeight: 700, padding: '0.6rem 1rem', cursor: stripeLoading ? 'not-allowed' : 'pointer', borderRadius: 0, whiteSpace: 'nowrap', opacity: stripeLoading ? 0.6 : 1 }}
+              >
+                {stripeLoading ? 'LOADING...' : 'MANAGE PLAN →'}
+              </button>
+            ) : (
+              <button
+                onClick={onUpgrade}
+                disabled={stripeLoading}
+                style={{ background: '#0ea5e9', border: 'none', color: '#fff', fontFamily: MONO, fontSize: '0.6rem', letterSpacing: '0.12em', fontWeight: 700, padding: '0.6rem 1rem', cursor: stripeLoading ? 'not-allowed' : 'pointer', borderRadius: 0, whiteSpace: 'nowrap', opacity: stripeLoading ? 0.6 : 1 }}
+              >
+                {stripeLoading ? 'LOADING...' : 'UPGRADE TO PRO →'}
+              </button>
+            )}
           </div>
         </div>
 

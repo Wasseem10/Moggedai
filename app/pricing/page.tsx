@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useUser } from "@clerk/nextjs";
 
 const MONO = "'Space Mono','Courier New',monospace";
 const GROTESK = "'Space Grotesk',-apple-system,BlinkMacSystemFont,sans-serif";
@@ -33,12 +34,30 @@ const PRO_FEATURES = [
 
 export default function PricingPage() {
   const router = useRouter();
+  const { isSignedIn } = useUser();
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
+  const [loading, setLoading] = useState(false);
 
   const monthlyPrice = 2.99;
   const yearlyPrice = 1.99;
   const price = billing === "monthly" ? monthlyPrice : yearlyPrice;
   const savings = Math.round((1 - yearlyPrice / monthlyPrice) * 100);
+
+  async function handleGetPro() {
+    if (!isSignedIn) { router.push("/sign-up"); return; }
+    setLoading(true);
+    try {
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: billing }),
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--c-root)", color: "var(--c-text)", fontFamily: GROTESK }}>
@@ -167,10 +186,11 @@ export default function PricingPage() {
             </div>
 
             <button
-              onClick={() => router.push("/sign-up")}
-              style={{ width:"100%", background:"#0ea5e9", border:"none", color:"#fff", fontFamily:MONO, fontSize:"0.7rem", letterSpacing:"0.15em", fontWeight:700, padding:"1rem", cursor:"pointer" }}
+              onClick={handleGetPro}
+              disabled={loading}
+              style={{ width:"100%", background:"#0ea5e9", border:"none", color:"#fff", fontFamily:MONO, fontSize:"0.7rem", letterSpacing:"0.15em", fontWeight:700, padding:"1rem", cursor:loading?"not-allowed":"pointer", opacity:loading?0.7:1 }}
             >
-              GET PRO →
+              {loading ? "LOADING..." : "GET PRO →"}
             </button>
           </div>
         </div>

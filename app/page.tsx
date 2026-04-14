@@ -120,17 +120,6 @@ function PhoneMockup() {
           from { opacity: 1; }
           to   { opacity: 0; }
         }
-        .hero-grid {
-          display: grid;
-          gap: 4rem;
-          align-items: center;
-          grid-template-columns: 1fr;
-        }
-        @media (min-width: 768px) {
-          .hero-grid {
-            grid-template-columns: 1fr 1fr;
-          }
-        }
       `}</style>
 
       <div style={{
@@ -404,28 +393,18 @@ export default function MoggedAI() {
       </nav>
 
       {/* HERO */}
-      <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", justifyContent:"center", padding:"5rem 1.5rem 4rem", maxWidth:"960px", margin:"0 auto" }}>
-        <div className="hero-grid">
-          {/* Left column: headline + CTA */}
-          <div>
-            <div style={tag}>AI ACCOUNTABILITY · SMS · BUILT FOR RESULTS</div>
-            <h1 style={{ fontSize:"clamp(2.8rem,8vw,5.5rem)", fontWeight:"700", lineHeight:0.95, letterSpacing:"-0.02em", wordSpacing:"-0.15em", marginBottom:"1rem", transform:`translateX(${noise*0.3}px)` }}>
-              STOP<br/><span style={{ color:"#0ea5e9" }}>SLACKING.</span><br/>START NOW.
-            </h1>
-            <p style={{ fontSize:"clamp(0.95rem,2vw,1.05rem)", color:"var(--c-text4)", maxWidth:"500px", lineHeight:"1.9", marginBottom:"2rem" }}>
-              Get daily habit reminders by text.<br/>Built to make sure you follow through.
-            </p>
-            <div style={{ display:"flex", gap:"1rem", flexWrap:"wrap" }}>
-              <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem 2.5rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
-                GET STARTED FREE →
-              </button>
-            </div>
-          </div>
-
-          {/* Right column: animated phone mockup */}
-          <div style={{ display:"flex", justifyContent:"center" }}>
-            <PhoneMockup />
-          </div>
+      <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", justifyContent:"center", padding:"5rem 1.5rem 4rem", maxWidth:"920px", margin:"0 auto" }}>
+        <div style={tag}>AI ACCOUNTABILITY · SMS · BUILT FOR RESULTS</div>
+        <h1 style={{ fontSize:"clamp(2.8rem,8vw,5.5rem)", fontWeight:"700", lineHeight:0.95, letterSpacing:"-0.02em", wordSpacing:"-0.15em", marginBottom:"1rem", transform:`translateX(${noise*0.3}px)` }}>
+          STOP<br/><span style={{ color:"#0ea5e9" }}>SLACKING.</span><br/>START NOW.
+        </h1>
+        <p style={{ fontSize:"clamp(0.95rem,2vw,1.05rem)", color:"var(--c-text4)", maxWidth:"500px", lineHeight:"1.9", marginBottom:"2rem" }}>
+          Get daily habit reminders by text.<br/>Built to make sure you follow through.
+        </p>
+        <div style={{ display:"flex", gap:"1rem", flexWrap:"wrap" }}>
+          <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem 2.5rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
+            GET STARTED FREE →
+          </button>
         </div>
       </div>
 
@@ -475,6 +454,19 @@ export default function MoggedAI() {
               <div style={{ fontSize:"0.8rem", color:"var(--c-text4)", lineHeight:"1.7" }}>{f.desc}</div>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* SEE IT IN ACTION */}
+      <div style={{ padding:"2rem 1.5rem 5rem", maxWidth:"920px", margin:"0 auto", textAlign:"center" }}>
+        <div style={{ fontSize:"0.85rem", letterSpacing:"0.25em", color:"var(--c-text)", fontWeight:"700", marginBottom:"0.5rem", display:"flex", alignItems:"center", gap:"1rem" }}>
+          <div style={{ flex:1, height:"1px", background:"var(--c-border)" }}/> SEE IT IN ACTION <div style={{ flex:1, height:"1px", background:"var(--c-border)" }}/>
+        </div>
+        <p style={{ fontSize:"0.78rem", color:"var(--c-text4)", marginBottom:"2.5rem", letterSpacing:"0.05em" }}>
+          This is what lands on your phone.
+        </p>
+        <div style={{ display:"flex", justifyContent:"center" }}>
+          <PhoneMockup />
         </div>
       </div>
 

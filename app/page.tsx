@@ -3,8 +3,349 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth, useClerk } from "@clerk/nextjs";
 
+// ── PhoneMockup ──────────────────────────────────────────────────────────────
+const CONVERSATIONS = [
+  {
+    label: "GYM",
+    messages: [
+      { from: "ai",   text: "you said you'd hit the gym this morning. it's 8am. you still in bed?" },
+      { from: "user", text: "just got back actually 💪" },
+      { from: "ai",   text: "7 day streak 🔥 don't stop now." },
+    ],
+  },
+  {
+    label: "STUDY",
+    messages: [
+      { from: "ai",   text: "you haven't touched that textbook all day. what's the excuse?" },
+      { from: "user", text: "studying rn, 2 hrs deep" },
+      { from: "ai",   text: "good. stay off your phone. you got this." },
+    ],
+  },
+  {
+    label: "SIDE PROJECT",
+    messages: [
+      { from: "ai",   text: "did you work on the app today or just think about it?" },
+      { from: "user", text: "shipped a new feature 🔥" },
+      { from: "ai",   text: "3 day streak. keep shipping. this is how it gets built." },
+    ],
+  },
+];
 
+function PhoneMockup() {
+  const [convIndex, setConvIndex] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(0);
+  const [showTyping, setShowTyping] = useState(false);
+  const [fading, setFading] = useState(false);
 
+  useEffect(() => {
+    let cancelled = false;
+    const conv = CONVERSATIONS[convIndex];
+
+    // Reset
+    setVisibleCount(0);
+    setShowTyping(false);
+    setFading(false);
+
+    // Helper: show next message with optional typing indicator before AI msgs
+    const delays: number[] = [];
+    let cursor = 0;
+
+    const showNext = (idx: number) => {
+      if (cancelled) return;
+      if (idx >= conv.messages.length) {
+        // After all messages visible, wait then fade out and advance
+        const t = window.setTimeout(() => {
+          if (cancelled) return;
+          setFading(true);
+          const t2 = window.setTimeout(() => {
+            if (cancelled) return;
+            setConvIndex(prev => (prev + 1) % CONVERSATIONS.length);
+          }, 600);
+          delays.push(t2);
+        }, 3500);
+        delays.push(t);
+        return;
+      }
+
+      const msg = conv.messages[idx];
+      if (msg.from === "ai") {
+        // Show typing indicator first
+        const t1 = window.setTimeout(() => {
+          if (cancelled) return;
+          setShowTyping(true);
+          const t2 = window.setTimeout(() => {
+            if (cancelled) return;
+            setShowTyping(false);
+            setVisibleCount(idx + 1);
+            showNext(idx + 1);
+          }, 1400);
+          delays.push(t2);
+        }, cursor);
+        delays.push(t1);
+        cursor += 1400 + 700;
+      } else {
+        const t = window.setTimeout(() => {
+          if (cancelled) return;
+          setVisibleCount(idx + 1);
+          showNext(idx + 1);
+        }, cursor);
+        delays.push(t);
+        cursor += 900;
+      }
+    };
+
+    showNext(0);
+
+    return () => {
+      cancelled = true;
+      delays.forEach(id => window.clearTimeout(id));
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [convIndex]);
+
+  const conv = CONVERSATIONS[convIndex];
+
+  return (
+    <>
+      <style>{`
+        @keyframes bubbleIn {
+          from { opacity: 0; transform: translateY(8px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes typingDot {
+          0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+          30%            { transform: translateY(-4px); opacity: 1; }
+        }
+        @keyframes phoneFade {
+          from { opacity: 1; }
+          to   { opacity: 0; }
+        }
+        .hero-grid {
+          display: grid;
+          gap: 4rem;
+          align-items: center;
+          grid-template-columns: 1fr;
+        }
+        @media (min-width: 768px) {
+          .hero-grid {
+            grid-template-columns: 1fr 1fr;
+          }
+        }
+      `}</style>
+
+      <div style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}>
+        {/* Phone shell */}
+        <div style={{
+          width: "260px",
+          height: "520px",
+          background: "#0a0a0a",
+          borderRadius: "36px",
+          border: "2px solid #2a2a2a",
+          boxShadow: "0 0 0 1px #111, 0 32px 80px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.05)",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+          position: "relative",
+          animation: fading ? "phoneFade 0.6s ease forwards" : "none",
+        }}>
+
+          {/* Notch */}
+          <div style={{
+            position: "absolute",
+            top: 0,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "100px",
+            height: "26px",
+            background: "#0a0a0a",
+            borderRadius: "0 0 18px 18px",
+            zIndex: 10,
+          }}/>
+
+          {/* Status bar */}
+          <div style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "10px 20px 0",
+            fontSize: "11px",
+            color: "#fff",
+            fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif",
+            fontWeight: 600,
+            flexShrink: 0,
+            minHeight: "32px",
+          }}>
+            <span style={{ paddingTop: "4px" }}>9:41</span>
+            <div style={{ display: "flex", gap: "4px", alignItems: "center", paddingTop: "4px" }}>
+              {/* Signal dots */}
+              {[10, 8, 6].map((h, i) => (
+                <div key={i} style={{
+                  width: "4px",
+                  height: `${h}px`,
+                  background: i === 0 ? "#fff" : "rgba(255,255,255,0.5)",
+                  borderRadius: "1px",
+                }}/>
+              ))}
+              {/* Wifi */}
+              <svg width="14" height="10" viewBox="0 0 14 10" fill="none" style={{ marginLeft: "2px" }}>
+                <path d="M7 8.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" fill="white"/>
+                <path d="M3.5 5.5C4.5 4.4 5.7 3.8 7 3.8s2.5.6 3.5 1.7" stroke="white" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
+                <path d="M1 3C2.8 1.2 4.8.3 7 .3s4.2.9 6 2.7" stroke="rgba(255,255,255,0.4)" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
+              </svg>
+              {/* Battery */}
+              <div style={{ display: "flex", alignItems: "center", marginLeft: "2px" }}>
+                <div style={{ width: "20px", height: "10px", border: "1px solid rgba(255,255,255,0.5)", borderRadius: "2px", position: "relative", overflow: "hidden" }}>
+                  <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "70%", background: "#4cd964", borderRadius: "1px" }}/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact header */}
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            padding: "8px 16px 10px",
+            borderBottom: "1px solid #1c1c1c",
+            flexShrink: 0,
+          }}>
+            <div style={{
+              width: "34px",
+              height: "34px",
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, #0ea5e9, #0284c7)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "16px",
+            }}>🤖</div>
+            <div>
+              <div style={{
+                fontSize: "13px",
+                fontWeight: 600,
+                color: "#fff",
+                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif",
+                letterSpacing: "0",
+              }}>MoggedAI</div>
+              <div style={{
+                fontSize: "10px",
+                color: "#4cd964",
+                fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
+              }}>online · {conv.label}</div>
+            </div>
+          </div>
+
+          {/* Messages area */}
+          <div style={{
+            flex: 1,
+            padding: "12px 12px 8px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+            overflowY: "hidden",
+            justifyContent: "flex-end",
+          }}>
+            {conv.messages.slice(0, visibleCount).map((msg, i) => (
+              <div
+                key={`${convIndex}-${i}`}
+                style={{
+                  display: "flex",
+                  justifyContent: msg.from === "user" ? "flex-end" : "flex-start",
+                  animation: "bubbleIn 0.3s ease forwards",
+                }}
+              >
+                <div style={{
+                  background: msg.from === "ai" ? "#1c1c1e" : "#0ea5e9",
+                  color: "#fff",
+                  borderRadius: msg.from === "ai" ? "16px 16px 16px 4px" : "16px 16px 4px 16px",
+                  padding: "9px 13px",
+                  fontSize: "12px",
+                  lineHeight: "1.55",
+                  maxWidth: "80%",
+                  fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
+                  fontWeight: 400,
+                  letterSpacing: "0",
+                  boxShadow: msg.from === "ai"
+                    ? "inset 0 0 0 1px rgba(255,255,255,0.06)"
+                    : "none",
+                }}>
+                  {msg.text}
+                </div>
+              </div>
+            ))}
+
+            {/* Typing indicator */}
+            {showTyping && (
+              <div style={{ display: "flex", justifyContent: "flex-start", animation: "bubbleIn 0.2s ease forwards" }}>
+                <div style={{
+                  background: "#1c1c1e",
+                  borderRadius: "16px 16px 16px 4px",
+                  padding: "10px 14px",
+                  display: "flex",
+                  gap: "4px",
+                  alignItems: "center",
+                  boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.06)",
+                }}>
+                  {[0, 1, 2].map(i => (
+                    <div key={i} style={{
+                      width: "6px",
+                      height: "6px",
+                      borderRadius: "50%",
+                      background: "#888",
+                      animation: `typingDot 1.2s ease-in-out ${i * 0.2}s infinite`,
+                    }}/>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* iMessage input bar */}
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "8px 10px 14px",
+            borderTop: "1px solid #1c1c1c",
+            flexShrink: 0,
+          }}>
+            <div style={{
+              flex: 1,
+              background: "#1c1c1e",
+              borderRadius: "18px",
+              padding: "7px 12px",
+              fontSize: "12px",
+              color: "#555",
+              fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
+              border: "1px solid #2c2c2e",
+            }}>iMessage</div>
+            <div style={{
+              width: "26px",
+              height: "26px",
+              borderRadius: "50%",
+              background: "#0ea5e9",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M6 2v8M2 6l4-4 4 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ── Main page ────────────────────────────────────────────────────────────────
 export default function MoggedAI() {
   const [ticker, setTicker] = useState(0);
   const router = useRouter();
@@ -63,77 +404,27 @@ export default function MoggedAI() {
       </nav>
 
       {/* HERO */}
-      <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", justifyContent:"center", padding:"5rem 1.5rem 2rem", maxWidth:"920px", margin:"0 auto" }}>
-        <div style={tag}>AI ACCOUNTABILITY · SMS · BUILT FOR RESULTS</div>
-        <h1 style={{ fontSize:"clamp(2.8rem,8vw,5.5rem)", fontWeight:"700", lineHeight:0.95, letterSpacing:"-0.02em", wordSpacing:"-0.15em", marginBottom:"1rem", transform:`translateX(${noise*0.3}px)` }}>
-          STOP<br/><span style={{ color:"#0ea5e9" }}>SLACKING.</span><br/>START NOW.
-        </h1>
-        <p style={{ fontSize:"clamp(0.95rem,2vw,1.05rem)", color:"var(--c-text4)", maxWidth:"500px", lineHeight:"1.9", marginBottom:"2rem" }}>
-          Get daily habit reminders by text.<br/>Built to make sure you follow through.
-        </p>
-        <div style={{ display:"flex", gap:"1rem", flexWrap:"wrap", marginBottom:"5rem" }}>
-          <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem 2.5rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
-            GET STARTED FREE →
-          </button>
-        </div>
-
-        {/* SMS Conversation showcase */}
-        <div style={{ width:"100%" }}>
-          {/* 3 conversation cards */}
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))", gap:"12px", marginBottom:"12px" }}>
-            {[
-              {
-                habit:"💪 GYM", time1:"8:14 AM", time2:"8:17 AM", time3:"8:17 AM",
-                msg:"you said you'd hit the gym this morning. it's 8am. you still in bed?",
-                reply:"done just got back",
-                response:"7 day streak. that's what it looks like. don't stop now.",
-              },
-              {
-                habit:"📚 STUDY", time1:"2:00 PM", time2:"2:06 PM", time3:"2:06 PM",
-                msg:"you haven't opened that textbook all day. what are you doing?",
-                reply:"done studying now",
-                response:"good. stay off your phone. two hours minimum.",
-              },
-              {
-                habit:"🚀 SIDE PROJECT", time1:"7:30 PM", time2:"7:35 PM", time3:"7:35 PM",
-                msg:"did you work on the side project today or did you just think about it?",
-                reply:"done shipped a feature",
-                response:"3 day streak. keep shipping. this is how it gets built.",
-              },
-            ].map(c => (
-              <div key={c.habit} style={{ background:"var(--c-s1)", border:"1px solid var(--c-border)", borderRadius:"16px", padding:"1.25rem", display:"flex", flexDirection:"column", gap:"8px" }}>
-                <div style={{ fontSize:"0.5rem", color:"#0ea5e9", letterSpacing:"0.2em", marginBottom:"4px" }}>{c.habit}</div>
-                {/* Coach message */}
-                <div style={{ background:"var(--c-s2)", borderRadius:"10px 10px 10px 0", padding:"0.7rem 0.85rem" }}>
-                  <div style={{ fontSize:"0.75rem", color:"var(--c-text2)", lineHeight:"1.6" }}>{c.msg}</div>
-                  <div style={{ fontSize:"0.45rem", color:"var(--c-text3)", textAlign:"right", marginTop:"6px" }}>{c.time1}</div>
-                </div>
-                {/* User reply */}
-                <div style={{ background:"#0ea5e9", borderRadius:"10px 10px 0 10px", padding:"0.6rem 0.85rem", alignSelf:"flex-end", maxWidth:"80%" }}>
-                  <div style={{ fontSize:"0.68rem", color:"#fff" }}>{c.reply}</div>
-                  <div style={{ fontSize:"0.45rem", color:"rgba(255,255,255,0.6)", textAlign:"right", marginTop:"4px" }}>{c.time2}</div>
-                </div>
-                {/* Coach response */}
-                <div style={{ background:"var(--c-s2)", borderRadius:"10px 10px 10px 0", padding:"0.7rem 0.85rem" }}>
-                  <div style={{ fontSize:"0.75rem", color:"var(--c-text2)", lineHeight:"1.6" }}>{c.response}</div>
-                  <div style={{ fontSize:"0.45rem", color:"var(--c-text3)", textAlign:"right", marginTop:"6px" }}>{c.time3}</div>
-                </div>
-              </div>
-            ))}
+      <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", justifyContent:"center", padding:"5rem 1.5rem 4rem", maxWidth:"960px", margin:"0 auto" }}>
+        <div className="hero-grid">
+          {/* Left column: headline + CTA */}
+          <div>
+            <div style={tag}>AI ACCOUNTABILITY · SMS · BUILT FOR RESULTS</div>
+            <h1 style={{ fontSize:"clamp(2.8rem,8vw,5.5rem)", fontWeight:"700", lineHeight:0.95, letterSpacing:"-0.02em", wordSpacing:"-0.15em", marginBottom:"1rem", transform:`translateX(${noise*0.3}px)` }}>
+              STOP<br/><span style={{ color:"#0ea5e9" }}>SLACKING.</span><br/>START NOW.
+            </h1>
+            <p style={{ fontSize:"clamp(0.95rem,2vw,1.05rem)", color:"var(--c-text4)", maxWidth:"500px", lineHeight:"1.9", marginBottom:"2rem" }}>
+              Get daily habit reminders by text.<br/>Built to make sure you follow through.
+            </p>
+            <div style={{ display:"flex", gap:"1rem", flexWrap:"wrap" }}>
+              <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem 2.5rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
+                GET STARTED FREE →
+              </button>
+            </div>
           </div>
 
-          {/* Stats bar */}
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"1px", background:"var(--c-s1)", border:"1px solid var(--c-border)" }}>
-            {[
-              { num:"5", label:"HABITS TRACKED" },
-              { num:"5 MIN", label:"FOLLOW-UP TIME" },
-              { num:"2-WAY", label:"AI COACHING" },
-            ].map(s => (
-              <div key={s.label} style={{ background:"var(--c-root)", padding:"1.25rem", textAlign:"center" }}>
-                <div style={{ fontSize:"1.5rem", fontWeight:"700", color:"#0ea5e9", lineHeight:1 }}>{s.num}</div>
-                <div style={{ fontSize:"0.5rem", color:"#666", letterSpacing:"0.15em", marginTop:"0.3rem" }}>{s.label}</div>
-              </div>
-            ))}
+          {/* Right column: animated phone mockup */}
+          <div style={{ display:"flex", justifyContent:"center" }}>
+            <PhoneMockup />
           </div>
         </div>
       </div>

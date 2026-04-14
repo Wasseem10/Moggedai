@@ -174,6 +174,22 @@ export default function Dashboard() {
 
   useEffect(() => { loadData() }, [loadData])
 
+  // Live polling — refresh data every 10s so new texts appear automatically
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch('/api/user')
+        const d = await res.json()
+        if (d.habits) setHabits(d.habits)
+        if (d.recent_messages) setRecentMessages(d.recent_messages)
+        if (d.stats) setStats(d.stats)
+        if (d.weekly_recap) setWeeklyRecap(d.weekly_recap)
+        if (d.user) setUserData(d.user)
+      } catch { /* silent */ }
+    }, 10_000)
+    return () => clearInterval(interval)
+  }, [])
+
   const greeting = () => {
     const h = new Date().getHours()
     if (h < 12) return 'GOOD MORNING'
@@ -358,10 +374,18 @@ export default function Dashboard() {
 
 function FontLoader() {
   return (
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
+      <style>{`
+        @keyframes livePulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.4; transform: scale(0.8); }
+        }
+      `}</style>
+    </>
   )
 }
 
@@ -552,8 +576,12 @@ function OverviewView({
     <div>
       {/* Hero */}
       <div style={{ paddingTop: '2rem', paddingBottom: '1.5rem' }}>
-        <p style={{ fontFamily: MONO, fontSize: '0.75rem', color: C.text2, letterSpacing: '0.15em', margin: 0, marginBottom: '0.4rem' }}>
+        <p style={{ fontFamily: MONO, fontSize: '0.75rem', color: C.text2, letterSpacing: '0.15em', margin: 0, marginBottom: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           {greeting} · {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }).toUpperCase()}
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.5rem', color: '#22c55e', letterSpacing: '0.15em' }}>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', display: 'inline-block', animation: 'livePulse 2s ease infinite' }} />
+            LIVE
+          </span>
         </p>
         <h1 style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.3rem,5vw,1.6rem)', margin: 0, marginBottom: '0.5rem', color: C.text }}>
           {displayName}

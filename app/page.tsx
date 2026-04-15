@@ -434,10 +434,15 @@ export default function MoggedAI() {
   return (
     <div style={root}>
       <style>{`
+        * { box-sizing: border-box; }
         .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
         @media (max-width: 640px) {
           .footer-grid { grid-template-columns: 1fr 1fr; }
           .footer-brand { grid-column: 1 / -1; }
+          .nav-btns .sign-out-btn { display: none; }
+          .phone-wrap { transform: scale(0.82); transform-origin: center top; margin-bottom: -60px; }
+          .cta-btn { width: 100% !important; }
+          .section-pad { padding-left: 1rem !important; padding-right: 1rem !important; }
         }
       `}</style>
       <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
@@ -446,7 +451,7 @@ export default function MoggedAI() {
 
       <nav style={nav}>
         <div style={logoS}>MOGGED<span style={{ color:"#0ea5e9" }}>AI</span></div>
-        <div style={{ display:"flex", gap:"0.5rem" }}>
+        <div className="nav-btns" style={{ display:"flex", gap:"0.5rem" }}>
           {isSignedIn ? (
             <>
               <button style={navBtn} onClick={() => router.push("/dashboard")}>DASHBOARD</button>
@@ -476,7 +481,7 @@ export default function MoggedAI() {
       </div>
 
       {/* WHO IT'S FOR */}
-      <div style={{ padding:"5rem 1.25rem 3rem", maxWidth:"920px", margin:"0 auto", width:"100%", boxSizing:"border-box" }}>
+      <div style={{ padding:"7rem 1.25rem 3rem", maxWidth:"920px", margin:"0 auto", width:"100%", boxSizing:"border-box" }}>
         <div style={{ fontSize:"0.75rem", letterSpacing:"0.25em", color:"var(--c-text)", fontWeight:"700", marginBottom:"0.4rem", display:"flex", alignItems:"center", gap:"1rem" }}>
           WHO IT&apos;S FOR <div style={{ flex:1, height:"1px", background:"var(--c-border)" }}/>
         </div>
@@ -530,14 +535,14 @@ export default function MoggedAI() {
         <p style={{ fontSize:"0.78rem", color:"var(--c-text4)", marginBottom:"2.5rem", letterSpacing:"0.05em" }}>
           This is what lands on your phone.
         </p>
-        <div style={{ display:"flex", justifyContent:"center" }}>
+        <div className="phone-wrap" style={{ display:"flex", justifyContent:"center" }}>
           <PhoneMockup />
         </div>
       </div>
 
       {/* CTA */}
       <div style={{ padding:"3rem 1.5rem 4rem", maxWidth:"920px", margin:"0 auto", textAlign:"center" }}>
-        <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1.1rem 3rem", fontSize:"0.9rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
+        <button className="cta-btn" style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1.1rem 3rem", fontSize:"0.9rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
           GET STARTED — IT&apos;S FREE
         </button>
         <p style={{ fontSize:"0.6rem", color:"#555", marginTop:"1rem" }}>US numbers only · Reply STOP to unsubscribe anytime</p>

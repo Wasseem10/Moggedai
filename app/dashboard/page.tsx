@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useUser, useClerk, UserButton } from '@clerk/nextjs'
 
@@ -297,11 +297,54 @@ export default function Dashboard() {
   }
 
   if (loading) {
+    const shimmerStyle: React.CSSProperties = {
+      background: `linear-gradient(90deg, ${C.s1} 25%, ${C.s2} 50%, ${C.s1} 75%)`,
+      backgroundSize: '200% 100%',
+      animation: 'shimmer 1.5s ease-in-out infinite',
+    }
     return (
       <>
         <FontLoader />
-        <div style={{ background: C.bg, minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <span style={{ color: C.text3, fontFamily: MONO, fontSize: '0.7rem', letterSpacing: '0.2em' }}>LOADING...</span>
+        <div style={{ background: C.bg, minHeight: '100vh', color: C.text, fontFamily: GROTESK }}>
+          {/* Skeleton Nav */}
+          <div style={{
+            background: C.bg,
+            borderBottom: `1px solid ${C.s2}`,
+            padding: '0 1.25rem',
+          }}>
+            <div style={{
+              maxWidth: 640,
+              margin: '0 auto',
+              height: 52,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+              <div style={{ ...shimmerStyle, width: 100, height: 14, borderRadius: 0 }} />
+              <div style={{ ...shimmerStyle, width: 32, height: 32, borderRadius: '50%' }} />
+            </div>
+          </div>
+          {/* Skeleton Content */}
+          <div style={{ maxWidth: 640, margin: '0 auto', padding: '0 1.25rem', paddingBottom: '4rem' }}>
+            {/* Skeleton greeting */}
+            <div style={{ paddingTop: '2rem', paddingBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+              <div style={{ ...shimmerStyle, width: 180, height: 12, borderRadius: 0 }} />
+              <div style={{ ...shimmerStyle, width: 280, height: 22, borderRadius: 0 }} />
+            </div>
+            {/* Skeleton MY MISSIONS label */}
+            <div style={{ ...shimmerStyle, width: 100, height: 12, borderRadius: 0, marginBottom: '0.75rem' }} />
+            {/* Skeleton mission cards */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2rem' }}>
+              <div style={{ ...shimmerStyle, width: '100%', height: 80, borderRadius: 0 }} />
+              <div style={{ ...shimmerStyle, width: '100%', height: 80, borderRadius: 0 }} />
+            </div>
+            {/* Skeleton stats row */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
+              <div style={{ ...shimmerStyle, height: 72, borderRadius: 0 }} />
+              <div style={{ ...shimmerStyle, height: 72, borderRadius: 0 }} />
+              <div style={{ ...shimmerStyle, height: 72, borderRadius: 0 }} />
+            </div>
+          </div>
         </div>
       </>
     )
@@ -312,7 +355,7 @@ export default function Dashboard() {
       <FontLoader />
       <div style={{ background: C.bg, minHeight: '100vh', color: C.text, fontFamily: GROTESK }}>
         <Nav onLogoClick={() => router.push('/')} theme={theme} onToggleTheme={toggleTheme} />
-        <div style={{ maxWidth: 640, margin: '0 auto', padding: '0 1.25rem', paddingBottom: '4rem' }}>
+        <div className="dashboard-content" style={{ maxWidth: 640, margin: '0 auto', padding: '0 1.25rem' }}>
           {view === 'overview' && (
             <OverviewView
               clerkUser={clerkUser}
@@ -365,8 +408,137 @@ export default function Dashboard() {
             />
           )}
         </div>
+        <MobileTabBar
+          view={view}
+          setView={setView}
+          onScrollToHistory={() => document.getElementById('recent-messages')?.scrollIntoView({ behavior: 'smooth' })}
+          onScrollToAccount={() => document.getElementById('account-section')?.scrollIntoView({ behavior: 'smooth' })}
+        />
       </div>
     </>
+  )
+}
+
+// ─── Mobile Tab Bar ────────────────────────────────────────────────────────────
+
+function MobileTabBar({
+  view,
+  setView,
+  onScrollToHistory,
+  onScrollToAccount,
+}: {
+  view: View
+  setView: (v: View) => void
+  onScrollToHistory: () => void
+  onScrollToAccount: () => void
+}) {
+  const tabs = [
+    {
+      key: 'home' as const,
+      label: 'HOME',
+      isActive: view === 'overview' || view === 'confirm',
+      onClick: () => setView('overview'),
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      ),
+    },
+    {
+      key: 'missions' as const,
+      label: 'MISSIONS',
+      isActive: view === 'add',
+      onClick: () => setView('add'),
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+      ),
+    },
+    {
+      key: 'history' as const,
+      label: 'HISTORY',
+      isActive: false,
+      onClick: onScrollToHistory,
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+      ),
+    },
+    {
+      key: 'account' as const,
+      label: 'ACCOUNT',
+      isActive: false,
+      onClick: onScrollToAccount,
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      ),
+    },
+  ]
+
+  return (
+    <div
+      className="mobile-tab-bar"
+      style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 100,
+        background: C.bg,
+        borderTop: `1px solid ${C.border}`,
+        height: 60,
+        display: 'flex',
+      }}
+    >
+      {tabs.map((tab) => (
+        <button
+          key={tab.key}
+          onClick={tab.onClick}
+          style={{
+            flex: 1,
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.25rem',
+            color: tab.isActive ? '#0ea5e9' : C.text3,
+            transition: 'color 0.15s ease',
+            padding: 0,
+            position: 'relative',
+          }}
+        >
+          {tab.isActive && (
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 2,
+              background: '#0ea5e9',
+            }} />
+          )}
+          {tab.icon}
+          <span style={{
+            fontFamily: MONO,
+            fontSize: '0.45rem',
+            letterSpacing: '0.1em',
+          }}>
+            {tab.label}
+          </span>
+        </button>
+      ))}
+    </div>
   )
 }
 
@@ -384,6 +556,21 @@ function FontLoader() {
           0%, 100% { opacity: 1; transform: scale(1); }
           50% { opacity: 0.4; transform: scale(0.8); }
         }
+        @keyframes shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+        @keyframes cardSlideUp {
+          from { opacity: 0; transform: translateY(16px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes badgePop {
+          from { transform: scale(0); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
+        }
+        .dashboard-content { padding-bottom: 4rem; }
+        @media (max-width: 640px) { .dashboard-content { padding-bottom: 80px; } }
+        @media (min-width: 641px) { .mobile-tab-bar { display: none !important; } }
       `}</style>
     </>
   )
@@ -653,8 +840,8 @@ function OverviewView({
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          {habits.map(h => (
-            <MissionCard key={h.id} habit={h} onClick={() => onSelectMission(h)} />
+          {habits.map((h, index) => (
+            <MissionCard key={h.id} habit={h} index={index} onClick={() => onSelectMission(h)} />
           ))}
 
           {/* Empty state — shown when no missions yet */}
@@ -725,9 +912,11 @@ function OverviewView({
       </div>
 
       {/* Weekly Recap — always show once they have at least one mission */}
-      {habits.length > 0 && (
-        <WeeklyRecapCard recap={weeklyRecap} streak={stats.streak} totalCompletions={stats.total_completions} />
-      )}
+      <div id="recent-messages">
+        {habits.length > 0 && (
+          <WeeklyRecapCard recap={weeklyRecap} streak={stats.streak} totalCompletions={stats.total_completions} />
+        )}
+      </div>
 
       {/* Completed Missions */}
       {completedHabits.length > 0 && (
@@ -771,7 +960,7 @@ function OverviewView({
       )}
 
       {/* Account Section */}
-      <div style={{ borderTop: `1px solid ${C.border}` }}>
+      <div id="account-section" style={{ borderTop: `1px solid ${C.border}` }}>
 
         {/* Phone row */}
         <div style={{ borderBottom: `1px solid ${C.border}`, padding: '1rem 0' }}>
@@ -946,7 +1135,7 @@ function StatBox({ label, value, borderLeft, valueColor }: {
   )
 }
 
-function MissionCard({ habit, onClick }: { habit: Habit; onClick: () => void }) {
+function MissionCard({ habit, onClick, index = 0 }: { habit: Habit; onClick: () => void; index?: number }) {
   const timeLabel = habit.time_of_day
     ? TIME_OPTIONS.find(t => t.value === habit.time_of_day)?.sub ?? ''
     : ''
@@ -954,6 +1143,21 @@ function MissionCard({ habit, onClick }: { habit: Habit; onClick: () => void }) 
   return (
     <button
       onClick={onClick}
+      onMouseEnter={e => {
+        e.currentTarget.style.transform = 'translateY(-2px)'
+        e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)'
+        e.currentTarget.style.transition = 'transform 0.18s ease, box-shadow 0.18s ease'
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.transform = 'translateY(0)'
+        e.currentTarget.style.boxShadow = 'none'
+      }}
+      onMouseDown={e => {
+        e.currentTarget.style.transform = 'scale(0.98)'
+      }}
+      onMouseUp={e => {
+        e.currentTarget.style.transform = 'translateY(-2px)'
+      }}
       style={{
         width: '100%',
         background: C.s1,
@@ -962,9 +1166,11 @@ function MissionCard({ habit, onClick }: { habit: Habit; onClick: () => void }) 
         cursor: 'pointer',
         textAlign: 'left',
         color: C.text,
-        transition: 'all 0.2s',
+        transition: 'transform 0.18s ease, box-shadow 0.18s ease',
         borderRadius: 0,
         position: 'relative',
+        opacity: 0,
+        animation: `cardSlideUp 0.35s cubic-bezier(0.34,1.2,0.64,1) ${index * 0.07}s both`,
       }}
     >
       <div style={{ position: 'absolute', top: '0.75rem', right: '0.75rem' }}>
@@ -992,6 +1198,7 @@ function MissionCard({ habit, onClick }: { habit: Habit; onClick: () => void }) 
                 background: 'rgba(245,158,11,0.1)',
                 border: '1px solid rgba(245,158,11,0.2)',
                 padding: '0.1rem 0.35rem',
+                animation: 'badgePop 0.4s cubic-bezier(0.34,1.56,0.64,1) both',
               }}>
                 🔥 {habit.streak} days
               </span>

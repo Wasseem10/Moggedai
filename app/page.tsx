@@ -480,7 +480,7 @@ export default function MoggedAI() {
       </div>
 
       {/* WHO IT'S FOR */}
-      <div style={{ padding:"5rem 1.5rem", maxWidth:"920px", margin:"0 auto" }}>
+      <div style={{ padding:"2rem 1.5rem 3rem", maxWidth:"920px", margin:"0 auto" }}>
         <div style={{ fontSize:"0.85rem", letterSpacing:"0.25em", color:"var(--c-text)", fontWeight:"700", marginBottom:"0.5rem", display:"flex", alignItems:"center", gap:"1rem" }}>
           WHO IT&apos;S FOR <div style={{ flex:1, height:"1px", background:"var(--c-border)" }}/>
         </div>
@@ -508,7 +508,7 @@ export default function MoggedAI() {
       </div>
 
       {/* HOW IT WORKS */}
-      <div style={{ padding:"0 1.5rem 5rem", maxWidth:"920px", margin:"0 auto" }}>
+      <div style={{ padding:"0 1.5rem 3rem", maxWidth:"920px", margin:"0 auto" }}>
         <div style={{ fontSize:"0.85rem", letterSpacing:"0.25em", color:"var(--c-text)", fontWeight:"700", marginBottom:"2rem", display:"flex", alignItems:"center", gap:"1rem" }}>
           HOW IT WORKS <div style={{ flex:1, height:"1px", background:"var(--c-border)" }}/>
         </div>
@@ -529,7 +529,7 @@ export default function MoggedAI() {
       </div>
 
       {/* SEE IT IN ACTION */}
-      <div style={{ padding:"2rem 1.5rem 5rem", maxWidth:"920px", margin:"0 auto", textAlign:"center" }}>
+      <div style={{ padding:"1rem 1.5rem 3rem", maxWidth:"920px", margin:"0 auto", textAlign:"center" }}>
         <div style={{ fontSize:"0.85rem", letterSpacing:"0.25em", color:"var(--c-text)", fontWeight:"700", marginBottom:"0.5rem", display:"flex", alignItems:"center", gap:"1rem" }}>
           <div style={{ flex:1, height:"1px", background:"var(--c-border)" }}/> SEE IT IN ACTION <div style={{ flex:1, height:"1px", background:"var(--c-border)" }}/>
         </div>

@@ -127,7 +127,7 @@ export default function Dashboard() {
   const [stripeLoading, setStripeLoading] = useState(false)
 
   useEffect(() => {
-    const stored = (localStorage.getItem('mogged-theme') || 'dark') as 'dark'|'light'
+    const stored = (localStorage.getItem('mogged-theme') || 'light') as 'dark'|'light'
     setTheme(stored)
   }, [])
 

@@ -393,7 +393,7 @@ export default function MoggedAI() {
       </nav>
 
       {/* HERO */}
-      <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", justifyContent:"center", padding:"2rem 1.5rem 4rem", maxWidth:"920px", margin:"0 auto" }}>
+      <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", justifyContent:"flex-start", padding:"8rem 1.5rem 4rem", maxWidth:"920px", margin:"0 auto" }}>
         <div style={tag}>AI ACCOUNTABILITY · SMS · BUILT FOR RESULTS</div>
         <h1 style={{ fontSize:"clamp(2.8rem,8vw,5.5rem)", fontWeight:"700", lineHeight:0.95, letterSpacing:"-0.02em", wordSpacing:"-0.15em", marginBottom:"1rem", transform:`translateX(${noise*0.3}px)` }}>
           STOP<br/><span style={{ color:"#0ea5e9" }}>SLACKING.</span><br/>START NOW.

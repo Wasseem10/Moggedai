@@ -188,55 +188,10 @@ export default function SetupPage() {
             ))}
           </div>
 
-          {/* ── STEP 1: Commitment / Focus ── */}
+          {/* ── STEP 1: Phone + Consent ── */}
           {step === 1 && (
             <div key="step1" style={slideStyle}>
               <div style={stepTag("01")}>STEP 01 / 04</div>
-              <h1 style={{ fontSize: "clamp(1.6rem,5vw,2.2rem)", fontWeight: "700", lineHeight: 1.15, marginBottom: "0.5rem", marginTop: 0 }}>
-                What&apos;s one thing you keep avoiding?
-              </h1>
-              <p style={{ fontSize: "1rem", color: "var(--c-text)", marginBottom: "1.75rem", lineHeight: "1.7" }}>
-                Be honest. This is between you and the AI.
-              </p>
-
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                {FOCUS_OPTIONS.map(opt => {
-                  const val = `${opt.emoji} ${opt.label}`;
-                  const selected = focus === val;
-                  return (
-                    <button
-                      key={val}
-                      onClick={() => {
-                        setFocus(val);
-                        setTimeout(() => setStep(2), 300);
-                      }}
-                      style={{
-                        background: selected ? "rgba(14,165,233,0.1)" : "var(--c-input)",
-                        border: `1px solid ${selected ? "#0ea5e9" : "var(--c-input-bdr)"}`,
-                        color: selected ? "var(--c-text)" : "var(--c-text3)",
-                        padding: "1rem",
-                        cursor: "pointer",
-                        fontFamily: MONO,
-                        textAlign: "left",
-                        fontSize: "0.75rem",
-                        lineHeight: "1.5",
-                        transition: "all 0.15s",
-                        borderRadius: 0,
-                      }}
-                    >
-                      <span style={{ display: "block", fontSize: "1.3rem", marginBottom: "0.3rem" }}>{opt.emoji}</span>
-                      {opt.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {/* ── STEP 2: Phone + Consent ── */}
-          {step === 2 && (
-            <div key="step2" style={slideStyle}>
-              <div style={stepTag("02")}>STEP 02 / 04</div>
               <h1 style={{ fontSize: "clamp(1.6rem,5vw,2.2rem)", fontWeight: "700", lineHeight: 1.15, marginBottom: "0.5rem", marginTop: 0 }}>
                 Your number.<br />
                 <span style={{ color: "#0ea5e9" }}>No excuses.</span>
@@ -251,12 +206,12 @@ export default function SetupPage() {
                 placeholder="(555) 000-0000"
                 value={phone}
                 onChange={e => setPhone(formatPhone(e.target.value))}
-                onKeyDown={e => e.key === "Enter" && validatePhone() && consent && setStep(3)}
+                onKeyDown={e => e.key === "Enter" && validatePhone() && consent && setStep(2)}
                 autoFocus
               />
               {phoneError && <p style={{ fontSize: "0.75rem", color: "#0ea5e9", marginTop: "0.4rem", marginBottom: 0 }}>{phoneError}</p>}
 
-              {/* SMS Consent — on same step as phone number */}
+              {/* SMS Consent */}
               <div
                 onClick={() => setConsent(c => !c)}
                 style={{ background: "var(--c-s1)", border: `1px solid ${consent ? "#0ea5e9" : "var(--c-input-bdr)"}`, padding: "1rem", marginTop: "1.25rem", marginBottom: "1.25rem", cursor: "pointer", transition: "all 0.15s" }}
@@ -274,22 +229,67 @@ export default function SetupPage() {
               </div>
 
               <button
-                onClick={() => validatePhone() && consent && setStep(3)}
+                onClick={() => validatePhone() && consent && setStep(2)}
                 disabled={!consent}
                 style={{ width: "100%", background: "#0ea5e9", border: "none", color: "#fff", padding: "1rem", fontSize: "0.85rem", letterSpacing: "0.15em", cursor: !consent ? "not-allowed" : "pointer", fontFamily: MONO, fontWeight: "700", opacity: !consent ? 0.4 : 1, transition: "opacity 0.2s" }}
               >
                 NEXT →
               </button>
+            </div>
+          )}
+
+          {/* ── STEP 2: Focus ── */}
+          {step === 2 && (
+            <div key="step2" style={slideStyle}>
+              <div style={stepTag("02")}>STEP 02 / 04</div>
+              <h1 style={{ fontSize: "clamp(1.6rem,5vw,2.2rem)", fontWeight: "700", lineHeight: 1.15, marginBottom: "0.5rem", marginTop: 0 }}>
+                What&apos;s one thing you keep avoiding?
+              </h1>
+              <p style={{ fontSize: "1rem", color: "var(--c-text)", marginBottom: "1.75rem", lineHeight: "1.7" }}>
+                Be honest. This is between you and the AI.
+              </p>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                {FOCUS_OPTIONS.map(opt => {
+                  const val = `${opt.emoji} ${opt.label}`;
+                  const selected = focus === val;
+                  return (
+                    <button
+                      key={val}
+                      onClick={() => {
+                        setFocus(val);
+                        setTimeout(() => setStep(3), 300);
+                      }}
+                      style={{
+                        background: selected ? "rgba(14,165,233,0.1)" : "var(--c-input)",
+                        border: `1px solid ${selected ? "#0ea5e9" : "var(--c-input-bdr)"}`,
+                        color: selected ? "var(--c-text)" : "var(--c-text3)",
+                        padding: "1rem",
+                        cursor: "pointer",
+                        fontFamily: MONO,
+                        textAlign: "left",
+                        fontSize: "0.85rem",
+                        lineHeight: "1.5",
+                        transition: "all 0.15s",
+                        borderRadius: 0,
+                      }}
+                    >
+                      <span style={{ display: "block", fontSize: "1.3rem", marginBottom: "0.3rem" }}>{opt.emoji}</span>
+                      {opt.label}
+                    </button>
+                  );
+                })}
+              </div>
               <button
                 onClick={() => setStep(1)}
-                style={{ background: "none", border: "none", color: "var(--c-text3)", fontSize: "0.7rem", cursor: "pointer", fontFamily: MONO, padding: "0.75rem 0", letterSpacing: "0.1em", display: "block", marginTop: "0.25rem" }}
+                style={{ background: "none", border: "none", color: "var(--c-text3)", fontSize: "0.7rem", cursor: "pointer", fontFamily: MONO, padding: "0.75rem 0", letterSpacing: "0.1em", display: "block", marginTop: "0.5rem" }}
               >
                 ← back
               </button>
             </div>
           )}
 
-          {/* ── STEP 3: Schedule + Consent ── */}
+          {/* ── STEP 3: Schedule ── */}
           {step === 3 && (
             <div key="step3" style={slideStyle}>
               <div style={stepTag("03")}>STEP 03 / 04</div>
@@ -346,7 +346,7 @@ export default function SetupPage() {
               </button>
               <button
                 onClick={() => setStep(2)}
-                style={{ background: "none", border: "none", color: "var(--c-text3)", fontSize: "0.65rem", cursor: "pointer", fontFamily: MONO, padding: "0.75rem 0", letterSpacing: "0.1em", display: "block", marginTop: "0.25rem" }}
+                style={{ background: "none", border: "none", color: "var(--c-text3)", fontSize: "0.7rem", cursor: "pointer", fontFamily: MONO, padding: "0.75rem 0", letterSpacing: "0.1em", display: "block", marginTop: "0.25rem" }}
               >
                 ← back
               </button>

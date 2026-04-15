@@ -464,7 +464,7 @@ export default function MoggedAI() {
       </nav>
 
       {/* HERO */}
-      <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", justifyContent:"flex-start", padding:"8rem 1.5rem 4rem", maxWidth:"920px", margin:"0 auto" }}>
+      <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", justifyContent:"flex-start", padding:"8rem 1.5rem 1rem", maxWidth:"920px", margin:"0 auto" }}>
         <div style={tag}>AI ACCOUNTABILITY · SMS · BUILT FOR RESULTS</div>
         <h1 style={{ fontSize:"clamp(2.8rem,8vw,5.5rem)", fontWeight:"700", lineHeight:0.95, letterSpacing:"-0.02em", wordSpacing:"-0.15em", marginBottom:"1rem", transform:`translateX(${noise*0.3}px)` }}>
           STOP<br/><span style={{ color:"#0ea5e9" }}>SLACKING.</span><br/>START NOW.
@@ -480,7 +480,7 @@ export default function MoggedAI() {
       </div>
 
       {/* WHO IT'S FOR */}
-      <div style={{ padding:"2rem 1.5rem 3rem", maxWidth:"920px", margin:"0 auto" }}>
+      <div style={{ padding:"0 1.5rem 3rem", maxWidth:"920px", margin:"0 auto" }}>
         <div style={{ fontSize:"0.85rem", letterSpacing:"0.25em", color:"var(--c-text)", fontWeight:"700", marginBottom:"0.5rem", display:"flex", alignItems:"center", gap:"1rem" }}>
           WHO IT&apos;S FOR <div style={{ flex:1, height:"1px", background:"var(--c-border)" }}/>
         </div>

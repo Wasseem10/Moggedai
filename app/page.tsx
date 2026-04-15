@@ -476,7 +476,7 @@ export default function MoggedAI() {
       </div>
 
       {/* WHO IT'S FOR */}
-      <div style={{ padding:"3rem 1.25rem 3rem", maxWidth:"920px", margin:"0 auto", width:"100%", boxSizing:"border-box" }}>
+      <div style={{ padding:"5rem 1.25rem 3rem", maxWidth:"920px", margin:"0 auto", width:"100%", boxSizing:"border-box" }}>
         <div style={{ fontSize:"0.75rem", letterSpacing:"0.25em", color:"var(--c-text)", fontWeight:"700", marginBottom:"0.4rem", display:"flex", alignItems:"center", gap:"1rem" }}>
           WHO IT&apos;S FOR <div style={{ flex:1, height:"1px", background:"var(--c-border)" }}/>
         </div>

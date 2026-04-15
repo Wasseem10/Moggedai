@@ -6,100 +6,92 @@ import { useAuth, useClerk } from "@clerk/nextjs";
 // ── PhoneMockup ──────────────────────────────────────────────────────────────
 const CONVERSATIONS = [
   {
-    label: "GYM",
+    label: "💪 GYM",
+    time: "8:14 AM",
     messages: [
-      { from: "ai",   text: "you said you'd hit the gym this morning. it's 8am. you still in bed?" },
-      { from: "user", text: "just got back actually 💪" },
-      { from: "ai",   text: "7 day streak 🔥 don't stop now." },
+      { from: "ai",   text: "yo it's 7am. you said gym before work today. clock's running ⏰" },
+      { from: "user", text: "walking in right now" },
+      { from: "ai",   text: "let's go 🔥 6 day streak. don't you dare break it." },
+      { from: "user", text: "done. PR on bench too 💪" },
+      { from: "ai",   text: "that's different. we're built different. rest day tomorrow, go hard today." },
     ],
   },
   {
-    label: "STUDY",
+    label: "📚 STUDY",
+    time: "2:03 PM",
     messages: [
-      { from: "ai",   text: "you haven't touched that textbook all day. what's the excuse?" },
-      { from: "user", text: "studying rn, 2 hrs deep" },
-      { from: "ai",   text: "good. stay off your phone. you got this." },
+      { from: "ai",   text: "how many pages have you actually read today. be honest" },
+      { from: "user", text: "..like 3 lol" },
+      { from: "ai",   text: "3 pages. you said 30 by tonight. put the phone down and start now." },
+      { from: "user", text: "ok ok im going" },
+      { from: "ai",   text: "good. i'll check back in 90 minutes. no excuses." },
     ],
   },
   {
-    label: "SIDE PROJECT",
+    label: "🚀 SIDE PROJECT",
+    time: "9:41 PM",
     messages: [
-      { from: "ai",   text: "did you work on the app today or just think about it?" },
-      { from: "user", text: "shipped a new feature 🔥" },
-      { from: "ai",   text: "3 day streak. keep shipping. this is how it gets built." },
+      { from: "ai",   text: "did you open the code editor today or just think about opening it" },
+      { from: "user", text: "shipped a whole feature actually 🔥" },
+      { from: "ai",   text: "okay. that's real. 3 day streak building." },
+      { from: "user", text: "feels good ngl" },
+      { from: "ai",   text: "stay consistent. this is how products get made. same time tomorrow." },
     ],
   },
 ];
 
 function PhoneMockup() {
-  const [convIndex, setConvIndex] = useState(0);
+  const [convIndex, setConvIndex]   = useState(0);
   const [visibleCount, setVisibleCount] = useState(0);
   const [showTyping, setShowTyping] = useState(false);
-  const [fading, setFading] = useState(false);
+  const [typingFrom, setTypingFrom] = useState<"ai"|"user">("ai");
+  const [screenFade, setScreenFade] = useState(false);
+  const [delivered, setDelivered]   = useState(false);
 
   useEffect(() => {
     let cancelled = false;
-    const conv = CONVERSATIONS[convIndex];
+    const ids: ReturnType<typeof setTimeout>[] = [];
+    const go = (ms: number, fn: () => void) => {
+      const id = setTimeout(() => { if (!cancelled) fn(); }, ms);
+      ids.push(id);
+    };
 
-    // Reset
     setVisibleCount(0);
     setShowTyping(false);
-    setFading(false);
+    setScreenFade(false);
+    setDelivered(false);
 
-    // Helper: show next message with optional typing indicator before AI msgs
-    const delays: number[] = [];
-    let cursor = 0;
+    const conv = CONVERSATIONS[convIndex];
+    let t = 600;
 
-    const showNext = (idx: number) => {
-      if (cancelled) return;
-      if (idx >= conv.messages.length) {
-        // After all messages visible, wait then fade out and advance
-        const t = window.setTimeout(() => {
-          if (cancelled) return;
-          setFading(true);
-          const t2 = window.setTimeout(() => {
-            if (cancelled) return;
-            setConvIndex(prev => (prev + 1) % CONVERSATIONS.length);
-          }, 600);
-          delays.push(t2);
-        }, 3500);
-        delays.push(t);
-        return;
-      }
+    conv.messages.forEach((msg, idx) => {
+      const typingDuration = msg.from === "ai"
+        ? 1200 + msg.text.length * 18
+        : 800 + msg.text.length * 12;
 
-      const msg = conv.messages[idx];
-      if (msg.from === "ai") {
-        // Show typing indicator first
-        const t1 = window.setTimeout(() => {
-          if (cancelled) return;
-          setShowTyping(true);
-          const t2 = window.setTimeout(() => {
-            if (cancelled) return;
-            setShowTyping(false);
-            setVisibleCount(idx + 1);
-            showNext(idx + 1);
-          }, 1400);
-          delays.push(t2);
-        }, cursor);
-        delays.push(t1);
-        cursor += 1400 + 700;
-      } else {
-        const t = window.setTimeout(() => {
-          if (cancelled) return;
-          setVisibleCount(idx + 1);
-          showNext(idx + 1);
-        }, cursor);
-        delays.push(t);
-        cursor += 900;
-      }
-    };
+      // show typing
+      go(t, () => {
+        setTypingFrom(msg.from as "ai" | "user");
+        setShowTyping(true);
+        setDelivered(false);
+      });
+      t += typingDuration;
 
-    showNext(0);
+      // show message
+      go(t, () => {
+        setShowTyping(false);
+        setVisibleCount(idx + 1);
+        if (msg.from === "user") go(300, () => setDelivered(true));
+      });
+      t += msg.from === "ai" ? 700 : 500;
+    });
 
-    return () => {
-      cancelled = true;
-      delays.forEach(id => window.clearTimeout(id));
-    };
+    // hold, then fade screen out and advance
+    t += 2800;
+    go(t, () => setScreenFade(true));
+    go(t + 700, () => setConvIndex(c => (c + 1) % CONVERSATIONS.length));
+
+    return () => { cancelled = true; ids.forEach(clearTimeout); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [convIndex]);
 
@@ -108,227 +100,306 @@ function PhoneMockup() {
   return (
     <>
       <style>{`
-        @keyframes bubbleIn {
-          from { opacity: 0; transform: translateY(8px); }
-          to   { opacity: 1; transform: translateY(0); }
+        @keyframes msgSpring {
+          0%   { opacity:0; transform: scale(0.82) translateY(14px); }
+          55%  { opacity:1; transform: scale(1.03) translateY(-2px); }
+          75%  { transform: scale(0.98) translateY(1px); }
+          100% { opacity:1; transform: scale(1) translateY(0); }
         }
-        @keyframes typingDot {
-          0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-          30%            { transform: translateY(-4px); opacity: 1; }
+        @keyframes typingAppear {
+          0%   { opacity:0; transform: scale(0.88) translateY(8px); }
+          100% { opacity:1; transform: scale(1) translateY(0); }
         }
-        @keyframes phoneFade {
-          from { opacity: 1; }
-          to   { opacity: 0; }
+        @keyframes dot1 { 0%,66%,100%{transform:translateY(0);opacity:.35} 22%{transform:translateY(-5px);opacity:1} }
+        @keyframes dot2 { 0%,66%,100%{transform:translateY(0);opacity:.35} 33%{transform:translateY(-5px);opacity:1} }
+        @keyframes dot3 { 0%,66%,100%{transform:translateY(0);opacity:.35} 44%{transform:translateY(-5px);opacity:1} }
+        @keyframes screenFadeOut {
+          0%   { opacity:1; }
+          100% { opacity:0; }
+        }
+        @keyframes deliveredFade {
+          0%   { opacity:0; transform:translateY(-4px); }
+          100% { opacity:1; transform:translateY(0); }
+        }
+        @keyframes ambientGlow {
+          0%,100% { opacity:0.5; transform:scale(1); }
+          50%     { opacity:0.8; transform:scale(1.06); }
         }
       `}</style>
 
-      <div style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}>
-        {/* Phone shell */}
+      {/* Outer ambient glow */}
+      <div style={{ position:"relative", display:"inline-block" }}>
         <div style={{
-          width: "260px",
-          height: "520px",
-          background: "#0a0a0a",
-          borderRadius: "36px",
-          border: "2px solid #2a2a2a",
-          boxShadow: "0 0 0 1px #111, 0 32px 80px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.05)",
-          display: "flex",
-          flexDirection: "column",
-          overflow: "hidden",
-          position: "relative",
-          animation: fading ? "phoneFade 0.6s ease forwards" : "none",
+          position:"absolute", inset:"-24px",
+          background:"radial-gradient(ellipse at 50% 60%, rgba(14,165,233,0.18) 0%, transparent 70%)",
+          borderRadius:"80px",
+          animation:"ambientGlow 4s ease-in-out infinite",
+          pointerEvents:"none",
+        }}/>
+
+        {/* Phone frame — titanium dark finish */}
+        <div style={{
+          width:"272px", height:"572px",
+          background:"linear-gradient(160deg, #2c2c2e 0%, #1a1a1c 45%, #232325 100%)",
+          borderRadius:"52px",
+          padding:"10px",
+          boxShadow:`
+            0 0 0 1px rgba(255,255,255,0.13),
+            0 0 0 1.5px rgba(0,0,0,0.8),
+            0 50px 100px rgba(0,0,0,0.85),
+            0 20px 40px rgba(0,0,0,0.5),
+            inset 0 1px 0 rgba(255,255,255,0.08)
+          `,
+          position:"relative",
+          flexShrink:0,
         }}>
 
-          {/* Notch */}
-          <div style={{
-            position: "absolute",
-            top: 0,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "100px",
-            height: "26px",
-            background: "#0a0a0a",
-            borderRadius: "0 0 18px 18px",
-            zIndex: 10,
-          }}/>
+          {/* Volume up */}
+          <div style={{ position:"absolute", left:-3, top:108, width:3, height:28, background:"#2a2a2c", borderRadius:"2px 0 0 2px", boxShadow:"-1px 0 0 rgba(255,255,255,0.07)" }}/>
+          {/* Volume down */}
+          <div style={{ position:"absolute", left:-3, top:145, width:3, height:28, background:"#2a2a2c", borderRadius:"2px 0 0 2px", boxShadow:"-1px 0 0 rgba(255,255,255,0.07)" }}/>
+          {/* Mute */}
+          <div style={{ position:"absolute", left:-3, top:78, width:3, height:20, background:"#2a2a2c", borderRadius:"2px 0 0 2px", boxShadow:"-1px 0 0 rgba(255,255,255,0.07)" }}/>
+          {/* Power */}
+          <div style={{ position:"absolute", right:-3, top:120, width:3, height:52, background:"#2a2a2c", borderRadius:"0 2px 2px 0", boxShadow:"1px 0 0 rgba(255,255,255,0.07)" }}/>
 
-          {/* Status bar */}
+          {/* Screen */}
           <div style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "10px 20px 0",
-            fontSize: "11px",
-            color: "#fff",
-            fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif",
-            fontWeight: 600,
-            flexShrink: 0,
-            minHeight: "32px",
+            width:"100%", height:"100%",
+            background:"#000",
+            borderRadius:"42px",
+            overflow:"hidden",
+            display:"flex",
+            flexDirection:"column",
+            position:"relative",
+            animation: screenFade ? "screenFadeOut 0.65s cubic-bezier(0.4,0,0.2,1) forwards" : "none",
           }}>
-            <span style={{ paddingTop: "4px" }}>9:41</span>
-            <div style={{ display: "flex", gap: "4px", alignItems: "center", paddingTop: "4px" }}>
-              {/* Signal dots */}
-              {[10, 8, 6].map((h, i) => (
-                <div key={i} style={{
-                  width: "4px",
-                  height: `${h}px`,
-                  background: i === 0 ? "#fff" : "rgba(255,255,255,0.5)",
-                  borderRadius: "1px",
-                }}/>
-              ))}
-              {/* Wifi */}
-              <svg width="14" height="10" viewBox="0 0 14 10" fill="none" style={{ marginLeft: "2px" }}>
-                <path d="M7 8.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" fill="white"/>
-                <path d="M3.5 5.5C4.5 4.4 5.7 3.8 7 3.8s2.5.6 3.5 1.7" stroke="white" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
-                <path d="M1 3C2.8 1.2 4.8.3 7 .3s4.2.9 6 2.7" stroke="rgba(255,255,255,0.4)" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
-              </svg>
-              {/* Battery */}
-              <div style={{ display: "flex", alignItems: "center", marginLeft: "2px" }}>
-                <div style={{ width: "20px", height: "10px", border: "1px solid rgba(255,255,255,0.5)", borderRadius: "2px", position: "relative", overflow: "hidden" }}>
-                  <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "70%", background: "#4cd964", borderRadius: "1px" }}/>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          {/* Contact header */}
-          <div style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            padding: "8px 16px 10px",
-            borderBottom: "1px solid #1c1c1c",
-            flexShrink: 0,
-          }}>
+            {/* Dynamic Island */}
             <div style={{
-              width: "34px",
-              height: "34px",
-              borderRadius: "50%",
-              background: "linear-gradient(135deg, #0ea5e9, #0284c7)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "16px",
-            }}>🤖</div>
-            <div>
-              <div style={{
-                fontSize: "13px",
-                fontWeight: 600,
-                color: "#fff",
-                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif",
-                letterSpacing: "0",
-              }}>MoggedAI</div>
-              <div style={{
-                fontSize: "10px",
-                color: "#4cd964",
-                fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
-              }}>online · {conv.label}</div>
-            </div>
-          </div>
+              position:"absolute", top:12, left:"50%",
+              transform:"translateX(-50%)",
+              width:88, height:26,
+              background:"#000",
+              borderRadius:20,
+              zIndex:20,
+              boxShadow:"0 0 0 1px rgba(255,255,255,0.06)",
+            }}/>
 
-          {/* Messages area */}
-          <div style={{
-            flex: 1,
-            padding: "12px 12px 8px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "8px",
-            overflowY: "hidden",
-            justifyContent: "flex-end",
-          }}>
-            {conv.messages.slice(0, visibleCount).map((msg, i) => (
-              <div
-                key={`${convIndex}-${i}`}
-                style={{
-                  display: "flex",
-                  justifyContent: msg.from === "user" ? "flex-end" : "flex-start",
-                  animation: "bubbleIn 0.3s ease forwards",
-                }}
-              >
-                <div style={{
-                  background: msg.from === "ai" ? "#1c1c1e" : "#0ea5e9",
-                  color: "#fff",
-                  borderRadius: msg.from === "ai" ? "16px 16px 16px 4px" : "16px 16px 4px 16px",
-                  padding: "9px 13px",
-                  fontSize: "12px",
-                  lineHeight: "1.55",
-                  maxWidth: "80%",
-                  fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
-                  fontWeight: 400,
-                  letterSpacing: "0",
-                  boxShadow: msg.from === "ai"
-                    ? "inset 0 0 0 1px rgba(255,255,255,0.06)"
-                    : "none",
-                }}>
-                  {msg.text}
-                </div>
-              </div>
-            ))}
-
-            {/* Typing indicator */}
-            {showTyping && (
-              <div style={{ display: "flex", justifyContent: "flex-start", animation: "bubbleIn 0.2s ease forwards" }}>
-                <div style={{
-                  background: "#1c1c1e",
-                  borderRadius: "16px 16px 16px 4px",
-                  padding: "10px 14px",
-                  display: "flex",
-                  gap: "4px",
-                  alignItems: "center",
-                  boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.06)",
-                }}>
-                  {[0, 1, 2].map(i => (
-                    <div key={i} style={{
-                      width: "6px",
-                      height: "6px",
-                      borderRadius: "50%",
-                      background: "#888",
-                      animation: `typingDot 1.2s ease-in-out ${i * 0.2}s infinite`,
-                    }}/>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* iMessage input bar */}
-          <div style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            padding: "8px 10px 14px",
-            borderTop: "1px solid #1c1c1c",
-            flexShrink: 0,
-          }}>
+            {/* Status bar */}
             <div style={{
-              flex: 1,
-              background: "#1c1c1e",
-              borderRadius: "18px",
-              padding: "7px 12px",
-              fontSize: "12px",
-              color: "#555",
-              fontFamily: "-apple-system, BlinkMacSystemFont, sans-serif",
-              border: "1px solid #2c2c2e",
-            }}>iMessage</div>
-            <div style={{
-              width: "26px",
-              height: "26px",
-              borderRadius: "50%",
-              background: "#0ea5e9",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              display:"flex", justifyContent:"space-between", alignItems:"center",
+              padding:"16px 22px 0",
+              fontFamily:"-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif",
+              flexShrink:0, height:46,
             }}>
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M6 2v8M2 6l4-4 4 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <span style={{ fontSize:14, fontWeight:600, color:"#fff", letterSpacing:0 }}>
+                {conv.time}
+              </span>
+              <div style={{ display:"flex", alignItems:"center", gap:5 }}>
+                {/* Signal */}
+                <svg width="16" height="11" viewBox="0 0 16 11" fill="none">
+                  <rect x="0" y="7" width="3" height="4" rx="0.5" fill="white"/>
+                  <rect x="4.5" y="4.5" width="3" height="6.5" rx="0.5" fill="white"/>
+                  <rect x="9" y="2" width="3" height="9" rx="0.5" fill="white"/>
+                  <rect x="13.5" y="0" width="2.5" height="11" rx="0.5" fill="white" opacity="0.3"/>
+                </svg>
+                {/* Wifi */}
+                <svg width="15" height="11" viewBox="0 0 15 11" fill="none">
+                  <path d="M7.5 9a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" fill="white"/>
+                  <path d="M4.2 6.3C5.1 5.3 6.2 4.7 7.5 4.7s2.4.6 3.3 1.6" stroke="white" strokeWidth="1.3" strokeLinecap="round"/>
+                  <path d="M1.5 3.8C3 2.1 5.1 1.1 7.5 1.1s4.5 1 6 2.7" stroke="white" strokeWidth="1.3" strokeLinecap="round" opacity="0.4"/>
+                </svg>
+                {/* Battery */}
+                <div style={{ display:"flex", alignItems:"center", gap:1 }}>
+                  <div style={{ width:22, height:11, border:"1px solid rgba(255,255,255,0.35)", borderRadius:3, position:"relative", overflow:"hidden" }}>
+                    <div style={{ position:"absolute", inset:1, width:"72%", background:"#fff", borderRadius:2 }}/>
+                  </div>
+                  <div style={{ width:2, height:5, background:"rgba(255,255,255,0.35)", borderRadius:"0 1px 1px 0" }}/>
+                </div>
+              </div>
             </div>
-          </div>
 
-        </div>
+            {/* iMessage nav header */}
+            <div style={{
+              display:"flex", alignItems:"center",
+              padding:"4px 14px 10px",
+              flexShrink:0,
+              borderBottom:"0.5px solid rgba(255,255,255,0.08)",
+              fontFamily:"-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif",
+            }}>
+              {/* Back */}
+              <div style={{ display:"flex", alignItems:"center", gap:3, marginRight:"auto" }}>
+                <svg width="9" height="15" viewBox="0 0 9 15" fill="none">
+                  <path d="M7.5 1.5 2 7.5l5.5 6" stroke="#0B84FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <span style={{ fontSize:16, color:"#0B84FF", fontWeight:400 }}>4</span>
+              </div>
+              {/* Center: avatar + name */}
+              <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:3 }}>
+                <div style={{
+                  width:36, height:36, borderRadius:"50%",
+                  background:"linear-gradient(145deg,#0ea5e9,#0369a1)",
+                  display:"flex", alignItems:"center", justifyContent:"center",
+                  fontSize:18, boxShadow:"0 2px 8px rgba(14,165,233,0.4)",
+                }}>🤖</div>
+                <span style={{ fontSize:11, color:"#fff", fontWeight:500, letterSpacing:0 }}>MoggedAI</span>
+              </div>
+              {/* Right icons */}
+              <div style={{ display:"flex", gap:14, marginLeft:"auto" }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M15.5 8.5a4 4 0 0 1 0 7M3 8.5a9 9 0 0 1 9-4.5m0 0a9 9 0 0 1 9 9 9 9 0 0 1-9 9 9 9 0 0 1-9-9" stroke="#0B84FF" strokeWidth="1.6" strokeLinecap="round"/>
+                  <circle cx="12" cy="13" r="2.5" fill="#0B84FF"/>
+                </svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="m22 16.92-.09-3.37a2 2 0 0 0-1.34-1.83l-2.56-.85a2 2 0 0 0-2.18.63l-.9 1.1a15.1 15.1 0 0 1-6.53-6.53l1.1-.9a2 2 0 0 0 .63-2.18l-.85-2.56A2 2 0 0 0 8 .09L4.63 0A2 2 0 0 0 2.5 2C2.5 13.85 10.15 21.5 22 21.5a2 2 0 0 0 2-2.09z" fill="#0B84FF"/>
+                </svg>
+              </div>
+            </div>
+
+            {/* Conversation label chip */}
+            <div style={{
+              display:"flex", justifyContent:"center",
+              padding:"10px 0 4px",
+              flexShrink:0,
+            }}>
+              <span style={{
+                fontSize:11,
+                color:"rgba(255,255,255,0.4)",
+                fontFamily:"-apple-system,BlinkMacSystemFont,sans-serif",
+                letterSpacing:0.2,
+              }}>{conv.label} · Today {conv.time}</span>
+            </div>
+
+            {/* Messages */}
+            <div style={{
+              flex:1,
+              padding:"4px 12px 6px",
+              display:"flex",
+              flexDirection:"column",
+              justifyContent:"flex-end",
+              gap:3,
+              overflowY:"hidden",
+            }}>
+              {conv.messages.slice(0, visibleCount).map((msg, i) => {
+                const isUser = msg.from === "user";
+                const isLast = i === visibleCount - 1;
+                const prevSame = i > 0 && conv.messages[i-1].from === msg.from;
+                const nextSame = i < visibleCount - 1 && conv.messages[i+1].from === msg.from;
+
+                // Bubble radius based on position in group
+                const tl = isUser ? 18 : (prevSame ? 6 : 18);
+                const tr = isUser ? (prevSame ? 6 : 18) : 18;
+                const br = isUser ? (nextSame ? 6 : 18) : 18;
+                const bl = isUser ? 18 : (nextSame ? 6 : 18);
+
+                return (
+                  <div key={`${convIndex}-${i}`} style={{
+                    display:"flex",
+                    flexDirection:"column",
+                    alignItems: isUser ? "flex-end" : "flex-start",
+                    animation:"msgSpring 0.42s cubic-bezier(0.34,1.56,0.64,1) forwards",
+                  }}>
+                    <div style={{
+                      background: isUser ? "#0B84FF" : "#1C1C1E",
+                      color:"#fff",
+                      borderRadius:`${tl}px ${tr}px ${br}px ${bl}px`,
+                      padding:"9px 14px",
+                      fontSize:13,
+                      lineHeight:1.45,
+                      maxWidth:"82%",
+                      fontFamily:"-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif",
+                      fontWeight:400,
+                      letterSpacing:-0.1,
+                      boxShadow: isUser
+                        ? "0 1px 4px rgba(11,132,255,0.3)"
+                        : "0 1px 3px rgba(0,0,0,0.4), inset 0 0 0 0.5px rgba(255,255,255,0.07)",
+                    }}>
+                      {msg.text}
+                    </div>
+                    {/* Delivered tag under last user msg */}
+                    {isUser && isLast && delivered && (
+                      <span style={{
+                        fontSize:10,
+                        color:"rgba(255,255,255,0.35)",
+                        marginTop:2,
+                        fontFamily:"-apple-system,BlinkMacSystemFont,sans-serif",
+                        animation:"deliveredFade 0.3s ease forwards",
+                      }}>Delivered</span>
+                    )}
+                  </div>
+                );
+              })}
+
+              {/* Typing bubble */}
+              {showTyping && (
+                <div style={{
+                  display:"flex",
+                  justifyContent: typingFrom === "user" ? "flex-end" : "flex-start",
+                  animation:"typingAppear 0.25s cubic-bezier(0.34,1.56,0.64,1) forwards",
+                }}>
+                  <div style={{
+                    background: typingFrom === "user" ? "#0B84FF" : "#1C1C1E",
+                    borderRadius:18,
+                    padding:"11px 15px",
+                    display:"flex", gap:5, alignItems:"center",
+                    boxShadow:"0 1px 3px rgba(0,0,0,0.4)",
+                  }}>
+                    {[
+                      { anim:"dot1 1.1s ease-in-out infinite" },
+                      { anim:"dot2 1.1s ease-in-out infinite" },
+                      { anim:"dot3 1.1s ease-in-out infinite" },
+                    ].map((d, i) => (
+                      <div key={i} style={{
+                        width:7, height:7,
+                        borderRadius:"50%",
+                        background:"rgba(255,255,255,0.75)",
+                        animation:d.anim,
+                      }}/>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Input bar */}
+            <div style={{
+              padding:"6px 10px 10px",
+              display:"flex", alignItems:"center", gap:7,
+              borderTop:"0.5px solid rgba(255,255,255,0.07)",
+              flexShrink:0,
+              fontFamily:"-apple-system,BlinkMacSystemFont,sans-serif",
+            }}>
+              {/* + button */}
+              <div style={{
+                width:28, height:28, borderRadius:"50%",
+                background:"#1C1C1E",
+                display:"flex", alignItems:"center", justifyContent:"center",
+                flexShrink:0,
+              }}>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M7 1v12M1 7h12" stroke="rgba(255,255,255,0.5)" strokeWidth="1.8" strokeLinecap="round"/>
+                </svg>
+              </div>
+              {/* Text field */}
+              <div style={{
+                flex:1, background:"#1C1C1E",
+                borderRadius:20, padding:"7px 13px",
+                fontSize:13, color:"rgba(255,255,255,0.25)",
+                border:"0.5px solid rgba(255,255,255,0.1)",
+              }}>iMessage</div>
+            </div>
+
+            {/* Home indicator */}
+            <div style={{
+              display:"flex", justifyContent:"center",
+              padding:"4px 0 8px", flexShrink:0,
+            }}>
+              <div style={{ width:100, height:4, background:"rgba(255,255,255,0.3)", borderRadius:3 }}/>
+            </div>
+
+          </div>{/* /screen */}
+        </div>{/* /frame */}
       </div>
     </>
   );

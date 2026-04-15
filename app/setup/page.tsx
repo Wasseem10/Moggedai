@@ -326,8 +326,9 @@ export default function SetupPage() {
                     {consent && <span style={{ color: "#fff", fontSize: "10px", fontWeight: "700", lineHeight: 1 }}>✓</span>}
                   </div>
                   <p style={{ fontSize: "0.62rem", color: "var(--c-text3)", lineHeight: "1.7", margin: 0 }}>
-                    I agree to receive recurring automated SMS messages from MoggedAI at the number provided. Msg &amp; data rates may apply. Reply STOP to unsubscribe anytime.{" "}
-                    <a href="/consent" target="_blank" style={{ color: "#0ea5e9", textDecoration: "none" }} onClick={e => e.stopPropagation()}>SMS Policy</a>
+                    By checking this box, I provide my express written consent to receive recurring automated SMS text messages from MoggedAI at the phone number above. Message frequency varies based on my chosen schedule. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help.{" "}
+                    <a href="/consent" target="_blank" style={{ color: "#0ea5e9", textDecoration: "none" }} onClick={e => e.stopPropagation()}>SMS Policy</a>{" "}&amp;{" "}
+                    <a href="/privacy" target="_blank" style={{ color: "#0ea5e9", textDecoration: "none" }} onClick={e => e.stopPropagation()}>Privacy Policy</a>
                   </p>
                 </div>
               </div>

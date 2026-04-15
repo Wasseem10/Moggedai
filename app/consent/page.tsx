@@ -29,7 +29,7 @@ export default function ConsentPage() {
     },
     {
       title: "Your Privacy",
-      body: `Your phone number is used only to deliver the MoggedAI service. We do not sell your number. See our full Privacy Policy at moggedai-production.up.railway.app/privacy`,
+      body: `Your phone number is used only to deliver the MoggedAI service. We do not sell your number. See our full Privacy Policy at https://www.moggedai.com/privacy`,
     },
   ];
 

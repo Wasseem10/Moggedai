@@ -50,6 +50,31 @@ export default function ConsentPage() {
         <div style={{ fontFamily:MONO, fontSize:"0.6rem", color:"#0ea5e9", letterSpacing:"0.25em", marginBottom:"0.75rem" }}>LEGAL</div>
         <h1 style={{ fontFamily:MONO, fontWeight:700, fontSize:"clamp(1.4rem,4vw,2rem)", marginBottom:"0.5rem", color:"var(--c-text)" }}>SMS Consent</h1>
         <p style={{ fontFamily:MONO, fontSize:"0.65rem", color:"var(--c-text3)", marginBottom:"3rem", letterSpacing:"0.1em" }}>Last updated: April 12, 2025</p>
+        {/* ── Opt-in form demo (visible proof of consent for Twilio) ── */}
+        <div style={{ border:"1px solid var(--c-border)", padding:"1.5rem", marginBottom:"3rem", background:"var(--c-s1)" }}>
+          <div style={{ fontFamily:MONO, fontSize:"0.6rem", color:"#0ea5e9", letterSpacing:"0.2em", marginBottom:"1rem" }}>EXAMPLE OPT-IN FORM — WHAT USERS SEE AT SIGN-UP</div>
+          <p style={{ fontSize:"0.85rem", color:"var(--c-text2)", marginBottom:"1.25rem", lineHeight:1.7 }}>
+            During account setup at <strong>www.moggedai.com/setup</strong>, users enter their phone number and must check the following box before any messages are sent:
+          </p>
+          {/* Consent checkbox mockup */}
+          <div style={{ border:"1px solid #0ea5e9", padding:"1rem", background:"var(--c-root)", marginBottom:"1rem" }}>
+            <div style={{ display:"flex", gap:"0.75rem", alignItems:"flex-start" }}>
+              <div style={{ width:18, height:18, border:"2px solid #0ea5e9", background:"#0ea5e9", flexShrink:0, marginTop:2, display:"flex", alignItems:"center", justifyContent:"center" }}>
+                <span style={{ color:"#fff", fontSize:11, fontWeight:700 }}>✓</span>
+              </div>
+              <p style={{ fontSize:"0.9rem", color:"var(--c-text)", lineHeight:1.75, margin:0 }}>
+                <strong>By checking this box, I provide my express written consent to receive recurring automated SMS text messages from MoggedAI</strong> at the phone number I entered above. Message frequency varies based on my chosen schedule. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to cancel, <strong>HELP</strong> for help.{" "}
+                <a href="/consent" style={{ color:"#0ea5e9" }}>SMS Policy</a> &amp; <a href="/privacy" style={{ color:"#0ea5e9" }}>Privacy Policy</a>.
+              </p>
+            </div>
+          </div>
+          <p style={{ fontSize:"0.78rem", color:"var(--c-text3)", lineHeight:1.7, margin:0 }}>
+            ✅ This checkbox is <strong>unchecked by default</strong> and must be actively checked by the user.<br/>
+            ✅ The &quot;Get Started&quot; button is <strong>disabled</strong> until the user checks this box.<br/>
+            ✅ No SMS messages are sent until explicit consent is given.
+          </p>
+        </div>
+
         {sections.map((s) => (
           <div key={s.title} style={{ marginBottom:"2.5rem" }}>
             <h2 style={{ fontFamily:MONO, fontWeight:700, fontSize:"0.85rem", letterSpacing:"0.1em", color:"#0ea5e9", marginBottom:"0.85rem" }}>{s.title}</h2>

@@ -128,9 +128,9 @@ export default function SetupPage() {
   };
 
   const lbl: React.CSSProperties = {
-    fontSize: "0.55rem",
+    fontSize: "0.7rem",
     letterSpacing: "0.2em",
-    color: "var(--c-text3)",
+    color: "var(--c-text)",
     display: "block",
     marginBottom: "0.5rem",
   };
@@ -195,7 +195,7 @@ export default function SetupPage() {
               <h1 style={{ fontSize: "clamp(1.6rem,5vw,2.2rem)", fontWeight: "700", lineHeight: 1.15, marginBottom: "0.5rem", marginTop: 0 }}>
                 What&apos;s one thing you keep avoiding?
               </h1>
-              <p style={{ fontSize: "0.88rem", color: "var(--c-text)", marginBottom: "1.75rem", lineHeight: "1.7" }}>
+              <p style={{ fontSize: "1rem", color: "var(--c-text)", marginBottom: "1.75rem", lineHeight: "1.7" }}>
                 Be honest. This is between you and the AI.
               </p>
 
@@ -241,7 +241,7 @@ export default function SetupPage() {
                 Your number.<br />
                 <span style={{ color: "#0ea5e9" }}>No excuses.</span>
               </h1>
-              <p style={{ fontSize: "0.88rem", color: "var(--c-text)", marginBottom: "1.75rem", lineHeight: "1.7" }}>
+              <p style={{ fontSize: "1rem", color: "var(--c-text)", marginBottom: "1.75rem", lineHeight: "1.7" }}>
                 This is where your AI coach will text you every day. US numbers only.
               </p>
               <label style={lbl}>PHONE NUMBER</label>
@@ -265,7 +265,7 @@ export default function SetupPage() {
                   <div style={{ width: "20px", height: "20px", border: `2px solid ${consent ? "#0ea5e9" : "var(--c-text3)"}`, background: consent ? "#0ea5e9" : "transparent", flexShrink: 0, marginTop: "2px", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.15s" }}>
                     {consent && <span style={{ color: "#fff", fontSize: "12px", fontWeight: "700", lineHeight: 1 }}>✓</span>}
                   </div>
-                  <p style={{ fontSize: "0.82rem", color: "var(--c-text)", lineHeight: "1.75", margin: 0 }}>
+                  <p style={{ fontSize: "0.92rem", color: "var(--c-text)", lineHeight: "1.75", margin: 0 }}>
                     By checking this box, I provide my <strong>express written consent</strong> to receive recurring automated SMS text messages from MoggedAI at the phone number above. Message frequency varies. Msg &amp; data rates may apply. Reply <strong>STOP</strong> to cancel, <strong>HELP</strong> for help.{" "}
                     <a href="/consent" target="_blank" style={{ color: "#0ea5e9", textDecoration: "underline" }} onClick={e => e.stopPropagation()}>SMS Policy</a>{" "}&amp;{" "}
                     <a href="/privacy" target="_blank" style={{ color: "#0ea5e9", textDecoration: "underline" }} onClick={e => e.stopPropagation()}>Privacy Policy</a>
@@ -297,7 +297,7 @@ export default function SetupPage() {
                 How hard do you want<br />
                 <span style={{ color: "#0ea5e9" }}>to be pushed?</span>
               </h1>
-              <p style={{ fontSize: "0.88rem", color: "var(--c-text)", marginBottom: "1.75rem", lineHeight: "1.7" }}>
+              <p style={{ fontSize: "1rem", color: "var(--c-text)", marginBottom: "1.75rem", lineHeight: "1.7" }}>
                 Set your active hours. You&apos;ll add your missions next inside the dashboard.
               </p>
 
@@ -331,7 +331,7 @@ export default function SetupPage() {
                   <input style={inputS} type="time" value={endTime} onChange={e => setEndTime(e.target.value)} />
                 </div>
               </div>
-              <p style={{ fontSize: "0.78rem", color: "var(--c-text)", marginBottom: "1.25rem", letterSpacing: "0.03em" }}>
+              <p style={{ fontSize: "0.88rem", color: "var(--c-text)", marginBottom: "1.25rem", letterSpacing: "0.03em" }}>
                 ⚡ Timezone auto-detected · Reply DONE to complete · Text STOP to unsubscribe
               </p>
 

@@ -41,12 +41,14 @@ const CONVERSATIONS = [
 ];
 
 function PhoneMockup() {
-  const [convIndex, setConvIndex]   = useState(0);
+  const [convIndex, setConvIndex]       = useState(0);
   const [visibleCount, setVisibleCount] = useState(0);
-  const [showTyping, setShowTyping] = useState(false);
-  const [typingFrom, setTypingFrom] = useState<"ai"|"user">("ai");
-  const [screenFade, setScreenFade] = useState(false);
-  const [delivered, setDelivered]   = useState(false);
+  const [showTyping, setShowTyping]     = useState(false);
+  const [typingFrom, setTypingFrom]     = useState<"ai"|"user">("ai");
+  const [screenFade, setScreenFade]     = useState(false);
+  const [delivered, setDelivered]       = useState(false);
+  const [showNotif, setShowNotif]       = useState(false);
+  const [notifExit, setNotifExit]       = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -60,33 +62,41 @@ function PhoneMockup() {
     setShowTyping(false);
     setScreenFade(false);
     setDelivered(false);
+    setShowNotif(false);
+    setNotifExit(false);
 
     const conv = CONVERSATIONS[convIndex];
-    let t = 600;
+    let t = 400;
 
+    // ── Lock-screen notification drop ────────────────────────────────────────
+    go(t, () => { setShowNotif(true); setNotifExit(false); });
+    t += 2400;
+    go(t, () => setNotifExit(true));
+    t += 500;
+    go(t, () => setShowNotif(false));
+    t += 200;
+
+    // ── Messages ─────────────────────────────────────────────────────────────
     conv.messages.forEach((msg, idx) => {
       const typingDuration = msg.from === "ai"
-        ? 1200 + msg.text.length * 18
-        : 800 + msg.text.length * 12;
+        ? 1100 + msg.text.length * 17
+        : 700  + msg.text.length * 11;
 
-      // show typing
       go(t, () => {
-        setTypingFrom(msg.from as "ai" | "user");
+        setTypingFrom(msg.from as "ai"|"user");
         setShowTyping(true);
         setDelivered(false);
       });
       t += typingDuration;
 
-      // show message
       go(t, () => {
         setShowTyping(false);
         setVisibleCount(idx + 1);
-        if (msg.from === "user") go(300, () => setDelivered(true));
+        if (msg.from === "user") go(320, () => setDelivered(true));
       });
-      t += msg.from === "ai" ? 700 : 500;
+      t += msg.from === "ai" ? 650 : 480;
     });
 
-    // hold, then fade screen out and advance
     t += 2800;
     go(t, () => setScreenFade(true));
     go(t + 700, () => setConvIndex(c => (c + 1) % CONVERSATIONS.length));
@@ -101,18 +111,18 @@ function PhoneMockup() {
     <>
       <style>{`
         @keyframes msgSpring {
-          0%   { opacity:0; transform: scale(0.82) translateY(14px); }
-          55%  { opacity:1; transform: scale(1.03) translateY(-2px); }
-          75%  { transform: scale(0.98) translateY(1px); }
-          100% { opacity:1; transform: scale(1) translateY(0); }
+          0%   { opacity:0; transform:scale(0.80) translateY(16px); }
+          52%  { opacity:1; transform:scale(1.05) translateY(-3px); }
+          74%  { transform:scale(0.97) translateY(1px); }
+          100% { opacity:1; transform:scale(1) translateY(0); }
         }
         @keyframes typingAppear {
-          0%   { opacity:0; transform: scale(0.88) translateY(8px); }
-          100% { opacity:1; transform: scale(1) translateY(0); }
+          0%   { opacity:0; transform:scale(0.85) translateY(10px); }
+          100% { opacity:1; transform:scale(1) translateY(0); }
         }
-        @keyframes dot1 { 0%,66%,100%{transform:translateY(0);opacity:.35} 22%{transform:translateY(-5px);opacity:1} }
-        @keyframes dot2 { 0%,66%,100%{transform:translateY(0);opacity:.35} 33%{transform:translateY(-5px);opacity:1} }
-        @keyframes dot3 { 0%,66%,100%{transform:translateY(0);opacity:.35} 44%{transform:translateY(-5px);opacity:1} }
+        @keyframes dot1 { 0%,60%,100%{transform:translateY(0);opacity:.28} 20%{transform:translateY(-5px);opacity:1} }
+        @keyframes dot2 { 0%,60%,100%{transform:translateY(0);opacity:.28} 33%{transform:translateY(-5px);opacity:1} }
+        @keyframes dot3 { 0%,60%,100%{transform:translateY(0);opacity:.28} 46%{transform:translateY(-5px);opacity:1} }
         @keyframes screenFadeOut {
           0%   { opacity:1; }
           100% { opacity:0; }
@@ -121,53 +131,87 @@ function PhoneMockup() {
           0%   { opacity:0; transform:translateY(-4px); }
           100% { opacity:1; transform:translateY(0); }
         }
-        @keyframes ambientGlow {
-          0%,100% { opacity:0.5; transform:scale(1); }
-          50%     { opacity:0.8; transform:scale(1.06); }
+        @keyframes ambientPulse {
+          0%,100% { opacity:0.55; transform:scale(1); }
+          50%     { opacity:0.9;  transform:scale(1.07); }
+        }
+        @keyframes phoneFloat {
+          0%,100% { transform:translateY(0px) rotate(0deg); }
+          35%     { transform:translateY(-7px) rotate(0.25deg); }
+          68%     { transform:translateY(-3px) rotate(-0.18deg); }
+        }
+        @keyframes notifEnter {
+          0%   { transform:translateY(-72px) scale(0.94); opacity:0; }
+          60%  { transform:translateY(4px)  scale(1.01); opacity:1; }
+          100% { transform:translateY(0)    scale(1);    opacity:1; }
+        }
+        @keyframes notifExit {
+          0%   { transform:translateY(0)    scale(1);    opacity:1; }
+          100% { transform:translateY(-72px) scale(0.94); opacity:0; }
         }
       `}</style>
 
-      {/* Outer ambient glow */}
-      <div style={{ position:"relative", display:"inline-block" }}>
+      {/* ── Floating wrapper ─────────────────────────────────────────────── */}
+      <div style={{ position:"relative", display:"inline-block", animation:"phoneFloat 7s ease-in-out infinite" }}>
+
+        {/* Multi-layer ambient glow */}
         <div style={{
-          position:"absolute", inset:"-24px",
-          background:"radial-gradient(ellipse at 50% 60%, rgba(14,165,233,0.18) 0%, transparent 70%)",
-          borderRadius:"80px",
-          animation:"ambientGlow 4s ease-in-out infinite",
+          position:"absolute", inset:"-44px",
+          background:"radial-gradient(ellipse at 50% 56%, rgba(14,165,233,0.24) 0%, rgba(99,102,241,0.07) 45%, transparent 70%)",
+          borderRadius:"110px",
+          animation:"ambientPulse 5s ease-in-out infinite",
+          pointerEvents:"none",
+        }}/>
+        <div style={{
+          position:"absolute", inset:"-20px",
+          background:"radial-gradient(ellipse at 50% 72%, rgba(14,165,233,0.13) 0%, transparent 62%)",
+          borderRadius:"90px",
+          animation:"ambientPulse 5s ease-in-out infinite 1.2s",
           pointerEvents:"none",
         }}/>
 
-        {/* Phone frame — titanium dark finish */}
+        {/* ── Titanium frame ───────────────────────────────────────────────── */}
         <div style={{
-          width:"272px", height:"572px",
-          background:"linear-gradient(160deg, #2c2c2e 0%, #1a1a1c 45%, #232325 100%)",
-          borderRadius:"52px",
-          padding:"10px",
+          width:"280px", height:"582px",
+          background:"linear-gradient(158deg, #56565a 0%, #3a3a3c 7%, #2c2c2e 28%, #1e1e20 58%, #28282a 84%, #3c3c3e 100%)",
+          borderRadius:"54px",
+          padding:"11px",
           boxShadow:`
-            0 0 0 1px rgba(255,255,255,0.13),
-            0 0 0 1.5px rgba(0,0,0,0.8),
-            0 50px 100px rgba(0,0,0,0.85),
-            0 20px 40px rgba(0,0,0,0.5),
-            inset 0 1px 0 rgba(255,255,255,0.08)
+            0 0 0 0.5px rgba(255,255,255,0.24),
+            0 0 0 1px rgba(0,0,0,0.9),
+            0 64px 128px rgba(0,0,0,0.92),
+            0 28px 56px rgba(0,0,0,0.62),
+            0 0 90px rgba(14,165,233,0.13),
+            inset 0 1.5px 0 rgba(255,255,255,0.15),
+            inset 0 -1px 0 rgba(0,0,0,0.6),
+            inset 1px 0 0 rgba(255,255,255,0.07),
+            inset -1px 0 0 rgba(0,0,0,0.4)
           `,
           position:"relative",
           flexShrink:0,
         }}>
 
-          {/* Volume up */}
-          <div style={{ position:"absolute", left:-3, top:108, width:3, height:28, background:"#2a2a2c", borderRadius:"2px 0 0 2px", boxShadow:"-1px 0 0 rgba(255,255,255,0.07)" }}/>
-          {/* Volume down */}
-          <div style={{ position:"absolute", left:-3, top:145, width:3, height:28, background:"#2a2a2c", borderRadius:"2px 0 0 2px", boxShadow:"-1px 0 0 rgba(255,255,255,0.07)" }}/>
-          {/* Mute */}
-          <div style={{ position:"absolute", left:-3, top:78, width:3, height:20, background:"#2a2a2c", borderRadius:"2px 0 0 2px", boxShadow:"-1px 0 0 rgba(255,255,255,0.07)" }}/>
-          {/* Power */}
-          <div style={{ position:"absolute", right:-3, top:120, width:3, height:52, background:"#2a2a2c", borderRadius:"0 2px 2px 0", boxShadow:"1px 0 0 rgba(255,255,255,0.07)" }}/>
+          {/* Titanium chamfer highlight */}
+          <div style={{
+            position:"absolute", inset:0, borderRadius:"54px",
+            background:"linear-gradient(130deg, rgba(255,255,255,0.11) 0%, transparent 38%, transparent 62%, rgba(255,255,255,0.05) 100%)",
+            pointerEvents:"none",
+          }}/>
 
-          {/* Screen */}
+          {/* Mute switch */}
+          <div style={{ position:"absolute", left:-3.5, top:84,  width:3.5, height:22, background:"linear-gradient(90deg,#1e1e20,#303032)", borderRadius:"3px 0 0 3px", boxShadow:"-1px 0 0 rgba(255,255,255,0.09),-1px 0 4px rgba(0,0,0,0.5)" }}/>
+          {/* Volume up */}
+          <div style={{ position:"absolute", left:-3.5, top:118, width:3.5, height:34, background:"linear-gradient(90deg,#1e1e20,#303032)", borderRadius:"3px 0 0 3px", boxShadow:"-1px 0 0 rgba(255,255,255,0.09),-1px 0 4px rgba(0,0,0,0.5)" }}/>
+          {/* Volume down */}
+          <div style={{ position:"absolute", left:-3.5, top:162, width:3.5, height:34, background:"linear-gradient(90deg,#1e1e20,#303032)", borderRadius:"3px 0 0 3px", boxShadow:"-1px 0 0 rgba(255,255,255,0.09),-1px 0 4px rgba(0,0,0,0.5)" }}/>
+          {/* Power */}
+          <div style={{ position:"absolute", right:-3.5, top:128, width:3.5, height:60, background:"linear-gradient(270deg,#1e1e20,#303032)", borderRadius:"0 3px 3px 0", boxShadow:"1px 0 0 rgba(255,255,255,0.09),1px 0 4px rgba(0,0,0,0.5)" }}/>
+
+          {/* ── Screen ─────────────────────────────────────────────────────── */}
           <div style={{
             width:"100%", height:"100%",
             background:"#000",
-            borderRadius:"42px",
+            borderRadius:"44px",
             overflow:"hidden",
             display:"flex",
             flexDirection:"column",
@@ -175,81 +219,128 @@ function PhoneMockup() {
             animation: screenFade ? "screenFadeOut 0.65s cubic-bezier(0.4,0,0.2,1) forwards" : "none",
           }}>
 
+            {/* OLED inner edge glow */}
+            <div style={{
+              position:"absolute", inset:0, borderRadius:"44px",
+              boxShadow:"inset 0 0 0 1px rgba(255,255,255,0.045), inset 0 1px 0 rgba(255,255,255,0.07)",
+              pointerEvents:"none", zIndex:52,
+            }}/>
+
+            {/* Glass reflection */}
+            <div style={{
+              position:"absolute", inset:0, borderRadius:"44px",
+              background:"linear-gradient(132deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.012) 28%, transparent 52%)",
+              pointerEvents:"none", zIndex:51,
+            }}/>
+
             {/* Dynamic Island */}
             <div style={{
-              position:"absolute", top:12, left:"50%",
+              position:"absolute", top:13, left:"50%",
               transform:"translateX(-50%)",
-              width:88, height:26,
+              width:112, height:31,
               background:"#000",
-              borderRadius:20,
+              borderRadius:22,
               zIndex:20,
-              boxShadow:"0 0 0 1px rgba(255,255,255,0.06)",
+              boxShadow:"0 0 0 1px rgba(255,255,255,0.05), 0 2px 10px rgba(0,0,0,0.9)",
             }}/>
+
+            {/* ── Lock-screen notification ──────────────────────────────── */}
+            {showNotif && (
+              <div style={{
+                position:"absolute",
+                top:60, left:10, right:10,
+                zIndex:40,
+                background:"rgba(26,26,28,0.88)",
+                backdropFilter:"blur(24px)",
+                WebkitBackdropFilter:"blur(24px)",
+                borderRadius:18,
+                padding:"11px 13px",
+                display:"flex", alignItems:"center", gap:11,
+                boxShadow:"0 10px 40px rgba(0,0,0,0.7), 0 0 0 0.5px rgba(255,255,255,0.11)",
+                animation: notifExit
+                  ? "notifExit 0.38s cubic-bezier(0.4,0,1,1) forwards"
+                  : "notifEnter 0.48s cubic-bezier(0.34,1.56,0.64,1) forwards",
+              }}>
+                <div style={{
+                  width:38, height:38, borderRadius:9,
+                  background:"linear-gradient(145deg,#0ea5e9,#0369a1)",
+                  display:"flex", alignItems:"center", justifyContent:"center",
+                  fontSize:20, flexShrink:0,
+                  boxShadow:"0 3px 10px rgba(14,165,233,0.45)",
+                }}>🤖</div>
+                <div style={{ flex:1, minWidth:0 }}>
+                  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:3 }}>
+                    <span style={{ fontSize:12, fontWeight:600, color:"#fff", fontFamily:"-apple-system,'SF Pro Text',sans-serif" }}>MoggedAI</span>
+                    <span style={{ fontSize:10, color:"rgba(255,255,255,0.42)", fontFamily:"-apple-system,'SF Pro Text',sans-serif" }}>now</span>
+                  </div>
+                  <div style={{
+                    fontSize:12, color:"rgba(255,255,255,0.68)",
+                    fontFamily:"-apple-system,'SF Pro Text',sans-serif",
+                    whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis",
+                    lineHeight:1.35,
+                  }}>{conv.messages[0].text}</div>
+                </div>
+              </div>
+            )}
 
             {/* Status bar */}
             <div style={{
               display:"flex", justifyContent:"space-between", alignItems:"center",
-              padding:"16px 22px 0",
-              fontFamily:"-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif",
-              flexShrink:0, height:46,
+              padding:"17px 24px 0",
+              fontFamily:"-apple-system,'SF Pro Text',sans-serif",
+              flexShrink:0, height:50,
+              position:"relative", zIndex:10,
             }}>
-              <span style={{ fontSize:14, fontWeight:600, color:"#fff", letterSpacing:0 }}>
+              <span style={{ fontSize:15, fontWeight:600, color:"#fff", letterSpacing:"-0.3px" }}>
                 {conv.time}
               </span>
-              <div style={{ display:"flex", alignItems:"center", gap:5 }}>
-                {/* Signal */}
-                <svg width="16" height="11" viewBox="0 0 16 11" fill="none">
-                  <rect x="0" y="7" width="3" height="4" rx="0.5" fill="white"/>
-                  <rect x="4.5" y="4.5" width="3" height="6.5" rx="0.5" fill="white"/>
-                  <rect x="9" y="2" width="3" height="9" rx="0.5" fill="white"/>
-                  <rect x="13.5" y="0" width="2.5" height="11" rx="0.5" fill="white" opacity="0.3"/>
+              <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+                <svg width="17" height="12" viewBox="0 0 17 12" fill="none">
+                  <rect x="0"  y="8" width="3" height="4"  rx="0.8" fill="white"/>
+                  <rect x="4.7" y="5.5" width="3" height="6.5" rx="0.8" fill="white"/>
+                  <rect x="9.3" y="3" width="3" height="9"  rx="0.8" fill="white"/>
+                  <rect x="14" y="0" width="3" height="12" rx="0.8" fill="white" opacity="0.28"/>
                 </svg>
-                {/* Wifi */}
-                <svg width="15" height="11" viewBox="0 0 15 11" fill="none">
-                  <path d="M7.5 9a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" fill="white"/>
-                  <path d="M4.2 6.3C5.1 5.3 6.2 4.7 7.5 4.7s2.4.6 3.3 1.6" stroke="white" strokeWidth="1.3" strokeLinecap="round"/>
-                  <path d="M1.5 3.8C3 2.1 5.1 1.1 7.5 1.1s4.5 1 6 2.7" stroke="white" strokeWidth="1.3" strokeLinecap="round" opacity="0.4"/>
+                <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+                  <path d="M8 10a1.2 1.2 0 1 1 0-2.4A1.2 1.2 0 0 1 8 10z" fill="white"/>
+                  <path d="M4.5 7C5.6 5.8 6.7 5.2 8 5.2s2.4.6 3.5 1.8" stroke="white" strokeWidth="1.4" strokeLinecap="round"/>
+                  <path d="M1.5 4.2C3.2 2.3 5.5 1.2 8 1.2s4.8 1.1 6.5 3" stroke="white" strokeWidth="1.4" strokeLinecap="round" opacity="0.38"/>
                 </svg>
-                {/* Battery */}
-                <div style={{ display:"flex", alignItems:"center", gap:1 }}>
-                  <div style={{ width:22, height:11, border:"1px solid rgba(255,255,255,0.35)", borderRadius:3, position:"relative", overflow:"hidden" }}>
-                    <div style={{ position:"absolute", inset:1, width:"72%", background:"#fff", borderRadius:2 }}/>
+                <div style={{ display:"flex", alignItems:"center" }}>
+                  <div style={{ width:24, height:12, border:"1px solid rgba(255,255,255,0.38)", borderRadius:3.5, position:"relative", overflow:"hidden", padding:"1.5px" }}>
+                    <div style={{ width:"75%", height:"100%", background:"#fff", borderRadius:2 }}/>
                   </div>
-                  <div style={{ width:2, height:5, background:"rgba(255,255,255,0.35)", borderRadius:"0 1px 1px 0" }}/>
+                  <div style={{ width:2, height:5, background:"rgba(255,255,255,0.38)", borderRadius:"0 1px 1px 0", marginLeft:0.5 }}/>
                 </div>
               </div>
             </div>
 
-            {/* iMessage nav header */}
+            {/* iMessage nav */}
             <div style={{
               display:"flex", alignItems:"center",
               padding:"4px 14px 10px",
               flexShrink:0,
-              borderBottom:"0.5px solid rgba(255,255,255,0.08)",
-              fontFamily:"-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif",
+              borderBottom:"0.5px solid rgba(255,255,255,0.07)",
+              fontFamily:"-apple-system,'SF Pro Text',sans-serif",
             }}>
-              {/* Back */}
               <div style={{ display:"flex", alignItems:"center", gap:3, marginRight:"auto" }}>
-                <svg width="9" height="15" viewBox="0 0 9 15" fill="none">
-                  <path d="M7.5 1.5 2 7.5l5.5 6" stroke="#0B84FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <svg width="10" height="16" viewBox="0 0 10 16" fill="none">
+                  <path d="M8 2 2.5 8 8 14" stroke="#0B84FF" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <span style={{ fontSize:16, color:"#0B84FF", fontWeight:400 }}>4</span>
+                <span style={{ fontSize:16, color:"#0B84FF", fontWeight:400 }}>3</span>
               </div>
-              {/* Center: avatar + name */}
-              <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:3 }}>
+              <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:2 }}>
                 <div style={{
-                  width:36, height:36, borderRadius:"50%",
+                  width:38, height:38, borderRadius:"50%",
                   background:"linear-gradient(145deg,#0ea5e9,#0369a1)",
                   display:"flex", alignItems:"center", justifyContent:"center",
-                  fontSize:18, boxShadow:"0 2px 8px rgba(14,165,233,0.4)",
+                  fontSize:19, boxShadow:"0 3px 10px rgba(14,165,233,0.5)",
                 }}>🤖</div>
-                <span style={{ fontSize:11, color:"#fff", fontWeight:500, letterSpacing:0 }}>MoggedAI</span>
+                <span style={{ fontSize:11, color:"#fff", fontWeight:600 }}>MoggedAI</span>
               </div>
-              {/* Right icons */}
-              <div style={{ display:"flex", gap:14, marginLeft:"auto" }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="M15.5 8.5a4 4 0 0 1 0 7M3 8.5a9 9 0 0 1 9-4.5m0 0a9 9 0 0 1 9 9 9 9 0 0 1-9 9 9 9 0 0 1-9-9" stroke="#0B84FF" strokeWidth="1.6" strokeLinecap="round"/>
-                  <circle cx="12" cy="13" r="2.5" fill="#0B84FF"/>
+              <div style={{ display:"flex", gap:16, marginLeft:"auto" }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M15 10l4.55-2.275A1 1 0 0 1 21 8.618V15.38a1 1 0 0 1-1.45.894L15 14M3 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8z" stroke="#0B84FF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                   <path d="m22 16.92-.09-3.37a2 2 0 0 0-1.34-1.83l-2.56-.85a2 2 0 0 0-2.18.63l-.9 1.1a15.1 15.1 0 0 1-6.53-6.53l1.1-.9a2 2 0 0 0 .63-2.18l-.85-2.56A2 2 0 0 0 8 .09L4.63 0A2 2 0 0 0 2.5 2C2.5 13.85 10.15 21.5 22 21.5a2 2 0 0 0 2-2.09z" fill="#0B84FF"/>
@@ -257,17 +348,11 @@ function PhoneMockup() {
               </div>
             </div>
 
-            {/* Conversation label chip */}
-            <div style={{
-              display:"flex", justifyContent:"center",
-              padding:"10px 0 4px",
-              flexShrink:0,
-            }}>
+            {/* Date chip */}
+            <div style={{ display:"flex", justifyContent:"center", padding:"8px 0 2px", flexShrink:0 }}>
               <span style={{
-                fontSize:11,
-                color:"rgba(255,255,255,0.4)",
-                fontFamily:"-apple-system,BlinkMacSystemFont,sans-serif",
-                letterSpacing:0.2,
+                fontSize:11, color:"rgba(255,255,255,0.36)",
+                fontFamily:"-apple-system,'SF Pro Text',sans-serif",
               }}>{conv.label} · Today {conv.time}</span>
             </div>
 
@@ -282,48 +367,46 @@ function PhoneMockup() {
               overflowY:"hidden",
             }}>
               {conv.messages.slice(0, visibleCount).map((msg, i) => {
-                const isUser = msg.from === "user";
-                const isLast = i === visibleCount - 1;
+                const isUser  = msg.from === "user";
+                const isLast  = i === visibleCount - 1;
                 const prevSame = i > 0 && conv.messages[i-1].from === msg.from;
                 const nextSame = i < visibleCount - 1 && conv.messages[i+1].from === msg.from;
 
-                // Bubble radius based on position in group
-                const tl = isUser ? 18 : (prevSame ? 6 : 18);
-                const tr = isUser ? (prevSame ? 6 : 18) : 18;
-                const br = isUser ? (nextSame ? 6 : 18) : 18;
-                const bl = isUser ? 18 : (nextSame ? 6 : 18);
+                const tl = isUser ? 18 : (prevSame ? 5 : 18);
+                const tr = isUser ? (prevSame ? 5 : 18) : 18;
+                const br = isUser ? (nextSame ? 5 : 5) : 18;
+                const bl = isUser ? 18 : (nextSame ? 5 : 5);
 
                 return (
                   <div key={`${convIndex}-${i}`} style={{
-                    display:"flex",
-                    flexDirection:"column",
+                    display:"flex", flexDirection:"column",
                     alignItems: isUser ? "flex-end" : "flex-start",
-                    animation:"msgSpring 0.42s cubic-bezier(0.34,1.56,0.64,1) forwards",
+                    animation:"msgSpring 0.46s cubic-bezier(0.34,1.56,0.64,1) forwards",
                   }}>
                     <div style={{
-                      background: isUser ? "#0B84FF" : "#1C1C1E",
+                      background: isUser
+                        ? "linear-gradient(175deg,#2a9fff 0%,#007AFF 40%,#0063CC 100%)"
+                        : "#1C1C1E",
                       color:"#fff",
                       borderRadius:`${tl}px ${tr}px ${br}px ${bl}px`,
-                      padding:"9px 14px",
+                      padding:"9px 13px",
                       fontSize:13,
                       lineHeight:1.45,
                       maxWidth:"82%",
-                      fontFamily:"-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif",
+                      fontFamily:"-apple-system,'SF Pro Text',sans-serif",
                       fontWeight:400,
-                      letterSpacing:-0.1,
+                      letterSpacing:-0.15,
                       boxShadow: isUser
-                        ? "0 1px 4px rgba(11,132,255,0.3)"
-                        : "0 1px 3px rgba(0,0,0,0.4), inset 0 0 0 0.5px rgba(255,255,255,0.07)",
+                        ? "0 2px 10px rgba(0,122,255,0.38), 0 1px 3px rgba(0,0,0,0.22)"
+                        : "0 1px 3px rgba(0,0,0,0.45), inset 0 0 0 0.5px rgba(255,255,255,0.06)",
                     }}>
                       {msg.text}
                     </div>
-                    {/* Delivered tag under last user msg */}
                     {isUser && isLast && delivered && (
                       <span style={{
-                        fontSize:10,
-                        color:"rgba(255,255,255,0.35)",
-                        marginTop:2,
-                        fontFamily:"-apple-system,BlinkMacSystemFont,sans-serif",
+                        fontSize:10, color:"rgba(255,255,255,0.33)",
+                        marginTop:3,
+                        fontFamily:"-apple-system,'SF Pro Text',sans-serif",
                         animation:"deliveredFade 0.3s ease forwards",
                       }}>Delivered</span>
                     )}
@@ -336,25 +419,24 @@ function PhoneMockup() {
                 <div style={{
                   display:"flex",
                   justifyContent: typingFrom === "user" ? "flex-end" : "flex-start",
-                  animation:"typingAppear 0.25s cubic-bezier(0.34,1.56,0.64,1) forwards",
+                  animation:"typingAppear 0.28s cubic-bezier(0.34,1.56,0.64,1) forwards",
                 }}>
                   <div style={{
-                    background: typingFrom === "user" ? "#0B84FF" : "#1C1C1E",
+                    background: typingFrom === "user"
+                      ? "linear-gradient(175deg,#2a9fff 0%,#007AFF 100%)"
+                      : "#1C1C1E",
                     borderRadius:18,
                     padding:"11px 15px",
                     display:"flex", gap:5, alignItems:"center",
-                    boxShadow:"0 1px 3px rgba(0,0,0,0.4)",
+                    boxShadow: typingFrom === "user"
+                      ? "0 2px 10px rgba(0,122,255,0.38)"
+                      : "0 1px 3px rgba(0,0,0,0.45)",
                   }}>
-                    {[
-                      { anim:"dot1 1.1s ease-in-out infinite" },
-                      { anim:"dot2 1.1s ease-in-out infinite" },
-                      { anim:"dot3 1.1s ease-in-out infinite" },
-                    ].map((d, i) => (
-                      <div key={i} style={{
-                        width:7, height:7,
-                        borderRadius:"50%",
-                        background:"rgba(255,255,255,0.75)",
-                        animation:d.anim,
+                    {["dot1","dot2","dot3"].map(d => (
+                      <div key={d} style={{
+                        width:7, height:7, borderRadius:"50%",
+                        background:"rgba(255,255,255,0.8)",
+                        animation:`${d} 1.1s ease-in-out infinite`,
                       }}/>
                     ))}
                   </div>
@@ -368,12 +450,10 @@ function PhoneMockup() {
               display:"flex", alignItems:"center", gap:7,
               borderTop:"0.5px solid rgba(255,255,255,0.07)",
               flexShrink:0,
-              fontFamily:"-apple-system,BlinkMacSystemFont,sans-serif",
             }}>
-              {/* + button */}
               <div style={{
-                width:28, height:28, borderRadius:"50%",
-                background:"#1C1C1E",
+                width:30, height:30, borderRadius:"50%",
+                background:"rgba(255,255,255,0.09)",
                 display:"flex", alignItems:"center", justifyContent:"center",
                 flexShrink:0,
               }}>
@@ -381,21 +461,30 @@ function PhoneMockup() {
                   <path d="M7 1v12M1 7h12" stroke="rgba(255,255,255,0.5)" strokeWidth="1.8" strokeLinecap="round"/>
                 </svg>
               </div>
-              {/* Text field */}
               <div style={{
                 flex:1, background:"#1C1C1E",
-                borderRadius:20, padding:"7px 13px",
-                fontSize:13, color:"rgba(255,255,255,0.25)",
-                border:"0.5px solid rgba(255,255,255,0.1)",
+                borderRadius:22, padding:"8px 14px",
+                fontSize:13, color:"rgba(255,255,255,0.22)",
+                border:"0.5px solid rgba(255,255,255,0.08)",
+                fontFamily:"-apple-system,'SF Pro Text',sans-serif",
               }}>iMessage</div>
+              <div style={{
+                width:30, height:30, borderRadius:"50%",
+                background:"rgba(255,255,255,0.09)",
+                display:"flex", alignItems:"center", justifyContent:"center",
+                flexShrink:0,
+              }}>
+                <svg width="12" height="17" viewBox="0 0 12 17" fill="none">
+                  <rect x="3.5" y="0.5" width="5" height="9.5" rx="2.5" stroke="rgba(255,255,255,0.5)" strokeWidth="1.3"/>
+                  <path d="M1 8a5 5 0 0 0 10 0" stroke="rgba(255,255,255,0.5)" strokeWidth="1.3" strokeLinecap="round"/>
+                  <path d="M6 13v3.5" stroke="rgba(255,255,255,0.5)" strokeWidth="1.3" strokeLinecap="round"/>
+                </svg>
+              </div>
             </div>
 
             {/* Home indicator */}
-            <div style={{
-              display:"flex", justifyContent:"center",
-              padding:"4px 0 8px", flexShrink:0,
-            }}>
-              <div style={{ width:100, height:4, background:"rgba(255,255,255,0.3)", borderRadius:3 }}/>
+            <div style={{ display:"flex", justifyContent:"center", padding:"4px 0 8px", flexShrink:0 }}>
+              <div style={{ width:114, height:4, background:"rgba(255,255,255,0.3)", borderRadius:3 }}/>
             </div>
 
           </div>{/* /screen */}

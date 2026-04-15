@@ -434,11 +434,9 @@ export default function MoggedAI() {
   return (
     <div style={root}>
       <style>{`
-        .who-grid { grid-template-columns: repeat(4, 1fr); }
         .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
         @media (max-width: 640px) {
-          .who-grid { grid-template-columns: repeat(2, 1fr); }
-          .footer-grid { grid-template-columns: 1fr 1fr 1fr; }
+          .footer-grid { grid-template-columns: 1fr 1fr; }
           .footer-brand { grid-column: 1 / -1; }
         }
       `}</style>
@@ -464,72 +462,68 @@ export default function MoggedAI() {
       </nav>
 
       {/* HERO */}
-      <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", justifyContent:"flex-start", padding:"8rem 1.5rem 1rem", maxWidth:"920px", margin:"0 auto" }}>
+      <div style={{ padding:"6rem 1.25rem 2.5rem", maxWidth:"920px", margin:"0 auto", width:"100%", boxSizing:"border-box" }}>
         <div style={tag}>AI ACCOUNTABILITY · SMS · BUILT FOR RESULTS</div>
-        <h1 style={{ fontSize:"clamp(2.8rem,8vw,5.5rem)", fontWeight:"700", lineHeight:0.95, letterSpacing:"-0.02em", wordSpacing:"-0.15em", marginBottom:"1rem", transform:`translateX(${noise*0.3}px)` }}>
+        <h1 style={{ fontSize:"clamp(2.4rem,9vw,5.5rem)", fontWeight:"700", lineHeight:0.95, letterSpacing:"-0.02em", wordSpacing:"-0.15em", marginBottom:"1rem", transform:`translateX(${noise*0.3}px)` }}>
           STOP<br/><span style={{ color:"#0ea5e9" }}>SLACKING.</span><br/>START NOW.
         </h1>
-        <p style={{ fontSize:"clamp(0.95rem,2vw,1.05rem)", color:"var(--c-text4)", maxWidth:"500px", lineHeight:"1.9", marginBottom:"2rem" }}>
-          Get daily habit reminders by text.<br/>Built to make sure you follow through.
+        <p style={{ fontSize:"clamp(0.9rem,2.5vw,1.05rem)", color:"var(--c-text4)", maxWidth:"480px", lineHeight:"1.9", marginBottom:"2rem" }}>
+          An AI that texts you all day and won&apos;t let you make excuses.<br/>Set it once. Stay accountable forever.
         </p>
-        <div style={{ display:"flex", gap:"1rem", flexWrap:"wrap" }}>
-          <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem 2.5rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
-            GET STARTED FREE →
-          </button>
-        </div>
+        <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem 2.5rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700", width:"100%", maxWidth:320 }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
+          GET STARTED FREE →
+        </button>
       </div>
 
       {/* WHO IT'S FOR */}
-      <div style={{ padding:"0 1.5rem 3rem", maxWidth:"920px", margin:"0 auto" }}>
-        <div style={{ fontSize:"0.85rem", letterSpacing:"0.25em", color:"var(--c-text)", fontWeight:"700", marginBottom:"0.5rem", display:"flex", alignItems:"center", gap:"1rem" }}>
+      <div style={{ padding:"0 1.25rem 3rem", maxWidth:"920px", margin:"0 auto", width:"100%", boxSizing:"border-box" }}>
+        <div style={{ fontSize:"0.75rem", letterSpacing:"0.25em", color:"var(--c-text)", fontWeight:"700", marginBottom:"0.4rem", display:"flex", alignItems:"center", gap:"1rem" }}>
           WHO IT&apos;S FOR <div style={{ flex:1, height:"1px", background:"var(--c-border)" }}/>
         </div>
-        <p style={{ fontSize:"0.85rem", color:"var(--c-text4)", lineHeight:"1.8", marginBottom:"2rem", maxWidth:"520px" }}>
+        <p style={{ fontSize:"0.82rem", color:"var(--c-text4)", lineHeight:"1.8", marginBottom:"1.5rem", maxWidth:"520px" }}>
           If you know what you should be doing but keep finding reasons not to — this is for you.
         </p>
-        <div className="who-grid" style={{ display:"grid", gap:"1px", background:"var(--c-border2)", border:"1px solid var(--c-border2)" }}>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:"1px", background:"var(--c-border2)", border:"1px solid var(--c-border2)" }}>
           {[
-            { emoji:"📚", who:"Students",      line:"You study for 15 min then end up on YouTube for 2 hours." },
-            { emoji:"💻", who:"Builders",       line:"Always planning the side project. Never actually building it." },
-            { emoji:"💪", who:"Athletes",       line:"You skip workouts and feel guilty about it all day." },
+            { emoji:"📚", who:"Students",      line:"Study for 15 min, end up on YouTube for 2 hours." },
+            { emoji:"💻", who:"Builders",       line:"Always planning the side project. Never building it." },
+            { emoji:"💪", who:"Athletes",       line:"Skip workouts then feel guilty about it all day." },
             { emoji:"📋", who:"Professionals",  line:"Putting off the one task that actually matters." },
             { emoji:"🎨", who:"Creatives",      line:"Waiting for motivation instead of just starting." },
             { emoji:"🚀", who:"Entrepreneurs",  line:"Busy with everything except the thing that moves the needle." },
-            { emoji:"💆", who:"Anyone Stressed",line:"Overwhelmed, avoiding, and telling yourself tomorrow." },
-            { emoji:"🎯", who:"Everyone Else",  line:"Who knows exactly what they should do and still doesn't do it." },
           ].map(f => (
-            <div key={f.who} style={{ background:"var(--c-root)", padding:"1.75rem 1.25rem" }}>
-              <div style={{ fontSize:"1.6rem", marginBottom:"0.75rem" }}>{f.emoji}</div>
-              <div style={{ fontSize:"0.78rem", fontWeight:"700", marginBottom:"0.5rem", letterSpacing:"0.08em", color:"var(--c-text)" }}>{f.who.toUpperCase()}</div>
-              <div style={{ fontSize:"0.78rem", color:"var(--c-text4)", lineHeight:"1.75" }}>{f.line}</div>
+            <div key={f.who} style={{ background:"var(--c-root)", padding:"1.25rem 1rem" }}>
+              <div style={{ fontSize:"1.4rem", marginBottom:"0.5rem" }}>{f.emoji}</div>
+              <div style={{ fontSize:"0.72rem", fontWeight:"700", marginBottom:"0.35rem", letterSpacing:"0.08em", color:"var(--c-text)" }}>{f.who.toUpperCase()}</div>
+              <div style={{ fontSize:"0.72rem", color:"var(--c-text4)", lineHeight:"1.7" }}>{f.line}</div>
             </div>
           ))}
         </div>
       </div>
 
       {/* HOW IT WORKS */}
-      <div style={{ padding:"0 1.5rem 3rem", maxWidth:"920px", margin:"0 auto" }}>
-        <div style={{ fontSize:"0.85rem", letterSpacing:"0.25em", color:"var(--c-text)", fontWeight:"700", marginBottom:"2rem", display:"flex", alignItems:"center", gap:"1rem" }}>
+      <div style={{ padding:"0 1.25rem 3rem", maxWidth:"920px", margin:"0 auto", width:"100%", boxSizing:"border-box" }}>
+        <div style={{ fontSize:"0.75rem", letterSpacing:"0.25em", color:"var(--c-text)", fontWeight:"700", marginBottom:"1.5rem", display:"flex", alignItems:"center", gap:"1rem" }}>
           HOW IT WORKS <div style={{ flex:1, height:"1px", background:"var(--c-border)" }}/>
         </div>
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:"1px", background:"var(--c-s1)", border:"1px solid var(--c-border)" }}>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:"1px", background:"var(--c-s1)", border:"1px solid var(--c-border)" }}>
           {[
-            { n:"01", title:"Set up your habits", desc:"Pick what you need to stay on top of. Study, gym, work, anything. Up to 5 habits." },
-            { n:"02", title:"Pick your coach style", desc:"Brutal, direct, or motivating. Every message adapts to how you want to be pushed." },
-            { n:"03", title:"Get texted all day", desc:"We rotate through your habits and check in. Every message is unique and personalized." },
-            { n:"04", title:'Reply "done"', desc:"Mark it complete. We track your streak. No reply? We follow up in 5 minutes." },
+            { n:"01", title:"Set your missions", desc:"Pick what you need to stay on top of — gym, studying, work, anything." },
+            { n:"02", title:"Pick your coach style", desc:"Brutal, direct, or motivating. Every message adapts to you." },
+            { n:"03", title:"Get texted all day", desc:"We check in throughout the day. Every message is unique and personal." },
+            { n:"04", title:'Reply "done"', desc:"Mark it complete. We track your streak. No reply? We follow up." },
           ].map(f => (
-            <div key={f.n} style={{ background:"var(--c-root)", padding:"1.5rem 1.25rem" }}>
-              <div style={{ fontSize:"0.7rem", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.75rem", letterSpacing:"0.1em" }}>{f.n} ——</div>
-              <div style={{ fontSize:"0.8rem", fontWeight:"700", marginBottom:"0.4rem", letterSpacing:"0.05em" }}>{f.title.toUpperCase()}</div>
-              <div style={{ fontSize:"0.8rem", color:"var(--c-text4)", lineHeight:"1.7" }}>{f.desc}</div>
+            <div key={f.n} style={{ background:"var(--c-root)", padding:"1.25rem 1rem" }}>
+              <div style={{ fontSize:"0.65rem", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.6rem", letterSpacing:"0.1em" }}>{f.n} ——</div>
+              <div style={{ fontSize:"0.72rem", fontWeight:"700", marginBottom:"0.35rem", letterSpacing:"0.05em" }}>{f.title.toUpperCase()}</div>
+              <div style={{ fontSize:"0.72rem", color:"var(--c-text4)", lineHeight:"1.7" }}>{f.desc}</div>
             </div>
           ))}
         </div>
       </div>
 
       {/* SEE IT IN ACTION */}
-      <div style={{ padding:"1rem 1.5rem 3rem", maxWidth:"920px", margin:"0 auto", textAlign:"center" }}>
+      <div style={{ padding:"1rem 1.25rem 3rem", maxWidth:"920px", margin:"0 auto", textAlign:"center", width:"100%", boxSizing:"border-box" }}>
         <div style={{ fontSize:"0.85rem", letterSpacing:"0.25em", color:"var(--c-text)", fontWeight:"700", marginBottom:"0.5rem", display:"flex", alignItems:"center", gap:"1rem" }}>
           <div style={{ flex:1, height:"1px", background:"var(--c-border)" }}/> SEE IT IN ACTION <div style={{ flex:1, height:"1px", background:"var(--c-border)" }}/>
         </div>

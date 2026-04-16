@@ -571,9 +571,20 @@ export default function MoggedAI() {
         <p style={{ fontSize:"clamp(0.9rem,2.5vw,1.05rem)", color:"var(--c-text4)", maxWidth:"480px", lineHeight:"1.9", marginBottom:"2rem" }}>
           An AI that texts you all day and won&apos;t let you make excuses.<br/>Set it once. Stay accountable forever.
         </p>
-        <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem 2.5rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700", width:"100%", maxWidth:320 }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
-          GET STARTED FREE →
-        </button>
+        <div style={{ display:"flex", gap:"0.75rem", flexWrap:"wrap" }}>
+          <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem 2.5rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
+            GET STARTED FREE →
+          </button>
+          {isSignedIn ? (
+            <button style={{ background:"transparent", border:"1px solid var(--c-border)", color:"var(--c-text)", padding:"1rem 2rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => router.push("/dashboard")}>
+              DASHBOARD
+            </button>
+          ) : (
+            <button style={{ background:"transparent", border:"1px solid var(--c-border)", color:"var(--c-text)", padding:"1rem 2rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => router.push("/sign-in")}>
+              LOG IN
+            </button>
+          )}
+        </div>
       </div>
 
       {/* WHO IT'S FOR */}

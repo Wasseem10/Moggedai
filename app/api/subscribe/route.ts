@@ -41,8 +41,8 @@ export async function POST(req: NextRequest) {
       [userId, coach_style || 'direct', biggest_distraction || '', why || '']
     )
 
-    // Insert new habits
-    for (const habit of habits) {
+    // Insert new habits (may be empty array or undefined — that's fine)
+    for (const habit of (habits ?? [])) {
       await db.query(
         `INSERT INTO habits (user_id, name, emoji, active) VALUES ($1, $2, $3, true)`,
         [userId, habit.name, habit.emoji || '🎯']

@@ -198,21 +198,26 @@ export default function Dashboard() {
   }
 
   const handleAddSubmit = async () => {
-    if (!addDraft.coach_style) return
+    if (!addDraft.name || !addDraft.coach_style) return
     setAddLoading(true)
     try {
-      await fetch('/api/user', {
+      const res = await fetch('/api/user', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ add_habit: addDraft }),
       })
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        throw new Error(err.error || `Failed to save mission (${res.status})`)
+      }
       await loadData()
       setConfirmedDraft({ ...addDraft })
       setView('confirm')
       setAddDraft(defaultDraft())
       setAddStep(1)
     } catch (e) {
-      console.error(e)
+      console.error('handleAddSubmit error:', e)
+      alert(e instanceof Error ? e.message : 'Something went wrong saving your mission. Please try again.')
     } finally {
       setAddLoading(false)
     }

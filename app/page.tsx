@@ -525,17 +525,11 @@ export default function MoggedAI() {
       <style>{`
         * { box-sizing: border-box; }
         .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
-        .who-card:hover {
-          border-color: rgba(14,165,233,0.5) !important;
-          transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(14,165,233,0.08);
-        }
-        .how-card:hover {
-          border-color: rgba(14,165,233,0.5) !important;
-          transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(14,165,233,0.08);
-        }
-        .how-card:hover .step-num { color: rgba(14,165,233,0.15) !important; }
+        .who-row { transition: all 0.18s; cursor: default; }
+        .who-row:hover { background: rgba(14,165,233,0.05) !important; padding-left: 1.5rem !important; }
+        .who-row:hover .who-emoji { transform: scale(1.2); }
+        .who-emoji { transition: transform 0.18s; display:inline-block; }
+        .step-line { transition: background 0.3s; }
         @media (max-width: 640px) {
           .footer-grid { grid-template-columns: 1fr 1fr; }
           .footer-brand { grid-column: 1 / -1; }
@@ -543,6 +537,8 @@ export default function MoggedAI() {
           .phone-wrap { transform: scale(0.82); transform-origin: center top; margin-bottom: -60px; }
           .cta-btn { width: 100% !important; }
           .section-pad { padding-left: 1rem !important; padding-right: 1rem !important; }
+          .how-timeline { flex-direction: column !important; }
+          .how-step { flex-direction: row !important; gap: 1rem !important; }
         }
       `}</style>
       <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
@@ -581,17 +577,18 @@ export default function MoggedAI() {
       </div>
 
       {/* WHO IT'S FOR */}
-      <div style={{ padding:"7rem 1.25rem 4rem", maxWidth:"920px", margin:"0 auto", width:"100%", boxSizing:"border-box" }}>
-        <div style={{ fontSize:"0.7rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.6rem" }}>
-          WHO IT&apos;S FOR
+      <div style={{ padding:"6rem 1.25rem 5rem", maxWidth:"920px", margin:"0 auto", width:"100%", boxSizing:"border-box" }}>
+        <div style={{ display:"flex", alignItems:"center", gap:"1.5rem", marginBottom:"3rem" }}>
+          <div>
+            <div style={{ fontSize:"0.65rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.5rem" }}>WHO IT&apos;S FOR</div>
+            <h2 style={{ fontSize:"clamp(1.5rem,3.5vw,2.2rem)", fontWeight:"700", lineHeight:1.1, margin:0, letterSpacing:"-0.02em" }}>
+              Sound familiar?
+            </h2>
+          </div>
         </div>
-        <h2 style={{ fontSize:"clamp(1.6rem,4vw,2.4rem)", fontWeight:"700", lineHeight:1.1, marginBottom:"0.75rem", marginTop:0, letterSpacing:"-0.02em" }}>
-          If you keep letting yourself off the hook.
-        </h2>
-        <p style={{ fontSize:"1rem", color:"var(--c-text4)", lineHeight:"1.8", marginBottom:"2.5rem", maxWidth:"500px" }}>
-          You know what you need to do. You just keep finding reasons not to.
-        </p>
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:"12px" }}>
+
+        {/* Statement rows */}
+        <div style={{ borderTop:"1px solid var(--c-border)" }}>
           {[
             { emoji:"📚", who:"Students",      line:"Study for 15 min, end up on YouTube for 2 hours." },
             { emoji:"💻", who:"Builders",       line:"Always planning the side project. Never building it." },
@@ -600,38 +597,56 @@ export default function MoggedAI() {
             { emoji:"🎨", who:"Creatives",      line:"Waiting for motivation instead of just starting." },
             { emoji:"🚀", who:"Entrepreneurs",  line:"Busy with everything except the thing that moves the needle." },
           ].map(f => (
-            <div key={f.who} className="who-card" style={{ background:"var(--c-s1)", border:"1px solid var(--c-border)", padding:"1.5rem 1.25rem", transition:"all 0.2s", cursor:"default" }}>
-              <div style={{ fontSize:"2rem", marginBottom:"0.75rem" }}>{f.emoji}</div>
-              <div style={{ fontSize:"0.8rem", fontWeight:"700", marginBottom:"0.5rem", letterSpacing:"0.1em", color:"var(--c-text)" }}>{f.who.toUpperCase()}</div>
-              <div style={{ fontSize:"0.85rem", color:"var(--c-text4)", lineHeight:"1.75" }}>{f.line}</div>
+            <div key={f.who} className="who-row" style={{
+              display:"flex", alignItems:"center", gap:"1.5rem",
+              padding:"1.1rem 1rem",
+              borderBottom:"1px solid var(--c-border)",
+            }}>
+              <span className="who-emoji" style={{ fontSize:"1.6rem", width:"2rem", textAlign:"center", flexShrink:0 }}>{f.emoji}</span>
+              <span style={{ fontSize:"0.72rem", fontWeight:"700", letterSpacing:"0.12em", color:"var(--c-text)", width:"110px", flexShrink:0 }}>{f.who.toUpperCase()}</span>
+              <span style={{ fontSize:"0.9rem", color:"var(--c-text4)", lineHeight:1.6 }}>{f.line}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* HOW IT WORKS */}
-      <div style={{ padding:"0 1.25rem 5rem", maxWidth:"920px", margin:"0 auto", width:"100%", boxSizing:"border-box" }}>
-        <div style={{ fontSize:"0.7rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.6rem" }}>
-          HOW IT WORKS
+      <div style={{ padding:"0 1.25rem 6rem", maxWidth:"920px", margin:"0 auto", width:"100%", boxSizing:"border-box" }}>
+        <div style={{ marginBottom:"3rem" }}>
+          <div style={{ fontSize:"0.65rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.5rem" }}>HOW IT WORKS</div>
+          <h2 style={{ fontSize:"clamp(1.5rem,3.5vw,2.2rem)", fontWeight:"700", lineHeight:1.1, margin:0, letterSpacing:"-0.02em" }}>
+            Set it once. Works all day.
+          </h2>
         </div>
-        <h2 style={{ fontSize:"clamp(1.6rem,4vw,2.4rem)", fontWeight:"700", lineHeight:1.1, marginBottom:"0.75rem", marginTop:0, letterSpacing:"-0.02em" }}>
-          Set it once. Get held accountable forever.
-        </h2>
-        <p style={{ fontSize:"1rem", color:"var(--c-text4)", lineHeight:"1.8", marginBottom:"2.5rem", maxWidth:"500px" }}>
-          Takes 2 minutes to set up. Works all day without you thinking about it.
-        </p>
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:"12px" }}>
+
+        {/* Timeline steps */}
+        <div style={{ display:"flex", flexDirection:"column", gap:0 }}>
           {[
-            { n:"01", emoji:"🎯", title:"Set your goals",        desc:"Pick what you need to stay on top of — gym, studying, work, anything." },
-            { n:"02", emoji:"🧠", title:"Pick your coach style", desc:"Brutal, direct, or motivating. Every message adapts to how you work." },
-            { n:"03", emoji:"📱", title:"Get texted all day",    desc:"We check in throughout the day. Every message is unique and personal." },
-            { n:"04", emoji:"✅", title:'Reply "done"',          desc:"Mark it complete. We track your streak. No reply? We follow up harder." },
-          ].map(f => (
-            <div key={f.n} className="how-card" style={{ background:"var(--c-s1)", border:"1px solid var(--c-border)", padding:"1.5rem 1.25rem", position:"relative", overflow:"hidden", transition:"all 0.2s", cursor:"default" }}>
-              <div style={{ fontSize:"3.5rem", fontWeight:"700", color:"var(--c-border)", position:"absolute", top:"-0.5rem", right:"0.75rem", lineHeight:1, userSelect:"none", pointerEvents:"none" }}>{f.n}</div>
-              <div style={{ fontSize:"1.8rem", marginBottom:"0.75rem" }}>{f.emoji}</div>
-              <div style={{ fontSize:"0.8rem", fontWeight:"700", marginBottom:"0.5rem", letterSpacing:"0.08em", color:"var(--c-text)" }}>{f.title.toUpperCase()}</div>
-              <div style={{ fontSize:"0.85rem", color:"var(--c-text4)", lineHeight:"1.75" }}>{f.desc}</div>
+            { n:"01", title:"Set your goals",        desc:"Pick what you need to stay on top of — gym, studying, work, anything.", color:"#0ea5e9" },
+            { n:"02", title:"Pick your coach style", desc:"Brutal, direct, or motivating. Every single message adapts to you.",    color:"#8b5cf6" },
+            { n:"03", title:"Get texted all day",    desc:"We check in throughout the day. Every message is unique and personal.", color:"#10b981" },
+            { n:"04", title:'Reply "done"',          desc:'Mark it complete. We track your streak. No reply? We follow up.',      color:"#f59e0b" },
+          ].map((f, i, arr) => (
+            <div key={f.n} style={{ display:"flex", gap:"1.5rem", alignItems:"stretch" }}>
+              {/* Left: number + line */}
+              <div style={{ display:"flex", flexDirection:"column", alignItems:"center", flexShrink:0 }}>
+                <div style={{
+                  width:44, height:44, borderRadius:"50%",
+                  background:`${f.color}18`,
+                  border:`1.5px solid ${f.color}`,
+                  display:"flex", alignItems:"center", justifyContent:"center",
+                  fontSize:"0.65rem", fontWeight:"700", color:f.color, letterSpacing:"0.05em",
+                  flexShrink:0,
+                }}>{f.n}</div>
+                {i < arr.length - 1 && (
+                  <div style={{ width:1, flex:1, background:`linear-gradient(${f.color}, ${arr[i+1].color})`, opacity:0.3, minHeight:32 }}/>
+                )}
+              </div>
+              {/* Right: content */}
+              <div style={{ paddingBottom: i < arr.length - 1 ? "2rem" : 0, paddingTop:"0.6rem" }}>
+                <div style={{ fontSize:"0.78rem", fontWeight:"700", letterSpacing:"0.08em", color:"var(--c-text)", marginBottom:"0.4rem" }}>{f.title.toUpperCase()}</div>
+                <div style={{ fontSize:"0.9rem", color:"var(--c-text4)", lineHeight:1.7 }}>{f.desc}</div>
+              </div>
             </div>
           ))}
         </div>

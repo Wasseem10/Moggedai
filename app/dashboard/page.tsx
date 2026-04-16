@@ -114,7 +114,7 @@ export default function Dashboard() {
 
   const [view, setView] = useState<View>('overview')
   const [confirmedDraft, setConfirmedDraft] = useState<AddDraft | null>(null)
-  const [selectedMission, setSelectedMission] = useState<Habit | null>(null)
+  const [selectedGoal, setSelectedGoal] = useState<Habit | null>(null)
 
   const [userData, setUserData] = useState<UserData | null>(null)
   const [habits, setHabits] = useState<Habit[]>([])
@@ -208,7 +208,7 @@ export default function Dashboard() {
       })
       if (!res.ok) {
         const err = await res.json().catch(() => ({}))
-        throw new Error(err.error || `Failed to save mission (${res.status})`)
+        throw new Error(err.error || `Failed to save goal (${res.status})`)
       }
       await loadData()
       setConfirmedDraft({ ...addDraft })
@@ -217,7 +217,7 @@ export default function Dashboard() {
       setAddStep(1)
     } catch (e) {
       console.error('handleAddSubmit error:', e)
-      alert(e instanceof Error ? e.message : 'Something went wrong saving your mission. Please try again.')
+      alert(e instanceof Error ? e.message : 'Something went wrong saving your goal. Please try again.')
     } finally {
       setAddLoading(false)
     }
@@ -230,8 +230,8 @@ export default function Dashboard() {
       body: JSON.stringify({ update_habit: updated }),
     })
     await loadData()
-    // Refresh selectedMission with updated data
-    setSelectedMission(prev => prev ? { ...prev, ...updated } : prev)
+    // Refresh selectedGoal with updated data
+    setSelectedGoal(prev => prev ? { ...prev, ...updated } : prev)
   }
 
   const handleDeleteHabit = async (habitId: string) => {
@@ -336,9 +336,9 @@ export default function Dashboard() {
               <div style={{ ...shimmerStyle, width: 180, height: 12, borderRadius: 0 }} />
               <div style={{ ...shimmerStyle, width: 280, height: 22, borderRadius: 0 }} />
             </div>
-            {/* Skeleton MY MISSIONS label */}
+            {/* Skeleton MY GOALS label */}
             <div style={{ ...shimmerStyle, width: 100, height: 12, borderRadius: 0, marginBottom: '0.75rem' }} />
-            {/* Skeleton mission cards */}
+            {/* Skeleton goal cards */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2rem' }}>
               <div style={{ ...shimmerStyle, width: '100%', height: 80, borderRadius: 0 }} />
               <div style={{ ...shimmerStyle, width: '100%', height: 80, borderRadius: 0 }} />
@@ -370,8 +370,8 @@ export default function Dashboard() {
               weeklyRecap={weeklyRecap}
               stats={stats}
               greeting={greeting()}
-              onSelectMission={(h) => { setSelectedMission(h); setView('detail') }}
-              onAddMission={() => { setView('add'); setAddStep(1); setAddDraft(defaultDraft()) }}
+              onSelectGoal={(h) => { setSelectedGoal(h); setView('detail') }}
+              onAddGoal={() => { setView('add'); setAddStep(1); setAddDraft(defaultDraft()) }}
               onToggleActive={handleToggleActive}
               onUpdatePhone={handleUpdatePhone}
               onSignOut={handleSignOut}
@@ -380,13 +380,13 @@ export default function Dashboard() {
               stripeLoading={stripeLoading}
             />
           )}
-          {view === 'detail' && selectedMission && (
+          {view === 'detail' && selectedGoal && (
             <DetailView
-              habit={selectedMission}
-              messages={recentMessages.filter(m => m.habit_id === selectedMission.id)}
+              habit={selectedGoal}
+              messages={recentMessages.filter(m => m.habit_id === selectedGoal.id)}
               onBack={() => setView('overview')}
-              onDelete={() => handleDeleteHabit(selectedMission.id)}
-              onComplete={() => handleCompleteHabit(selectedMission.id)}
+              onDelete={() => handleDeleteHabit(selectedGoal.id)}
+              onComplete={() => handleCompleteHabit(selectedGoal.id)}
               onUpdate={handleUpdateHabit}
             />
           )}
@@ -451,8 +451,8 @@ function MobileTabBar({
       ),
     },
     {
-      key: 'missions' as const,
-      label: 'MISSIONS',
+      key: 'goals' as const,
+      label: 'GOALS',
       isActive: view === 'add',
       onClick: () => setView('add'),
       icon: (
@@ -732,8 +732,8 @@ function OverviewView({
   weeklyRecap,
   stats,
   greeting,
-  onSelectMission,
-  onAddMission,
+  onSelectGoal,
+  onAddGoal,
   onToggleActive,
   onUpdatePhone,
   onSignOut,
@@ -748,8 +748,8 @@ function OverviewView({
   weeklyRecap: WeeklyRecap
   stats: Stats
   greeting: string
-  onSelectMission: (h: Habit) => void
-  onAddMission: () => void
+  onSelectGoal: (h: Habit) => void
+  onAddGoal: () => void
   onToggleActive: () => void
   onUpdatePhone: (phone: string) => Promise<void>
   onSignOut: () => void
@@ -791,12 +791,12 @@ function OverviewView({
       {/* Stats Row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', border: `1px solid ${C.border}`, marginBottom: '2rem' }}>
 
-        {/* Active Missions */}
+        {/* Active Goals */}
         <div style={{ padding: '1rem 0.75rem', textAlign: 'center', borderRight: `1px solid ${C.border}` }}>
           <div style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.1rem,4vw,1.4rem)', color: C.text, lineHeight: 1, marginBottom: '0.3rem' }}>
             {habits.length}
           </div>
-          <div style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.12em' }}>MISSIONS</div>
+          <div style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.12em' }}>GOALS</div>
           <div style={{ fontFamily: MONO, fontSize: '0.55rem', color: habits.length > 0 ? '#22c55e' : C.text3, letterSpacing: '0.08em', marginTop: '0.2rem' }}>
             {habits.length > 0 ? 'ACTIVE' : 'NONE YET'}
           </div>
@@ -826,11 +826,11 @@ function OverviewView({
 
       </div>
 
-      {/* Missions */}
+      {/* Goals */}
       <div style={{ marginBottom: '2rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
           <span style={{ fontFamily: MONO, fontSize: '0.75rem', letterSpacing: '0.15em', color: C.text2, fontWeight: 700 }}>
-            MY MISSIONS
+            MY GOALS
           </span>
           <span style={{
             background: C.s2,
@@ -846,10 +846,10 @@ function OverviewView({
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {habits.map((h, index) => (
-            <MissionCard key={h.id} habit={h} index={index} onClick={() => onSelectMission(h)} />
+            <GoalCard key={h.id} habit={h} index={index} onClick={() => onSelectGoal(h)} />
           ))}
 
-          {/* Empty state — shown when no missions yet */}
+          {/* Empty state — shown when no goals yet */}
           {habits.length === 0 && (
             <div style={{
               border: `1px solid ${C.border}`,
@@ -864,14 +864,14 @@ function OverviewView({
               <div style={{ fontSize: '2.5rem', lineHeight: 1 }}>🎯</div>
               <div>
                 <p style={{ fontFamily: MONO, fontSize: '0.7rem', letterSpacing: '0.15em', color: C.text, margin: 0, marginBottom: '0.4rem', fontWeight: 700 }}>
-                  NO MISSIONS YET
+                  NO GOALS YET
                 </p>
                 <p style={{ fontFamily: MONO, fontSize: '0.58rem', color: C.text3, margin: 0, lineHeight: 1.7, letterSpacing: '0.05em' }}>
-                  Add your first mission and your AI coach<br />will start texting you to make sure you do it.
+                  Add your first goal and your AI coach<br />will start texting you to make sure you do it.
                 </p>
               </div>
               <button
-                onClick={onAddMission}
+                onClick={onAddGoal}
                 style={{
                   background: '#0ea5e9',
                   border: 'none',
@@ -884,15 +884,15 @@ function OverviewView({
                   cursor: 'pointer',
                 }}
               >
-                + ADD YOUR FIRST MISSION
+                + ADD YOUR FIRST GOAL
               </button>
             </div>
           )}
 
-          {/* Add button — shown when missions exist but under the limit */}
+          {/* Add button — shown when goals exist but under the limit */}
           {habits.length > 0 && habits.length < 5 && (
             <button
-              onClick={onAddMission}
+              onClick={onAddGoal}
               style={{
                 width: '100%',
                 border: `1px dashed ${C.border}`,
@@ -909,26 +909,26 @@ function OverviewView({
             >
               <span style={{ fontSize: '1.4rem', color: '#0ea5e9', lineHeight: 1 }}>+</span>
               <span style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.1em' }}>
-                Add a mission
+                Add a goal
               </span>
             </button>
           )}
         </div>
       </div>
 
-      {/* Weekly Recap — always show once they have at least one mission */}
+      {/* Weekly Recap — always show once they have at least one goal */}
       <div id="recent-messages">
         {habits.length > 0 && (
           <WeeklyRecapCard recap={weeklyRecap} streak={stats.streak} totalCompletions={stats.total_completions} />
         )}
       </div>
 
-      {/* Completed Missions */}
+      {/* Completed Goals */}
       {completedHabits.length > 0 && (
         <div style={{ marginBottom: '2rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
             <span style={{ fontFamily: MONO, fontSize: '0.75rem', letterSpacing: '0.15em', color: C.text2, fontWeight: 700 }}>
-              COMPLETED MISSIONS
+              COMPLETED GOALS
             </span>
             <span style={{ background: C.s2, border: `1px solid ${C.border}`, color: C.text2, fontFamily: MONO, fontSize: '0.7rem', padding: '0.1rem 0.5rem' }}>
               {completedHabits.length}
@@ -1063,7 +1063,7 @@ function OverviewView({
                 <span style={{ fontFamily: MONO, fontSize: '0.5rem', color: isPro ? '#22c55e' : '#f59e0b', border: `1px solid ${isPro ? '#22c55e' : '#f59e0b'}`, padding: '0.1rem 0.4rem', letterSpacing: '0.1em' }}>ACTIVE</span>
               </div>
               <div style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.05em' }}>
-                {isPro ? 'Up to 5 missions · check-ins every 30min' : '1 mission · check-ins every 2hrs'}
+                {isPro ? 'Up to 5 goals · check-ins every 30min' : '1 goal · check-ins every 2hrs'}
               </div>
             </div>
             {isPro ? (
@@ -1140,7 +1140,7 @@ function StatBox({ label, value, borderLeft, valueColor }: {
   )
 }
 
-function MissionCard({ habit, onClick, index = 0 }: { habit: Habit; onClick: () => void; index?: number }) {
+function GoalCard({ habit, onClick, index = 0 }: { habit: Habit; onClick: () => void; index?: number }) {
   const timeLabel = habit.time_of_day
     ? TIME_OPTIONS.find(t => t.value === habit.time_of_day)?.sub ?? ''
     : ''
@@ -1254,7 +1254,7 @@ function ConfirmView({ draft, onDone }: { draft: AddDraft; onDone: () => void })
   const timeLabel = TIME_OPTIONS.find(t => t.value === draft.time_of_day)?.label ?? draft.time_of_day
   const coachLabel = COACH_OPTIONS.find(c => c.value === draft.coach_style)?.label ?? draft.coach_style
 
-  const TYPED_TEXT = 'MISSION ACTIVATED'
+  const TYPED_TEXT = 'GOAL ACTIVATED'
   const [phase, setPhase] = useState(0)       // 0=scan 1=badge 2=type 3=content 4=done
   const [typed, setTyped] = useState(0)
   const [visible, setVisible] = useState(false)
@@ -1488,7 +1488,7 @@ function DetailView({
   return (
     <div style={{ paddingTop: '1.5rem' }}>
       <button onClick={onBack} style={{ background:'none', border:'none', color:C.text3, fontFamily:MONO, fontSize:'0.65rem', letterSpacing:'0.1em', cursor:'pointer', padding:'0 0 1.5rem 0', display:'block' }}>
-        ← MY MISSIONS
+        ← MY GOALS
       </button>
 
       {/* Hero */}
@@ -1526,7 +1526,7 @@ function DetailView({
       {editing && (
         <div style={{ border:`1px solid ${C.border}`, background:C.s1, marginBottom:'1.5rem' }}>
           <div style={{ padding:'0.85rem 1.25rem', borderBottom:`1px solid ${C.border}` }}>
-            <span style={{ fontFamily:MONO, fontSize:'0.5rem', color:C.text3, letterSpacing:'0.15em' }}>EDIT MISSION</span>
+            <span style={{ fontFamily:MONO, fontSize:'0.5rem', color:C.text3, letterSpacing:'0.15em' }}>EDIT GOAL</span>
           </div>
           <div style={{ padding:'1.25rem', display:'flex', flexDirection:'column', gap:'1rem' }}>
 
@@ -1670,11 +1670,11 @@ function DetailView({
         {confirmComplete ? (
           <div style={{ background: C.s1, border:`1px solid #22c55e`, padding:'1rem 1.25rem' }}>
             <p style={{ fontFamily:MONO, fontSize:'0.6rem', color:'#22c55e', letterSpacing:'0.1em', margin:'0 0 0.75rem 0' }}>
-              MARK AS COMPLETE — this will move it to your completed missions.
+              MARK AS COMPLETE — this will move it to your completed goals.
             </p>
             <div style={{ display:'flex', gap:'0.5rem' }}>
               <button onClick={() => setShowCompleteAnim(true)} style={{ flex:1, background:'#22c55e', border:'none', color:'#000', fontFamily:MONO, fontSize:'0.65rem', letterSpacing:'0.1em', fontWeight:700, padding:'0.7rem', cursor:'pointer', borderRadius:0 }}>
-                🏆 YES, MISSION COMPLETE
+                🏆 YES, GOAL COMPLETE
               </button>
               <button onClick={() => setConfirmComplete(false)} style={{ background:'none', border:`1px solid ${C.border}`, color:C.text3, fontFamily:MONO, fontSize:'0.6rem', padding:'0.7rem 1rem', cursor:'pointer', borderRadius:0 }}>
                 CANCEL
@@ -1686,7 +1686,7 @@ function DetailView({
             onClick={() => setConfirmComplete(true)}
             style={{ width:'100%', background:'transparent', border:`1px solid #22c55e`, color:'#22c55e', fontFamily:MONO, fontSize:'0.65rem', letterSpacing:'0.12em', fontWeight:700, padding:'0.85rem', cursor:'pointer', borderRadius:0 }}
           >
-            🏆 MARK MISSION COMPLETE
+            🏆 MARK GOAL COMPLETE
           </button>
         )}
 
@@ -1698,15 +1698,15 @@ function DetailView({
             </button>
           ) : (
             <button onClick={() => setConfirmDelete(true)} style={{ background:'none', border:'none', color:C.text3, fontFamily:MONO, fontSize:'0.55rem', letterSpacing:'0.1em', padding:'0.3rem 0', cursor:'pointer', textDecoration:'underline' }}>
-              delete mission
+              delete goal
             </button>
           )
         )}
       </div>
 
-      {/* Mission Complete Animation Overlay */}
+      {/* Goal Complete Animation Overlay */}
       {showCompleteAnim && (
-        <MissionCompleteOverlay
+        <GoalCompleteOverlay
           habit={habit}
           onFinish={() => {
             setShowCompleteAnim(false)
@@ -1718,7 +1718,7 @@ function DetailView({
   )
 }
 
-// ─── Mission Complete Overlay ─────────────────────────────────────────────────
+// ─── Goal Complete Overlay ─────────────────────────────────────────────────
 
 const PARTICLES = Array.from({ length: 30 }, (_, i) => {
   const angle = (i / 30) * 360
@@ -1729,7 +1729,7 @@ const PARTICLES = Array.from({ length: 30 }, (_, i) => {
   return { x, y, color: colors[i % colors.length], size: 4 + Math.random() * 6, delay: Math.random() * 0.3 }
 })
 
-function MissionCompleteOverlay({ habit, onFinish }: { habit: Habit; onFinish: () => void }) {
+function GoalCompleteOverlay({ habit, onFinish }: { habit: Habit; onFinish: () => void }) {
   const [phase, setPhase] = useState(0)
 
   useEffect(() => {
@@ -1812,7 +1812,7 @@ function MissionCompleteOverlay({ habit, onFinish }: { habit: Habit; onFinish: (
         </div>
       )}
 
-      {/* MISSION text */}
+      {/* GOAL text */}
       {phase >= 2 && (
         <div style={{
           fontFamily: MONO, fontWeight: 700,
@@ -1822,7 +1822,7 @@ function MissionCompleteOverlay({ habit, onFinish }: { habit: Habit; onFinish: (
           animation: 'slamIn 0.4s cubic-bezier(0.22,1,0.36,1) forwards',
           marginBottom: '0.1rem',
         }}>
-          MISSION
+          GOAL
         </div>
       )}
 

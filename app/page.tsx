@@ -602,7 +602,7 @@ export default function MoggedAI() {
         </div>
         <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:"1px", background:"var(--c-s1)", border:"1px solid var(--c-border)" }}>
           {[
-            { n:"01", title:"Set your missions", desc:"Pick what you need to stay on top of — gym, studying, work, anything." },
+            { n:"01", title:"Set your goals", desc:"Pick what you need to stay on top of — gym, studying, work, anything." },
             { n:"02", title:"Pick your coach style", desc:"Brutal, direct, or motivating. Every message adapts to you." },
             { n:"03", title:"Get texted all day", desc:"We check in throughout the day. Every message is unique and personal." },
             { n:"04", title:'Reply "done"', desc:"Mark it complete. We track your streak. No reply? We follow up." },

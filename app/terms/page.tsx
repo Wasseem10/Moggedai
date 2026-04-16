@@ -78,7 +78,7 @@ Standard message and data rates from your mobile carrier may apply. MoggedAI is 
 • Use the Service to harass, abuse, or harm any person
 • Attempt to circumvent any rate limiting, security, or authentication measures
 • Use automated tools, bots, or scripts to interact with the Service in unauthorized ways
-• Resell, sublicense, or otherwise commercially exploit the Service without written permission
+• Resell, sublicense, or otherwise commercially exploit the Service without written pergoal
 • Upload or transmit viruses, malware, or any other malicious code
 • Interfere with the proper functioning of the Service or servers
 • Violate the intellectual property rights of MoggedAI or any third party

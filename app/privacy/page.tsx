@@ -121,12 +121,12 @@ You may request deletion of your data at any time by contacting wasseem800@gmail
     title: "7. Data Security",
     body: `We implement commercially reasonable technical and organizational security measures to protect your information, including:
 
-• Encrypted data transmission (TLS/HTTPS)
+• Encrypted data transgoal (TLS/HTTPS)
 • Access controls limiting employee access to personal data
 • Secure third-party infrastructure (Railway, Clerk)
 • Regular review of data handling practices
 
-HOWEVER, NO METHOD OF TRANSMISSION OVER THE INTERNET OR ELECTRONIC STORAGE IS 100% SECURE. WE CANNOT GUARANTEE ABSOLUTE SECURITY OF YOUR DATA. BY USING THE SERVICE, YOU ACKNOWLEDGE AND ACCEPT THIS RISK.
+HOWEVER, NO METHOD OF TRANSGOAL OVER THE INTERNET OR ELECTRONIC STORAGE IS 100% SECURE. WE CANNOT GUARANTEE ABSOLUTE SECURITY OF YOUR DATA. BY USING THE SERVICE, YOU ACKNOWLEDGE AND ACCEPT THIS RISK.
 
 In the event of a data breach that affects your personal information, we will notify you as required by applicable law.`,
   },

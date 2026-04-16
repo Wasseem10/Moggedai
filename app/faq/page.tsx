@@ -28,11 +28,11 @@ const FAQS = [
   },
   {
     q: "What are the different coach styles?",
-    a: "Direct — no fluff, just facts. Brutal — tough love, calls out your excuses. Savage — maximum pressure, no filter. Motivating — hype energy, reminds you of your why. You set this per mission.",
+    a: "Direct — no fluff, just facts. Brutal — tough love, calls out your excuses. Savage — maximum pressure, no filter. Motivating — hype energy, reminds you of your why. You set this per goal.",
   },
   {
-    q: "What is a mission?",
-    a: "That's what we call a habit. You can have up to 5 active missions at a time. Each one has its own context — your why, your go-to excuse, what's at stake — which the AI uses to make messages personal to you.",
+    q: "What is a goal?",
+    a: "That's what we call a habit. You can have up to 5 active goals at a time. Each one has its own context — your why, your go-to excuse, what's at stake — which the AI uses to make messages personal to you.",
   },
   {
     q: "Will it cost me anything to receive texts?",
@@ -52,7 +52,7 @@ const FAQS = [
   },
   {
     q: "Can I add my own custom habit?",
-    a: "Yes. When adding a mission you can type any habit name and emoji you want — you're not limited to the presets.",
+    a: "Yes. When adding a goal you can type any habit name and emoji you want — you're not limited to the presets.",
   },
 ];
 

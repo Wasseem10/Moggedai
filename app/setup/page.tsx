@@ -298,7 +298,7 @@ export default function SetupPage() {
                 <span style={{ color: "#0ea5e9" }}>to be pushed?</span>
               </h1>
               <p style={{ fontSize: "1rem", color: "var(--c-text)", marginBottom: "1.75rem", lineHeight: "1.7" }}>
-                Set your active hours. You&apos;ll add your missions next inside the dashboard.
+                Set your active hours. You&apos;ll add your goals next inside the dashboard.
               </p>
 
               <label style={lbl}>CHECK-IN FREQUENCY</label>

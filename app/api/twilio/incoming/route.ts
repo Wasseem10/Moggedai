@@ -242,7 +242,7 @@ export async function POST(req: NextRequest) {
         )
       }
 
-      // Store the photo submission in messages table
+      // Store the photo subgoal in messages table
       await db.query(
         `INSERT INTO messages (user_id, habit_id, message_text, sent_at, follow_up_sent, responded_at)
          VALUES ($1, $2, $3, NOW(), true, NOW())
@@ -263,7 +263,7 @@ export async function POST(req: NextRequest) {
     if (/^habits?$/i.test(body)) {
       if (!habits.length) return twiml("no habits set up yet. go to moggedai.com to add some.")
       const list = habits.map((h: HabitRow) => `${h.emoji} ${h.name}`).join('\n')
-      return twiml(`your missions:\n${list}`)
+      return twiml(`your goals:\n${list}`)
     }
 
     // ── STREAK ─────────────────────────────────────────────────────────────

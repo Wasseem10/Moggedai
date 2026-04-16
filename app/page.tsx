@@ -622,7 +622,8 @@ export default function MoggedAI() {
       </div>
 
       {/* HOW IT WORKS */}
-      <div style={{ padding:"0 1.25rem 6rem", maxWidth:"920px", margin:"0 auto", width:"100%", boxSizing:"border-box" }}>
+      <div style={{ background:"var(--c-s1)", borderTop:"1px solid var(--c-border)", borderBottom:"1px solid var(--c-border)", width:"100%" }}>
+      <div style={{ padding:"5rem 1.25rem 6rem", maxWidth:"920px", margin:"0 auto", width:"100%", boxSizing:"border-box" }}>
         <div style={{ marginBottom:"3rem" }}>
           <div style={{ fontSize:"0.65rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.5rem" }}>HOW IT WORKS</div>
           <h2 style={{ fontSize:"clamp(1.5rem,3.5vw,2.2rem)", fontWeight:"700", lineHeight:1.1, margin:0, letterSpacing:"-0.02em" }}>
@@ -661,6 +662,7 @@ export default function MoggedAI() {
             </div>
           ))}
         </div>
+      </div>
       </div>
 
       {/* SEE IT IN ACTION */}

@@ -568,19 +568,43 @@ export default function MoggedAI() {
         .who-row:hover .who-emoji { transform: scale(1.2); }
         .who-emoji { transition: transform 0.18s; display:inline-block; }
         .step-line { transition: background 0.3s; }
-        .hero-btns { max-width: 480px; }
+
+        /* ── Hero layout ── */
+        .hero-outer { padding: 6.5rem 1.5rem 3rem; max-width: 1080px; margin: 0 auto; width: 100%; }
+        .hero-inner { display: flex; align-items: center; gap: 3rem; }
+        .hero-left  { flex: 1; min-width: 0; }
+        .hero-right { flex-shrink: 0; display: flex; justify-content: center; }
+        .hero-btns  { display: flex; gap: 0.75rem; margin-top: 2rem; max-width: 440px; }
+
+        /* ── Section ── */
+        .section-inner { max-width: 1080px; margin: 0 auto; width: 100%; padding-left: 1.5rem; padding-right: 1.5rem; }
+        .who-grid-inner { grid-template-columns: repeat(3, 1fr); }
+
+        /* ── CTA ── */
+        .cta-section { padding: 4rem 1.5rem 5rem; max-width: 1080px; margin: 0 auto; text-align: center; }
+
+        /* ─── Mobile ─────────────────────────────── */
+        @media (max-width: 860px) {
+          .hero-inner  { flex-direction: column; gap: 2.5rem; }
+          .hero-right  { width: 100%; }
+          .hero-btns   { max-width: 100%; }
+          .who-grid-inner { grid-template-columns: repeat(2, 1fr) !important; }
+        }
         @media (max-width: 640px) {
-          .hero-btns { max-width: 100%; }
-          .hero-primary-btn { font-size: 0.75rem !important; padding: 1rem 1rem !important; }
-          .hero-secondary-btn { font-size: 0.75rem !important; padding: 1rem 1rem !important; }
+          .hero-outer  { padding: 5rem 1.1rem 2rem; }
+          .hero-btns   { flex-direction: column; }
+          .hero-primary-btn  { font-size: 0.8rem !important; padding: 0.9rem 1rem !important; text-align: center; }
+          .hero-secondary-btn{ font-size: 0.8rem !important; padding: 0.9rem 1rem !important; text-align: center; }
+          .hero-right  { transform: scale(0.78); transform-origin: center top; margin-bottom: -90px; }
           .footer-grid { grid-template-columns: 1fr 1fr; }
           .footer-brand { grid-column: 1 / -1; }
-          .nav-btns .sign-out-btn { display: none; }
-          .phone-wrap { transform: scale(0.82); transform-origin: center top; margin-bottom: -60px; }
-          .cta-btn { width: 100% !important; }
-          .section-pad { padding-left: 1rem !important; padding-right: 1rem !important; }
-          .how-timeline { flex-direction: column !important; }
-          .how-step { flex-direction: row !important; gap: 1rem !important; }
+          .who-grid-inner { grid-template-columns: 1fr !important; }
+          .cta-btn     { width: 100% !important; }
+          .section-inner { padding-left: 1.1rem !important; padding-right: 1.1rem !important; }
+          .cta-section { padding: 3rem 1.1rem 4rem; }
+        }
+        @media (max-width: 400px) {
+          .hero-right { transform: scale(0.68); transform-origin: center top; margin-bottom: -115px; }
         }
       `}</style>
       <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
@@ -605,131 +629,151 @@ export default function MoggedAI() {
       </nav>
 
       {/* HERO */}
-      <div style={{ padding:"6rem 1.25rem 2.5rem", maxWidth:"920px", margin:"0 auto", width:"100%", boxSizing:"border-box" }}>
-        <div style={tag}>AI ACCOUNTABILITY · SMS · BUILT FOR RESULTS</div>
-        <h1 style={{ fontSize:"clamp(2.4rem,9vw,5.5rem)", fontWeight:"700", lineHeight:0.95, letterSpacing:"-0.02em", wordSpacing:"-0.15em", marginBottom:"1rem", transform:`translateX(${noise*0.3}px)` }}>
-          STOP DREAMING.<br/><span style={{ color:"#0ea5e9" }}>START</span><br/>DOING.
-        </h1>
-        <p style={{ fontSize:"clamp(0.9rem,2.5vw,1.05rem)", color:"var(--c-text4)", maxWidth:"480px", lineHeight:"1.9", marginBottom:"2rem" }}>
-          An AI that texts you all day and won&apos;t let you make excuses.<br/>Set it once. Stay accountable forever.
-        </p>
-        <div className="hero-btns" style={{ display:"flex", gap:"0.75rem" }}>
-          <button className="hero-primary-btn" style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem 2.5rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700", flex:1 }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
-            GET STARTED FREE →
-          </button>
-          {isSignedIn ? (
-            <button className="hero-secondary-btn" style={{ background:"transparent", border:"1px solid var(--c-border)", color:"var(--c-text)", padding:"1rem 2rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700", flex:1 }} onClick={() => router.push("/dashboard")}>
-              DASHBOARD
-            </button>
-          ) : (
-            <button className="hero-secondary-btn" style={{ background:"transparent", border:"1px solid var(--c-border)", color:"var(--c-text)", padding:"1rem 2rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700", flex:1 }} onClick={() => router.push("/sign-in")}>
-              LOG IN
-            </button>
-          )}
+      <div className="hero-outer">
+        <div className="hero-inner">
+
+          {/* Left: copy */}
+          <div className="hero-left">
+            <div style={tag}>AI ACCOUNTABILITY · SMS · BUILT FOR RESULTS</div>
+            <h1 style={{ fontSize:"clamp(3rem,7vw,5.8rem)", fontWeight:"700", lineHeight:0.92, letterSpacing:"-0.03em", margin:"0 0 1.5rem", transform:`translateX(${noise*0.3}px)` }}>
+              WIN THE<br/>
+              <span style={{ color:"#0ea5e9" }}>DAY.</span><br/>
+              <span style={{ fontSize:"clamp(1.6rem,3.8vw,3rem)", letterSpacing:"-0.01em", color:"var(--c-text2)" }}>EVERY DAY.</span>
+            </h1>
+            <p style={{ fontSize:"clamp(0.88rem,1.6vw,1rem)", color:"var(--c-text4)", maxWidth:"420px", lineHeight:"1.85", margin:0 }}>
+              An AI coach that texts you throughout the day, holds you accountable, and won&apos;t let you make excuses. Set it once. Stay on track forever.
+            </p>
+            <div className="hero-btns">
+              <button className="hero-primary-btn" style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem 2rem", fontSize:"0.82rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700", flex:1 }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
+                GET STARTED FREE →
+              </button>
+              {isSignedIn ? (
+                <button className="hero-secondary-btn" style={{ background:"transparent", border:"1px solid var(--c-border)", color:"var(--c-text)", padding:"1rem 1.5rem", fontSize:"0.82rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700", flex:1 }} onClick={() => router.push("/dashboard")}>
+                  DASHBOARD
+                </button>
+              ) : (
+                <button className="hero-secondary-btn" style={{ background:"transparent", border:"1px solid var(--c-border)", color:"var(--c-text)", padding:"1rem 1.5rem", fontSize:"0.82rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700", flex:1 }} onClick={() => router.push("/sign-in")}>
+                  LOG IN
+                </button>
+              )}
+            </div>
+            {/* Social proof nudge */}
+            <div style={{ marginTop:"1.5rem", display:"flex", alignItems:"center", gap:"0.6rem" }}>
+              <div style={{ display:"flex" }}>
+                {["🧑","👩","🧔","👨","🙋"].map((e,i) => (
+                  <div key={i} style={{ width:26, height:26, borderRadius:"50%", background:"var(--c-s2)", border:"2px solid var(--c-root)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:13, marginLeft: i===0 ? 0 : -8 }}>{e}</div>
+                ))}
+              </div>
+              <span style={{ fontSize:"0.68rem", color:"var(--c-text3)", letterSpacing:"0.04em" }}>Join people hitting their goals daily</span>
+            </div>
+          </div>
+
+          {/* Right: phone */}
+          <div className="hero-right">
+            <PhoneMockup theme={theme} />
+          </div>
+
         </div>
       </div>
 
       {/* WHO IT'S FOR */}
-      <div style={{ padding:"6rem 1.25rem 5rem", maxWidth:"920px", margin:"0 auto", width:"100%", boxSizing:"border-box" }}>
-        <div style={{ display:"flex", alignItems:"center", gap:"1.5rem", marginBottom:"3rem" }}>
-          <div>
-            <div style={{ fontSize:"0.65rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.5rem" }}>WHO IT&apos;S FOR</div>
-            <h2 style={{ fontSize:"clamp(1.5rem,3.5vw,2.2rem)", fontWeight:"700", lineHeight:1.1, margin:0, letterSpacing:"-0.02em" }}>
+      <div style={{ padding:"5rem 0 4rem", borderTop:"1px solid var(--c-border)" }}>
+        <div className="section-inner">
+          <div style={{ marginBottom:"2.5rem" }}>
+            <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.5rem" }}>WHO IT&apos;S FOR</div>
+            <h2 style={{ fontSize:"clamp(1.4rem,3vw,2rem)", fontWeight:"700", lineHeight:1.1, margin:0, letterSpacing:"-0.02em" }}>
               Sound familiar?
             </h2>
           </div>
-        </div>
 
-        {/* Statement cards */}
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(260px, 1fr))", gap:"1rem" }}>
-          {[
-            { emoji:"📚", who:"Students",      line:"Study for 15 min, end up on YouTube for 2 hours." },
-            { emoji:"💻", who:"Builders",       line:"Always planning the side project. Never building it." },
-            { emoji:"💪", who:"Athletes",       line:"Skip workouts then feel guilty about it all day." },
-            { emoji:"📋", who:"Professionals",  line:"Putting off the one task that actually matters." },
-            { emoji:"🎨", who:"Creatives",      line:"Waiting for motivation instead of just starting." },
-            { emoji:"🚀", who:"Entrepreneurs",  line:"Busy with everything except the thing that moves the needle." },
-          ].map(f => (
-            <div key={f.who} style={{
-              border:"1px solid var(--c-border)",
-              borderRadius:"8px",
-              padding:"1.4rem 1.2rem",
-              background:"var(--c-s1)",
-              display:"flex",
-              flexDirection:"column",
-              gap:"0.75rem",
-            }}>
-              <span style={{ fontSize:"1.8rem" }}>{f.emoji}</span>
-              <span style={{ fontSize:"0.7rem", fontWeight:"700", letterSpacing:"0.15em", color:"var(--c-text)" }}>{f.who.toUpperCase()}</span>
-              <span style={{ fontSize:"0.88rem", color:"var(--c-text4)", lineHeight:1.6 }}>{f.line}</span>
-            </div>
-          ))}
+          {/* Statement cards */}
+          <div className="who-grid-inner" style={{ display:"grid", gap:"0.9rem" }}>
+            {[
+              { emoji:"📚", who:"Students",      line:"Study for 15 min, end up on YouTube for 2 hours." },
+              { emoji:"💻", who:"Builders",       line:"Always planning the side project. Never building it." },
+              { emoji:"💪", who:"Athletes",       line:"Skip workouts then feel guilty about it all day." },
+              { emoji:"📋", who:"Professionals",  line:"Putting off the one task that actually matters." },
+              { emoji:"🎨", who:"Creatives",      line:"Waiting for motivation instead of just starting." },
+              { emoji:"🚀", who:"Entrepreneurs",  line:"Busy with everything except the thing that moves the needle." },
+            ].map(f => (
+              <div key={f.who} style={{
+                border:"1px solid var(--c-border)",
+                borderRadius:"10px",
+                padding:"1.3rem 1.1rem",
+                background:"var(--c-s1)",
+                display:"flex",
+                flexDirection:"column",
+                gap:"0.6rem",
+              }}>
+                <span style={{ fontSize:"1.7rem" }}>{f.emoji}</span>
+                <span style={{ fontSize:"0.68rem", fontWeight:"700", letterSpacing:"0.15em", color:"var(--c-text)" }}>{f.who.toUpperCase()}</span>
+                <span style={{ fontSize:"0.85rem", color:"var(--c-text4)", lineHeight:1.65 }}>{f.line}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* HOW IT WORKS */}
       <div style={{ background:"var(--c-s1)", borderTop:"1px solid var(--c-border)", borderBottom:"1px solid var(--c-border)", width:"100%" }}>
-      <div style={{ padding:"5rem 1.25rem 6rem", maxWidth:"920px", margin:"0 auto", width:"100%", boxSizing:"border-box" }}>
-        <div style={{ marginBottom:"3rem" }}>
-          <div style={{ fontSize:"0.65rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.5rem" }}>HOW IT WORKS</div>
-          <h2 style={{ fontSize:"clamp(1.5rem,3.5vw,2.2rem)", fontWeight:"700", lineHeight:1.1, margin:0, letterSpacing:"-0.02em" }}>
-            Set it once. Works all day.
-          </h2>
-        </div>
+      <div style={{ padding:"5rem 0 5rem" }}>
+        <div className="section-inner">
+          <div style={{ marginBottom:"2.5rem" }}>
+            <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.5rem" }}>HOW IT WORKS</div>
+            <h2 style={{ fontSize:"clamp(1.4rem,3vw,2rem)", fontWeight:"700", lineHeight:1.1, margin:0, letterSpacing:"-0.02em" }}>
+              Set it once. Works all day.
+            </h2>
+          </div>
 
-        {/* Timeline steps */}
-        <div style={{ display:"flex", flexDirection:"column", gap:0 }}>
+          {/* Timeline steps — 2-col on desktop, 1-col on mobile */}
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(280px, 1fr))", gap:"0" }}>
+          <div style={{ display:"flex", flexDirection:"column", gap:0 }}>
           {[
             { n:"01", title:"Set your goals",        desc:"Pick what you need to stay on top of — gym, studying, work, anything.", color:"#0ea5e9" },
             { n:"02", title:"Pick your coach style", desc:"Brutal, direct, or motivating. Every single message adapts to you.",    color:"#8b5cf6" },
             { n:"03", title:"Get texted all day",    desc:"We check in throughout the day. Every message is unique and personal.", color:"#10b981" },
             { n:"04", title:'Reply "done"',          desc:'Mark it complete. We track your streak. No reply? We follow up.',      color:"#f59e0b" },
           ].map((f, i, arr) => (
-            <div key={f.n} style={{ display:"flex", gap:"1.5rem", alignItems:"stretch" }}>
-              {/* Left: number + line */}
+            <div key={f.n} style={{ display:"flex", gap:"1.25rem", alignItems:"stretch" }}>
               <div style={{ display:"flex", flexDirection:"column", alignItems:"center", flexShrink:0 }}>
                 <div style={{
-                  width:44, height:44, borderRadius:"50%",
+                  width:42, height:42, borderRadius:"50%",
                   background:`${f.color}18`,
                   border:`1.5px solid ${f.color}`,
                   display:"flex", alignItems:"center", justifyContent:"center",
-                  fontSize:"0.65rem", fontWeight:"700", color:f.color, letterSpacing:"0.05em",
+                  fontSize:"0.62rem", fontWeight:"700", color:f.color, letterSpacing:"0.05em",
                   flexShrink:0,
                 }}>{f.n}</div>
                 {i < arr.length - 1 && (
-                  <div style={{ width:1, flex:1, background:`linear-gradient(${f.color}, ${arr[i+1].color})`, opacity:0.3, minHeight:32 }}/>
+                  <div style={{ width:1, flex:1, background:`linear-gradient(${f.color}, ${arr[i+1].color})`, opacity:0.3, minHeight:28 }}/>
                 )}
               </div>
-              {/* Right: content */}
-              <div style={{ paddingBottom: i < arr.length - 1 ? "2rem" : 0, paddingTop:"0.6rem" }}>
-                <div style={{ fontSize:"0.78rem", fontWeight:"700", letterSpacing:"0.08em", color:"var(--c-text)", marginBottom:"0.4rem" }}>{f.title.toUpperCase()}</div>
-                <div style={{ fontSize:"0.9rem", color:"var(--c-text4)", lineHeight:1.7 }}>{f.desc}</div>
+              <div style={{ paddingBottom: i < arr.length - 1 ? "1.75rem" : 0, paddingTop:"0.5rem" }}>
+                <div style={{ fontSize:"0.75rem", fontWeight:"700", letterSpacing:"0.08em", color:"var(--c-text)", marginBottom:"0.35rem" }}>{f.title.toUpperCase()}</div>
+                <div style={{ fontSize:"0.88rem", color:"var(--c-text4)", lineHeight:1.7 }}>{f.desc}</div>
               </div>
             </div>
           ))}
+          </div>
+          </div>
         </div>
       </div>
-      </div>
-
-      {/* SEE IT IN ACTION */}
-      <div style={{ padding:"1rem 1.25rem 3rem", maxWidth:"920px", margin:"0 auto", textAlign:"center", width:"100%", boxSizing:"border-box" }}>
-        <div style={{ fontSize:"0.85rem", letterSpacing:"0.25em", color:"var(--c-text)", fontWeight:"700", marginBottom:"0.5rem", display:"flex", alignItems:"center", gap:"1rem" }}>
-          <div style={{ flex:1, height:"1px", background:"var(--c-border)" }}/> SEE IT IN ACTION <div style={{ flex:1, height:"1px", background:"var(--c-border)" }}/>
-        </div>
-        <p style={{ fontSize:"0.78rem", color:"var(--c-text4)", marginBottom:"2.5rem", letterSpacing:"0.05em" }}>
-          This is what lands on your phone.
-        </p>
-        <div className="phone-wrap" style={{ display:"flex", justifyContent:"center" }}>
-          <PhoneMockup theme={theme} />
-        </div>
       </div>
 
       {/* CTA */}
-      <div style={{ padding:"3rem 1.5rem 4rem", maxWidth:"920px", margin:"0 auto", textAlign:"center" }}>
-        <button className="cta-btn" style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1.1rem 3rem", fontSize:"0.9rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
-          GET STARTED — IT&apos;S FREE
+      <div className="cta-section">
+        <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"1rem" }}>READY TO WIN?</div>
+        <h2 style={{ fontSize:"clamp(1.6rem,4vw,2.6rem)", fontWeight:"700", letterSpacing:"-0.02em", lineHeight:1.1, marginBottom:"0.75rem" }}>
+          Start winning your days.<br/>
+          <span style={{ color:"#0ea5e9" }}>Right now.</span>
+        </h2>
+        <p style={{ fontSize:"0.88rem", color:"var(--c-text4)", marginBottom:"2rem", lineHeight:1.8 }}>
+          Takes 2 minutes to set up. No app download needed.
+        </p>
+        <button className="cta-btn" style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1.1rem 3.5rem", fontSize:"0.88rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
+          GET STARTED — IT&apos;S FREE →
         </button>
-        <p style={{ fontSize:"0.6rem", color:"#555", marginTop:"1rem" }}>US numbers only · Reply STOP to unsubscribe anytime</p>
+        <p style={{ fontSize:"0.6rem", color:"var(--c-text5)", marginTop:"1rem" }}>US numbers only · Reply STOP to unsubscribe anytime</p>
       </div>
 
       {/* Footer */}

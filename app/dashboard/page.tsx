@@ -566,13 +566,28 @@ function FontLoader() {
           100% { background-position: 200% 0; }
         }
         @keyframes cardSlideUp {
-          from { opacity: 0; transform: translateY(16px); }
-          to { opacity: 1; transform: translateY(0); }
+          from { opacity: 0; transform: translateY(20px) scale(0.97); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
         }
         @keyframes badgePop {
           from { transform: scale(0); opacity: 0; }
           to { transform: scale(1); opacity: 1; }
         }
+        @keyframes statCardIn {
+          from { opacity: 0; transform: translateY(18px) scale(0.93); }
+          to   { opacity: 1; transform: translateY(0)  scale(1); }
+        }
+        @keyframes heroIn {
+          from { opacity: 0; transform: translateY(12px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes addBtnShimmer {
+          0%   { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+        .goal-card-arrow { transition: transform 0.18s ease; }
+        .goal-card:hover .goal-card-arrow { transform: translateX(3px); }
+        .add-goal-btn:hover { border-color: #0ea5e9 !important; background: rgba(14,165,233,0.06) !important; }
         .dashboard-content { padding-bottom: 4rem; }
         @media (max-width: 640px) { .dashboard-content { padding-bottom: 80px; } }
         @media (min-width: 641px) { .mobile-tab-bar { display: none !important; } }
@@ -767,60 +782,108 @@ function OverviewView({
   return (
     <div>
       {/* Hero */}
-      <div style={{ paddingTop: '2rem', paddingBottom: '1.5rem' }}>
-        <p style={{ fontFamily: MONO, fontSize: '0.75rem', color: C.text2, letterSpacing: '0.15em', margin: 0, marginBottom: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          {greeting} · {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }).toUpperCase()}
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.5rem', color: '#22c55e', letterSpacing: '0.15em' }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', display: 'inline-block', animation: 'livePulse 2s ease infinite' }} />
-            LIVE
-          </span>
-        </p>
-        <h1 style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.3rem,5vw,1.6rem)', margin: 0, marginBottom: '0.5rem', color: C.text }}>
-          {displayName}
-        </h1>
-        <span style={{
-          fontFamily: MONO,
-          fontSize: '0.7rem',
-          color: isActive ? '#22c55e' : C.text3,
-          letterSpacing: '0.1em',
-        }}>
-          {isActive ? '● ACTIVE' : '● PAUSED'}
-        </span>
+      <div style={{ paddingTop: '2rem', paddingBottom: '1.75rem', position: 'relative' }}>
+        {/* Ambient glow */}
+        <div style={{
+          position: 'absolute', top: 0, left: -24, right: -24, bottom: 0,
+          background: 'radial-gradient(ellipse 80% 60% at 30% 20%, rgba(14,165,233,0.08) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+
+        <div style={{ position: 'relative', opacity: 0, animation: 'heroIn 0.5s ease 0.05s both' }}>
+          {/* Date + LIVE */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.6rem' }}>
+            <span style={{ fontFamily: MONO, fontSize: '0.62rem', color: C.text3, letterSpacing: '0.12em' }}>
+              {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).toUpperCase()}
+            </span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.52rem', color: '#22c55e', letterSpacing: '0.15em', fontFamily: MONO }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', display: 'inline-block', animation: 'livePulse 2s ease infinite' }} />
+              LIVE
+            </span>
+          </div>
+
+          {/* Greeting + Name */}
+          <p style={{ fontFamily: MONO, fontSize: '0.7rem', color: C.text2, letterSpacing: '0.18em', margin: 0, marginBottom: '0.4rem' }}>
+            {greeting}
+          </p>
+          <h1 style={{ fontFamily: GROTESK, fontWeight: 800, fontSize: 'clamp(1.65rem,6vw,2.1rem)', margin: 0, marginBottom: '0.85rem', color: C.text, letterSpacing: '-0.025em', lineHeight: 1.15 }}>
+            {displayName ? `${displayName} 👋` : 'Welcome back'}
+          </h1>
+
+          {/* Status pill */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <span style={{
+              fontFamily: MONO, fontSize: '0.62rem', letterSpacing: '0.12em',
+              color: isActive ? '#22c55e' : C.text3,
+              background: isActive ? 'rgba(34,197,94,0.1)' : C.s2,
+              border: `1px solid ${isActive ? 'rgba(34,197,94,0.35)' : C.border}`,
+              padding: '0.28rem 0.7rem', borderRadius: 999,
+            }}>
+              {isActive ? '● ACTIVE' : '○ PAUSED'}
+            </span>
+            {habits.length > 0 && (
+              <span style={{ fontFamily: MONO, fontSize: '0.58rem', color: C.text3, letterSpacing: '0.08em' }}>
+                {habits.length} goal{habits.length !== 1 ? 's' : ''} running
+              </span>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* Stats Row */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', border: `1px solid ${C.border}`, marginBottom: '2rem' }}>
+      {/* Stats Row — colorful gradient cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '0.6rem', marginBottom: '2rem' }}>
 
-        {/* Active Goals */}
-        <div style={{ padding: '1rem 0.75rem', textAlign: 'center', borderRight: `1px solid ${C.border}` }}>
-          <div style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.1rem,4vw,1.4rem)', color: C.text, lineHeight: 1, marginBottom: '0.3rem' }}>
+        {/* Goals card */}
+        <div style={{
+          background: 'linear-gradient(145deg, rgba(14,165,233,0.16) 0%, rgba(14,165,233,0.05) 100%)',
+          border: '1px solid rgba(14,165,233,0.28)',
+          borderRadius: 14, padding: '1rem 0.6rem',
+          textAlign: 'center',
+          opacity: 0, animation: 'statCardIn 0.45s cubic-bezier(0.34,1.2,0.64,1) 0.08s both',
+        }}>
+          <div style={{ fontSize: '1.3rem', lineHeight: 1, marginBottom: '0.4rem' }}>🎯</div>
+          <div style={{ fontFamily: GROTESK, fontWeight: 800, fontSize: 'clamp(1.3rem,5vw,1.7rem)', color: '#0ea5e9', lineHeight: 1, marginBottom: '0.25rem' }}>
             {habits.length}
           </div>
-          <div style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.12em' }}>GOALS</div>
-          <div style={{ fontFamily: MONO, fontSize: '0.55rem', color: habits.length > 0 ? '#22c55e' : C.text3, letterSpacing: '0.08em', marginTop: '0.2rem' }}>
+          <div style={{ fontFamily: MONO, fontSize: '0.52rem', color: C.text3, letterSpacing: '0.12em' }}>GOALS</div>
+          <div style={{ fontFamily: MONO, fontSize: '0.48rem', color: habits.length > 0 ? '#22c55e' : C.text3, letterSpacing: '0.08em', marginTop: '0.15rem' }}>
             {habits.length > 0 ? 'ACTIVE' : 'NONE YET'}
           </div>
         </div>
 
-        {/* Streak */}
-        <div style={{ padding: '1rem 0.75rem', textAlign: 'center', borderRight: `1px solid ${C.border}` }}>
-          <div style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.1rem,4vw,1.4rem)', color: stats.streak > 0 ? '#f59e0b' : C.text, lineHeight: 1, marginBottom: '0.3rem' }}>
-            {stats.streak > 0 ? `🔥 ${stats.streak}` : '—'}
+        {/* Streak card */}
+        <div style={{
+          background: 'linear-gradient(145deg, rgba(245,158,11,0.16) 0%, rgba(245,158,11,0.05) 100%)',
+          border: '1px solid rgba(245,158,11,0.28)',
+          borderRadius: 14, padding: '1rem 0.6rem',
+          textAlign: 'center',
+          opacity: 0, animation: 'statCardIn 0.45s cubic-bezier(0.34,1.2,0.64,1) 0.15s both',
+        }}>
+          <div style={{ fontSize: '1.3rem', lineHeight: 1, marginBottom: '0.4rem' }}>🔥</div>
+          <div style={{ fontFamily: GROTESK, fontWeight: 800, fontSize: 'clamp(1.3rem,5vw,1.7rem)', color: '#f59e0b', lineHeight: 1, marginBottom: '0.25rem' }}>
+            {stats.streak > 0 ? stats.streak : '—'}
           </div>
-          <div style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.12em' }}>DAY STREAK</div>
-          <div style={{ fontFamily: MONO, fontSize: '0.55rem', color: C.text3, letterSpacing: '0.08em', marginTop: '0.2rem' }}>
-            {stats.streak > 0 ? 'KEEP GOING' : 'REPLY DONE TO START'}
+          <div style={{ fontFamily: MONO, fontSize: '0.52rem', color: C.text3, letterSpacing: '0.12em' }}>STREAK</div>
+          <div style={{ fontFamily: MONO, fontSize: '0.48rem', color: C.text3, letterSpacing: '0.08em', marginTop: '0.15rem' }}>
+            {stats.streak > 0 ? 'KEEP GOING' : 'DAYS'}
           </div>
         </div>
 
-        {/* Completions */}
-        <div style={{ padding: '1rem 0.75rem', textAlign: 'center' }}>
-          <div style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.1rem,4vw,1.4rem)', color: C.text, lineHeight: 1, marginBottom: '0.3rem' }}>
+        {/* Completions card */}
+        <div style={{
+          background: 'linear-gradient(145deg, rgba(34,197,94,0.16) 0%, rgba(34,197,94,0.05) 100%)',
+          border: '1px solid rgba(34,197,94,0.28)',
+          borderRadius: 14, padding: '1rem 0.6rem',
+          textAlign: 'center',
+          opacity: 0, animation: 'statCardIn 0.45s cubic-bezier(0.34,1.2,0.64,1) 0.22s both',
+        }}>
+          <div style={{ fontSize: '1.3rem', lineHeight: 1, marginBottom: '0.4rem' }}>✅</div>
+          <div style={{ fontFamily: GROTESK, fontWeight: 800, fontSize: 'clamp(1.3rem,5vw,1.7rem)', color: '#22c55e', lineHeight: 1, marginBottom: '0.25rem' }}>
             {stats.total_completions}
           </div>
-          <div style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.12em' }}>COMPLETED</div>
-          <div style={{ fontFamily: MONO, fontSize: '0.55rem', color: C.text3, letterSpacing: '0.08em', marginTop: '0.2rem' }}>
-            {stats.total_completions > 0 ? 'TOTAL DONE' : 'NONE YET'}
+          <div style={{ fontFamily: MONO, fontSize: '0.52rem', color: C.text3, letterSpacing: '0.12em' }}>DONE</div>
+          <div style={{ fontFamily: MONO, fontSize: '0.48rem', color: C.text3, letterSpacing: '0.08em', marginTop: '0.15rem' }}>
+            TOTAL
           </div>
         </div>
 
@@ -828,20 +891,25 @@ function OverviewView({
 
       {/* Goals */}
       <div style={{ marginBottom: '2rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-          <span style={{ fontFamily: MONO, fontSize: '0.75rem', letterSpacing: '0.15em', color: C.text2, fontWeight: 700 }}>
-            MY GOALS
-          </span>
-          <span style={{
-            background: C.s2,
-            border: `1px solid ${C.border}`,
-            color: C.text2,
-            fontFamily: MONO,
-            fontSize: '0.7rem',
-            padding: '0.1rem 0.5rem',
-          }}>
-            {habits.length}
-          </span>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <span style={{
+              fontFamily: MONO, fontSize: '0.68rem', letterSpacing: '0.18em', fontWeight: 700,
+              background: 'linear-gradient(90deg, #0ea5e9 0%, #8b5cf6 100%)',
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+            }}>
+              MY GOALS
+            </span>
+            {habits.length > 0 && (
+              <span style={{
+                background: 'rgba(14,165,233,0.14)', border: '1px solid rgba(14,165,233,0.3)',
+                color: '#0ea5e9', fontFamily: MONO, fontSize: '0.6rem',
+                padding: '0.1rem 0.5rem', borderRadius: 999, fontWeight: 700,
+              }}>
+                {habits.length}
+              </span>
+            )}
+          </div>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -852,36 +920,51 @@ function OverviewView({
           {/* Empty state — shown when no goals yet */}
           {habits.length === 0 && (
             <div style={{
-              border: `1px solid ${C.border}`,
-              background: C.s1,
-              padding: '2.5rem 1.5rem',
+              border: '1px solid rgba(14,165,233,0.2)',
+              background: 'linear-gradient(145deg, rgba(14,165,233,0.07) 0%, rgba(139,92,246,0.04) 100%)',
+              borderRadius: 16,
+              padding: '3rem 1.75rem',
               textAlign: 'center',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: '1rem',
+              gap: '1.25rem',
+              position: 'relative',
+              overflow: 'hidden',
             }}>
-              <div style={{ fontSize: '2.5rem', lineHeight: 1 }}>🎯</div>
+              {/* Decorative glow */}
+              <div style={{
+                position: 'absolute', top: -30, left: '50%', transform: 'translateX(-50%)',
+                width: 160, height: 160,
+                background: 'radial-gradient(circle, rgba(14,165,233,0.18) 0%, transparent 70%)',
+                pointerEvents: 'none',
+              }} />
+              <div style={{ fontSize: '3rem', lineHeight: 1, position: 'relative' }}>🎯</div>
               <div>
-                <p style={{ fontFamily: MONO, fontSize: '0.7rem', letterSpacing: '0.15em', color: C.text, margin: 0, marginBottom: '0.4rem', fontWeight: 700 }}>
-                  NO GOALS YET
+                <p style={{ fontFamily: GROTESK, fontSize: '1.15rem', fontWeight: 800, color: C.text, margin: 0, marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
+                  No goals yet
                 </p>
-                <p style={{ fontFamily: MONO, fontSize: '0.58rem', color: C.text3, margin: 0, lineHeight: 1.7, letterSpacing: '0.05em' }}>
-                  Add your first goal and your AI coach<br />will start texting you to make sure you do it.
+                <p style={{ fontFamily: MONO, fontSize: '0.68rem', color: C.text3, margin: 0, lineHeight: 1.8, letterSpacing: '0.04em' }}>
+                  Add your first goal and your AI coach<br />will text you every single day until you do it.
                 </p>
               </div>
               <button
                 onClick={onAddGoal}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(14,165,233,0.4)' }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(14,165,233,0.3)' }}
                 style={{
-                  background: '#0ea5e9',
+                  background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
                   border: 'none',
                   color: '#fff',
                   fontFamily: MONO,
                   fontSize: '0.7rem',
                   letterSpacing: '0.15em',
                   fontWeight: 700,
-                  padding: '0.85rem 1.75rem',
+                  padding: '0.9rem 2rem',
                   cursor: 'pointer',
+                  borderRadius: 10,
+                  boxShadow: '0 4px 16px rgba(14,165,233,0.3)',
+                  transition: 'transform 0.15s ease, box-shadow 0.15s ease',
                 }}
               >
                 + ADD YOUR FIRST GOAL
@@ -892,24 +975,30 @@ function OverviewView({
           {/* Add button — shown when goals exist but under the limit */}
           {habits.length > 0 && habits.length < 5 && (
             <button
+              className="add-goal-btn"
               onClick={onAddGoal}
               style={{
                 width: '100%',
-                border: `1px dashed ${C.border}`,
+                border: `1.5px dashed ${C.border}`,
                 background: 'transparent',
-                padding: '1.25rem',
+                borderRadius: 12,
+                padding: '1.1rem 1.25rem',
                 cursor: 'pointer',
                 display: 'flex',
-                flexDirection: 'column',
                 alignItems: 'center',
-                gap: '0.4rem',
-                transition: 'all 0.2s',
-                borderRadius: 0,
+                justifyContent: 'center',
+                gap: '0.65rem',
+                transition: 'all 0.2s ease',
               }}
             >
-              <span style={{ fontSize: '1.4rem', color: '#0ea5e9', lineHeight: 1 }}>+</span>
-              <span style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.1em' }}>
-                Add a goal
+              <span style={{
+                width: 30, height: 30, borderRadius: '50%',
+                background: 'rgba(14,165,233,0.12)', border: '1px solid rgba(14,165,233,0.28)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: '#0ea5e9', fontSize: '1.1rem', lineHeight: 1, flexShrink: 0,
+              }}>+</span>
+              <span style={{ fontFamily: MONO, fontSize: '0.62rem', color: C.text3, letterSpacing: '0.12em' }}>
+                ADD ANOTHER GOAL
               </span>
             </button>
           )}
@@ -926,11 +1015,19 @@ function OverviewView({
       {/* Completed Goals */}
       {completedHabits.length > 0 && (
         <div style={{ marginBottom: '2rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-            <span style={{ fontFamily: MONO, fontSize: '0.75rem', letterSpacing: '0.15em', color: C.text2, fontWeight: 700 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+            <span style={{
+              fontFamily: MONO, fontSize: '0.68rem', letterSpacing: '0.18em', fontWeight: 700,
+              background: 'linear-gradient(90deg, #22c55e 0%, #10b981 100%)',
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+            }}>
               COMPLETED GOALS
             </span>
-            <span style={{ background: C.s2, border: `1px solid ${C.border}`, color: C.text2, fontFamily: MONO, fontSize: '0.7rem', padding: '0.1rem 0.5rem' }}>
+            <span style={{
+              background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.28)',
+              color: '#22c55e', fontFamily: MONO, fontSize: '0.6rem',
+              padding: '0.1rem 0.5rem', borderRadius: 999, fontWeight: 700,
+            }}>
               {completedHabits.length}
             </span>
           </div>
@@ -939,25 +1036,34 @@ function OverviewView({
               <div
                 key={h.id}
                 style={{
-                  border: `1px solid ${C.border}`,
-                  background: C.s1,
-                  padding: '1rem 1.25rem',
+                  border: '1px solid rgba(34,197,94,0.2)',
+                  borderLeft: '3px solid #22c55e',
+                  background: 'linear-gradient(90deg, rgba(34,197,94,0.06) 0%, transparent 100%)',
+                  borderRadius: 10,
+                  padding: '0.9rem 1.1rem',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '1rem',
+                  gap: '0.85rem',
                   opacity: 0,
-                  animation: `slideUp 0.4s ease forwards`,
+                  animation: `cardSlideUp 0.4s ease forwards`,
                   animationDelay: `${i * 80}ms`,
                 }}
               >
-                <span style={{ fontSize: '1.5rem', lineHeight: 1 }}>{h.emoji}</span>
+                <div style={{
+                  width: 40, height: 40, borderRadius: 10, flexShrink: 0,
+                  background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.25)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '1.25rem', lineHeight: 1,
+                }}>
+                  {h.emoji}
+                </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontFamily: GROTESK, fontWeight: 600, fontSize: '0.95rem', color: C.text2 }}>{h.name}</div>
-                  <div style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, marginTop: '0.2rem' }}>
+                  <div style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: '0.95rem', color: C.text }}>{h.name}</div>
+                  <div style={{ fontFamily: MONO, fontSize: '0.58rem', color: C.text3, marginTop: '0.2rem', letterSpacing: '0.05em' }}>
                     {h.total_completions} completions · finished {new Date(h.completed_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                   </div>
                 </div>
-                <span style={{ fontSize: '1.2rem' }}>🏆</span>
+                <span style={{ fontSize: '1.3rem' }}>🏆</span>
               </div>
             ))}
           </div>
@@ -965,7 +1071,17 @@ function OverviewView({
       )}
 
       {/* Account Section */}
-      <div id="account-section" style={{ borderTop: `1px solid ${C.border}` }}>
+      <div id="account-section" style={{ borderTop: `1px solid ${C.border}`, paddingTop: '0.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '1.25rem 0 0.5rem' }}>
+          <span style={{
+            fontFamily: MONO, fontSize: '0.68rem', letterSpacing: '0.18em', fontWeight: 700,
+            background: 'linear-gradient(90deg, #64748b 0%, #94a3b8 100%)',
+            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+          }}>
+            ACCOUNT
+          </span>
+        </div>
+
 
         {/* Phone row */}
         <div style={{ borderBottom: `1px solid ${C.border}`, padding: '1rem 0' }}>
@@ -1038,31 +1154,40 @@ function OverviewView({
           <button
             onClick={onToggleActive}
             style={{
-              background: 'none',
-              border: `1px solid ${C.border}`,
-              color: isActive ? C.text3 : '#22c55e',
+              background: isActive ? 'rgba(239,68,68,0.08)' : 'rgba(34,197,94,0.08)',
+              border: `1px solid ${isActive ? 'rgba(239,68,68,0.25)' : 'rgba(34,197,94,0.25)'}`,
+              color: isActive ? '#ef4444' : '#22c55e',
               fontFamily: MONO,
               fontSize: '0.65rem',
               letterSpacing: '0.1em',
-              padding: '0.6rem 1rem',
+              padding: '0.6rem 1.1rem',
               cursor: 'pointer',
-              borderRadius: 0,
+              borderRadius: 8,
+              transition: 'all 0.15s ease',
             }}
           >
-            {isActive ? 'PAUSE ALL TEXTS' : 'RESUME TEXTS'}
+            {isActive ? '⏸ PAUSE ALL TEXTS' : '▶ RESUME TEXTS'}
           </button>
         </div>
 
         {/* Subscription */}
         <div style={{ borderBottom: `1px solid ${C.border}`, padding: '1rem 0' }}>
-          <div style={{ fontFamily: MONO, fontSize: '0.7rem', color: C.text2, letterSpacing: '0.12em', marginBottom: '0.75rem', fontWeight: 700 }}>SUBSCRIPTION</div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
+          <div style={{ fontFamily: MONO, fontSize: '0.58rem', color: C.text3, letterSpacing: '0.15em', marginBottom: '0.75rem' }}>SUBSCRIPTION</div>
+          <div style={{
+            background: isPro
+              ? 'linear-gradient(135deg, rgba(34,197,94,0.08) 0%, rgba(16,185,129,0.04) 100%)'
+              : 'linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(234,179,8,0.04) 100%)',
+            border: `1px solid ${isPro ? 'rgba(34,197,94,0.22)' : 'rgba(245,158,11,0.22)'}`,
+            borderRadius: 10,
+            padding: '0.9rem 1rem',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem',
+          }}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-                <span style={{ fontFamily: MONO, fontSize: '0.75rem', color: C.text, fontWeight: 700 }}>{isPro ? 'PRO PLAN' : 'FREE PLAN'}</span>
-                <span style={{ fontFamily: MONO, fontSize: '0.5rem', color: isPro ? '#22c55e' : '#f59e0b', border: `1px solid ${isPro ? '#22c55e' : '#f59e0b'}`, padding: '0.1rem 0.4rem', letterSpacing: '0.1em' }}>ACTIVE</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.3rem' }}>
+                <span style={{ fontFamily: GROTESK, fontSize: '0.9rem', color: C.text, fontWeight: 700 }}>{isPro ? '⚡ PRO PLAN' : '🌱 FREE PLAN'}</span>
+                <span style={{ fontFamily: MONO, fontSize: '0.48rem', color: isPro ? '#22c55e' : '#f59e0b', border: `1px solid ${isPro ? 'rgba(34,197,94,0.35)' : 'rgba(245,158,11,0.35)'}`, background: isPro ? 'rgba(34,197,94,0.1)' : 'rgba(245,158,11,0.1)', padding: '0.1rem 0.45rem', borderRadius: 4, letterSpacing: '0.1em' }}>ACTIVE</span>
               </div>
-              <div style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.05em' }}>
+              <div style={{ fontFamily: MONO, fontSize: '0.58rem', color: C.text3, letterSpacing: '0.04em' }}>
                 {isPro ? 'Up to 5 goals · check-ins every 30min' : '1 goal · check-ins every 2hrs'}
               </div>
             </div>
@@ -1070,15 +1195,15 @@ function OverviewView({
               <button
                 onClick={onManageSubscription}
                 disabled={stripeLoading}
-                style={{ background: 'none', border: `1px solid ${C.border}`, color: C.text3, fontFamily: MONO, fontSize: '0.6rem', letterSpacing: '0.12em', fontWeight: 700, padding: '0.6rem 1rem', cursor: stripeLoading ? 'not-allowed' : 'pointer', borderRadius: 0, whiteSpace: 'nowrap', opacity: stripeLoading ? 0.6 : 1 }}
+                style={{ background: 'none', border: `1px solid ${C.border}`, color: C.text3, fontFamily: MONO, fontSize: '0.58rem', letterSpacing: '0.1em', fontWeight: 700, padding: '0.55rem 0.9rem', cursor: stripeLoading ? 'not-allowed' : 'pointer', borderRadius: 8, whiteSpace: 'nowrap', opacity: stripeLoading ? 0.6 : 1 }}
               >
-                {stripeLoading ? 'LOADING...' : 'MANAGE PLAN →'}
+                {stripeLoading ? 'LOADING...' : 'MANAGE →'}
               </button>
             ) : (
               <button
                 onClick={onUpgrade}
                 disabled={stripeLoading}
-                style={{ background: '#0ea5e9', border: 'none', color: '#fff', fontFamily: MONO, fontSize: '0.6rem', letterSpacing: '0.12em', fontWeight: 700, padding: '0.6rem 1rem', cursor: stripeLoading ? 'not-allowed' : 'pointer', borderRadius: 0, whiteSpace: 'nowrap', opacity: stripeLoading ? 0.6 : 1 }}
+                style={{ background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)', border: 'none', color: '#fff', fontFamily: MONO, fontSize: '0.58rem', letterSpacing: '0.1em', fontWeight: 700, padding: '0.55rem 0.9rem', cursor: stripeLoading ? 'not-allowed' : 'pointer', borderRadius: 8, whiteSpace: 'nowrap', opacity: stripeLoading ? 0.6 : 1, boxShadow: '0 2px 12px rgba(14,165,233,0.3)' }}
               >
                 {stripeLoading ? 'LOADING...' : 'UPGRADE TO PRO →'}
               </button>
@@ -1087,7 +1212,7 @@ function OverviewView({
         </div>
 
         {/* Sign out */}
-        <div style={{ padding: '1rem 0' }}>
+        <div style={{ padding: '1.25rem 0 2rem' }}>
           <button
             onClick={onSignOut}
             style={{
@@ -1095,11 +1220,12 @@ function OverviewView({
               border: `1px solid ${C.border}`,
               color: C.text3,
               fontFamily: MONO,
-              fontSize: '0.65rem',
+              fontSize: '0.62rem',
               letterSpacing: '0.1em',
-              padding: '0.6rem 1rem',
+              padding: '0.6rem 1.1rem',
               cursor: 'pointer',
-              borderRadius: 0,
+              borderRadius: 8,
+              transition: 'all 0.15s ease',
             }}
           >
             SIGN OUT
@@ -1145,87 +1271,114 @@ function GoalCard({ habit, onClick, index = 0 }: { habit: Habit; onClick: () => 
     ? TIME_OPTIONS.find(t => t.value === habit.time_of_day)?.sub ?? ''
     : ''
 
+  // Accent color by coach style
+  const accentColor =
+    habit.coach_style === 'brutal' ? '#ef4444' :
+    habit.coach_style === 'savage' ? '#8b5cf6' : '#0ea5e9'
+
+  const coachLabel = COACH_OPTIONS.find(c => c.value === habit.coach_style)?.label ?? 'DIRECT'
+
   return (
     <button
+      className="goal-card"
       onClick={onClick}
       onMouseEnter={e => {
         e.currentTarget.style.transform = 'translateY(-2px)'
-        e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)'
-        e.currentTarget.style.transition = 'transform 0.18s ease, box-shadow 0.18s ease'
+        e.currentTarget.style.boxShadow = `0 10px 36px ${accentColor}22`
+        e.currentTarget.style.borderColor = `${accentColor}44`
       }}
       onMouseLeave={e => {
         e.currentTarget.style.transform = 'translateY(0)'
         e.currentTarget.style.boxShadow = 'none'
+        e.currentTarget.style.borderColor = C.border
       }}
-      onMouseDown={e => {
-        e.currentTarget.style.transform = 'scale(0.98)'
-      }}
-      onMouseUp={e => {
-        e.currentTarget.style.transform = 'translateY(-2px)'
-      }}
+      onMouseDown={e => { e.currentTarget.style.transform = 'scale(0.985)' }}
+      onMouseUp={e => { e.currentTarget.style.transform = 'translateY(-2px)' }}
       style={{
         width: '100%',
         background: C.s1,
         border: `1px solid ${C.border}`,
-        padding: '1.25rem',
+        borderLeft: `3px solid ${accentColor}`,
+        borderRadius: 12,
+        padding: '1.1rem 1.1rem 1.1rem 1rem',
         cursor: 'pointer',
         textAlign: 'left',
         color: C.text,
-        transition: 'transform 0.18s ease, box-shadow 0.18s ease',
-        borderRadius: 0,
+        transition: 'transform 0.18s ease, box-shadow 0.2s ease, border-color 0.18s ease',
         position: 'relative',
         opacity: 0,
-        animation: `cardSlideUp 0.35s cubic-bezier(0.34,1.2,0.64,1) ${index * 0.07}s both`,
+        animation: `cardSlideUp 0.38s cubic-bezier(0.34,1.2,0.64,1) ${index * 0.08}s both`,
       }}
     >
-      <div style={{ position: 'absolute', top: '0.75rem', right: '0.75rem' }}>
-        <span style={{
-          display: 'inline-block',
-          width: 7,
-          height: 7,
-          borderRadius: '50%',
-          background: '#22c55e',
-        }} />
-      </div>
+      {/* Top row: emoji box + name/badges + arrow */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '0.65rem' }}>
+        {/* Emoji in accent-tinted rounded box */}
+        <div style={{
+          width: 46, height: 46, borderRadius: 11, flexShrink: 0,
+          background: `${accentColor}18`,
+          border: `1px solid ${accentColor}28`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '1.35rem', lineHeight: 1,
+        }}>
+          {habit.emoji}
+        </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.4rem', paddingRight: '1rem' }}>
-        <span style={{ fontSize: '1.5rem', lineHeight: 1 }}>{habit.emoji}</span>
+        {/* Name + badges */}
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
-            <span style={{ fontFamily: GROTESK, fontWeight: 600, fontSize: '1rem', color: C.text }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexWrap: 'wrap', marginBottom: '0.35rem' }}>
+            <span style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: '1.05rem', color: C.text, lineHeight: 1.2 }}>
               {habit.name}
             </span>
             {habit.streak > 0 && (
               <span style={{
-                fontFamily: MONO,
-                fontSize: '0.55rem',
-                color: '#f59e0b',
-                background: 'rgba(245,158,11,0.1)',
-                border: '1px solid rgba(245,158,11,0.2)',
-                padding: '0.1rem 0.35rem',
+                fontFamily: MONO, fontSize: '0.53rem', color: '#f59e0b',
+                background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.28)',
+                padding: '0.12rem 0.42rem', borderRadius: 5,
                 animation: 'badgePop 0.4s cubic-bezier(0.34,1.56,0.64,1) both',
+                whiteSpace: 'nowrap',
               }}>
-                🔥 {habit.streak} days
+                🔥 {habit.streak}d
               </span>
             )}
           </div>
-          <p style={{
-            fontFamily: MONO,
-            fontSize: '0.72rem',
-            color: C.text3,
-            margin: 0,
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
+          {/* Coach style badge */}
+          <span style={{
+            fontFamily: MONO, fontSize: '0.48rem', letterSpacing: '0.1em',
+            color: accentColor, background: `${accentColor}14`,
+            border: `1px solid ${accentColor}30`,
+            padding: '0.1rem 0.38rem', borderRadius: 4,
           }}>
-            {habit.last_message || "You haven't started. Don't fall behind."}
-          </p>
+            {coachLabel}
+          </span>
         </div>
-        <span style={{ color: C.text3, fontSize: '0.9rem', flexShrink: 0 }}>›</span>
+
+        {/* Chevron arrow */}
+        <svg
+          className="goal-card-arrow"
+          width="16" height="16" viewBox="0 0 24 24"
+          fill="none" stroke={C.text3} strokeWidth="2.5"
+          strokeLinecap="round" strokeLinejoin="round"
+          style={{ flexShrink: 0 }}
+        >
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
       </div>
 
+      {/* Message preview */}
+      <p style={{
+        fontFamily: MONO, fontSize: '0.68rem', color: C.text3,
+        margin: 0, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis',
+        paddingLeft: '3.6rem', lineHeight: 1.4,
+      }}>
+        {habit.last_message || "Your coach hasn't checked in yet — stay ready."}
+      </p>
+
+      {/* Time tag */}
       {timeLabel && (
-        <div style={{ fontFamily: MONO, fontSize: '0.55rem', color: C.text3, letterSpacing: '0.1em', paddingLeft: '2.25rem' }}>
+        <div style={{
+          fontFamily: MONO, fontSize: '0.5rem', color: C.text3,
+          letterSpacing: '0.1em', paddingLeft: '3.6rem', marginTop: '0.35rem',
+        }}>
           {timeLabel}
         </div>
       )}

@@ -40,7 +40,7 @@ const CONVERSATIONS = [
   },
 ];
 
-function PhoneMockup() {
+function PhoneMockup({ theme = "dark" }: { theme?: "dark" | "light" }) {
   const [convIndex, setConvIndex]       = useState(0);
   const [visibleCount, setVisibleCount] = useState(0);
   const [showTyping, setShowTyping]     = useState(false);
@@ -173,10 +173,22 @@ function PhoneMockup() {
         {/* ── Titanium frame ───────────────────────────────────────────────── */}
         <div style={{
           width:"306px", height:"624px",
-          background:"linear-gradient(158deg, #58585c 0%, #3c3c3e 7%, #2e2e30 28%, #1e1e20 58%, #2a2a2c 84%, #3e3e40 100%)",
+          background: theme === "light"
+            ? "linear-gradient(158deg, #f8f8fa 0%, #e8e8ea 7%, #dddde0 28%, #c8c8cc 58%, #d2d2d5 84%, #e4e4e6 100%)"
+            : "linear-gradient(158deg, #58585c 0%, #3c3c3e 7%, #2e2e30 28%, #1e1e20 58%, #2a2a2c 84%, #3e3e40 100%)",
           borderRadius:"56px",
           padding:"12px",
-          boxShadow:`
+          boxShadow: theme === "light" ? `
+            0 0 0 0.5px rgba(255,255,255,0.9),
+            0 0 0 1px rgba(0,0,0,0.12),
+            0 72px 140px rgba(0,0,0,0.22),
+            0 32px 64px rgba(0,0,0,0.12),
+            0 0 100px rgba(14,165,233,0.10),
+            inset 0 1.5px 0 rgba(255,255,255,0.95),
+            inset 0 -1px 0 rgba(0,0,0,0.08),
+            inset 1px 0 0 rgba(255,255,255,0.7),
+            inset -1px 0 0 rgba(0,0,0,0.06)
+          ` : `
             0 0 0 0.5px rgba(255,255,255,0.22),
             0 0 0 1px rgba(0,0,0,0.9),
             0 72px 140px rgba(0,0,0,0.95),
@@ -194,23 +206,25 @@ function PhoneMockup() {
           {/* Titanium chamfer highlight */}
           <div style={{
             position:"absolute", inset:0, borderRadius:"56px",
-            background:"linear-gradient(130deg, rgba(255,255,255,0.12) 0%, transparent 36%, transparent 64%, rgba(255,255,255,0.05) 100%)",
+            background: theme === "light"
+              ? "linear-gradient(130deg, rgba(255,255,255,0.85) 0%, transparent 36%, transparent 64%, rgba(255,255,255,0.45) 100%)"
+              : "linear-gradient(130deg, rgba(255,255,255,0.12) 0%, transparent 36%, transparent 64%, rgba(255,255,255,0.05) 100%)",
             pointerEvents:"none",
           }}/>
 
           {/* Mute switch */}
-          <div style={{ position:"absolute", left:-3.5, top:90,  width:3.5, height:24, background:"linear-gradient(90deg,#1c1c1e,#323234)", borderRadius:"3px 0 0 3px", boxShadow:"-1px 0 0 rgba(255,255,255,0.09),-1px 0 4px rgba(0,0,0,0.5)" }}/>
+          <div style={{ position:"absolute", left:-3.5, top:90,  width:3.5, height:24, background: theme==="light" ? "linear-gradient(90deg,#b8b8bc,#d8d8dc)" : "linear-gradient(90deg,#1c1c1e,#323234)", borderRadius:"3px 0 0 3px", boxShadow: theme==="light" ? "-1px 0 0 rgba(255,255,255,0.7),-1px 0 4px rgba(0,0,0,0.12)" : "-1px 0 0 rgba(255,255,255,0.09),-1px 0 4px rgba(0,0,0,0.5)" }}/>
           {/* Volume up */}
-          <div style={{ position:"absolute", left:-3.5, top:126, width:3.5, height:38, background:"linear-gradient(90deg,#1c1c1e,#323234)", borderRadius:"3px 0 0 3px", boxShadow:"-1px 0 0 rgba(255,255,255,0.09),-1px 0 4px rgba(0,0,0,0.5)" }}/>
+          <div style={{ position:"absolute", left:-3.5, top:126, width:3.5, height:38, background: theme==="light" ? "linear-gradient(90deg,#b8b8bc,#d8d8dc)" : "linear-gradient(90deg,#1c1c1e,#323234)", borderRadius:"3px 0 0 3px", boxShadow: theme==="light" ? "-1px 0 0 rgba(255,255,255,0.7),-1px 0 4px rgba(0,0,0,0.12)" : "-1px 0 0 rgba(255,255,255,0.09),-1px 0 4px rgba(0,0,0,0.5)" }}/>
           {/* Volume down */}
-          <div style={{ position:"absolute", left:-3.5, top:174, width:3.5, height:38, background:"linear-gradient(90deg,#1c1c1e,#323234)", borderRadius:"3px 0 0 3px", boxShadow:"-1px 0 0 rgba(255,255,255,0.09),-1px 0 4px rgba(0,0,0,0.5)" }}/>
+          <div style={{ position:"absolute", left:-3.5, top:174, width:3.5, height:38, background: theme==="light" ? "linear-gradient(90deg,#b8b8bc,#d8d8dc)" : "linear-gradient(90deg,#1c1c1e,#323234)", borderRadius:"3px 0 0 3px", boxShadow: theme==="light" ? "-1px 0 0 rgba(255,255,255,0.7),-1px 0 4px rgba(0,0,0,0.12)" : "-1px 0 0 rgba(255,255,255,0.09),-1px 0 4px rgba(0,0,0,0.5)" }}/>
           {/* Power */}
-          <div style={{ position:"absolute", right:-3.5, top:138, width:3.5, height:68, background:"linear-gradient(270deg,#1c1c1e,#323234)", borderRadius:"0 3px 3px 0", boxShadow:"1px 0 0 rgba(255,255,255,0.09),1px 0 4px rgba(0,0,0,0.5)" }}/>
+          <div style={{ position:"absolute", right:-3.5, top:138, width:3.5, height:68, background: theme==="light" ? "linear-gradient(270deg,#b8b8bc,#d8d8dc)" : "linear-gradient(270deg,#1c1c1e,#323234)", borderRadius:"0 3px 3px 0", boxShadow: theme==="light" ? "1px 0 0 rgba(255,255,255,0.7),1px 0 4px rgba(0,0,0,0.12)" : "1px 0 0 rgba(255,255,255,0.09),1px 0 4px rgba(0,0,0,0.5)" }}/>
 
           {/* ── Screen ─────────────────────────────────────────────────────── */}
           <div style={{
             width:"100%", height:"100%",
-            background:"#000",
+            background: theme === "light" ? "#f2f2f7" : "#000",
             borderRadius:"46px",
             overflow:"hidden",
             display:"flex",
@@ -222,14 +236,18 @@ function PhoneMockup() {
             {/* OLED inner edge glow */}
             <div style={{
               position:"absolute", inset:0, borderRadius:"46px",
-              boxShadow:"inset 0 0 0 1px rgba(255,255,255,0.048), inset 0 1px 0 rgba(255,255,255,0.08)",
+              boxShadow: theme === "light"
+                ? "inset 0 0 0 1px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8)"
+                : "inset 0 0 0 1px rgba(255,255,255,0.048), inset 0 1px 0 rgba(255,255,255,0.08)",
               pointerEvents:"none", zIndex:52,
             }}/>
 
             {/* Glass reflection */}
             <div style={{
               position:"absolute", inset:0, borderRadius:"46px",
-              background:"linear-gradient(132deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.014) 26%, transparent 50%)",
+              background: theme === "light"
+                ? "linear-gradient(132deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.12) 26%, transparent 50%)"
+                : "linear-gradient(132deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.014) 26%, transparent 50%)",
               pointerEvents:"none", zIndex:51,
             }}/>
 
@@ -250,13 +268,15 @@ function PhoneMockup() {
                 position:"absolute",
                 top:62, left:12, right:12,
                 zIndex:40,
-                background:"rgba(26,26,28,0.88)",
+                background: theme === "light" ? "rgba(235,235,240,0.92)" : "rgba(26,26,28,0.88)",
                 backdropFilter:"blur(24px)",
                 WebkitBackdropFilter:"blur(24px)",
                 borderRadius:18,
                 padding:"11px 13px",
                 display:"flex", alignItems:"center", gap:11,
-                boxShadow:"0 10px 40px rgba(0,0,0,0.7), 0 0 0 0.5px rgba(255,255,255,0.11)",
+                boxShadow: theme === "light"
+                  ? "0 10px 40px rgba(0,0,0,0.12), 0 0 0 0.5px rgba(0,0,0,0.08)"
+                  : "0 10px 40px rgba(0,0,0,0.7), 0 0 0 0.5px rgba(255,255,255,0.11)",
                 animation: notifExit
                   ? "notifExit 0.38s cubic-bezier(0.4,0,1,1) forwards"
                   : "notifEnter 0.48s cubic-bezier(0.34,1.56,0.64,1) forwards",
@@ -270,11 +290,11 @@ function PhoneMockup() {
                 }}>🤖</div>
                 <div style={{ flex:1, minWidth:0 }}>
                   <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:3 }}>
-                    <span style={{ fontSize:12, fontWeight:600, color:"#fff", fontFamily:"-apple-system,'SF Pro Text',sans-serif" }}>MoggedAI</span>
-                    <span style={{ fontSize:10, color:"rgba(255,255,255,0.42)", fontFamily:"-apple-system,'SF Pro Text',sans-serif" }}>now</span>
+                    <span style={{ fontSize:12, fontWeight:600, color: theme==="light" ? "#1c1c1e" : "#fff", fontFamily:"-apple-system,'SF Pro Text',sans-serif" }}>MoggedAI</span>
+                    <span style={{ fontSize:10, color: theme==="light" ? "rgba(0,0,0,0.38)" : "rgba(255,255,255,0.42)", fontFamily:"-apple-system,'SF Pro Text',sans-serif" }}>now</span>
                   </div>
                   <div style={{
-                    fontSize:12, color:"rgba(255,255,255,0.68)",
+                    fontSize:12, color: theme==="light" ? "rgba(0,0,0,0.55)" : "rgba(255,255,255,0.68)",
                     fontFamily:"-apple-system,'SF Pro Text',sans-serif",
                     whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis",
                     lineHeight:1.35,
@@ -291,26 +311,26 @@ function PhoneMockup() {
               flexShrink:0, height:54,
               position:"relative", zIndex:25,
             }}>
-              <span style={{ fontSize:15, fontWeight:600, color:"#fff", letterSpacing:"-0.4px", lineHeight:1 }}>
+              <span style={{ fontSize:15, fontWeight:600, color: theme==="light" ? "#1c1c1e" : "#fff", letterSpacing:"-0.4px", lineHeight:1 }}>
                 {conv.time}
               </span>
               <div style={{ display:"flex", alignItems:"center", gap:6 }}>
                 <svg width="17" height="12" viewBox="0 0 17 12" fill="none">
-                  <rect x="0"  y="8" width="3" height="4"  rx="0.8" fill="white"/>
-                  <rect x="4.7" y="5.5" width="3" height="6.5" rx="0.8" fill="white"/>
-                  <rect x="9.3" y="3" width="3" height="9"  rx="0.8" fill="white"/>
-                  <rect x="14" y="0" width="3" height="12" rx="0.8" fill="white" opacity="0.28"/>
+                  <rect x="0"  y="8" width="3" height="4"  rx="0.8" fill={theme==="light" ? "#1c1c1e" : "white"}/>
+                  <rect x="4.7" y="5.5" width="3" height="6.5" rx="0.8" fill={theme==="light" ? "#1c1c1e" : "white"}/>
+                  <rect x="9.3" y="3" width="3" height="9"  rx="0.8" fill={theme==="light" ? "#1c1c1e" : "white"}/>
+                  <rect x="14" y="0" width="3" height="12" rx="0.8" fill={theme==="light" ? "#1c1c1e" : "white"} opacity="0.28"/>
                 </svg>
                 <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
-                  <path d="M8 10a1.2 1.2 0 1 1 0-2.4A1.2 1.2 0 0 1 8 10z" fill="white"/>
-                  <path d="M4.5 7C5.6 5.8 6.7 5.2 8 5.2s2.4.6 3.5 1.8" stroke="white" strokeWidth="1.4" strokeLinecap="round"/>
-                  <path d="M1.5 4.2C3.2 2.3 5.5 1.2 8 1.2s4.8 1.1 6.5 3" stroke="white" strokeWidth="1.4" strokeLinecap="round" opacity="0.38"/>
+                  <path d="M8 10a1.2 1.2 0 1 1 0-2.4A1.2 1.2 0 0 1 8 10z" fill={theme==="light" ? "#1c1c1e" : "white"}/>
+                  <path d="M4.5 7C5.6 5.8 6.7 5.2 8 5.2s2.4.6 3.5 1.8" stroke={theme==="light" ? "#1c1c1e" : "white"} strokeWidth="1.4" strokeLinecap="round"/>
+                  <path d="M1.5 4.2C3.2 2.3 5.5 1.2 8 1.2s4.8 1.1 6.5 3" stroke={theme==="light" ? "#1c1c1e" : "white"} strokeWidth="1.4" strokeLinecap="round" opacity="0.38"/>
                 </svg>
                 <div style={{ display:"flex", alignItems:"center" }}>
-                  <div style={{ width:24, height:12, border:"1px solid rgba(255,255,255,0.38)", borderRadius:3.5, position:"relative", overflow:"hidden", padding:"1.5px" }}>
-                    <div style={{ width:"75%", height:"100%", background:"#fff", borderRadius:2 }}/>
+                  <div style={{ width:24, height:12, border: theme==="light" ? "1px solid rgba(0,0,0,0.32)" : "1px solid rgba(255,255,255,0.38)", borderRadius:3.5, position:"relative", overflow:"hidden", padding:"1.5px" }}>
+                    <div style={{ width:"75%", height:"100%", background: theme==="light" ? "#1c1c1e" : "#fff", borderRadius:2 }}/>
                   </div>
-                  <div style={{ width:2, height:5, background:"rgba(255,255,255,0.38)", borderRadius:"0 1px 1px 0", marginLeft:0.5 }}/>
+                  <div style={{ width:2, height:5, background: theme==="light" ? "rgba(0,0,0,0.32)" : "rgba(255,255,255,0.38)", borderRadius:"0 1px 1px 0", marginLeft:0.5 }}/>
                 </div>
               </div>
             </div>
@@ -320,7 +340,7 @@ function PhoneMockup() {
               display:"flex", alignItems:"center",
               padding:"4px 16px 10px",
               flexShrink:0,
-              borderBottom:"0.5px solid rgba(255,255,255,0.07)",
+              borderBottom: theme==="light" ? "0.5px solid rgba(0,0,0,0.1)" : "0.5px solid rgba(255,255,255,0.07)",
               fontFamily:"-apple-system,'SF Pro Text',sans-serif",
             }}>
               <div style={{ display:"flex", alignItems:"center", gap:3, marginRight:"auto" }}>
@@ -336,7 +356,7 @@ function PhoneMockup() {
                   display:"flex", alignItems:"center", justifyContent:"center",
                   fontSize:19, boxShadow:"0 3px 10px rgba(14,165,233,0.5)",
                 }}>🤖</div>
-                <span style={{ fontSize:11, color:"#fff", fontWeight:600 }}>MoggedAI</span>
+                <span style={{ fontSize:11, color: theme==="light" ? "#1c1c1e" : "#fff", fontWeight:600 }}>MoggedAI</span>
               </div>
               <div style={{ display:"flex", gap:16, marginLeft:"auto" }}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -351,7 +371,7 @@ function PhoneMockup() {
             {/* Date chip */}
             <div style={{ display:"flex", justifyContent:"center", padding:"8px 0 2px", flexShrink:0 }}>
               <span style={{
-                fontSize:11, color:"rgba(255,255,255,0.36)",
+                fontSize:11, color: theme==="light" ? "rgba(0,0,0,0.38)" : "rgba(255,255,255,0.36)",
                 fontFamily:"-apple-system,'SF Pro Text',sans-serif",
               }}>{conv.label} · Today {conv.time}</span>
             </div>
@@ -386,8 +406,8 @@ function PhoneMockup() {
                     <div style={{
                       background: isUser
                         ? "linear-gradient(175deg,#2a9fff 0%,#007AFF 40%,#0063CC 100%)"
-                        : "#1C1C1E",
-                      color:"#fff",
+                        : (theme === "light" ? "#e5e5ea" : "#1C1C1E"),
+                      color: isUser ? "#fff" : (theme === "light" ? "#1c1c1e" : "#fff"),
                       borderRadius:`${tl}px ${tr}px ${br}px ${bl}px`,
                       padding:"9px 13px",
                       fontSize:13,
@@ -398,13 +418,15 @@ function PhoneMockup() {
                       letterSpacing:-0.15,
                       boxShadow: isUser
                         ? "0 2px 10px rgba(0,122,255,0.38), 0 1px 3px rgba(0,0,0,0.22)"
-                        : "0 1px 3px rgba(0,0,0,0.45), inset 0 0 0 0.5px rgba(255,255,255,0.06)",
+                        : (theme === "light"
+                            ? "0 1px 3px rgba(0,0,0,0.08)"
+                            : "0 1px 3px rgba(0,0,0,0.45), inset 0 0 0 0.5px rgba(255,255,255,0.06)"),
                     }}>
                       {msg.text}
                     </div>
                     {isUser && isLast && delivered && (
                       <span style={{
-                        fontSize:10, color:"rgba(255,255,255,0.33)",
+                        fontSize:10, color: theme==="light" ? "rgba(0,0,0,0.33)" : "rgba(255,255,255,0.33)",
                         marginTop:3,
                         fontFamily:"-apple-system,'SF Pro Text',sans-serif",
                         animation:"deliveredFade 0.3s ease forwards",
@@ -424,18 +446,18 @@ function PhoneMockup() {
                   <div style={{
                     background: typingFrom === "user"
                       ? "linear-gradient(175deg,#2a9fff 0%,#007AFF 100%)"
-                      : "#1C1C1E",
+                      : (theme === "light" ? "#e5e5ea" : "#1C1C1E"),
                     borderRadius:18,
                     padding:"11px 15px",
                     display:"flex", gap:5, alignItems:"center",
                     boxShadow: typingFrom === "user"
                       ? "0 2px 10px rgba(0,122,255,0.38)"
-                      : "0 1px 3px rgba(0,0,0,0.45)",
+                      : (theme === "light" ? "0 1px 3px rgba(0,0,0,0.08)" : "0 1px 3px rgba(0,0,0,0.45)"),
                   }}>
                     {["dot1","dot2","dot3"].map(d => (
                       <div key={d} style={{
                         width:7, height:7, borderRadius:"50%",
-                        background:"rgba(255,255,255,0.8)",
+                        background: typingFrom === "user" || theme === "dark" ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.45)",
                         animation:`${d} 1.1s ease-in-out infinite`,
                       }}/>
                     ))}
@@ -448,43 +470,43 @@ function PhoneMockup() {
             <div style={{
               padding:"6px 10px 10px",
               display:"flex", alignItems:"center", gap:7,
-              borderTop:"0.5px solid rgba(255,255,255,0.07)",
+              borderTop: theme==="light" ? "0.5px solid rgba(0,0,0,0.1)" : "0.5px solid rgba(255,255,255,0.07)",
               flexShrink:0,
             }}>
               <div style={{
                 width:30, height:30, borderRadius:"50%",
-                background:"rgba(255,255,255,0.09)",
+                background: theme==="light" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.09)",
                 display:"flex", alignItems:"center", justifyContent:"center",
                 flexShrink:0,
               }}>
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M7 1v12M1 7h12" stroke="rgba(255,255,255,0.5)" strokeWidth="1.8" strokeLinecap="round"/>
+                  <path d="M7 1v12M1 7h12" stroke={theme==="light" ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.5)"} strokeWidth="1.8" strokeLinecap="round"/>
                 </svg>
               </div>
               <div style={{
-                flex:1, background:"#1C1C1E",
+                flex:1, background: theme==="light" ? "#e5e5ea" : "#1C1C1E",
                 borderRadius:22, padding:"8px 14px",
-                fontSize:13, color:"rgba(255,255,255,0.22)",
-                border:"0.5px solid rgba(255,255,255,0.08)",
+                fontSize:13, color: theme==="light" ? "rgba(0,0,0,0.3)" : "rgba(255,255,255,0.22)",
+                border: theme==="light" ? "0.5px solid rgba(0,0,0,0.08)" : "0.5px solid rgba(255,255,255,0.08)",
                 fontFamily:"-apple-system,'SF Pro Text',sans-serif",
               }}>iMessage</div>
               <div style={{
                 width:30, height:30, borderRadius:"50%",
-                background:"rgba(255,255,255,0.09)",
+                background: theme==="light" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.09)",
                 display:"flex", alignItems:"center", justifyContent:"center",
                 flexShrink:0,
               }}>
                 <svg width="12" height="17" viewBox="0 0 12 17" fill="none">
-                  <rect x="3.5" y="0.5" width="5" height="9.5" rx="2.5" stroke="rgba(255,255,255,0.5)" strokeWidth="1.3"/>
-                  <path d="M1 8a5 5 0 0 0 10 0" stroke="rgba(255,255,255,0.5)" strokeWidth="1.3" strokeLinecap="round"/>
-                  <path d="M6 13v3.5" stroke="rgba(255,255,255,0.5)" strokeWidth="1.3" strokeLinecap="round"/>
+                  <rect x="3.5" y="0.5" width="5" height="9.5" rx="2.5" stroke={theme==="light" ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.5)"} strokeWidth="1.3"/>
+                  <path d="M1 8a5 5 0 0 0 10 0" stroke={theme==="light" ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.5)"} strokeWidth="1.3" strokeLinecap="round"/>
+                  <path d="M6 13v3.5" stroke={theme==="light" ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.5)"} strokeWidth="1.3" strokeLinecap="round"/>
                 </svg>
               </div>
             </div>
 
             {/* Home indicator */}
             <div style={{ display:"flex", justifyContent:"center", padding:"6px 0 10px", flexShrink:0 }}>
-              <div style={{ width:120, height:4.5, background:"rgba(255,255,255,0.32)", borderRadius:3 }}/>
+              <div style={{ width:120, height:4.5, background: theme==="light" ? "rgba(0,0,0,0.2)" : "rgba(255,255,255,0.32)", borderRadius:3 }}/>
             </div>
 
           </div>{/* /screen */}
@@ -497,9 +519,25 @@ function PhoneMockup() {
 // ── Main page ────────────────────────────────────────────────────────────────
 export default function MoggedAI() {
   const [ticker, setTicker] = useState(0);
+  const [theme, setTheme] = useState<"dark"|"light">("dark");
   const router = useRouter();
   const { isSignedIn } = useAuth();
   const { signOut } = useClerk();
+
+  // Sync theme from localStorage / data-theme attribute (set by dashboard toggle)
+  useEffect(() => {
+    const stored = localStorage.getItem("mogged-theme") as "dark"|"light"|null;
+    const initial = stored ?? (document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark");
+    setTheme(initial);
+
+    const observer = new MutationObserver(() => {
+      const t = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+      setTheme(t);
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => observer.disconnect();
+  }, []);
+
   useEffect(() => {
     const t = setInterval(() => setTicker(p => p + 1), 50);
     return () => clearInterval(t);
@@ -570,7 +608,7 @@ export default function MoggedAI() {
       <div style={{ padding:"6rem 1.25rem 2.5rem", maxWidth:"920px", margin:"0 auto", width:"100%", boxSizing:"border-box" }}>
         <div style={tag}>AI ACCOUNTABILITY · SMS · BUILT FOR RESULTS</div>
         <h1 style={{ fontSize:"clamp(2.4rem,9vw,5.5rem)", fontWeight:"700", lineHeight:0.95, letterSpacing:"-0.02em", wordSpacing:"-0.15em", marginBottom:"1rem", transform:`translateX(${noise*0.3}px)` }}>
-          STOP<br/><span style={{ color:"#0ea5e9" }}>SLACKING.</span><br/>START NOW.
+          YOUR GOALS<br/><span style={{ color:"#0ea5e9" }}>DON&apos;T CHASE</span><br/>THEMSELVES.
         </h1>
         <p style={{ fontSize:"clamp(0.9rem,2.5vw,1.05rem)", color:"var(--c-text4)", maxWidth:"480px", lineHeight:"1.9", marginBottom:"2rem" }}>
           An AI that texts you all day and won&apos;t let you make excuses.<br/>Set it once. Stay accountable forever.
@@ -682,7 +720,7 @@ export default function MoggedAI() {
           This is what lands on your phone.
         </p>
         <div className="phone-wrap" style={{ display:"flex", justifyContent:"center" }}>
-          <PhoneMockup />
+          <PhoneMockup theme={theme} />
         </div>
       </div>
 

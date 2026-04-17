@@ -168,6 +168,7 @@ export async function GET() {
 }
 
 export async function PATCH(req: NextRequest) {
+  try {
   const { userId } = await auth();
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
@@ -235,4 +236,9 @@ export async function PATCH(req: NextRequest) {
   }
 
   return NextResponse.json({ success: true });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error('[PATCH /api/user] error:', msg);
+    return NextResponse.json({ error: msg }, { status: 500 });
+  }
 }

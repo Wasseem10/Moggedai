@@ -84,5 +84,26 @@ export async function ensureSchema(): Promise<void> {
       responded_at TIMESTAMPTZ
     );
   `)
+
+  // Safe column migrations — handles databases that pre-existed before these
+  // columns were added to the schema above. CREATE TABLE IF NOT EXISTS does
+  // NOT add missing columns to an existing table, so we backfill them here.
+  const columnAdds = [
+    `ALTER TABLE habits ADD COLUMN IF NOT EXISTS why            TEXT`,
+    `ALTER TABLE habits ADD COLUMN IF NOT EXISTS biggest_excuse TEXT`,
+    `ALTER TABLE habits ADD COLUMN IF NOT EXISTS stakes         TEXT`,
+    `ALTER TABLE habits ADD COLUMN IF NOT EXISTS time_of_day    TEXT DEFAULT 'anytime'`,
+    `ALTER TABLE habits ADD COLUMN IF NOT EXISTS coach_style    TEXT DEFAULT 'direct'`,
+    `ALTER TABLE habits ADD COLUMN IF NOT EXISTS completed_at   TIMESTAMPTZ`,
+    `ALTER TABLE users  ADD COLUMN IF NOT EXISTS stripe_customer_id      TEXT`,
+    `ALTER TABLE users  ADD COLUMN IF NOT EXISTS stripe_subscription_id  TEXT`,
+    `ALTER TABLE users  ADD COLUMN IF NOT EXISTS plan TEXT NOT NULL DEFAULT 'free'`,
+  ]
+  for (const sql of columnAdds) {
+    await db.query(sql).catch(err => {
+      console.warn('[ensureSchema] migration skipped:', sql, err?.message)
+    })
+  }
+
   _schemaReady = true
 }

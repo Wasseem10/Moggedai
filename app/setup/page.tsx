@@ -84,11 +84,23 @@ export default function SetupPage() {
     setError("");
     try {
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      // Split "💪 Going to the gym" → { emoji: "💪", name: "Going to the gym" }
+      const habits = focus
+        ? (() => {
+            const match = focus.match(/^(\p{Emoji}+)\s+(.+)$/u);
+            return match
+              ? [{ emoji: match[1], name: match[2] }]
+              : [{ emoji: "🎯", name: focus }];
+          })()
+        : [];
+
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           phone: `+1${phone.replace(/\D/g,"")}`,
+          habits,
           frequency_minutes: freq,
           start_time: startTime,
           end_time: endTime,

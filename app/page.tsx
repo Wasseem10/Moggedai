@@ -255,7 +255,7 @@ function PhoneMockup({ theme = "dark" }: { theme?: "dark" | "light" }) {
             <div style={{
               position:"absolute", top:14, left:"50%",
               transform:"translateX(-50%)",
-              width:96, height:30,
+              width:84, height:26,
               background:"#000",
               borderRadius:20,
               zIndex:20,
@@ -362,8 +362,8 @@ function PhoneMockup({ theme = "dark" }: { theme?: "dark" | "light" }) {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                   <path d="M15 10l4.55-2.275A1 1 0 0 1 21 8.618V15.38a1 1 0 0 1-1.45.894L15 14M3 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8z" stroke="#0B84FF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="m22 16.92-.09-3.37a2 2 0 0 0-1.34-1.83l-2.56-.85a2 2 0 0 0-2.18.63l-.9 1.1a15.1 15.1 0 0 1-6.53-6.53l1.1-.9a2 2 0 0 0 .63-2.18l-.85-2.56A2 2 0 0 0 8 .09L4.63 0A2 2 0 0 0 2.5 2C2.5 13.85 10.15 21.5 22 21.5a2 2 0 0 0 2-2.09z" fill="#0B84FF"/>
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
+                  <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24 11.36 11.36 0 0 0 3.57.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.36 11.36 0 0 0 .57 3.57 1 1 0 0 1-.24 1.02l-2.21 2.2z" fill="#0B84FF"/>
                 </svg>
               </div>
             </div>
@@ -521,8 +521,16 @@ export default function MoggedAI() {
   const [ticker, setTicker] = useState(0);
   const [theme, setTheme] = useState<"dark"|"light">("dark");
   const router = useRouter();
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, isLoaded } = useAuth();
   const { signOut } = useClerk();
+
+  // Auto-redirect signed-in users straight to their dashboard.
+  // If they haven't completed setup yet, /dashboard itself will bounce them to /setup.
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      router.replace("/dashboard");
+    }
+  }, [isLoaded, isSignedIn, router]);
 
   // Sync theme from localStorage / data-theme attribute (set by dashboard toggle)
   useEffect(() => {

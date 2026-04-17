@@ -530,7 +530,11 @@ export default function MoggedAI() {
         .who-row:hover .who-emoji { transform: scale(1.2); }
         .who-emoji { transition: transform 0.18s; display:inline-block; }
         .step-line { transition: background 0.3s; }
+        .hero-btns { max-width: 480px; }
         @media (max-width: 640px) {
+          .hero-btns { max-width: 100%; }
+          .hero-primary-btn { font-size: 0.75rem !important; padding: 1rem 1rem !important; }
+          .hero-secondary-btn { font-size: 0.75rem !important; padding: 1rem 1rem !important; }
           .footer-grid { grid-template-columns: 1fr 1fr; }
           .footer-brand { grid-column: 1 / -1; }
           .nav-btns .sign-out-btn { display: none; }
@@ -571,16 +575,16 @@ export default function MoggedAI() {
         <p style={{ fontSize:"clamp(0.9rem,2.5vw,1.05rem)", color:"var(--c-text4)", maxWidth:"480px", lineHeight:"1.9", marginBottom:"2rem" }}>
           An AI that texts you all day and won&apos;t let you make excuses.<br/>Set it once. Stay accountable forever.
         </p>
-        <div style={{ display:"flex", gap:"0.75rem", flexWrap:"wrap" }}>
-          <button style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem 2.5rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
+        <div className="hero-btns" style={{ display:"flex", gap:"0.75rem" }}>
+          <button className="hero-primary-btn" style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem 2.5rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700", flex:1 }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
             GET STARTED FREE →
           </button>
           {isSignedIn ? (
-            <button style={{ background:"transparent", border:"1px solid var(--c-border)", color:"var(--c-text)", padding:"1rem 2rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => router.push("/dashboard")}>
+            <button className="hero-secondary-btn" style={{ background:"transparent", border:"1px solid var(--c-border)", color:"var(--c-text)", padding:"1rem 2rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700", flex:1 }} onClick={() => router.push("/dashboard")}>
               DASHBOARD
             </button>
           ) : (
-            <button style={{ background:"transparent", border:"1px solid var(--c-border)", color:"var(--c-text)", padding:"1rem 2rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => router.push("/sign-in")}>
+            <button className="hero-secondary-btn" style={{ background:"transparent", border:"1px solid var(--c-border)", color:"var(--c-text)", padding:"1rem 2rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700", flex:1 }} onClick={() => router.push("/sign-in")}>
               LOG IN
             </button>
           )}
@@ -598,8 +602,8 @@ export default function MoggedAI() {
           </div>
         </div>
 
-        {/* Statement rows */}
-        <div style={{ borderTop:"1px solid var(--c-border)" }}>
+        {/* Statement cards */}
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(260px, 1fr))", gap:"1rem" }}>
           {[
             { emoji:"📚", who:"Students",      line:"Study for 15 min, end up on YouTube for 2 hours." },
             { emoji:"💻", who:"Builders",       line:"Always planning the side project. Never building it." },
@@ -608,14 +612,18 @@ export default function MoggedAI() {
             { emoji:"🎨", who:"Creatives",      line:"Waiting for motivation instead of just starting." },
             { emoji:"🚀", who:"Entrepreneurs",  line:"Busy with everything except the thing that moves the needle." },
           ].map(f => (
-            <div key={f.who} className="who-row" style={{
-              display:"flex", alignItems:"center", gap:"1.5rem",
-              padding:"1.1rem 1rem",
-              borderBottom:"1px solid var(--c-border)",
+            <div key={f.who} style={{
+              border:"1px solid var(--c-border)",
+              borderRadius:"8px",
+              padding:"1.4rem 1.2rem",
+              background:"var(--c-s1)",
+              display:"flex",
+              flexDirection:"column",
+              gap:"0.75rem",
             }}>
-              <span className="who-emoji" style={{ fontSize:"1.6rem", width:"2rem", textAlign:"center", flexShrink:0 }}>{f.emoji}</span>
-              <span style={{ fontSize:"0.72rem", fontWeight:"700", letterSpacing:"0.12em", color:"var(--c-text)", width:"110px", flexShrink:0 }}>{f.who.toUpperCase()}</span>
-              <span style={{ fontSize:"0.9rem", color:"var(--c-text4)", lineHeight:1.6 }}>{f.line}</span>
+              <span style={{ fontSize:"1.8rem" }}>{f.emoji}</span>
+              <span style={{ fontSize:"0.7rem", fontWeight:"700", letterSpacing:"0.15em", color:"var(--c-text)" }}>{f.who.toUpperCase()}</span>
+              <span style={{ fontSize:"0.88rem", color:"var(--c-text4)", lineHeight:1.6 }}>{f.line}</span>
             </div>
           ))}
         </div>

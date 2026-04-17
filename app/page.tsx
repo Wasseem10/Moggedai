@@ -608,7 +608,7 @@ export default function MoggedAI() {
       <div style={{ padding:"6rem 1.25rem 2.5rem", maxWidth:"920px", margin:"0 auto", width:"100%", boxSizing:"border-box" }}>
         <div style={tag}>AI ACCOUNTABILITY · SMS · BUILT FOR RESULTS</div>
         <h1 style={{ fontSize:"clamp(2.4rem,9vw,5.5rem)", fontWeight:"700", lineHeight:0.95, letterSpacing:"-0.02em", wordSpacing:"-0.15em", marginBottom:"1rem", transform:`translateX(${noise*0.3}px)` }}>
-          YOUR GOALS<br/><span style={{ color:"#0ea5e9" }}>DON&apos;T CHASE</span><br/>THEMSELVES.
+          STOP DREAMING.<br/><span style={{ color:"#0ea5e9" }}>START</span><br/>DOING.
         </h1>
         <p style={{ fontSize:"clamp(0.9rem,2.5vw,1.05rem)", color:"var(--c-text4)", maxWidth:"480px", lineHeight:"1.9", marginBottom:"2rem" }}>
           An AI that texts you all day and won&apos;t let you make excuses.<br/>Set it once. Stay accountable forever.

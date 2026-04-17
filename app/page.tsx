@@ -136,9 +136,9 @@ function PhoneMockup() {
           50%     { opacity:0.9;  transform:scale(1.07); }
         }
         @keyframes phoneFloat {
-          0%,100% { transform:translateY(0px) rotate(0deg); }
-          35%     { transform:translateY(-7px) rotate(0.25deg); }
-          68%     { transform:translateY(-3px) rotate(-0.18deg); }
+          0%,100% { transform:translateY(0px); }
+          40%     { transform:translateY(-9px); }
+          70%     { transform:translateY(-4px); }
         }
         @keyframes notifEnter {
           0%   { transform:translateY(-72px) scale(0.94); opacity:0; }
@@ -172,17 +172,17 @@ function PhoneMockup() {
 
         {/* ── Titanium frame ───────────────────────────────────────────────── */}
         <div style={{
-          width:"280px", height:"582px",
-          background:"linear-gradient(158deg, #56565a 0%, #3a3a3c 7%, #2c2c2e 28%, #1e1e20 58%, #28282a 84%, #3c3c3e 100%)",
-          borderRadius:"54px",
-          padding:"11px",
+          width:"306px", height:"624px",
+          background:"linear-gradient(158deg, #58585c 0%, #3c3c3e 7%, #2e2e30 28%, #1e1e20 58%, #2a2a2c 84%, #3e3e40 100%)",
+          borderRadius:"56px",
+          padding:"12px",
           boxShadow:`
-            0 0 0 0.5px rgba(255,255,255,0.24),
+            0 0 0 0.5px rgba(255,255,255,0.22),
             0 0 0 1px rgba(0,0,0,0.9),
-            0 64px 128px rgba(0,0,0,0.92),
-            0 28px 56px rgba(0,0,0,0.62),
-            0 0 90px rgba(14,165,233,0.13),
-            inset 0 1.5px 0 rgba(255,255,255,0.15),
+            0 72px 140px rgba(0,0,0,0.95),
+            0 32px 64px rgba(0,0,0,0.65),
+            0 0 100px rgba(14,165,233,0.15),
+            inset 0 1.5px 0 rgba(255,255,255,0.16),
             inset 0 -1px 0 rgba(0,0,0,0.6),
             inset 1px 0 0 rgba(255,255,255,0.07),
             inset -1px 0 0 rgba(0,0,0,0.4)
@@ -193,25 +193,25 @@ function PhoneMockup() {
 
           {/* Titanium chamfer highlight */}
           <div style={{
-            position:"absolute", inset:0, borderRadius:"54px",
-            background:"linear-gradient(130deg, rgba(255,255,255,0.11) 0%, transparent 38%, transparent 62%, rgba(255,255,255,0.05) 100%)",
+            position:"absolute", inset:0, borderRadius:"56px",
+            background:"linear-gradient(130deg, rgba(255,255,255,0.12) 0%, transparent 36%, transparent 64%, rgba(255,255,255,0.05) 100%)",
             pointerEvents:"none",
           }}/>
 
           {/* Mute switch */}
-          <div style={{ position:"absolute", left:-3.5, top:84,  width:3.5, height:22, background:"linear-gradient(90deg,#1e1e20,#303032)", borderRadius:"3px 0 0 3px", boxShadow:"-1px 0 0 rgba(255,255,255,0.09),-1px 0 4px rgba(0,0,0,0.5)" }}/>
+          <div style={{ position:"absolute", left:-3.5, top:90,  width:3.5, height:24, background:"linear-gradient(90deg,#1c1c1e,#323234)", borderRadius:"3px 0 0 3px", boxShadow:"-1px 0 0 rgba(255,255,255,0.09),-1px 0 4px rgba(0,0,0,0.5)" }}/>
           {/* Volume up */}
-          <div style={{ position:"absolute", left:-3.5, top:118, width:3.5, height:34, background:"linear-gradient(90deg,#1e1e20,#303032)", borderRadius:"3px 0 0 3px", boxShadow:"-1px 0 0 rgba(255,255,255,0.09),-1px 0 4px rgba(0,0,0,0.5)" }}/>
+          <div style={{ position:"absolute", left:-3.5, top:126, width:3.5, height:38, background:"linear-gradient(90deg,#1c1c1e,#323234)", borderRadius:"3px 0 0 3px", boxShadow:"-1px 0 0 rgba(255,255,255,0.09),-1px 0 4px rgba(0,0,0,0.5)" }}/>
           {/* Volume down */}
-          <div style={{ position:"absolute", left:-3.5, top:162, width:3.5, height:34, background:"linear-gradient(90deg,#1e1e20,#303032)", borderRadius:"3px 0 0 3px", boxShadow:"-1px 0 0 rgba(255,255,255,0.09),-1px 0 4px rgba(0,0,0,0.5)" }}/>
+          <div style={{ position:"absolute", left:-3.5, top:174, width:3.5, height:38, background:"linear-gradient(90deg,#1c1c1e,#323234)", borderRadius:"3px 0 0 3px", boxShadow:"-1px 0 0 rgba(255,255,255,0.09),-1px 0 4px rgba(0,0,0,0.5)" }}/>
           {/* Power */}
-          <div style={{ position:"absolute", right:-3.5, top:128, width:3.5, height:60, background:"linear-gradient(270deg,#1e1e20,#303032)", borderRadius:"0 3px 3px 0", boxShadow:"1px 0 0 rgba(255,255,255,0.09),1px 0 4px rgba(0,0,0,0.5)" }}/>
+          <div style={{ position:"absolute", right:-3.5, top:138, width:3.5, height:68, background:"linear-gradient(270deg,#1c1c1e,#323234)", borderRadius:"0 3px 3px 0", boxShadow:"1px 0 0 rgba(255,255,255,0.09),1px 0 4px rgba(0,0,0,0.5)" }}/>
 
           {/* ── Screen ─────────────────────────────────────────────────────── */}
           <div style={{
             width:"100%", height:"100%",
             background:"#000",
-            borderRadius:"44px",
+            borderRadius:"46px",
             overflow:"hidden",
             display:"flex",
             flexDirection:"column",
@@ -221,34 +221,34 @@ function PhoneMockup() {
 
             {/* OLED inner edge glow */}
             <div style={{
-              position:"absolute", inset:0, borderRadius:"44px",
-              boxShadow:"inset 0 0 0 1px rgba(255,255,255,0.045), inset 0 1px 0 rgba(255,255,255,0.07)",
+              position:"absolute", inset:0, borderRadius:"46px",
+              boxShadow:"inset 0 0 0 1px rgba(255,255,255,0.048), inset 0 1px 0 rgba(255,255,255,0.08)",
               pointerEvents:"none", zIndex:52,
             }}/>
 
             {/* Glass reflection */}
             <div style={{
-              position:"absolute", inset:0, borderRadius:"44px",
-              background:"linear-gradient(132deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.012) 28%, transparent 52%)",
+              position:"absolute", inset:0, borderRadius:"46px",
+              background:"linear-gradient(132deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.014) 26%, transparent 50%)",
               pointerEvents:"none", zIndex:51,
             }}/>
 
-            {/* Dynamic Island */}
+            {/* Dynamic Island — narrower so it doesn't overlap the time */}
             <div style={{
-              position:"absolute", top:13, left:"50%",
+              position:"absolute", top:14, left:"50%",
               transform:"translateX(-50%)",
-              width:112, height:31,
+              width:96, height:30,
               background:"#000",
-              borderRadius:22,
+              borderRadius:20,
               zIndex:20,
-              boxShadow:"0 0 0 1px rgba(255,255,255,0.05), 0 2px 10px rgba(0,0,0,0.9)",
+              boxShadow:"0 0 0 1px rgba(255,255,255,0.06), 0 2px 12px rgba(0,0,0,0.95)",
             }}/>
 
             {/* ── Lock-screen notification ──────────────────────────────── */}
             {showNotif && (
               <div style={{
                 position:"absolute",
-                top:60, left:10, right:10,
+                top:62, left:12, right:12,
                 zIndex:40,
                 background:"rgba(26,26,28,0.88)",
                 backdropFilter:"blur(24px)",
@@ -283,15 +283,15 @@ function PhoneMockup() {
               </div>
             )}
 
-            {/* Status bar */}
+            {/* Status bar — sits ABOVE the Dynamic Island on both sides */}
             <div style={{
-              display:"flex", justifyContent:"space-between", alignItems:"center",
-              padding:"17px 24px 0",
+              display:"flex", justifyContent:"space-between", alignItems:"flex-start",
+              padding:"18px 26px 0",
               fontFamily:"-apple-system,'SF Pro Text',sans-serif",
-              flexShrink:0, height:50,
-              position:"relative", zIndex:10,
+              flexShrink:0, height:54,
+              position:"relative", zIndex:25,
             }}>
-              <span style={{ fontSize:15, fontWeight:600, color:"#fff", letterSpacing:"-0.3px" }}>
+              <span style={{ fontSize:15, fontWeight:600, color:"#fff", letterSpacing:"-0.4px", lineHeight:1 }}>
                 {conv.time}
               </span>
               <div style={{ display:"flex", alignItems:"center", gap:6 }}>
@@ -318,7 +318,7 @@ function PhoneMockup() {
             {/* iMessage nav */}
             <div style={{
               display:"flex", alignItems:"center",
-              padding:"4px 14px 10px",
+              padding:"4px 16px 10px",
               flexShrink:0,
               borderBottom:"0.5px solid rgba(255,255,255,0.07)",
               fontFamily:"-apple-system,'SF Pro Text',sans-serif",
@@ -483,8 +483,8 @@ function PhoneMockup() {
             </div>
 
             {/* Home indicator */}
-            <div style={{ display:"flex", justifyContent:"center", padding:"4px 0 8px", flexShrink:0 }}>
-              <div style={{ width:114, height:4, background:"rgba(255,255,255,0.3)", borderRadius:3 }}/>
+            <div style={{ display:"flex", justifyContent:"center", padding:"6px 0 10px", flexShrink:0 }}>
+              <div style={{ width:120, height:4.5, background:"rgba(255,255,255,0.32)", borderRadius:3 }}/>
             </div>
 
           </div>{/* /screen */}

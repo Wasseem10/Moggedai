@@ -524,12 +524,14 @@ export default function MoggedAI() {
   const { isSignedIn, isLoaded } = useAuth();
   const { signOut } = useClerk();
 
-  // Auto-redirect signed-in users straight to their dashboard.
-  // If they haven't completed setup yet, /dashboard itself will bounce them to /setup.
+  // Auto-redirect signed-in users to their dashboard — but only on the
+  // post-auth landing (e.g. Clerk OAuth callback). If the URL contains
+  // ?home=1 (set by the dashboard logo), let them stay on the landing page.
   useEffect(() => {
-    if (isLoaded && isSignedIn) {
-      router.replace("/dashboard");
-    }
+    if (!isLoaded || !isSignedIn) return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("home") === "1") return;
+    router.replace("/dashboard");
   }, [isLoaded, isSignedIn, router]);
 
   // Sync theme from localStorage / data-theme attribute (set by dashboard toggle)

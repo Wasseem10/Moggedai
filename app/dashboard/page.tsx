@@ -365,7 +365,7 @@ export default function Dashboard() {
     <>
       <FontLoader />
       <div style={{ background: C.bg, minHeight: '100vh', color: C.text, fontFamily: GROTESK }}>
-        <Nav onLogoClick={() => router.push('/')} theme={theme} onToggleTheme={toggleTheme} />
+        <Nav onLogoClick={() => router.push('/?home=1')} theme={theme} onToggleTheme={toggleTheme} />
         <div className="dashboard-content" style={{ maxWidth: 640, margin: '0 auto', padding: '0 1.25rem' }}>
           {view === 'overview' && (
             <OverviewView

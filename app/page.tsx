@@ -607,7 +607,7 @@ export default function MoggedAI() {
           .hero-right { transform: scale(0.68); transform-origin: center top; margin-bottom: -115px; }
         }
       `}</style>
-      <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+      <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
       <div style={grid}/>
       <div style={{ position:"fixed", top:`${(ticker*2)%100}%`, left:0, right:0, height:"2px", background:"rgba(14,165,233,0.08)", pointerEvents:"none", transition:"none" }}/>
 
@@ -635,7 +635,7 @@ export default function MoggedAI() {
           {/* Left: copy */}
           <div className="hero-left">
             <div style={tag}>AI ACCOUNTABILITY · SMS · BUILT FOR RESULTS</div>
-            <h1 style={{ fontSize:"clamp(2.8rem,5.8vw,5rem)", fontWeight:"700", lineHeight:1.05, letterSpacing:"-0.03em", wordSpacing:"-0.06em", margin:"0 0 1.5rem", transform:`translateX(${noise*0.3}px)` }}>
+            <h1 style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:"clamp(4rem,8vw,7.5rem)", fontWeight:"400", lineHeight:0.95, letterSpacing:"0.02em", margin:"0 0 1.5rem", transform:`translateX(${noise*0.3}px)` }}>
               WIN THE DAY.<br/>
               <span style={{ color:"#0ea5e9" }}>EVERY DAY.</span>
             </h1>

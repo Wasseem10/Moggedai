@@ -61,13 +61,9 @@ const PRESET_HABITS = [
   { name: 'Gym', emoji: '💪' },
   { name: 'Study', emoji: '📚' },
   { name: 'Work', emoji: '💼' },
-  { name: 'Read', emoji: '📖' },
-  { name: 'Meditate', emoji: '🧘' },
-  { name: 'Sleep', emoji: '😴' },
-  { name: 'Diet', emoji: '🥗' },
   { name: 'Side Project', emoji: '🚀' },
-  { name: 'No Phone', emoji: '📵' },
-  { name: 'Water', emoji: '💧' },
+  { name: 'Diet', emoji: '🥗' },
+  { name: 'Meditate', emoji: '🧘' },
 ]
 
 const TIME_OPTIONS = [
@@ -2224,7 +2220,7 @@ function AddView({
   onSubmit: () => void
   onBack: () => void
 }) {
-  const totalSteps = 4
+  const totalSteps = 6
   const activeHabitNames = habits.map(h => h.name.toLowerCase())
   const availablePresets = PRESET_HABITS.filter(p => !activeHabitNames.includes(p.name.toLowerCase()))
   const suggestions = getSuggestions(draft.name)
@@ -2235,34 +2231,29 @@ function AddView({
     onCustomNameChange('')
   }
 
-  // Remap: parent uses steps 1-6, we show 4 steps. Map cleanly.
-  // Step 1=pick, 2=why, 3=excuse+stakes, 4=when+coach
-  // We keep parent steps 1,2,3,5 to stay compatible (skip 4 & 6 in nav below)
-  const displayStep = step <= 2 ? step : step <= 4 ? 3 : 4
-
   return (
     <div style={{ paddingTop: '1.5rem' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
         <button
-          onClick={onBack}
+          onClick={step === 1 ? onBack : () => onStepChange(step - 1)}
           style={{ background: 'none', border: 'none', color: C.text3, fontFamily: MONO, fontSize: '0.65rem', letterSpacing: '0.1em', cursor: 'pointer', padding: 0 }}
         >
-          ← CANCEL
+          {step === 1 ? '← CANCEL' : '← BACK'}
         </button>
         <span style={{ fontFamily: MONO, fontSize: '0.58rem', color: C.text3, letterSpacing: '0.12em' }}>
-          {displayStep} / {totalSteps}
+          {step} / {totalSteps}
         </span>
       </div>
 
-      {/* Progress dots */}
-      <div style={{ display: 'flex', gap: '6px', marginBottom: '2.25rem' }}>
+      {/* Progress bar */}
+      <div style={{ display: 'flex', gap: '5px', marginBottom: '2.25rem' }}>
         {Array.from({ length: totalSteps }).map((_, i) => (
           <div key={i} style={{
             flex: 1, height: 4, borderRadius: 999,
-            background: i < displayStep ? '#0ea5e9' : C.border,
+            background: i < step ? '#0ea5e9' : C.border,
             transition: 'all 0.4s cubic-bezier(0.34,1.2,0.64,1)',
-            boxShadow: i < displayStep ? '0 0 8px rgba(14,165,233,0.5)' : 'none',
+            boxShadow: i < step ? '0 0 8px rgba(14,165,233,0.45)' : 'none',
           }} />
         ))}
       </div>
@@ -2274,7 +2265,7 @@ function AddView({
             What do you want to stay on top of?
           </h2>
           <p style={{ fontFamily: GROTESK, fontSize: '0.88rem', color: C.text3, margin: '0 0 1.75rem', lineHeight: 1.5 }}>
-            Pick one thing. One goal = one relentless AI coach on your back.
+            Pick one. One goal = one relentless AI coach on your back.
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem', marginBottom: '1rem' }}>
@@ -2287,57 +2278,38 @@ function AddView({
                   style={{
                     background: sel ? 'rgba(14,165,233,0.12)' : C.s1,
                     border: `1.5px solid ${sel ? '#0ea5e9' : C.border}`,
-                    borderRadius: 12,
-                    color: C.text,
-                    padding: '0.9rem 1rem',
-                    cursor: 'pointer',
-                    fontFamily: GROTESK,
-                    fontSize: '0.9rem',
-                    fontWeight: sel ? 700 : 400,
-                    textAlign: 'left',
-                    transition: 'all 0.18s ease',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.6rem',
+                    borderRadius: 12, color: C.text,
+                    padding: '0.9rem 1rem', cursor: 'pointer',
+                    fontFamily: GROTESK, fontSize: '0.9rem', fontWeight: sel ? 700 : 400,
+                    textAlign: 'left', transition: 'all 0.18s ease',
+                    display: 'flex', alignItems: 'center', gap: '0.6rem',
                     boxShadow: sel ? '0 0 0 1px #0ea5e9' : 'none',
-                    opacity: 0,
-                    animation: `statCardIn 0.35s cubic-bezier(0.34,1.2,0.64,1) ${i * 0.04}s both`,
+                    opacity: 0, animation: `statCardIn 0.35s cubic-bezier(0.34,1.2,0.64,1) ${i * 0.04}s both`,
                   }}
                 >
                   <span style={{
-                    fontSize: '1.3rem', lineHeight: 1,
+                    fontSize: '1.25rem', lineHeight: 1,
                     background: sel ? 'rgba(14,165,233,0.18)' : C.s2,
                     border: `1px solid ${sel ? 'rgba(14,165,233,0.3)' : C.border}`,
-                    borderRadius: 8, width: 36, height: 36,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    borderRadius: 8, width: 36, height: 36, flexShrink: 0,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>{p.emoji}</span>
                   <span>{p.name}</span>
-                  {sel && <span style={{ marginLeft: 'auto', color: '#0ea5e9', fontSize: '1rem' }}>✓</span>}
+                  {sel && <span style={{ marginLeft: 'auto', color: '#0ea5e9' }}>✓</span>}
                 </button>
               )
             })}
           </div>
 
           {/* Custom input */}
-          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: draft.name ? '1rem' : '1.75rem' }}>
-            <input
-              value={customEmoji}
-              onChange={e => onCustomEmojiChange(e.target.value)}
-              placeholder="🎯"
-              style={{ width: 48, background: C.s1, border: `1px solid ${C.border}`, color: C.text, padding: '0.7rem', fontFamily: MONO, fontSize: '1.1rem', outline: 'none', borderRadius: 10, textAlign: 'center', flexShrink: 0 }}
-            />
-            <input
-              value={customName}
-              onChange={e => onCustomNameChange(e.target.value)}
-              placeholder="Something else..."
+          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}>
+            <input value={customEmoji} onChange={e => onCustomEmojiChange(e.target.value)} placeholder="🎯"
+              style={{ width: 48, background: C.s1, border: `1px solid ${C.border}`, color: C.text, padding: '0.7rem', fontFamily: MONO, fontSize: '1.1rem', outline: 'none', borderRadius: 10, textAlign: 'center', flexShrink: 0 }} />
+            <input value={customName} onChange={e => onCustomNameChange(e.target.value)} placeholder="Something else..."
               onKeyDown={e => e.key === 'Enter' && handleAddCustom()}
-              style={{ flex: 1, background: C.s1, border: `1px solid ${C.border}`, color: C.text, padding: '0.7rem 1rem', fontFamily: GROTESK, fontSize: '0.9rem', outline: 'none', borderRadius: 10 }}
-            />
-            <button
-              onClick={handleAddCustom}
-              disabled={!customName.trim()}
-              style={{ background: customName.trim() ? '#0ea5e9' : C.s2, border: 'none', color: '#fff', padding: '0.7rem 1rem', fontFamily: MONO, fontSize: '0.62rem', letterSpacing: '0.1em', cursor: customName.trim() ? 'pointer' : 'default', borderRadius: 10, flexShrink: 0, transition: 'all 0.2s' }}
-            >
+              style={{ flex: 1, background: C.s1, border: `1px solid ${C.border}`, color: C.text, padding: '0.7rem 1rem', fontFamily: GROTESK, fontSize: '0.9rem', outline: 'none', borderRadius: 10 }} />
+            <button onClick={handleAddCustom} disabled={!customName.trim()}
+              style={{ background: customName.trim() ? '#0ea5e9' : C.s2, border: 'none', color: '#fff', padding: '0.7rem 1rem', fontFamily: MONO, fontSize: '0.62rem', letterSpacing: '0.1em', cursor: customName.trim() ? 'pointer' : 'default', borderRadius: 10, flexShrink: 0, transition: 'all 0.2s' }}>
               ADD
             </button>
           </div>
@@ -2346,7 +2318,7 @@ function AddView({
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', background: 'rgba(14,165,233,0.08)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: 10, padding: '0.7rem 1rem', marginBottom: '1.25rem' }}>
               <span style={{ fontSize: '1.1rem' }}>{draft.emoji}</span>
               <span style={{ fontFamily: GROTESK, fontWeight: 600, fontSize: '0.9rem', color: C.text }}>{draft.name}</span>
-              <span style={{ marginLeft: 'auto', color: '#0ea5e9', fontFamily: MONO, fontSize: '0.55rem' }}>SELECTED ✓</span>
+              <span style={{ marginLeft: 'auto', color: '#0ea5e9', fontFamily: MONO, fontSize: '0.52rem' }}>SELECTED ✓</span>
             </div>
           )}
 
@@ -2358,20 +2330,13 @@ function AddView({
       {step === 2 && (
         <div key="s2" style={{ animation: 'stepSlide 0.35s cubic-bezier(0.34,1.1,0.64,1) both' }}>
           <h2 style={{ fontFamily: GROTESK, fontWeight: 800, fontSize: 'clamp(1.3rem,5vw,1.7rem)', color: C.text, margin: '0 0 0.4rem', lineHeight: 1.2, letterSpacing: '-0.02em' }}>
-            Why does {draft.emoji} {draft.name} actually matter?
+            Why does this actually matter to you?
           </h2>
           <p style={{ fontFamily: GROTESK, fontSize: '0.88rem', color: C.text3, margin: '0 0 1.5rem', lineHeight: 1.5 }}>
-            Be honest. The more specific you are, the more personal your AI coach gets.
+            The more real you are, the better your coach hits different. Tap a suggestion or write your own.
           </p>
-
-          <SmartField
-            chips={suggestions.why}
-            value={draft.why}
-            onChange={v => onDraftChange({ why: v })}
-            placeholder="e.g. I want to get fit before summer. I've been saying this for 2 years and keep quitting."
-            rows={4}
-          />
-
+          <SmartField chips={suggestions.why} value={draft.why} onChange={v => onDraftChange({ why: v })}
+            placeholder="e.g. I've been saying I'll start for 2 years and keep quitting." rows={4} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <AddNavBtn onClick={() => onStepChange(3)} label="NEXT →" />
             <AddSkipBtn onClick={() => onStepChange(3)} />
@@ -2379,34 +2344,35 @@ function AddView({
         </div>
       )}
 
-      {/* ── Step 3: Excuse + Stakes ── */}
-      {(step === 3 || step === 4) && (
+      {/* ── Step 3: Biggest excuse ── */}
+      {step === 3 && (
         <div key="s3" style={{ animation: 'stepSlide 0.35s cubic-bezier(0.34,1.1,0.64,1) both' }}>
           <h2 style={{ fontFamily: GROTESK, fontWeight: 800, fontSize: 'clamp(1.3rem,5vw,1.7rem)', color: C.text, margin: '0 0 0.4rem', lineHeight: 1.2, letterSpacing: '-0.02em' }}>
-            What's holding you back?
+            What's your biggest excuse for skipping?
           </h2>
           <p style={{ fontFamily: GROTESK, fontSize: '0.88rem', color: C.text3, margin: '0 0 1.5rem', lineHeight: 1.5 }}>
-            Your coach will call you out on these specifically. Tap one or write your own.
+            Your coach will call you out on this word for word. Be honest.
           </p>
+          <SmartField chips={suggestions.excuse} value={draft.biggest_excuse} onChange={v => onDraftChange({ biggest_excuse: v })}
+            placeholder="e.g. I'm too tired after work. I'll do it tomorrow. I don't have time." rows={4} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <AddNavBtn onClick={() => onStepChange(4)} label="NEXT →" />
+            <AddSkipBtn onClick={() => onStepChange(4)} />
+          </div>
+        </div>
+      )}
 
-          <SmartField
-            label="YOUR BIGGEST EXCUSE"
-            chips={suggestions.excuse}
-            value={draft.biggest_excuse}
-            onChange={v => onDraftChange({ biggest_excuse: v })}
-            placeholder="e.g. I'm too tired. I'll do it tomorrow. I don't have time."
-            rows={3}
-          />
-
-          <SmartField
-            label="WHAT HAPPENS IF YOU KEEP AVOIDING THIS"
-            chips={suggestions.stakes}
-            value={draft.stakes}
-            onChange={v => onDraftChange({ stakes: v })}
-            placeholder="e.g. I'll be in the same place next year. My health will get worse."
-            rows={3}
-          />
-
+      {/* ── Step 4: Stakes ── */}
+      {step === 4 && (
+        <div key="s4" style={{ animation: 'stepSlide 0.35s cubic-bezier(0.34,1.1,0.64,1) both' }}>
+          <h2 style={{ fontFamily: GROTESK, fontWeight: 800, fontSize: 'clamp(1.3rem,5vw,1.7rem)', color: C.text, margin: '0 0 0.4rem', lineHeight: 1.2, letterSpacing: '-0.02em' }}>
+            What happens if you keep avoiding this?
+          </h2>
+          <p style={{ fontFamily: GROTESK, fontSize: '0.88rem', color: C.text3, margin: '0 0 1.5rem', lineHeight: 1.5 }}>
+            Make it real. This is what your coach reminds you of when you want to quit.
+          </p>
+          <SmartField chips={suggestions.stakes} value={draft.stakes} onChange={v => onDraftChange({ stakes: v })}
+            placeholder="e.g. I'll be in the same place next year. My health will keep getting worse." rows={4} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <AddNavBtn onClick={() => onStepChange(5)} label="NEXT →" />
             <AddSkipBtn onClick={() => onStepChange(5)} />
@@ -2414,45 +2380,54 @@ function AddView({
         </div>
       )}
 
-      {/* ── Step 4: When + Coach style ── */}
-      {(step === 5 || step === 6) && (
-        <div key="s4" style={{ animation: 'stepSlide 0.35s cubic-bezier(0.34,1.1,0.64,1) both' }}>
+      {/* ── Step 5: When ── */}
+      {step === 5 && (
+        <div key="s5" style={{ animation: 'stepSlide 0.35s cubic-bezier(0.34,1.1,0.64,1) both' }}>
           <h2 style={{ fontFamily: GROTESK, fontWeight: 800, fontSize: 'clamp(1.3rem,5vw,1.7rem)', color: C.text, margin: '0 0 0.4rem', lineHeight: 1.2, letterSpacing: '-0.02em' }}>
-            Set up your coach
+            When do you usually do this?
           </h2>
           <p style={{ fontFamily: GROTESK, fontSize: '0.88rem', color: C.text3, margin: '0 0 1.5rem', lineHeight: 1.5 }}>
-            When should we check in, and how hard should we push?
+            We'll focus your check-ins around this window.
           </p>
-
-          {/* When */}
-          <p style={{ fontFamily: MONO, fontSize: '0.58rem', color: C.text3, letterSpacing: '0.15em', margin: '0 0 0.65rem' }}>WHEN DO YOU DO THIS?</p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginBottom: '1.5rem' }}>
-            {TIME_OPTIONS.map(t => {
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem', marginBottom: '1.75rem' }}>
+            {TIME_OPTIONS.map((t, i) => {
               const sel = draft.time_of_day === t.value
               return (
                 <button key={t.value} onClick={() => onDraftChange({ time_of_day: t.value })}
                   style={{
                     background: sel ? 'rgba(14,165,233,0.12)' : C.s1,
                     border: `1.5px solid ${sel ? '#0ea5e9' : C.border}`,
-                    borderRadius: 12, color: C.text, padding: '0.9rem 0.75rem',
+                    borderRadius: 12, color: C.text, padding: '1.1rem 0.75rem',
                     cursor: 'pointer', textAlign: 'center', transition: 'all 0.18s',
                     boxShadow: sel ? '0 0 0 1px #0ea5e9' : 'none',
+                    opacity: 0, animation: `statCardIn 0.3s cubic-bezier(0.34,1.2,0.64,1) ${i * 0.05}s both`,
                   }}>
-                  <div style={{ fontFamily: GROTESK, fontSize: '0.9rem', fontWeight: sel ? 700 : 400, marginBottom: '0.2rem' }}>{t.label}</div>
-                  <div style={{ fontFamily: MONO, fontSize: '0.52rem', color: C.text3 }}>{t.sub}</div>
+                  <div style={{ fontFamily: GROTESK, fontSize: '1rem', fontWeight: sel ? 700 : 400, marginBottom: '0.3rem' }}>{t.label}</div>
+                  <div style={{ fontFamily: MONO, fontSize: '0.55rem', color: C.text3, letterSpacing: '0.05em' }}>{t.sub}</div>
+                  {sel && <div style={{ fontFamily: MONO, fontSize: '0.5rem', color: '#0ea5e9', marginTop: '0.35rem' }}>✓ SELECTED</div>}
                 </button>
               )
             })}
           </div>
+          <AddNavBtn onClick={() => onStepChange(6)} label="NEXT →" />
+        </div>
+      )}
 
-          {/* Coach style */}
-          <p style={{ fontFamily: MONO, fontSize: '0.58rem', color: C.text3, letterSpacing: '0.15em', margin: '0 0 0.65rem' }}>HOW HARD SHOULD WE PUSH YOU?</p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.75rem' }}>
+      {/* ── Step 6: Coach style ── */}
+      {step === 6 && (
+        <div key="s6" style={{ animation: 'stepSlide 0.35s cubic-bezier(0.34,1.1,0.64,1) both' }}>
+          <h2 style={{ fontFamily: GROTESK, fontWeight: 800, fontSize: 'clamp(1.3rem,5vw,1.7rem)', color: C.text, margin: '0 0 0.4rem', lineHeight: 1.2, letterSpacing: '-0.02em' }}>
+            How hard should we push you?
+          </h2>
+          <p style={{ fontFamily: GROTESK, fontSize: '0.88rem', color: C.text3, margin: '0 0 1.5rem', lineHeight: 1.5 }}>
+            This sets the tone for every single message your coach sends.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginBottom: '1.75rem' }}>
             {[
               { value: 'direct', label: 'DIRECT', sub: 'Clear and no-nonsense. Just get it done.', color: '#0ea5e9', emoji: '💬' },
               { value: 'brutal', label: 'BRUTAL', sub: 'No mercy. Gets in your face. Zero sympathy.', color: '#ef4444', emoji: '🔥' },
               { value: 'savage', label: 'SAVAGE', sub: 'Maximum pressure. Not for the weak.', color: '#8b5cf6', emoji: '💀' },
-            ].map(o => {
+            ].map((o, i) => {
               const sel = draft.coach_style === o.value
               return (
                 <button key={o.value} onClick={() => onDraftChange({ coach_style: o.value })}
@@ -2463,24 +2438,24 @@ function AddView({
                     cursor: 'pointer', textAlign: 'left', transition: 'all 0.18s',
                     display: 'flex', alignItems: 'center', gap: '0.85rem',
                     boxShadow: sel ? `0 0 0 1px ${o.color}` : 'none',
+                    opacity: 0, animation: `statCardIn 0.35s cubic-bezier(0.34,1.2,0.64,1) ${i * 0.07}s both`,
                   }}>
                   <span style={{
                     fontSize: '1.4rem', lineHeight: 1, flexShrink: 0,
-                    width: 42, height: 42, borderRadius: 10,
+                    width: 44, height: 44, borderRadius: 10,
                     background: sel ? `${o.color}20` : C.s2,
                     border: `1px solid ${sel ? `${o.color}40` : C.border}`,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>{o.emoji}</span>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontFamily: MONO, fontWeight: 700, fontSize: '0.72rem', letterSpacing: '0.1em', color: sel ? o.color : C.text, marginBottom: '0.2rem' }}>{o.label}</div>
-                    <div style={{ fontFamily: GROTESK, fontSize: '0.8rem', color: C.text3, lineHeight: 1.4 }}>{o.sub}</div>
+                    <div style={{ fontFamily: MONO, fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.12em', color: sel ? o.color : C.text, marginBottom: '0.25rem' }}>{o.label}</div>
+                    <div style={{ fontFamily: GROTESK, fontSize: '0.82rem', color: C.text3, lineHeight: 1.4 }}>{o.sub}</div>
                   </div>
-                  {sel && <span style={{ color: o.color, fontSize: '1.1rem', flexShrink: 0 }}>✓</span>}
+                  {sel && <span style={{ color: o.color, fontSize: '1.2rem', flexShrink: 0 }}>✓</span>}
                 </button>
               )
             })}
           </div>
-
           <button
             onClick={onSubmit}
             disabled={!draft.coach_style || loading}

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
-import { getDb } from "@/lib/db";
+import { getDb, ensureSchema } from "@/lib/db";
 
 function getStreak(completions: { completed_at: string }[]): number {
   if (!completions.length) return 0;
@@ -19,6 +19,9 @@ function getStreak(completions: { completed_at: string }[]): number {
 export async function GET() {
   const { userId } = await auth();
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  // Auto-create tables if they don't exist (handles fresh Railway DB, no manual SQL needed)
+  await ensureSchema();
 
   const db = getDb();
 
@@ -167,6 +170,8 @@ export async function GET() {
 export async function PATCH(req: NextRequest) {
   const { userId } = await auth();
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  await ensureSchema();
 
   const body = await req.json();
   const db = getDb();

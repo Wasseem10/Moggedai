@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
-import { getDb } from '@/lib/db'
+import { getDb, ensureSchema } from '@/lib/db'
 
 export async function POST(req: NextRequest) {
   try {
     const { userId: clerkId } = await auth()
+
+    // Require authenticated session
+    if (!clerkId) {
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+    }
+
     const {
       phone, habits, coach_style, biggest_distraction, why,
       frequency_minutes, start_time, end_time, timezone
@@ -14,6 +20,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
+    // Auto-create tables if they don't exist (handles fresh Railway DB)
+    await ensureSchema()
+
     const db = getDb()
 
     // Upsert user — works whether phone already exists or not
@@ -21,15 +30,21 @@ export async function POST(req: NextRequest) {
       `INSERT INTO users (phone, clerk_id, active)
        VALUES ($1, $2, true)
        ON CONFLICT (phone) DO UPDATE
-         SET clerk_id = COALESCE($2, users.clerk_id),
+         SET clerk_id = COALESCE(EXCLUDED.clerk_id, users.clerk_id),
              active   = true
        RETURNING id`,
-      [phone, clerkId ?? null]
+      [phone, clerkId]
     )
     const userId = userRows[0].id
 
+    // Also make sure clerk_id is linked if phone existed under a different clerk_id
+    await db.query(
+      `UPDATE users SET clerk_id = $1 WHERE id = $2 AND (clerk_id IS NULL OR clerk_id = $1)`,
+      [clerkId, userId]
+    )
+
     // Deactivate old habits & schedules for clean slate
-    await db.query(`UPDATE habits   SET active = false WHERE user_id = $1`, [userId])
+    await db.query(`UPDATE habits    SET active = false WHERE user_id = $1`, [userId])
     await db.query(`UPDATE schedules SET active = false WHERE user_id = $1`, [userId])
 
     // Upsert profile

@@ -148,6 +148,14 @@ export default function Dashboard() {
   const loadData = useCallback(async () => {
     try {
       const res = await fetch('/api/user')
+      // If server errored (500 = DB down, 401 = not logged in), don't redirect
+      if (!res.ok) {
+        if (res.status === 401) {
+          router.push('/sign-in')
+        }
+        // Other errors (500 etc) — leave user on dashboard, just stop loading
+        return
+      }
       const d = await res.json()
       if (d.user) {
         // If user exists but has no phone, send them to setup
@@ -167,6 +175,7 @@ export default function Dashboard() {
       }
     } catch (e) {
       console.error(e)
+      // Network error — don't redirect, just stop loading
     } finally {
       setLoading(false)
     }
@@ -174,11 +183,12 @@ export default function Dashboard() {
 
   useEffect(() => { loadData() }, [loadData])
 
-  // Live polling — refresh data every 10s so new texts appear automatically
+  // Live polling — refresh data every 15s so new texts appear automatically
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
         const res = await fetch('/api/user')
+        if (!res.ok) return // silent — don't crash on poll errors
         const d = await res.json()
         if (d.habits) setHabits(d.habits)
         if (d.recent_messages) setRecentMessages(d.recent_messages)
@@ -186,7 +196,7 @@ export default function Dashboard() {
         if (d.weekly_recap) setWeeklyRecap(d.weekly_recap)
         if (d.user) setUserData(d.user)
       } catch { /* silent */ }
-    }, 10_000)
+    }, 15_000)
     return () => clearInterval(interval)
   }, [])
 

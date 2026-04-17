@@ -635,10 +635,9 @@ export default function MoggedAI() {
           {/* Left: copy */}
           <div className="hero-left">
             <div style={tag}>AI ACCOUNTABILITY · SMS · BUILT FOR RESULTS</div>
-            <h1 style={{ fontSize:"clamp(3rem,7vw,5.8rem)", fontWeight:"700", lineHeight:0.92, letterSpacing:"-0.03em", margin:"0 0 1.5rem", transform:`translateX(${noise*0.3}px)` }}>
-              WIN THE<br/>
-              <span style={{ color:"#0ea5e9" }}>DAY.</span><br/>
-              <span style={{ fontSize:"clamp(1.6rem,3.8vw,3rem)", letterSpacing:"-0.01em", color:"var(--c-text2)" }}>EVERY DAY.</span>
+            <h1 style={{ fontSize:"clamp(2.8rem,5.8vw,5rem)", fontWeight:"700", lineHeight:1.05, letterSpacing:"-0.03em", wordSpacing:"-0.06em", margin:"0 0 1.5rem", transform:`translateX(${noise*0.3}px)` }}>
+              WIN THE DAY.<br/>
+              <span style={{ color:"#0ea5e9" }}>EVERY DAY.</span>
             </h1>
             <p style={{ fontSize:"clamp(0.88rem,1.6vw,1rem)", color:"var(--c-text4)", maxWidth:"420px", lineHeight:"1.85", margin:0 }}>
               An AI coach that texts you throughout the day, holds you accountable, and won&apos;t let you make excuses. Set it once. Stay on track forever.

@@ -686,114 +686,172 @@ export default function MoggedAI() {
         </div>
       </div>
 
-      {/* WHO IT'S FOR — the "progress report" that nobody wants */}
-      <div style={{ padding:"5rem 0 5rem", borderTop:"1px solid var(--c-border)" }}>
-        <div className="section-inner" style={{ maxWidth:"820px" }}>
-          <div style={{ marginBottom:"2.75rem", display:"flex", alignItems:"flex-end", justifyContent:"space-between", gap:"1.5rem", flexWrap:"wrap" }}>
-            <div>
-              <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.5rem" }}>
-                YOUR PROGRESS REPORT
-              </div>
-              <h2 style={{ fontSize:"clamp(1.8rem,3.8vw,2.6rem)", fontWeight:"700", lineHeight:1.05, margin:0, letterSpacing:"-0.03em" }}>
-                Be honest with yourself.
-              </h2>
-            </div>
-            <div style={{
-              fontSize:"0.55rem",
-              letterSpacing:"0.25em",
-              color:"var(--c-text5)",
-              fontFamily:"'Space Mono','Courier New',monospace",
-              border:"1px solid var(--c-border)",
-              padding:"0.4rem 0.75rem",
-            }}>
-              REPORT · Q1–Q2
-            </div>
+      {/* WHO IT'S FOR — brutalist stat wall */}
+      <div style={{
+        padding:"6rem 0",
+        borderTop:"1px solid var(--c-border)",
+        position:"relative",
+        overflow:"hidden",
+      }}>
+        {/* subtle grid tint */}
+        <div aria-hidden style={{
+          position:"absolute", inset:0,
+          backgroundImage: "radial-gradient(circle at 50% 0%, rgba(14,165,233,0.08), transparent 60%)",
+          pointerEvents:"none",
+        }}/>
+
+        <div className="section-inner" style={{ maxWidth:"980px", position:"relative" }}>
+
+          {/* Eyebrow row */}
+          <div style={{
+            display:"flex", alignItems:"center", gap:"0.75rem",
+            fontFamily:"'Space Mono','Courier New',monospace",
+            fontSize:"0.6rem", letterSpacing:"0.3em",
+            color:"var(--c-text5)",
+            marginBottom:"1.25rem",
+          }}>
+            <span style={{ width:"28px", height:"1px", background:"#0ea5e9" }}/>
+            <span>EXHIBIT A · THE AVERAGE WEEK</span>
           </div>
 
-          <div style={{
+          {/* Big headline */}
+          <h2 style={{
+            fontFamily:"'Bebas Neue',sans-serif",
+            fontSize:"clamp(3rem,8vw,6rem)",
+            fontWeight:"400",
+            lineHeight:0.92,
+            letterSpacing:"0.005em",
+            margin:"0 0 1rem",
+            textTransform:"uppercase",
+          }}>
+            The receipts<br/>
+            <span style={{ color:"#0ea5e9" }}>aren&apos;t pretty.</span>
+          </h2>
+          <p style={{
+            fontSize:"0.98rem",
+            color:"var(--c-text3)",
+            lineHeight:1.7,
+            margin:"0 0 3rem",
+            maxWidth:"480px",
+          }}>
+            Pulled from thousands of people just like you. If one of these
+            lands — we already know why you&apos;re here.
+          </p>
+
+          {/* Stat wall — 4 huge numbers */}
+          <div className="stat-wall" style={{
+            display:"grid",
+            gridTemplateColumns:"repeat(2, 1fr)",
             border:"1px solid var(--c-border)",
-            background:"var(--c-s1)",
-            padding:"0.25rem 0",
+            borderRight:"none",
+            borderBottom:"none",
           }}>
             {[
-              { label:"Side project you keep restarting", pct:12, note:"last touched 41 days ago" },
-              { label:"Gym routine",                      pct:6,  note:"last check-in 23 days ago" },
-              { label:"Book on your nightstand",          pct:23, note:"bookmarked since February" },
-              { label:"That email you need to send",      pct:0,  note:"drafted 3 weeks ago" },
-              { label:"Learning Spanish again",           pct:8,  note:"streak broken 17 times" },
-              { label:"The goal you don't tell anyone",   pct:3,  note:"no movement this quarter" },
-            ].map((row, i, arr) => (
-              <div
-                key={i}
-                style={{
-                  display:"grid",
-                  gridTemplateColumns:"1fr auto",
-                  columnGap:"1.25rem",
-                  rowGap:"0.55rem",
-                  padding:"1.15rem 1.35rem",
-                  borderBottom: i < arr.length - 1 ? "1px solid var(--c-border)" : "none",
-                  alignItems:"center",
-                }}
-              >
+              { big:"3:47",   unit:"HRS/DAY",   label:"Average time scrolling",         foot:"that's 56 days a year" },
+              { big:"0",      unit:"WORKOUTS",  label:"Completed this week",            foot:"last check-in: 11 days ago" },
+              { big:"47",     unit:"DAYS",      label:"Since “I'll start Monday”",       foot:"6 Mondays missed" },
+              { big:"12%",    unit:"PROGRESS",  label:"On the project you keep restarting", foot:"same % as last quarter" },
+            ].map((s, i) => (
+              <div key={i} style={{
+                borderRight:"1px solid var(--c-border)",
+                borderBottom:"1px solid var(--c-border)",
+                padding:"2rem 1.75rem 1.75rem",
+                position:"relative",
+                background: i % 3 === 0 ? "var(--c-s1)" : "transparent",
+                minHeight:"220px",
+                display:"flex", flexDirection:"column", justifyContent:"space-between",
+              }}>
+                {/* index marker */}
                 <div style={{
-                  fontSize:"0.95rem",
-                  fontWeight:"600",
-                  color:"var(--c-text)",
-                  letterSpacing:"-0.005em",
-                }}>
-                  {row.label}
-                </div>
-                <div style={{
-                  fontSize:"0.9rem",
-                  fontWeight:"700",
                   fontFamily:"'Space Mono','Courier New',monospace",
-                  color: row.pct === 0 ? "#ef4444" : "var(--c-text3)",
-                  letterSpacing:"0.02em",
-                  minWidth:"44px",
-                  textAlign:"right",
-                }}>
-                  {row.pct}%
-                </div>
-                <div style={{
-                  gridColumn:"1 / -1",
-                  position:"relative",
-                  height:"4px",
-                  background:"var(--c-border)",
-                  overflow:"hidden",
-                }}>
-                  <div style={{
-                    position:"absolute", top:0, left:0, bottom:0,
-                    width:`${Math.max(row.pct, 1.5)}%`,
-                    background: row.pct === 0 ? "#ef4444" : "#0ea5e9",
-                    opacity: row.pct === 0 ? 0.5 : 1,
-                  }}/>
-                </div>
-                <div style={{
-                  gridColumn:"1 / -1",
-                  fontSize:"0.65rem",
-                  fontFamily:"'Space Mono','Courier New',monospace",
-                  letterSpacing:"0.12em",
+                  fontSize:"0.55rem",
+                  letterSpacing:"0.25em",
                   color:"var(--c-text5)",
-                  textTransform:"uppercase",
+                  position:"absolute", top:"0.9rem", right:"0.9rem",
                 }}>
-                  {row.note}
+                  {String(i+1).padStart(2,"0")}/04
+                </div>
+
+                <div>
+                  <div style={{
+                    fontFamily:"'Bebas Neue',sans-serif",
+                    fontSize:"clamp(4rem, 10vw, 7rem)",
+                    fontWeight:"400",
+                    lineHeight:0.88,
+                    letterSpacing:"0.01em",
+                    color:"var(--c-text)",
+                    marginBottom:"0.35rem",
+                  }}>
+                    {s.big}
+                  </div>
+                  <div style={{
+                    fontFamily:"'Space Mono','Courier New',monospace",
+                    fontSize:"0.62rem",
+                    letterSpacing:"0.25em",
+                    color:"#0ea5e9",
+                    fontWeight:"700",
+                  }}>
+                    {s.unit}
+                  </div>
+                </div>
+
+                <div style={{ marginTop:"1.25rem" }}>
+                  <div style={{
+                    fontSize:"0.95rem",
+                    fontWeight:"600",
+                    color:"var(--c-text)",
+                    marginBottom:"0.25rem",
+                    letterSpacing:"-0.005em",
+                  }}>
+                    {s.label}
+                  </div>
+                  <div style={{
+                    fontSize:"0.72rem",
+                    color:"var(--c-text5)",
+                    fontFamily:"'Space Mono','Courier New',monospace",
+                    letterSpacing:"0.08em",
+                    textTransform:"uppercase",
+                  }}>
+                    {s.foot}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
 
-          <p style={{
-            marginTop:"2.25rem",
-            fontSize:"0.95rem",
-            color:"var(--c-text3)",
-            lineHeight:1.75,
-            maxWidth:"560px",
+          {/* Closing manifesto line */}
+          <div style={{
+            marginTop:"2.5rem",
+            display:"flex", alignItems:"baseline", gap:"1rem",
+            flexWrap:"wrap",
           }}>
-            You don&apos;t have a goals problem. You have a follow-through problem.
-            MoggedAI is the coach that notices when the bar stops moving — and won&apos;t
-            shut up about it until it does.
-          </p>
+            <span style={{
+              fontFamily:"'Bebas Neue',sans-serif",
+              fontSize:"clamp(1.5rem,2.8vw,2rem)",
+              letterSpacing:"0.01em",
+              lineHeight:1,
+              color:"var(--c-text)",
+            }}>
+              YOU DON&apos;T NEED ANOTHER APP.
+            </span>
+            <span style={{
+              fontFamily:"'Bebas Neue',sans-serif",
+              fontSize:"clamp(1.5rem,2.8vw,2rem)",
+              letterSpacing:"0.01em",
+              lineHeight:1,
+              color:"#0ea5e9",
+            }}>
+              YOU NEED A WITNESS.
+            </span>
+          </div>
         </div>
+
+        {/* Mobile: 1 col */}
+        <style>{`
+          @media (max-width: 640px) {
+            .stat-wall { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
       </div>
 
       {/* HOW IT WORKS */}

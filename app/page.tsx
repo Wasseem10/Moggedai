@@ -687,7 +687,7 @@ export default function MoggedAI() {
       </div>
 
       {/* WHO IT'S FOR — premium 3-card spread */}
-      <div style={{ padding:"6rem 0 6rem", borderTop:"1px solid var(--c-border)" }}>
+      <div style={{ padding:"6rem 0 6rem", borderTop:"1px solid var(--c-border)", background:"#f6f7f9" }}>
         <div className="section-inner" style={{ maxWidth:"1080px" }}>
 
           <div style={{ marginBottom:"3rem", maxWidth:"640px" }}>
@@ -742,7 +742,7 @@ export default function MoggedAI() {
                 className="who-card"
                 style={{
                   position:"relative",
-                  background:"var(--c-s1)",
+                  background:"#fff",
                   border:"1px solid var(--c-border)",
                   padding:"1.75rem 1.5rem 1.5rem",
                   display:"flex",

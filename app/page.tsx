@@ -692,7 +692,7 @@ export default function MoggedAI() {
 
           <div style={{ marginBottom:"3rem", maxWidth:"640px" }}>
             <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.75rem" }}>
-              MADE FOR YOU IF
+              WHO IT&apos;S FOR
             </div>
             <h2 style={{
               fontFamily:"'Bebas Neue',sans-serif",
@@ -702,10 +702,10 @@ export default function MoggedAI() {
               letterSpacing:"0.01em",
               margin:"0 0 1rem",
             }}>
-              You keep saying <span style={{ color:"#0ea5e9" }}>tomorrow.</span>
+              Built for anyone who <span style={{ color:"#0ea5e9" }}>follows through.</span>
             </h2>
             <p style={{ fontSize:"1rem", color:"var(--c-text3)", lineHeight:1.7, margin:0 }}>
-              Three flavors of stuck. Pick the one that hits hardest.
+              People already using MoggedAI to stop missing the thing that actually matters.
             </p>
           </div>
 
@@ -717,24 +717,24 @@ export default function MoggedAI() {
             {[
               {
                 num:"01",
-                title:"The Planner",
-                line:"You love making the list. Actually doing it? Different story.",
-                quote:"“Let me just organize my Notion first.”",
-                tag:"TASKS LISTED · 47 · DONE · 3",
+                title:"Students",
+                line:"For the study sessions that turn into TikTok breaks. We quiz you, keep you off your phone, and get you through finals week without the all-nighter.",
+                quote:"“Check in on my studying every hour from 4–9pm.”",
+                tag:"USE CASE · EXAMS · ESSAYS · LOCK-IN",
               },
               {
                 num:"02",
-                title:"The Procrastinator",
-                line:"Tomorrow's the day. It's been tomorrow for 3 weeks.",
-                quote:"“Lowkey locking in Monday.”",
-                tag:"DAYS SINCE “SOON” · 23",
+                title:"Builders",
+                line:"For the side project collecting dust. We text you to ship one thing every day — because momentum beats motivation.",
+                quote:"“Make sure I push code before bed.”",
+                tag:"USE CASE · STARTUPS · PROJECTS · SHIPPING",
               },
               {
                 num:"03",
-                title:"The Quitter",
-                line:"Week one is easy. You've never made it to week two.",
-                quote:"“Taking a break — I'll pick it back up.”",
-                tag:"STREAKS STARTED · 9 · FINISHED · 0",
+                title:"Athletes",
+                line:"For the 6am workouts you keep sleeping through. We wake you up, hold your streak, and call you out when you try to skip.",
+                quote:"“Text me at 5:45. Don't let me snooze.”",
+                tag:"USE CASE · GYM · RUNS · NUTRITION",
               },
             ].map((c) => (
               <div

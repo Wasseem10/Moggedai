@@ -686,89 +686,90 @@ export default function MoggedAI() {
         </div>
       </div>
 
-      {/* WHO IT'S FOR — confessions in chat-bubble form */}
+      {/* WHO IT'S FOR — lies vs. reality, editorial layout */}
       <div style={{ padding:"5rem 0 5rem", borderTop:"1px solid var(--c-border)" }}>
-        <div className="section-inner" style={{ maxWidth:"720px" }}>
+        <div className="section-inner" style={{ maxWidth:"860px" }}>
           <div style={{ marginBottom:"3rem" }}>
             <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.5rem" }}>
-              THINGS YOU&apos;VE TEXTED YOURSELF
+              SOUND FAMILIAR?
             </div>
-            <h2 style={{ fontSize:"clamp(1.6rem,3.4vw,2.3rem)", fontWeight:"700", lineHeight:1.1, margin:"0 0 0.75rem", letterSpacing:"-0.025em" }}>
-              Sound familiar?
+            <h2 style={{ fontSize:"clamp(1.8rem,3.8vw,2.6rem)", fontWeight:"700", lineHeight:1.05, margin:"0 0 0.75rem", letterSpacing:"-0.03em" }}>
+              The gap between what you <span style={{ fontStyle:"italic", color:"var(--c-text3)", fontWeight:"400" }}>said</span>
+              <br/>
+              and what you <span style={{ color:"#0ea5e9" }}>did</span>.
             </h2>
-            <p style={{ fontSize:"0.92rem", color:"var(--c-text4)", lineHeight:1.7, margin:0, maxWidth:"520px" }}>
-              If one of these hits, you&apos;re exactly who we built this for.
-            </p>
           </div>
 
-          <div style={{ display:"flex", flexDirection:"column", gap:"1.1rem" }}>
+          <div style={{ display:"flex", flexDirection:"column" }}>
             {[
-              { side:"left",  tag:"THE STUDENT",       text:"opened notes. closed notes. opened tiktok." },
-              { side:"right", tag:"THE BUILDER",       text:"i'll start the project tomorrow. for real this time." },
-              { side:"left",  tag:"THE ATHLETE",       text:"rest day #6. no comment." },
-              { side:"right", tag:"THE PROFESSIONAL",  text:"cleared my inbox instead of doing the actual work." },
-              { side:"left",  tag:"THE CREATIVE",      text:"waiting to ‘feel inspired’ is going great 🙃" },
-              { side:"right", tag:"THE FOUNDER",       text:"booked 4 meetings. shipped nothing." },
-            ].map((c, i) => {
-              const isLeft = c.side === "left";
-              return (
-                <div
-                  key={i}
-                  style={{
-                    display:"flex",
-                    flexDirection:"column",
-                    alignItems: isLeft ? "flex-start" : "flex-end",
-                    gap:"0.35rem",
-                    animationDelay: `${i * 0.05}s`,
-                  }}
-                >
-                  <div
-                    style={{
-                      maxWidth:"78%",
-                      background: isLeft ? "var(--c-s1)" : "#0ea5e9",
-                      color: isLeft ? "var(--c-text)" : "#fff",
-                      padding:"0.85rem 1.1rem",
-                      borderRadius: isLeft ? "18px 18px 18px 4px" : "18px 18px 4px 18px",
-                      fontSize:"1rem",
-                      lineHeight:1.5,
-                      border: isLeft ? "1px solid var(--c-border)" : "none",
-                      fontFamily:"-apple-system,'SF Pro Text','Segoe UI',sans-serif",
-                      letterSpacing:"-0.01em",
-                    }}
-                  >
-                    {c.text}
+              { tag:"01 / STUDENTS",       lie:"I'll study for 2 hours tonight.",          truth:"15 minutes. Then YouTube." },
+              { tag:"02 / BUILDERS",       lie:"Gonna ship the side project by Sunday.",   truth:"Sunday becomes next Sunday. Again." },
+              { tag:"03 / ATHLETES",       lie:"Hitting the gym at 6am.",                  truth:"Alarm off. Guilt on." },
+              { tag:"04 / PROFESSIONALS",  lie:"Today I tackle the hard thing first.",     truth:"Inbox, Slack, a snack, anything else." },
+              { tag:"05 / CREATIVES",      lie:"I'll start when I'm inspired.",            truth:"You've been ‘waiting’ for 7 months." },
+              { tag:"06 / FOUNDERS",       lie:"Monday I'm locking in.",                    truth:"Monday you booked 4 calls and shipped nothing." },
+            ].map((c, i, arr) => (
+              <div
+                key={i}
+                style={{
+                  display:"grid",
+                  gridTemplateColumns:"minmax(90px, 140px) 1fr",
+                  gap:"1.5rem",
+                  padding:"1.5rem 0",
+                  borderTop: i === 0 ? "1px solid var(--c-border)" : "none",
+                  borderBottom: "1px solid var(--c-border)",
+                  alignItems:"baseline",
+                }}
+              >
+                <div style={{
+                  fontSize:"0.6rem",
+                  letterSpacing:"0.22em",
+                  color:"var(--c-text5)",
+                  fontFamily:"'Space Mono','Courier New',monospace",
+                  paddingTop:"0.35rem",
+                }}>
+                  {c.tag}
+                </div>
+                <div>
+                  <div style={{
+                    fontSize:"clamp(1.05rem,2.2vw,1.35rem)",
+                    fontWeight:"500",
+                    color:"var(--c-text3)",
+                    textDecoration:"line-through",
+                    textDecorationThickness:"1px",
+                    textDecorationColor:"var(--c-text5)",
+                    letterSpacing:"-0.01em",
+                    lineHeight:1.35,
+                    marginBottom:"0.45rem",
+                  }}>
+                    “{c.lie}”
                   </div>
-                  <div
-                    style={{
-                      fontSize:"0.58rem",
-                      letterSpacing:"0.22em",
-                      color:"var(--c-text5)",
-                      fontFamily:"'Space Mono','Courier New',monospace",
-                      padding: isLeft ? "0 0 0 0.4rem" : "0 0.4rem 0 0",
-                    }}
-                  >
-                    — {c.tag}
+                  <div style={{
+                    fontSize:"clamp(1.05rem,2.2vw,1.35rem)",
+                    fontWeight:"700",
+                    color:"var(--c-text)",
+                    letterSpacing:"-0.015em",
+                    lineHeight:1.35,
+                  }}>
+                    {c.truth}
                   </div>
                 </div>
-              );
-            })}
+                {/* Hide the first border-top after index 0 to avoid double line */}
+                {i !== arr.length - 1 ? null : null}
+              </div>
+            ))}
           </div>
 
-          {/* Closing line */}
-          <div style={{
-            marginTop:"3rem",
-            paddingTop:"1.75rem",
-            borderTop:"1px solid var(--c-border)",
-            display:"flex", alignItems:"center", gap:"0.75rem",
-            flexWrap:"wrap",
+          <p style={{
+            marginTop:"2.5rem",
+            fontSize:"0.95rem",
+            color:"var(--c-text3)",
+            lineHeight:1.7,
+            maxWidth:"540px",
           }}>
-            <span style={{ fontSize:"0.85rem", color:"var(--c-text3)", letterSpacing:"0.01em" }}>
-              Stop negotiating with yourself.
-            </span>
-            <span style={{ fontSize:"0.85rem", color:"var(--c-text)", fontWeight:"600" }}>
-              Let someone else hold the line.
-            </span>
-          </div>
+            We built MoggedAI for the gap. The one between the plan and the execution.
+            The coach lives there. So you don&apos;t have to.
+          </p>
         </div>
       </div>
 

@@ -581,7 +581,7 @@ export default function MoggedAI() {
         .step-line { transition: background 0.3s; }
 
         /* ── Hero layout ── */
-        .hero-outer { padding: 6.5rem 1.5rem 3rem; max-width: 1080px; margin: 0 auto; width: 100%; min-height: calc(100vh - 64px); display: flex; align-items: center; }
+        .hero-outer { padding: 6.5rem 1.5rem 3rem; max-width: 1080px; margin: 0 auto; width: 100%; min-height: 82vh; display: flex; align-items: center; }
         .hero-inner { display: flex; align-items: center; gap: 3rem; width: 100%; }
         .hero-left  { flex: 1; min-width: 0; }
         .hero-right { flex-shrink: 0; display: flex; justify-content: center; }

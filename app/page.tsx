@@ -686,172 +686,70 @@ export default function MoggedAI() {
         </div>
       </div>
 
-      {/* WHO IT'S FOR — brutalist stat wall */}
-      <div style={{
-        padding:"6rem 0",
-        borderTop:"1px solid var(--c-border)",
-        position:"relative",
-        overflow:"hidden",
-      }}>
-        {/* subtle grid tint */}
-        <div aria-hidden style={{
-          position:"absolute", inset:0,
-          backgroundImage: "radial-gradient(circle at 50% 0%, rgba(14,165,233,0.08), transparent 60%)",
-          pointerEvents:"none",
-        }}/>
+      {/* WHO IT'S FOR — three clean lines, centered */}
+      <div style={{ padding:"7rem 0", borderTop:"1px solid var(--c-border)" }}>
+        <div className="section-inner" style={{ maxWidth:"760px", textAlign:"center" }}>
 
-        <div className="section-inner" style={{ maxWidth:"980px", position:"relative" }}>
-
-          {/* Eyebrow row */}
           <div style={{
-            display:"flex", alignItems:"center", gap:"0.75rem",
-            fontFamily:"'Space Mono','Courier New',monospace",
-            fontSize:"0.6rem", letterSpacing:"0.3em",
-            color:"var(--c-text5)",
+            fontSize:"0.6rem",
+            letterSpacing:"0.3em",
+            color:"#0ea5e9",
+            fontWeight:"700",
             marginBottom:"1.25rem",
           }}>
-            <span style={{ width:"28px", height:"1px", background:"#0ea5e9" }}/>
-            <span>EXHIBIT A · THE AVERAGE WEEK</span>
+            MADE FOR YOU IF
           </div>
 
-          {/* Big headline */}
           <h2 style={{
             fontFamily:"'Bebas Neue',sans-serif",
-            fontSize:"clamp(3rem,8vw,6rem)",
+            fontSize:"clamp(2.5rem,6vw,4.5rem)",
             fontWeight:"400",
-            lineHeight:0.92,
-            letterSpacing:"0.005em",
-            margin:"0 0 1rem",
-            textTransform:"uppercase",
+            lineHeight:0.95,
+            letterSpacing:"0.01em",
+            margin:"0 0 3.5rem",
           }}>
-            The receipts<br/>
-            <span style={{ color:"#0ea5e9" }}>aren&apos;t pretty.</span>
+            You keep saying<br/>
+            <span style={{ color:"#0ea5e9" }}>tomorrow.</span>
           </h2>
-          <p style={{
-            fontSize:"0.98rem",
-            color:"var(--c-text3)",
-            lineHeight:1.7,
-            margin:"0 0 3rem",
-            maxWidth:"480px",
-          }}>
-            Pulled from thousands of people just like you. If one of these
-            lands — we already know why you&apos;re here.
-          </p>
 
-          {/* Stat wall — 4 huge numbers */}
-          <div className="stat-wall" style={{
-            display:"grid",
-            gridTemplateColumns:"repeat(2, 1fr)",
-            border:"1px solid var(--c-border)",
-            borderRight:"none",
-            borderBottom:"none",
-          }}>
+          <div style={{ display:"flex", flexDirection:"column", gap:"1.75rem", textAlign:"left", maxWidth:"560px", margin:"0 auto" }}>
             {[
-              { big:"3:47",   unit:"HRS/DAY",   label:"Average time scrolling",         foot:"that's 56 days a year" },
-              { big:"0",      unit:"WORKOUTS",  label:"Completed this week",            foot:"last check-in: 11 days ago" },
-              { big:"47",     unit:"DAYS",      label:"Since “I'll start Monday”",       foot:"6 Mondays missed" },
-              { big:"12%",    unit:"PROGRESS",  label:"On the project you keep restarting", foot:"same % as last quarter" },
-            ].map((s, i) => (
-              <div key={i} style={{
-                borderRight:"1px solid var(--c-border)",
-                borderBottom:"1px solid var(--c-border)",
-                padding:"2rem 1.75rem 1.75rem",
-                position:"relative",
-                background: i % 3 === 0 ? "var(--c-s1)" : "transparent",
-                minHeight:"220px",
-                display:"flex", flexDirection:"column", justifyContent:"space-between",
-              }}>
-                {/* index marker */}
+              "You set goals. You forget them by Thursday.",
+              "You download apps. You never open them twice.",
+              "You promise you'll start Monday. It's been 6 Mondays.",
+            ].map((line, i) => (
+              <div key={i} style={{ display:"flex", alignItems:"flex-start", gap:"1rem" }}>
                 <div style={{
-                  fontFamily:"'Space Mono','Courier New',monospace",
-                  fontSize:"0.55rem",
-                  letterSpacing:"0.25em",
-                  color:"var(--c-text5)",
-                  position:"absolute", top:"0.9rem", right:"0.9rem",
+                  flexShrink:0,
+                  width:"8px", height:"8px",
+                  background:"#0ea5e9",
+                  borderRadius:"50%",
+                  marginTop:"0.65rem",
+                }}/>
+                <div style={{
+                  fontSize:"clamp(1.1rem,2.2vw,1.35rem)",
+                  fontWeight:"500",
+                  color:"var(--c-text)",
+                  lineHeight:1.45,
+                  letterSpacing:"-0.01em",
                 }}>
-                  {String(i+1).padStart(2,"0")}/04
-                </div>
-
-                <div>
-                  <div style={{
-                    fontFamily:"'Bebas Neue',sans-serif",
-                    fontSize:"clamp(4rem, 10vw, 7rem)",
-                    fontWeight:"400",
-                    lineHeight:0.88,
-                    letterSpacing:"0.01em",
-                    color:"var(--c-text)",
-                    marginBottom:"0.35rem",
-                  }}>
-                    {s.big}
-                  </div>
-                  <div style={{
-                    fontFamily:"'Space Mono','Courier New',monospace",
-                    fontSize:"0.62rem",
-                    letterSpacing:"0.25em",
-                    color:"#0ea5e9",
-                    fontWeight:"700",
-                  }}>
-                    {s.unit}
-                  </div>
-                </div>
-
-                <div style={{ marginTop:"1.25rem" }}>
-                  <div style={{
-                    fontSize:"0.95rem",
-                    fontWeight:"600",
-                    color:"var(--c-text)",
-                    marginBottom:"0.25rem",
-                    letterSpacing:"-0.005em",
-                  }}>
-                    {s.label}
-                  </div>
-                  <div style={{
-                    fontSize:"0.72rem",
-                    color:"var(--c-text5)",
-                    fontFamily:"'Space Mono','Courier New',monospace",
-                    letterSpacing:"0.08em",
-                    textTransform:"uppercase",
-                  }}>
-                    {s.foot}
-                  </div>
+                  {line}
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Closing manifesto line */}
-          <div style={{
-            marginTop:"2.5rem",
-            display:"flex", alignItems:"baseline", gap:"1rem",
-            flexWrap:"wrap",
+          <p style={{
+            marginTop:"3.5rem",
+            fontSize:"1rem",
+            color:"var(--c-text3)",
+            lineHeight:1.7,
+            maxWidth:"440px",
+            margin:"3.5rem auto 0",
           }}>
-            <span style={{
-              fontFamily:"'Bebas Neue',sans-serif",
-              fontSize:"clamp(1.5rem,2.8vw,2rem)",
-              letterSpacing:"0.01em",
-              lineHeight:1,
-              color:"var(--c-text)",
-            }}>
-              YOU DON&apos;T NEED ANOTHER APP.
-            </span>
-            <span style={{
-              fontFamily:"'Bebas Neue',sans-serif",
-              fontSize:"clamp(1.5rem,2.8vw,2rem)",
-              letterSpacing:"0.01em",
-              lineHeight:1,
-              color:"#0ea5e9",
-            }}>
-              YOU NEED A WITNESS.
-            </span>
-          </div>
+            MoggedAI is the text message you&apos;d send yourself — if you actually could.
+          </p>
         </div>
-
-        {/* Mobile: 1 col */}
-        <style>{`
-          @media (max-width: 640px) {
-            .stat-wall { grid-template-columns: 1fr !important; }
-          }
-        `}</style>
       </div>
 
       {/* HOW IT WORKS */}

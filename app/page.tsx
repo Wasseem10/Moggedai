@@ -686,70 +686,160 @@ export default function MoggedAI() {
         </div>
       </div>
 
-      {/* WHO IT'S FOR — three clean lines, centered */}
-      <div style={{ padding:"7rem 0", borderTop:"1px solid var(--c-border)" }}>
-        <div className="section-inner" style={{ maxWidth:"760px", textAlign:"center" }}>
+      {/* WHO IT'S FOR — premium 3-card spread */}
+      <div style={{ padding:"6rem 0 6rem", borderTop:"1px solid var(--c-border)" }}>
+        <div className="section-inner" style={{ maxWidth:"1080px" }}>
 
-          <div style={{
-            fontSize:"0.6rem",
-            letterSpacing:"0.3em",
-            color:"#0ea5e9",
-            fontWeight:"700",
-            marginBottom:"1.25rem",
-          }}>
-            MADE FOR YOU IF
+          <div style={{ marginBottom:"3rem", maxWidth:"640px" }}>
+            <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.75rem" }}>
+              MADE FOR YOU IF
+            </div>
+            <h2 style={{
+              fontFamily:"'Bebas Neue',sans-serif",
+              fontSize:"clamp(2.4rem,5.5vw,4rem)",
+              fontWeight:"400",
+              lineHeight:0.98,
+              letterSpacing:"0.01em",
+              margin:"0 0 1rem",
+            }}>
+              You keep saying <span style={{ color:"#0ea5e9" }}>tomorrow.</span>
+            </h2>
+            <p style={{ fontSize:"1rem", color:"var(--c-text3)", lineHeight:1.7, margin:0 }}>
+              Three flavors of stuck. Pick the one that hits hardest.
+            </p>
           </div>
 
-          <h2 style={{
-            fontFamily:"'Bebas Neue',sans-serif",
-            fontSize:"clamp(2.5rem,6vw,4.5rem)",
-            fontWeight:"400",
-            lineHeight:0.95,
-            letterSpacing:"0.01em",
-            margin:"0 0 3.5rem",
+          <div className="who-cards" style={{
+            display:"grid",
+            gridTemplateColumns:"repeat(3, 1fr)",
+            gap:"1rem",
           }}>
-            You keep saying<br/>
-            <span style={{ color:"#0ea5e9" }}>tomorrow.</span>
-          </h2>
-
-          <div style={{ display:"flex", flexDirection:"column", gap:"1.75rem", textAlign:"left", maxWidth:"560px", margin:"0 auto" }}>
             {[
-              "You set goals. You forget them by Thursday.",
-              "You download apps. You never open them twice.",
-              "You promise you'll start Monday. It's been 6 Mondays.",
-            ].map((line, i) => (
-              <div key={i} style={{ display:"flex", alignItems:"flex-start", gap:"1rem" }}>
-                <div style={{
-                  flexShrink:0,
-                  width:"8px", height:"8px",
+              {
+                num:"01",
+                title:"The Dreamer",
+                line:"Big plans. Vision boards. Zero follow-through.",
+                quote:"“I'll start fresh on Monday.”",
+                tag:"MONDAYS MISSED · 6",
+              },
+              {
+                num:"02",
+                title:"The Starter",
+                line:"Always day one. Never day seven.",
+                quote:"“This time I'm actually locking in.”",
+                tag:"APPS DOWNLOADED · 14",
+              },
+              {
+                num:"03",
+                title:"The Avoider",
+                line:"Busy all day. Productive with nothing that matters.",
+                quote:"“I'll do it right after this.”",
+                tag:"TAB COUNT · 37",
+              },
+            ].map((c) => (
+              <div
+                key={c.num}
+                className="who-card"
+                style={{
+                  position:"relative",
+                  background:"var(--c-s1)",
+                  border:"1px solid var(--c-border)",
+                  padding:"1.75rem 1.5rem 1.5rem",
+                  display:"flex",
+                  flexDirection:"column",
+                  gap:"1rem",
+                  minHeight:"320px",
+                  overflow:"hidden",
+                  transition:"border-color 0.2s, transform 0.2s",
+                }}
+              >
+                {/* Accent corner line */}
+                <div aria-hidden style={{
+                  position:"absolute",
+                  top:0, left:0,
+                  width:"40px", height:"2px",
                   background:"#0ea5e9",
-                  borderRadius:"50%",
-                  marginTop:"0.65rem",
                 }}/>
+
+                {/* Number */}
                 <div style={{
-                  fontSize:"clamp(1.1rem,2.2vw,1.35rem)",
-                  fontWeight:"500",
-                  color:"var(--c-text)",
-                  lineHeight:1.45,
-                  letterSpacing:"-0.01em",
+                  fontFamily:"'Space Mono','Courier New',monospace",
+                  fontSize:"0.6rem",
+                  letterSpacing:"0.25em",
+                  color:"var(--c-text5)",
                 }}>
-                  {line}
+                  {c.num} / 03
+                </div>
+
+                {/* Title */}
+                <div style={{
+                  fontFamily:"'Bebas Neue',sans-serif",
+                  fontSize:"2.25rem",
+                  lineHeight:1,
+                  letterSpacing:"0.015em",
+                  color:"var(--c-text)",
+                }}>
+                  {c.title}
+                </div>
+
+                {/* Description */}
+                <div style={{
+                  fontSize:"0.95rem",
+                  color:"var(--c-text3)",
+                  lineHeight:1.55,
+                  letterSpacing:"-0.005em",
+                  flex:1,
+                }}>
+                  {c.line}
+                </div>
+
+                {/* Quote */}
+                <div style={{
+                  fontSize:"0.92rem",
+                  color:"var(--c-text)",
+                  fontStyle:"italic",
+                  lineHeight:1.5,
+                  paddingLeft:"0.85rem",
+                  borderLeft:"2px solid #0ea5e9",
+                }}>
+                  {c.quote}
+                </div>
+
+                {/* Foot tag */}
+                <div style={{
+                  fontFamily:"'Space Mono','Courier New',monospace",
+                  fontSize:"0.58rem",
+                  letterSpacing:"0.2em",
+                  color:"var(--c-text5)",
+                  paddingTop:"0.75rem",
+                  borderTop:"1px solid var(--c-border)",
+                }}>
+                  {c.tag}
                 </div>
               </div>
             ))}
           </div>
 
           <p style={{
-            marginTop:"3.5rem",
+            marginTop:"2.5rem",
             fontSize:"1rem",
             color:"var(--c-text3)",
             lineHeight:1.7,
-            maxWidth:"440px",
-            margin:"3.5rem auto 0",
+            maxWidth:"500px",
           }}>
-            MoggedAI is the text message you&apos;d send yourself — if you actually could.
+            One hits too close? Good. That&apos;s exactly who we built this for.
           </p>
         </div>
+
+        <style>{`
+          .who-card:hover { border-color: #0ea5e9 !important; transform: translateY(-2px); }
+          @media (max-width: 860px) {
+            .who-cards { grid-template-columns: 1fr 1fr !important; }
+          }
+          @media (max-width: 560px) {
+            .who-cards { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
       </div>
 
       {/* HOW IT WORKS */}

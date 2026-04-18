@@ -687,7 +687,7 @@ export default function MoggedAI() {
       </div>
 
       {/* WHO IT'S FOR — premium 3-card spread */}
-      <div style={{ padding:"6rem 0 6rem", borderTop:"1px solid var(--c-border)", background:"#f6f7f9" }}>
+      <div style={{ padding:"6rem 0 6rem", borderTop:"1px solid var(--c-border)", background:"#0b0b0d", color:"#fff" }}>
         <div className="section-inner" style={{ maxWidth:"1080px" }}>
 
           <div style={{ marginBottom:"3rem", maxWidth:"640px" }}>
@@ -701,10 +701,11 @@ export default function MoggedAI() {
               lineHeight:0.98,
               letterSpacing:"0.01em",
               margin:"0 0 1rem",
+              color:"#fff",
             }}>
               Built for anyone who <span style={{ color:"#0ea5e9" }}>follows through.</span>
             </h2>
-            <p style={{ fontSize:"1rem", color:"var(--c-text3)", lineHeight:1.7, margin:0 }}>
+            <p style={{ fontSize:"1rem", color:"rgba(255,255,255,0.6)", lineHeight:1.7, margin:0 }}>
               People already using MoggedAI to stop missing the thing that actually matters.
             </p>
           </div>

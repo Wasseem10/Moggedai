@@ -717,24 +717,24 @@ export default function MoggedAI() {
             {[
               {
                 num:"01",
-                title:"The Dreamer",
-                line:"Big plans. Vision boards. Zero follow-through.",
-                quote:"“I'll start fresh on Monday.”",
-                tag:"MONDAYS MISSED · 6",
+                title:"The Planner",
+                line:"You love making the list. Actually doing it? Different story.",
+                quote:"“Let me just organize my Notion first.”",
+                tag:"TASKS LISTED · 47 · DONE · 3",
               },
               {
                 num:"02",
-                title:"The Starter",
-                line:"Always day one. Never day seven.",
-                quote:"“This time I'm actually locking in.”",
-                tag:"APPS DOWNLOADED · 14",
+                title:"The Procrastinator",
+                line:"Tomorrow's the day. It's been tomorrow for 3 weeks.",
+                quote:"“Lowkey locking in Monday.”",
+                tag:"DAYS SINCE “SOON” · 23",
               },
               {
                 num:"03",
-                title:"The Avoider",
-                line:"Busy all day. Productive with nothing that matters.",
-                quote:"“I'll do it right after this.”",
-                tag:"TAB COUNT · 37",
+                title:"The Quitter",
+                line:"Week one is easy. You've never made it to week two.",
+                quote:"“Taking a break — I'll pick it back up.”",
+                tag:"STREAKS STARTED · 9 · FINISHED · 0",
               },
             ].map((c) => (
               <div

@@ -686,89 +686,112 @@ export default function MoggedAI() {
         </div>
       </div>
 
-      {/* WHO IT'S FOR — lies vs. reality, editorial layout */}
+      {/* WHO IT'S FOR — the "progress report" that nobody wants */}
       <div style={{ padding:"5rem 0 5rem", borderTop:"1px solid var(--c-border)" }}>
-        <div className="section-inner" style={{ maxWidth:"860px" }}>
-          <div style={{ marginBottom:"3rem" }}>
-            <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.5rem" }}>
-              SOUND FAMILIAR?
+        <div className="section-inner" style={{ maxWidth:"820px" }}>
+          <div style={{ marginBottom:"2.75rem", display:"flex", alignItems:"flex-end", justifyContent:"space-between", gap:"1.5rem", flexWrap:"wrap" }}>
+            <div>
+              <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.5rem" }}>
+                YOUR PROGRESS REPORT
+              </div>
+              <h2 style={{ fontSize:"clamp(1.8rem,3.8vw,2.6rem)", fontWeight:"700", lineHeight:1.05, margin:0, letterSpacing:"-0.03em" }}>
+                Be honest with yourself.
+              </h2>
             </div>
-            <h2 style={{ fontSize:"clamp(1.8rem,3.8vw,2.6rem)", fontWeight:"700", lineHeight:1.05, margin:"0 0 0.75rem", letterSpacing:"-0.03em" }}>
-              The gap between what you <span style={{ fontStyle:"italic", color:"var(--c-text3)", fontWeight:"400" }}>said</span>
-              <br/>
-              and what you <span style={{ color:"#0ea5e9" }}>did</span>.
-            </h2>
+            <div style={{
+              fontSize:"0.55rem",
+              letterSpacing:"0.25em",
+              color:"var(--c-text5)",
+              fontFamily:"'Space Mono','Courier New',monospace",
+              border:"1px solid var(--c-border)",
+              padding:"0.4rem 0.75rem",
+            }}>
+              REPORT · Q1–Q2
+            </div>
           </div>
 
-          <div style={{ display:"flex", flexDirection:"column" }}>
+          <div style={{
+            border:"1px solid var(--c-border)",
+            background:"var(--c-s1)",
+            padding:"0.25rem 0",
+          }}>
             {[
-              { tag:"01 / STUDENTS",       lie:"I'll study for 2 hours tonight.",          truth:"15 minutes. Then YouTube." },
-              { tag:"02 / BUILDERS",       lie:"Gonna ship the side project by Sunday.",   truth:"Sunday becomes next Sunday. Again." },
-              { tag:"03 / ATHLETES",       lie:"Hitting the gym at 6am.",                  truth:"Alarm off. Guilt on." },
-              { tag:"04 / PROFESSIONALS",  lie:"Today I tackle the hard thing first.",     truth:"Inbox, Slack, a snack, anything else." },
-              { tag:"05 / CREATIVES",      lie:"I'll start when I'm inspired.",            truth:"You've been ‘waiting’ for 7 months." },
-              { tag:"06 / FOUNDERS",       lie:"Monday I'm locking in.",                    truth:"Monday you booked 4 calls and shipped nothing." },
-            ].map((c, i, arr) => (
+              { label:"Side project you keep restarting", pct:12, note:"last touched 41 days ago" },
+              { label:"Gym routine",                      pct:6,  note:"last check-in 23 days ago" },
+              { label:"Book on your nightstand",          pct:23, note:"bookmarked since February" },
+              { label:"That email you need to send",      pct:0,  note:"drafted 3 weeks ago" },
+              { label:"Learning Spanish again",           pct:8,  note:"streak broken 17 times" },
+              { label:"The goal you don't tell anyone",   pct:3,  note:"no movement this quarter" },
+            ].map((row, i, arr) => (
               <div
                 key={i}
                 style={{
                   display:"grid",
-                  gridTemplateColumns:"minmax(90px, 140px) 1fr",
-                  gap:"1.5rem",
-                  padding:"1.5rem 0",
-                  borderTop: i === 0 ? "1px solid var(--c-border)" : "none",
-                  borderBottom: "1px solid var(--c-border)",
-                  alignItems:"baseline",
+                  gridTemplateColumns:"1fr auto",
+                  columnGap:"1.25rem",
+                  rowGap:"0.55rem",
+                  padding:"1.15rem 1.35rem",
+                  borderBottom: i < arr.length - 1 ? "1px solid var(--c-border)" : "none",
+                  alignItems:"center",
                 }}
               >
                 <div style={{
-                  fontSize:"0.6rem",
-                  letterSpacing:"0.22em",
-                  color:"var(--c-text5)",
-                  fontFamily:"'Space Mono','Courier New',monospace",
-                  paddingTop:"0.35rem",
+                  fontSize:"0.95rem",
+                  fontWeight:"600",
+                  color:"var(--c-text)",
+                  letterSpacing:"-0.005em",
                 }}>
-                  {c.tag}
+                  {row.label}
                 </div>
-                <div>
-                  <div style={{
-                    fontSize:"clamp(1.05rem,2.2vw,1.35rem)",
-                    fontWeight:"500",
-                    color:"var(--c-text3)",
-                    textDecoration:"line-through",
-                    textDecorationThickness:"1px",
-                    textDecorationColor:"var(--c-text5)",
-                    letterSpacing:"-0.01em",
-                    lineHeight:1.35,
-                    marginBottom:"0.45rem",
-                  }}>
-                    “{c.lie}”
-                  </div>
-                  <div style={{
-                    fontSize:"clamp(1.05rem,2.2vw,1.35rem)",
-                    fontWeight:"700",
-                    color:"var(--c-text)",
-                    letterSpacing:"-0.015em",
-                    lineHeight:1.35,
-                  }}>
-                    {c.truth}
-                  </div>
+                <div style={{
+                  fontSize:"0.9rem",
+                  fontWeight:"700",
+                  fontFamily:"'Space Mono','Courier New',monospace",
+                  color: row.pct === 0 ? "#ef4444" : "var(--c-text3)",
+                  letterSpacing:"0.02em",
+                  minWidth:"44px",
+                  textAlign:"right",
+                }}>
+                  {row.pct}%
                 </div>
-                {/* Hide the first border-top after index 0 to avoid double line */}
-                {i !== arr.length - 1 ? null : null}
+                <div style={{
+                  gridColumn:"1 / -1",
+                  position:"relative",
+                  height:"4px",
+                  background:"var(--c-border)",
+                  overflow:"hidden",
+                }}>
+                  <div style={{
+                    position:"absolute", top:0, left:0, bottom:0,
+                    width:`${Math.max(row.pct, 1.5)}%`,
+                    background: row.pct === 0 ? "#ef4444" : "#0ea5e9",
+                    opacity: row.pct === 0 ? 0.5 : 1,
+                  }}/>
+                </div>
+                <div style={{
+                  gridColumn:"1 / -1",
+                  fontSize:"0.65rem",
+                  fontFamily:"'Space Mono','Courier New',monospace",
+                  letterSpacing:"0.12em",
+                  color:"var(--c-text5)",
+                  textTransform:"uppercase",
+                }}>
+                  {row.note}
+                </div>
               </div>
             ))}
           </div>
 
           <p style={{
-            marginTop:"2.5rem",
+            marginTop:"2.25rem",
             fontSize:"0.95rem",
             color:"var(--c-text3)",
-            lineHeight:1.7,
-            maxWidth:"540px",
+            lineHeight:1.75,
+            maxWidth:"560px",
           }}>
-            We built MoggedAI for the gap. The one between the plan and the execution.
-            The coach lives there. So you don&apos;t have to.
+            You don&apos;t have a goals problem. You have a follow-through problem.
+            MoggedAI is the coach that notices when the bar stops moving — and won&apos;t
+            shut up about it until it does.
           </p>
         </div>
       </div>

@@ -686,40 +686,88 @@ export default function MoggedAI() {
         </div>
       </div>
 
-      {/* WHO IT'S FOR */}
-      <div style={{ padding:"5rem 0 4rem", borderTop:"1px solid var(--c-border)" }}>
-        <div className="section-inner">
-          <div style={{ marginBottom:"2.5rem" }}>
-            <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.5rem" }}>WHO IT&apos;S FOR</div>
-            <h2 style={{ fontSize:"clamp(1.4rem,3vw,2rem)", fontWeight:"700", lineHeight:1.1, margin:0, letterSpacing:"-0.02em" }}>
+      {/* WHO IT'S FOR — confessions in chat-bubble form */}
+      <div style={{ padding:"5rem 0 5rem", borderTop:"1px solid var(--c-border)" }}>
+        <div className="section-inner" style={{ maxWidth:"720px" }}>
+          <div style={{ marginBottom:"3rem" }}>
+            <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.5rem" }}>
+              THINGS YOU&apos;VE TEXTED YOURSELF
+            </div>
+            <h2 style={{ fontSize:"clamp(1.6rem,3.4vw,2.3rem)", fontWeight:"700", lineHeight:1.1, margin:"0 0 0.75rem", letterSpacing:"-0.025em" }}>
               Sound familiar?
             </h2>
+            <p style={{ fontSize:"0.92rem", color:"var(--c-text4)", lineHeight:1.7, margin:0, maxWidth:"520px" }}>
+              If one of these hits, you&apos;re exactly who we built this for.
+            </p>
           </div>
 
-          {/* Statement cards */}
-          <div className="who-grid-inner" style={{ display:"grid", gap:"0.9rem" }}>
+          <div style={{ display:"flex", flexDirection:"column", gap:"1.1rem" }}>
             {[
-              { emoji:"📚", who:"Students",      line:"Study for 15 min, end up on YouTube for 2 hours." },
-              { emoji:"💻", who:"Builders",       line:"Always planning the side project. Never building it." },
-              { emoji:"💪", who:"Athletes",       line:"Skip workouts then feel guilty about it all day." },
-              { emoji:"📋", who:"Professionals",  line:"Putting off the one task that actually matters." },
-              { emoji:"🎨", who:"Creatives",      line:"Waiting for motivation instead of just starting." },
-              { emoji:"🚀", who:"Entrepreneurs",  line:"Busy with everything except the thing that moves the needle." },
-            ].map(f => (
-              <div key={f.who} style={{
-                border:"1px solid var(--c-border)",
-                borderRadius:"10px",
-                padding:"1.3rem 1.1rem",
-                background:"var(--c-s1)",
-                display:"flex",
-                flexDirection:"column",
-                gap:"0.6rem",
-              }}>
-                <span style={{ fontSize:"1.7rem" }}>{f.emoji}</span>
-                <span style={{ fontSize:"0.68rem", fontWeight:"700", letterSpacing:"0.15em", color:"var(--c-text)" }}>{f.who.toUpperCase()}</span>
-                <span style={{ fontSize:"0.85rem", color:"var(--c-text4)", lineHeight:1.65 }}>{f.line}</span>
-              </div>
-            ))}
+              { side:"left",  tag:"THE STUDENT",       text:"opened notes. closed notes. opened tiktok." },
+              { side:"right", tag:"THE BUILDER",       text:"i'll start the project tomorrow. for real this time." },
+              { side:"left",  tag:"THE ATHLETE",       text:"rest day #6. no comment." },
+              { side:"right", tag:"THE PROFESSIONAL",  text:"cleared my inbox instead of doing the actual work." },
+              { side:"left",  tag:"THE CREATIVE",      text:"waiting to ‘feel inspired’ is going great 🙃" },
+              { side:"right", tag:"THE FOUNDER",       text:"booked 4 meetings. shipped nothing." },
+            ].map((c, i) => {
+              const isLeft = c.side === "left";
+              return (
+                <div
+                  key={i}
+                  style={{
+                    display:"flex",
+                    flexDirection:"column",
+                    alignItems: isLeft ? "flex-start" : "flex-end",
+                    gap:"0.35rem",
+                    animationDelay: `${i * 0.05}s`,
+                  }}
+                >
+                  <div
+                    style={{
+                      maxWidth:"78%",
+                      background: isLeft ? "var(--c-s1)" : "#0ea5e9",
+                      color: isLeft ? "var(--c-text)" : "#fff",
+                      padding:"0.85rem 1.1rem",
+                      borderRadius: isLeft ? "18px 18px 18px 4px" : "18px 18px 4px 18px",
+                      fontSize:"1rem",
+                      lineHeight:1.5,
+                      border: isLeft ? "1px solid var(--c-border)" : "none",
+                      fontFamily:"-apple-system,'SF Pro Text','Segoe UI',sans-serif",
+                      letterSpacing:"-0.01em",
+                    }}
+                  >
+                    {c.text}
+                  </div>
+                  <div
+                    style={{
+                      fontSize:"0.58rem",
+                      letterSpacing:"0.22em",
+                      color:"var(--c-text5)",
+                      fontFamily:"'Space Mono','Courier New',monospace",
+                      padding: isLeft ? "0 0 0 0.4rem" : "0 0.4rem 0 0",
+                    }}
+                  >
+                    — {c.tag}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Closing line */}
+          <div style={{
+            marginTop:"3rem",
+            paddingTop:"1.75rem",
+            borderTop:"1px solid var(--c-border)",
+            display:"flex", alignItems:"center", gap:"0.75rem",
+            flexWrap:"wrap",
+          }}>
+            <span style={{ fontSize:"0.85rem", color:"var(--c-text3)", letterSpacing:"0.01em" }}>
+              Stop negotiating with yourself.
+            </span>
+            <span style={{ fontSize:"0.85rem", color:"var(--c-text)", fontWeight:"600" }}>
+              Let someone else hold the line.
+            </span>
           </div>
         </div>
       </div>

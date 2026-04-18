@@ -523,6 +523,7 @@ export default function MoggedAI() {
   const router = useRouter();
   const { isSignedIn, isLoaded } = useAuth();
   const { signOut } = useClerk();
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   // Auto-redirect signed-in users to their dashboard — but only on the
   // post-auth landing (e.g. Clerk OAuth callback). If the URL contains
@@ -767,6 +768,62 @@ export default function MoggedAI() {
           </div>
         </div>
       </div>
+      </div>
+
+      {/* FAQ */}
+      <div style={{ width:"100%", borderBottom:"1px solid var(--c-border)" }}>
+        <div style={{ padding:"5rem 0 5rem" }}>
+          <div className="section-inner">
+            <div style={{ marginBottom:"2.5rem" }}>
+              <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.5rem" }}>FAQ</div>
+              <h2 style={{ fontSize:"clamp(1.4rem,3vw,2rem)", fontWeight:"700", lineHeight:1.1, margin:0, letterSpacing:"-0.02em" }}>
+                Questions? We got you.
+              </h2>
+            </div>
+
+            <div style={{ display:"flex", flexDirection:"column", borderTop:"1px solid var(--c-border)" }}>
+              {[
+                { q:"How does MoggedAI work?",                     a:"You sign up, add your goals (gym, studying, side project — whatever you're trying to stay on top of), and set a schedule. From there, your AI coach texts you throughout the day to check in. You reply back naturally and the AI responds like a real person — not a bot." },
+                { q:"Do I need to open the app every day?",        a:"No. That's the whole point. Everything happens over text. The AI reaches out to you. You reply. You might not open the dashboard for weeks — and that's fine." },
+                { q:"What do I text back?",                         a:"Whatever you'd text a friend. 'just did it', 'not today', 'i'm tired bro' — the AI understands normal replies. You don't need to say specific commands." },
+                { q:"How often will I get texts?",                  a:"You choose during setup — every 30 minutes, every hour, every 2 hours, or every 3 hours. You also set active hours so you're not getting texts at 3am." },
+                { q:"What are the different coach styles?",         a:"Direct — no fluff. Brutal — tough love that calls out your excuses. Savage — maximum pressure, no filter. Motivating — hype energy, reminds you of your why. You set this per goal." },
+                { q:"Will it cost me anything to receive texts?",   a:"MoggedAI does not charge for text messages. Standard message and data rates from your mobile carrier may apply." },
+                { q:"How do I stop getting texts?",                 a:"Text STOP to +1 (844) 991-1147 at any time. You'll get one confirmation and nothing after. You can re-enable from your dashboard or by texting START." },
+                { q:"Is my information safe?",                      a:"Yes. Your data is stored on secure servers. We don't sell your phone number or personal information to anyone. Read our full Privacy Policy for details." },
+              ].map((item, i) => {
+                const isOpen = openFaq === i;
+                return (
+                  <div key={i} style={{ borderBottom:"1px solid var(--c-border)" }}>
+                    <button
+                      onClick={() => setOpenFaq(isOpen ? null : i)}
+                      style={{
+                        width:"100%", background:"transparent", border:"none", color:"var(--c-text)",
+                        padding:"1.25rem 0", cursor:"pointer", fontFamily:"inherit", textAlign:"left",
+                        display:"flex", alignItems:"center", justifyContent:"space-between", gap:"1rem",
+                        fontSize:"0.95rem", fontWeight:"600", letterSpacing:"-0.005em",
+                      }}
+                    >
+                      <span>{item.q}</span>
+                      <span style={{ color:"#0ea5e9", fontSize:"1.25rem", lineHeight:1, flexShrink:0, transform: isOpen ? "rotate(45deg)" : "none", transition:"transform 0.2s" }}>+</span>
+                    </button>
+                    {isOpen && (
+                      <div style={{ padding:"0 0 1.25rem", fontSize:"0.88rem", color:"var(--c-text4)", lineHeight:1.75, maxWidth:"640px" }}>
+                        {item.a}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <div style={{ marginTop:"2rem", textAlign:"center" }}>
+              <a href="/faq" style={{ fontSize:"0.72rem", letterSpacing:"0.15em", color:"var(--c-text3)", textDecoration:"none", borderBottom:"1px solid var(--c-border)", paddingBottom:"0.25rem" }}>
+                SEE ALL QUESTIONS →
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* CTA */}

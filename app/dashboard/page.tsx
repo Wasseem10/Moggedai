@@ -797,134 +797,229 @@ function OverviewView({
 
   return (
     <div>
-      {/* ── HEADER ─────────────────────────────────────────── */}
-      <div style={{ paddingTop: '2.25rem', paddingBottom: '1.5rem', opacity: 0, animation: 'heroIn 0.45s ease 0.05s both' }}>
-        <div style={{ fontFamily: MONO, fontSize: '0.6rem', color: C.text3, letterSpacing: '0.22em', marginBottom: '0.75rem' }}>
-          {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }).toUpperCase()}
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
-          <h1 style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.75rem, 5.5vw, 2.4rem)', margin: 0, color: C.text, letterSpacing: '-0.03em', lineHeight: 1.1 }}>
-            {greeting}{displayName ? `, ${displayName}.` : '.'}
+      {/* Hero */}
+      <div style={{ paddingTop: '2rem', paddingBottom: '1.75rem', position: 'relative' }}>
+        {/* Ambient glow */}
+        <div style={{
+          position: 'absolute', top: 0, left: -24, right: -24, bottom: 0,
+          background: 'radial-gradient(ellipse 80% 60% at 30% 20%, rgba(14,165,233,0.08) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+
+        <div style={{ position: 'relative', opacity: 0, animation: 'heroIn 0.5s ease 0.05s both' }}>
+          {/* Date + LIVE */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.6rem' }}>
+            <span style={{ fontFamily: MONO, fontSize: '0.62rem', color: C.text3, letterSpacing: '0.12em' }}>
+              {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).toUpperCase()}
+            </span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.52rem', color: '#22c55e', letterSpacing: '0.15em', fontFamily: MONO }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', display: 'inline-block', animation: 'livePulse 2s ease infinite' }} />
+              LIVE
+            </span>
+          </div>
+
+          {/* Greeting + Name */}
+          <p style={{ fontFamily: MONO, fontSize: '0.7rem', color: C.text2, letterSpacing: '0.18em', margin: 0, marginBottom: '0.4rem' }}>
+            {greeting}
+          </p>
+          <h1 style={{ fontFamily: GROTESK, fontWeight: 800, fontSize: 'clamp(1.65rem,6vw,2.1rem)', margin: 0, marginBottom: '0.85rem', color: C.text, letterSpacing: '-0.025em', lineHeight: 1.15 }}>
+            {displayName ? `${displayName} 👋` : 'Welcome back'}
           </h1>
-          <button
-            onClick={onToggleActive}
-            style={{
-              fontFamily: MONO, fontSize: '0.58rem', letterSpacing: '0.18em', fontWeight: 700,
+
+          {/* Status pill */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <span style={{
+              fontFamily: MONO, fontSize: '0.62rem', letterSpacing: '0.12em',
               color: isActive ? '#22c55e' : C.text3,
-              background: 'transparent',
+              background: isActive ? 'rgba(34,197,94,0.1)' : C.s2,
               border: `1px solid ${isActive ? 'rgba(34,197,94,0.35)' : C.border}`,
-              padding: '0.4rem 0.8rem', borderRadius: 999,
-              cursor: 'pointer',
-              display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
-              transition: 'opacity 0.15s',
-            }}
-            title={isActive ? 'Click to pause all texts' : 'Click to resume texts'}
-          >
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: isActive ? '#22c55e' : C.text3 }} />
-            {isActive ? 'COACH ACTIVE' : 'PAUSED'}
-          </button>
+              padding: '0.28rem 0.7rem', borderRadius: 999,
+            }}>
+              {isActive ? '● ACTIVE' : '○ PAUSED'}
+            </span>
+            {habits.length > 0 && (
+              <span style={{ fontFamily: MONO, fontSize: '0.58rem', color: C.text3, letterSpacing: '0.08em' }}>
+                {habits.length} goal{habits.length !== 1 ? 's' : ''} running
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* ── GOALS ─────────────────────────────────────────── */}
-      <div style={{ marginBottom: '2.25rem' }}>
+      {/* Stats Row — colorful gradient cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '0.6rem', marginBottom: '2rem' }}>
+
+        {/* Goals card */}
         <div style={{
-          display: 'flex', alignItems: 'baseline', justifyContent: 'space-between',
-          marginBottom: '1rem', paddingBottom: '0.75rem',
-          borderBottom: `1px solid ${C.border}`,
+          background: 'linear-gradient(145deg, rgba(14,165,233,0.16) 0%, rgba(14,165,233,0.05) 100%)',
+          border: '1px solid rgba(14,165,233,0.28)',
+          borderRadius: 14, padding: '1rem 0.6rem',
+          textAlign: 'center',
+          opacity: 0, animation: 'statCardIn 0.45s cubic-bezier(0.34,1.2,0.64,1) 0.08s both',
         }}>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
-            <span style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: '1.05rem', color: C.text, letterSpacing: '-0.01em' }}>
-              Goals
-            </span>
-            <span style={{ fontFamily: MONO, fontSize: '0.62rem', color: C.text3, letterSpacing: '0.12em' }}>
-              {habits.length}/5
-            </span>
+          <div style={{ fontSize: '1.3rem', lineHeight: 1, marginBottom: '0.4rem' }}>🎯</div>
+          <div style={{ fontFamily: GROTESK, fontWeight: 800, fontSize: 'clamp(1.3rem,5vw,1.7rem)', color: '#0ea5e9', lineHeight: 1, marginBottom: '0.25rem' }}>
+            {habits.length}
           </div>
+          <div style={{ fontFamily: MONO, fontSize: '0.52rem', color: C.text3, letterSpacing: '0.12em' }}>GOALS</div>
+          <div style={{ fontFamily: MONO, fontSize: '0.48rem', color: habits.length > 0 ? '#22c55e' : C.text3, letterSpacing: '0.08em', marginTop: '0.15rem' }}>
+            {habits.length > 0 ? 'ACTIVE' : 'NONE YET'}
+          </div>
+        </div>
+
+        {/* Streak card */}
+        <div style={{
+          background: 'linear-gradient(145deg, rgba(245,158,11,0.16) 0%, rgba(245,158,11,0.05) 100%)',
+          border: '1px solid rgba(245,158,11,0.28)',
+          borderRadius: 14, padding: '1rem 0.6rem',
+          textAlign: 'center',
+          opacity: 0, animation: 'statCardIn 0.45s cubic-bezier(0.34,1.2,0.64,1) 0.15s both',
+        }}>
+          <div style={{ fontSize: '1.3rem', lineHeight: 1, marginBottom: '0.4rem' }}>🔥</div>
+          <div style={{ fontFamily: GROTESK, fontWeight: 800, fontSize: 'clamp(1.3rem,5vw,1.7rem)', color: '#f59e0b', lineHeight: 1, marginBottom: '0.25rem' }}>
+            {stats.streak > 0 ? stats.streak : '—'}
+          </div>
+          <div style={{ fontFamily: MONO, fontSize: '0.52rem', color: C.text3, letterSpacing: '0.12em' }}>STREAK</div>
+          <div style={{ fontFamily: MONO, fontSize: '0.48rem', color: C.text3, letterSpacing: '0.08em', marginTop: '0.15rem' }}>
+            {stats.streak > 0 ? 'KEEP GOING' : 'DAYS'}
+          </div>
+        </div>
+
+        {/* Completions card */}
+        <div style={{
+          background: 'linear-gradient(145deg, rgba(34,197,94,0.16) 0%, rgba(34,197,94,0.05) 100%)',
+          border: '1px solid rgba(34,197,94,0.28)',
+          borderRadius: 14, padding: '1rem 0.6rem',
+          textAlign: 'center',
+          opacity: 0, animation: 'statCardIn 0.45s cubic-bezier(0.34,1.2,0.64,1) 0.22s both',
+        }}>
+          <div style={{ fontSize: '1.3rem', lineHeight: 1, marginBottom: '0.4rem' }}>✅</div>
+          <div style={{ fontFamily: GROTESK, fontWeight: 800, fontSize: 'clamp(1.3rem,5vw,1.7rem)', color: '#22c55e', lineHeight: 1, marginBottom: '0.25rem' }}>
+            {stats.total_completions}
+          </div>
+          <div style={{ fontFamily: MONO, fontSize: '0.52rem', color: C.text3, letterSpacing: '0.12em' }}>DONE</div>
+          <div style={{ fontFamily: MONO, fontSize: '0.48rem', color: C.text3, letterSpacing: '0.08em', marginTop: '0.15rem' }}>
+            TOTAL
+          </div>
+        </div>
+
+      </div>
+
+      {/* Goals */}
+      <div style={{ marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <span style={{
+              fontFamily: MONO, fontSize: '0.68rem', letterSpacing: '0.18em', fontWeight: 700,
+              background: 'linear-gradient(90deg, #0ea5e9 0%, #8b5cf6 100%)',
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+            }}>
+              MY GOALS
+            </span>
+            {habits.length > 0 && (
+              <span style={{
+                background: 'rgba(14,165,233,0.14)', border: '1px solid rgba(14,165,233,0.3)',
+                color: '#0ea5e9', fontFamily: MONO, fontSize: '0.6rem',
+                padding: '0.1rem 0.5rem', borderRadius: 999, fontWeight: 700,
+              }}>
+                {habits.length}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          {habits.map((h, index) => (
+            <GoalCard key={h.id} habit={h} index={index} onClick={() => onSelectGoal(h)} />
+          ))}
+
+          {/* Empty state — shown when no goals yet */}
+          {habits.length === 0 && (
+            <div style={{
+              border: '1px solid rgba(14,165,233,0.2)',
+              background: 'linear-gradient(145deg, rgba(14,165,233,0.07) 0%, rgba(139,92,246,0.04) 100%)',
+              borderRadius: 16,
+              padding: '3rem 1.75rem',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '1.25rem',
+              position: 'relative',
+              overflow: 'hidden',
+            }}>
+              {/* Decorative glow */}
+              <div style={{
+                position: 'absolute', top: -30, left: '50%', transform: 'translateX(-50%)',
+                width: 160, height: 160,
+                background: 'radial-gradient(circle, rgba(14,165,233,0.18) 0%, transparent 70%)',
+                pointerEvents: 'none',
+              }} />
+              <div style={{ fontSize: '3rem', lineHeight: 1, position: 'relative' }}>🎯</div>
+              <div>
+                <p style={{ fontFamily: GROTESK, fontSize: '1.15rem', fontWeight: 800, color: C.text, margin: 0, marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
+                  No goals yet
+                </p>
+                <p style={{ fontFamily: MONO, fontSize: '0.68rem', color: C.text3, margin: 0, lineHeight: 1.8, letterSpacing: '0.04em' }}>
+                  Add your first goal and your AI coach<br />will text you every single day until you do it.
+                </p>
+              </div>
+              <button
+                onClick={onAddGoal}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(14,165,233,0.4)' }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(14,165,233,0.3)' }}
+                style={{
+                  background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
+                  border: 'none',
+                  color: '#fff',
+                  fontFamily: MONO,
+                  fontSize: '0.7rem',
+                  letterSpacing: '0.15em',
+                  fontWeight: 700,
+                  padding: '0.9rem 2rem',
+                  cursor: 'pointer',
+                  borderRadius: 10,
+                  boxShadow: '0 4px 16px rgba(14,165,233,0.3)',
+                  transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+                }}
+              >
+                + ADD YOUR FIRST GOAL
+              </button>
+            </div>
+          )}
+
+          {/* Add button — shown when goals exist but under the limit */}
           {habits.length > 0 && habits.length < 5 && (
             <button
+              className="add-goal-btn"
               onClick={onAddGoal}
               style={{
-                background: 'none', border: 'none',
-                color: '#0ea5e9', fontFamily: MONO, fontSize: '0.62rem',
-                letterSpacing: '0.12em', fontWeight: 700,
-                cursor: 'pointer', padding: 0,
+                width: '100%',
+                border: `1.5px dashed ${C.border}`,
+                background: 'transparent',
+                borderRadius: 12,
+                padding: '1.1rem 1.25rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.65rem',
+                transition: 'all 0.2s ease',
               }}
             >
-              + NEW GOAL
+              <span style={{
+                width: 30, height: 30, borderRadius: '50%',
+                background: 'rgba(14,165,233,0.12)', border: '1px solid rgba(14,165,233,0.28)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: '#0ea5e9', fontSize: '1.1rem', lineHeight: 1, flexShrink: 0,
+              }}>+</span>
+              <span style={{ fontFamily: MONO, fontSize: '0.62rem', color: C.text3, letterSpacing: '0.12em' }}>
+                ADD ANOTHER GOAL
+              </span>
             </button>
           )}
         </div>
-
-        {habits.length === 0 ? (
-          <div style={{
-            border: `1px dashed ${C.border}`,
-            borderRadius: 14,
-            padding: '2.75rem 1.5rem',
-            textAlign: 'center',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.1rem',
-          }}>
-            <div style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: '1.1rem', color: C.text, letterSpacing: '-0.02em' }}>
-              Set your first goal.
-            </div>
-            <div style={{ fontFamily: GROTESK, fontSize: '0.88rem', color: C.text3, lineHeight: 1.6, maxWidth: 320 }}>
-              Your coach will text you every day until you do the thing.
-            </div>
-            <button
-              onClick={onAddGoal}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(14,165,233,0.35)' }}
-              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(14,165,233,0.25)' }}
-              style={{
-                background: '#0ea5e9', border: 'none', color: '#fff',
-                fontFamily: MONO, fontSize: '0.68rem', letterSpacing: '0.14em', fontWeight: 700,
-                padding: '0.85rem 1.75rem', cursor: 'pointer', borderRadius: 10,
-                marginTop: '0.35rem',
-                boxShadow: '0 2px 10px rgba(14,165,233,0.25)',
-                transition: 'transform 0.15s ease, box-shadow 0.15s ease',
-              }}
-            >
-              + ADD FIRST GOAL
-            </button>
-          </div>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {habits.map((h, index) => (
-              <GoalCard key={h.id} habit={h} index={index} onClick={() => onSelectGoal(h)} />
-            ))}
-          </div>
-        )}
       </div>
-
-      {/* ── AT A GLANCE ─────────────────────────────────────── */}
-      {habits.length > 0 && (
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          border: `1px solid ${C.border}`,
-          borderRadius: 14,
-          overflow: 'hidden',
-          marginBottom: '2.25rem',
-        }}>
-          {[
-            { label: 'ACTIVE GOALS', value: habits.length },
-            { label: 'DAY STREAK',  value: stats.streak > 0 ? stats.streak : '—' },
-            { label: 'COMPLETIONS', value: stats.total_completions },
-          ].map((s, i) => (
-            <div key={i} style={{
-              padding: '1.1rem 0.85rem',
-              borderRight: i < 2 ? `1px solid ${C.border}` : 'none',
-              textAlign: 'center',
-            }}>
-              <div style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: 'clamp(1.5rem,4vw,1.85rem)', color: C.text, lineHeight: 1, marginBottom: '0.4rem', letterSpacing: '-0.02em' }}>
-                {s.value}
-              </div>
-              <div style={{ fontFamily: MONO, fontSize: '0.55rem', color: C.text3, letterSpacing: '0.18em', fontWeight: 600 }}>
-                {s.label}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
 
       {/* Weekly Recap — always show once they have at least one goal */}
       <div id="recent-messages">
@@ -936,15 +1031,19 @@ function OverviewView({
       {/* Completed Goals */}
       {completedHabits.length > 0 && (
         <div style={{ marginBottom: '2rem' }}>
-          <div style={{
-            display: 'flex', alignItems: 'baseline', gap: '0.5rem',
-            marginBottom: '1rem', paddingBottom: '0.75rem',
-            borderBottom: `1px solid ${C.border}`,
-          }}>
-            <span style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: '1.05rem', color: C.text, letterSpacing: '-0.01em' }}>
-              Completed
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+            <span style={{
+              fontFamily: MONO, fontSize: '0.68rem', letterSpacing: '0.18em', fontWeight: 700,
+              background: 'linear-gradient(90deg, #22c55e 0%, #10b981 100%)',
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+            }}>
+              COMPLETED GOALS
             </span>
-            <span style={{ fontFamily: MONO, fontSize: '0.62rem', color: C.text3, letterSpacing: '0.12em' }}>
+            <span style={{
+              background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.28)',
+              color: '#22c55e', fontFamily: MONO, fontSize: '0.6rem',
+              padding: '0.1rem 0.5rem', borderRadius: 999, fontWeight: 700,
+            }}>
               {completedHabits.length}
             </span>
           </div>
@@ -988,14 +1087,14 @@ function OverviewView({
       )}
 
       {/* Account Section */}
-      <div id="account-section" style={{ marginTop: '1rem' }}>
-        <div style={{
-          display: 'flex', alignItems: 'baseline', justifyContent: 'space-between',
-          marginBottom: '0.5rem', paddingBottom: '0.75rem',
-          borderBottom: `1px solid ${C.border}`,
-        }}>
-          <span style={{ fontFamily: GROTESK, fontWeight: 700, fontSize: '1.05rem', color: C.text, letterSpacing: '-0.01em' }}>
-            Account
+      <div id="account-section" style={{ borderTop: `1px solid ${C.border}`, paddingTop: '0.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '1.25rem 0 0.5rem' }}>
+          <span style={{
+            fontFamily: MONO, fontSize: '0.68rem', letterSpacing: '0.18em', fontWeight: 700,
+            background: 'linear-gradient(90deg, #64748b 0%, #94a3b8 100%)',
+            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+          }}>
+            ACCOUNT
           </span>
         </div>
 

@@ -848,8 +848,8 @@ export default function MoggedAI() {
         <div className="section-inner">
           <div style={{ marginBottom:"2.5rem" }}>
             <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.5rem" }}>HOW IT WORKS</div>
-            <h2 style={{ fontSize:"clamp(1.4rem,3vw,2rem)", fontWeight:"700", lineHeight:1.1, margin:0, letterSpacing:"-0.02em" }}>
-              Set it once. Works all day.
+            <h2 style={{ fontSize:"clamp(1.9rem,4vw,2.6rem)", fontWeight:"800", lineHeight:1.05, margin:0, letterSpacing:"-0.025em" }}>
+              Set it once. <span style={{ color:"#0ea5e9" }}>Works all day.</span>
             </h2>
           </div>
 
@@ -862,23 +862,23 @@ export default function MoggedAI() {
             { n:"03", title:"Get texted all day",    desc:"We check in throughout the day. Every message is unique and personal.", color:"#10b981" },
             { n:"04", title:'Reply "done"',          desc:'Mark it complete. We track your streak. No reply? We follow up.',      color:"#f59e0b" },
           ].map((f, i, arr) => (
-            <div key={f.n} style={{ display:"flex", gap:"1.25rem", alignItems:"stretch" }}>
+            <div key={f.n} style={{ display:"flex", gap:"1.5rem", alignItems:"stretch" }}>
               <div style={{ display:"flex", flexDirection:"column", alignItems:"center", flexShrink:0 }}>
                 <div style={{
-                  width:42, height:42, borderRadius:"50%",
-                  background:`${f.color}18`,
-                  border:`1.5px solid ${f.color}`,
+                  width:54, height:54, borderRadius:"50%",
+                  background:f.color,
                   display:"flex", alignItems:"center", justifyContent:"center",
-                  fontSize:"0.62rem", fontWeight:"700", color:f.color, letterSpacing:"0.05em",
+                  fontSize:"0.9rem", fontWeight:"800", color:"#fff", letterSpacing:"0.02em",
                   flexShrink:0,
+                  boxShadow:`0 6px 20px ${f.color}55`,
                 }}>{f.n}</div>
                 {i < arr.length - 1 && (
-                  <div style={{ width:1, flex:1, background:`linear-gradient(${f.color}, ${arr[i+1].color})`, opacity:0.3, minHeight:28 }}/>
+                  <div style={{ width:2, flex:1, background:`linear-gradient(${f.color}, ${arr[i+1].color})`, opacity:0.55, minHeight:32 }}/>
                 )}
               </div>
-              <div style={{ paddingBottom: i < arr.length - 1 ? "1.75rem" : 0, paddingTop:"0.5rem" }}>
-                <div style={{ fontSize:"0.75rem", fontWeight:"700", letterSpacing:"0.08em", color:"var(--c-text)", marginBottom:"0.35rem" }}>{f.title.toUpperCase()}</div>
-                <div style={{ fontSize:"0.88rem", color:"var(--c-text4)", lineHeight:1.7 }}>{f.desc}</div>
+              <div style={{ paddingBottom: i < arr.length - 1 ? "2rem" : 0, paddingTop:"0.65rem" }}>
+                <div style={{ fontSize:"1rem", fontWeight:"800", letterSpacing:"0.06em", color:"var(--c-text)", marginBottom:"0.5rem" }}>{f.title.toUpperCase()}</div>
+                <div style={{ fontSize:"0.98rem", color:"var(--c-text2)", lineHeight:1.65, maxWidth:"440px" }}>{f.desc}</div>
               </div>
             </div>
           ))}

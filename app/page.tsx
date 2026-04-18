@@ -581,8 +581,8 @@ export default function MoggedAI() {
         .step-line { transition: background 0.3s; }
 
         /* ── Hero layout ── */
-        .hero-outer { padding: 6.5rem 1.5rem 3rem; max-width: 1080px; margin: 0 auto; width: 100%; }
-        .hero-inner { display: flex; align-items: center; gap: 3rem; }
+        .hero-outer { padding: 6.5rem 1.5rem 3rem; max-width: 1080px; margin: 0 auto; width: 100%; min-height: calc(100vh - 64px); display: flex; align-items: center; }
+        .hero-inner { display: flex; align-items: center; gap: 3rem; width: 100%; }
         .hero-left  { flex: 1; min-width: 0; }
         .hero-right { flex-shrink: 0; display: flex; justify-content: center; }
         .hero-btns  { display: flex; gap: 0.75rem; margin-top: 2rem; max-width: 440px; }
@@ -596,6 +596,7 @@ export default function MoggedAI() {
 
         /* ─── Mobile ─────────────────────────────── */
         @media (max-width: 860px) {
+          .hero-outer  { min-height: auto; }
           .hero-inner  { flex-direction: column; gap: 2.5rem; }
           .hero-right  { width: 100%; }
           .hero-btns   { max-width: 100%; }

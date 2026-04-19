@@ -94,8 +94,11 @@ reply ONLY with the message.`
 }
 
 export async function GET(req: NextRequest) {
-  const secret = req.headers.get('x-cron-secret')
-  if (secret !== process.env.CRON_SECRET) {
+  const expected = process.env.CRON_SECRET
+  const headerSecret = req.headers.get('x-cron-secret')
+  const authHeader  = req.headers.get('authorization')
+  const bearer      = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null
+  if (!expected || (headerSecret !== expected && bearer !== expected)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

@@ -525,13 +525,18 @@ export default function MoggedAI() {
   const { signOut } = useClerk();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
+  // Gate first paint on knowing auth state — prevents the flash-of-landing-page
+  // that signed-in users were seeing before the client-side redirect fires.
+  const [readyToRender, setReadyToRender] = useState(false);
+
   // Auto-redirect signed-in users to their dashboard — but only on the
   // post-auth landing (e.g. Clerk OAuth callback). If the URL contains
   // ?home=1 (set by the dashboard logo), let them stay on the landing page.
   useEffect(() => {
-    if (!isLoaded || !isSignedIn) return;
+    if (!isLoaded) return;
+    if (!isSignedIn) { setReadyToRender(true); return; }
     const params = new URLSearchParams(window.location.search);
-    if (params.get("home") === "1") return;
+    if (params.get("home") === "1") { setReadyToRender(true); return; }
     router.replace("/dashboard");
   }, [isLoaded, isSignedIn, router]);
 
@@ -569,6 +574,12 @@ export default function MoggedAI() {
   const lbl: React.CSSProperties = { fontSize:"0.6rem", letterSpacing:"0.2em", color:"var(--c-text3)", display:"block", marginBottom:"0.5rem" };
 
   // ── LANDING PAGE ──────────────────────────────────────────────────────────
+  // Blank screen until we know whether the user is signed in and whether to
+  // redirect to the dashboard — avoids the flash-of-landing-page glitch.
+  if (!readyToRender) {
+    return <div style={{ minHeight:"100vh", background:"var(--c-root)" }} />;
+  }
+
   return (
     <div style={root}>
       <style>{`

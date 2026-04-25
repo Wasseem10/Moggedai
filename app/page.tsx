@@ -628,17 +628,13 @@ export default function MoggedAI() {
         .step-line { transition: background 0.3s; }
 
         /* ── Premium iMessage CTA ── */
-        .imsg-cta { transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.18s ease; }
+        .imsg-cta { transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease, filter 0.2s ease; }
         .imsg-cta:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 1px 0 rgba(255,255,255,0.4) inset, 0 -1px 0 rgba(0,0,0,0.2) inset, 0 18px 42px rgba(45,200,80,0.55), 0 6px 14px rgba(45,200,80,0.32) !important;
+          transform: translateY(-2px) scale(1.015);
+          filter: brightness(1.05);
+          box-shadow: 0 1px 0 rgba(255,255,255,0.55) inset, 0 -1px 1px rgba(0,0,0,0.14) inset, 0 14px 32px rgba(61,139,245,0.5), 0 4px 10px rgba(0,0,0,0.1) !important;
         }
-        .imsg-cta:active { transform: translateY(0); }
-        @keyframes imsgPulse {
-          0%, 100% { box-shadow: 0 1px 0 rgba(255,255,255,0.35) inset, 0 -1px 0 rgba(0,0,0,0.18) inset, 0 10px 28px rgba(45,200,80,0.42), 0 4px 10px rgba(45,200,80,0.28); }
-          50%      { box-shadow: 0 1px 0 rgba(255,255,255,0.35) inset, 0 -1px 0 rgba(0,0,0,0.18) inset, 0 14px 36px rgba(45,200,80,0.55), 0 4px 10px rgba(45,200,80,0.28); }
-        }
-        .imsg-cta { animation: imsgPulse 3.2s ease-in-out infinite; }
+        .imsg-cta:active { transform: translateY(0) scale(1); }
 
         /* ── Hero layout ── */
         .hero-outer { padding: 6.5rem 1.5rem 3rem; max-width: 1080px; margin: 0 auto; width: 100%; min-height: 82vh; display: flex; align-items: center; }
@@ -722,36 +718,36 @@ export default function MoggedAI() {
                 style={{
                   display:"inline-flex",
                   alignItems:"center",
-                  gap:"0.7rem",
-                  background:"linear-gradient(180deg,#3DDC68 0%,#2BB94E 55%,#1FA641 100%)",
+                  gap:"0.85rem",
+                  background:"linear-gradient(180deg,#5BA8FF 0%,#3D8BF5 55%,#2F7AE6 100%)",
                   color:"#fff",
-                  padding:"1.15rem 2rem",
-                  fontSize:"0.88rem",
-                  letterSpacing:"0.18em",
-                  fontFamily:"inherit",
-                  fontWeight:"700",
+                  padding:"0.7rem 1.6rem 0.7rem 0.7rem",
+                  fontSize:"1.05rem",
+                  letterSpacing:"-0.01em",
+                  fontFamily:"-apple-system, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif",
+                  fontWeight:"600",
                   textDecoration:"none",
                   cursor:"pointer",
-                  width:"100%",
-                  maxWidth:"440px",
-                  boxSizing:"border-box",
-                  justifyContent:"center",
-                  borderRadius:"4px",
+                  borderRadius:"999px",
                   position:"relative",
                   overflow:"hidden",
-                  boxShadow:"0 1px 0 rgba(255,255,255,0.35) inset, 0 -1px 0 rgba(0,0,0,0.18) inset, 0 10px 28px rgba(45,200,80,0.42), 0 4px 10px rgba(45,200,80,0.28)",
-                  transition:"transform 0.18s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.18s ease",
+                  boxShadow:"0 1px 0 rgba(255,255,255,0.5) inset, 0 -1px 1px rgba(0,0,0,0.12) inset, 0 8px 22px rgba(61,139,245,0.4), 0 2px 6px rgba(0,0,0,0.08)",
                 }}
               >
+                {/* iMessage app icon */}
                 <span aria-hidden style={{
-                  position:"absolute", inset:0,
-                  background:"linear-gradient(180deg,rgba(255,255,255,0.32) 0%,rgba(255,255,255,0) 48%)",
-                  pointerEvents:"none",
-                }}/>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="white" style={{ position:"relative", filter:"drop-shadow(0 1px 1px rgba(0,0,0,0.18))" }}>
-                  <path d="M12 2C6.477 2 2 6.258 2 11.5c0 2.577 1.09 4.91 2.862 6.615L3.5 22l4.197-1.33A10.7 10.7 0 0 0 12 21c5.523 0 10-4.258 10-9.5S17.523 2 12 2z"/>
-                </svg>
-                <span style={{ position:"relative", textShadow:"0 1px 1px rgba(0,0,0,0.18)" }}>GET STARTED →</span>
+                  width:42, height:42, borderRadius:"10px",
+                  background:"linear-gradient(180deg,#5DF07A 0%,#3DCB5E 55%,#28B048 100%)",
+                  display:"flex", alignItems:"center", justifyContent:"center",
+                  flexShrink:0,
+                  boxShadow:"0 1px 0 rgba(255,255,255,0.45) inset, 0 -1px 1px rgba(0,0,0,0.12) inset, 0 2px 5px rgba(0,0,0,0.18)",
+                  position:"relative",
+                }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style={{ filter:"drop-shadow(0 1px 1px rgba(0,0,0,0.15))" }}>
+                    <path d="M12 3.2c-5.06 0-9.16 3.43-9.16 7.66 0 2.27 1.18 4.31 3.05 5.7-.13.95-.5 2.06-1.14 2.97-.13.18.04.42.25.36 1.83-.5 3.13-1.17 3.94-1.7.95.27 1.97.42 3.06.42 5.06 0 9.16-3.43 9.16-7.66S17.06 3.2 12 3.2z"/>
+                  </svg>
+                </span>
+                <span style={{ position:"relative", textShadow:"0 1px 1px rgba(0,0,0,0.15)" }}>Get Started</span>
               </a>
             </div>
 

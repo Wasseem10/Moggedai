@@ -627,6 +627,19 @@ export default function MoggedAI() {
         .who-emoji { transition: transform 0.18s; display:inline-block; }
         .step-line { transition: background 0.3s; }
 
+        /* ── Premium iMessage CTA ── */
+        .imsg-cta { transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.18s ease; }
+        .imsg-cta:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 1px 0 rgba(255,255,255,0.4) inset, 0 -1px 0 rgba(0,0,0,0.2) inset, 0 18px 42px rgba(45,200,80,0.55), 0 6px 14px rgba(45,200,80,0.32) !important;
+        }
+        .imsg-cta:active { transform: translateY(0); }
+        @keyframes imsgPulse {
+          0%, 100% { box-shadow: 0 1px 0 rgba(255,255,255,0.35) inset, 0 -1px 0 rgba(0,0,0,0.18) inset, 0 10px 28px rgba(45,200,80,0.42), 0 4px 10px rgba(45,200,80,0.28); }
+          50%      { box-shadow: 0 1px 0 rgba(255,255,255,0.35) inset, 0 -1px 0 rgba(0,0,0,0.18) inset, 0 14px 36px rgba(45,200,80,0.55), 0 4px 10px rgba(45,200,80,0.28); }
+        }
+        .imsg-cta { animation: imsgPulse 3.2s ease-in-out infinite; }
+
         /* ── Hero layout ── */
         .hero-outer { padding: 6.5rem 1.5rem 3rem; max-width: 1080px; margin: 0 auto; width: 100%; min-height: 82vh; display: flex; align-items: center; }
         .hero-inner { display: flex; align-items: center; gap: 3rem; width: 100%; }
@@ -701,49 +714,46 @@ export default function MoggedAI() {
             <p style={{ fontSize:"clamp(0.88rem,1.6vw,1rem)", color:"var(--c-text4)", maxWidth:"420px", lineHeight:"1.85", margin:0 }}>
               An AI coach that texts you throughout the day, holds you accountable, and won&apos;t let you make excuses. Set it once. Stay on track forever.
             </p>
+            {/* iMessage CTA — primary action */}
             <div className="hero-btns">
-              <button className="hero-primary-btn" style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem 2rem", fontSize:"0.82rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700", flex:1 }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
-                GET STARTED FREE →
-              </button>
-              {isSignedIn ? (
-                <button className="hero-secondary-btn" style={{ background:"transparent", border:"1px solid var(--c-border)", color:"var(--c-text)", padding:"1rem 1.5rem", fontSize:"0.82rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700", flex:1 }} onClick={() => router.push("/dashboard")}>
-                  DASHBOARD
-                </button>
-              ) : (
-                <button className="hero-secondary-btn" style={{ background:"transparent", border:"1px solid var(--c-border)", color:"var(--c-text)", padding:"1rem 1.5rem", fontSize:"0.82rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700", flex:1 }} onClick={() => router.push("/sign-in")}>
-                  LOG IN
-                </button>
-              )}
+              <a
+                href={smsHref}
+                className="imsg-cta"
+                style={{
+                  display:"inline-flex",
+                  alignItems:"center",
+                  gap:"0.7rem",
+                  background:"linear-gradient(180deg,#3DDC68 0%,#2BB94E 55%,#1FA641 100%)",
+                  color:"#fff",
+                  padding:"1.15rem 2rem",
+                  fontSize:"0.88rem",
+                  letterSpacing:"0.18em",
+                  fontFamily:"inherit",
+                  fontWeight:"700",
+                  textDecoration:"none",
+                  cursor:"pointer",
+                  width:"100%",
+                  maxWidth:"440px",
+                  boxSizing:"border-box",
+                  justifyContent:"center",
+                  borderRadius:"4px",
+                  position:"relative",
+                  overflow:"hidden",
+                  boxShadow:"0 1px 0 rgba(255,255,255,0.35) inset, 0 -1px 0 rgba(0,0,0,0.18) inset, 0 10px 28px rgba(45,200,80,0.42), 0 4px 10px rgba(45,200,80,0.28)",
+                  transition:"transform 0.18s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.18s ease",
+                }}
+              >
+                <span aria-hidden style={{
+                  position:"absolute", inset:0,
+                  background:"linear-gradient(180deg,rgba(255,255,255,0.32) 0%,rgba(255,255,255,0) 48%)",
+                  pointerEvents:"none",
+                }}/>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white" style={{ position:"relative", filter:"drop-shadow(0 1px 1px rgba(0,0,0,0.18))" }}>
+                  <path d="M12 2C6.477 2 2 6.258 2 11.5c0 2.577 1.09 4.91 2.862 6.615L3.5 22l4.197-1.33A10.7 10.7 0 0 0 12 21c5.523 0 10-4.258 10-9.5S17.523 2 12 2z"/>
+                </svg>
+                <span style={{ position:"relative", textShadow:"0 1px 1px rgba(0,0,0,0.18)" }}>GET STARTED →</span>
+              </a>
             </div>
-            {/* iMessage CTA */}
-            <a
-              href={smsHref}
-              style={{
-                display:"inline-flex",
-                alignItems:"center",
-                gap:"0.55rem",
-                marginTop:"1.25rem",
-                background:"#34C759",
-                border:"none",
-                color:"#fff",
-                padding:"0.85rem 1.5rem",
-                fontSize:"0.82rem",
-                letterSpacing:"0.12em",
-                fontFamily:"inherit",
-                fontWeight:"700",
-                textDecoration:"none",
-                cursor:"pointer",
-                maxWidth:"440px",
-                width:"100%",
-                boxSizing:"border-box",
-                justifyContent:"center",
-              }}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
-                <path d="M12 2C6.477 2 2 6.258 2 11.5c0 2.577 1.09 4.91 2.862 6.615L3.5 22l4.197-1.33A10.7 10.7 0 0 0 12 21c5.523 0 10-4.258 10-9.5S17.523 2 12 2z"/>
-              </svg>
-              TEXT US ON IMESSAGE →
-            </a>
 
             {/* Social proof nudge */}
             <div style={{ marginTop:"1.25rem", display:"flex", alignItems:"center", gap:"0.6rem" }}>

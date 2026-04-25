@@ -581,6 +581,20 @@ export default function MoggedAI() {
     return () => clearInterval(t);
   }, []);
 
+  // ── Mobile detection — for iMessage / SMS deeplink ───────────────────────
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    if (typeof navigator === "undefined") return;
+    setIsMobile(/iphone|ipad|ipod|android/i.test(navigator.userAgent));
+  }, []);
+
+  // SMS deeplink — opens Messages on iOS / Android with number + body prefilled.
+  // iOS expects `&body=`, Android expects `?body=`. The form below works on both
+  // because iOS treats the leading `?` as a no-op separator.
+  const SMS_NUMBER = "+18449911147";
+  const SMS_BODY  = "Hey! I want to try MoggedAI - can you help me get started?";
+  const smsHref   = `sms:${SMS_NUMBER}?&body=${encodeURIComponent(SMS_BODY)}`;
+
   const noise = Math.sin(ticker * 0.3) * 2;
 
   // ── shared styles ────────────────────────────────────────────────────────
@@ -701,8 +715,38 @@ export default function MoggedAI() {
                 </button>
               )}
             </div>
+            {/* iMessage CTA */}
+            <a
+              href={smsHref}
+              style={{
+                display:"inline-flex",
+                alignItems:"center",
+                gap:"0.55rem",
+                marginTop:"1.25rem",
+                background:"#34C759",
+                border:"none",
+                color:"#fff",
+                padding:"0.85rem 1.5rem",
+                fontSize:"0.82rem",
+                letterSpacing:"0.12em",
+                fontFamily:"inherit",
+                fontWeight:"700",
+                textDecoration:"none",
+                cursor:"pointer",
+                maxWidth:"440px",
+                width:"100%",
+                boxSizing:"border-box",
+                justifyContent:"center",
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                <path d="M12 2C6.477 2 2 6.258 2 11.5c0 2.577 1.09 4.91 2.862 6.615L3.5 22l4.197-1.33A10.7 10.7 0 0 0 12 21c5.523 0 10-4.258 10-9.5S17.523 2 12 2z"/>
+              </svg>
+              TEXT US ON IMESSAGE →
+            </a>
+
             {/* Social proof nudge */}
-            <div style={{ marginTop:"1.5rem", display:"flex", alignItems:"center", gap:"0.6rem" }}>
+            <div style={{ marginTop:"1.25rem", display:"flex", alignItems:"center", gap:"0.6rem" }}>
               <div style={{ display:"flex" }}>
                 {["🧑","👩","🧔","👨","🙋"].map((e,i) => (
                   <div key={i} style={{ width:26, height:26, borderRadius:"50%", background:"var(--c-s2)", border:"2px solid var(--c-root)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:13, marginLeft: i===0 ? 0 : -8 }}>{e}</div>

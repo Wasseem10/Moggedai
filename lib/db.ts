@@ -49,6 +49,7 @@ export async function ensureSchema(): Promise<void> {
       start_time        TEXT        NOT NULL DEFAULT '08:00',
       end_time          TEXT        NOT NULL DEFAULT '22:00',
       timezone          TEXT        NOT NULL DEFAULT 'America/New_York',
+      last_texted_at    TIMESTAMPTZ,
       active            BOOLEAN     NOT NULL DEFAULT true,
       created_at        TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
@@ -81,6 +82,8 @@ export async function ensureSchema(): Promise<void> {
       habit_id     UUID        REFERENCES habits(id) ON DELETE SET NULL,
       message_text TEXT        NOT NULL,
       sent_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      follow_up_at TIMESTAMPTZ,
+      follow_up_sent BOOLEAN   NOT NULL DEFAULT false,
       responded_at TIMESTAMPTZ
     );
   `)
@@ -95,6 +98,9 @@ export async function ensureSchema(): Promise<void> {
     `ALTER TABLE habits ADD COLUMN IF NOT EXISTS time_of_day    TEXT DEFAULT 'anytime'`,
     `ALTER TABLE habits ADD COLUMN IF NOT EXISTS coach_style    TEXT DEFAULT 'direct'`,
     `ALTER TABLE habits ADD COLUMN IF NOT EXISTS completed_at   TIMESTAMPTZ`,
+    `ALTER TABLE schedules ADD COLUMN IF NOT EXISTS last_texted_at TIMESTAMPTZ`,
+    `ALTER TABLE messages ADD COLUMN IF NOT EXISTS follow_up_at TIMESTAMPTZ`,
+    `ALTER TABLE messages ADD COLUMN IF NOT EXISTS follow_up_sent BOOLEAN NOT NULL DEFAULT false`,
     `ALTER TABLE users  ADD COLUMN IF NOT EXISTS stripe_customer_id      TEXT`,
     `ALTER TABLE users  ADD COLUMN IF NOT EXISTS stripe_subscription_id  TEXT`,
     `ALTER TABLE users  ADD COLUMN IF NOT EXISTS plan TEXT NOT NULL DEFAULT 'free'`,

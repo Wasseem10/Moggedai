@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getDb } from '@/lib/db'
-import twilio from 'twilio'
+import { ensureSchema, getDb } from '@/lib/db'
+import { sendSms } from '@/lib/sms'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
 function getLocalTime(timezone: string): string {
@@ -102,8 +102,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  await ensureSchema()
   const db = getDb()
-  const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID!, process.env.TWILIO_AUTH_TOKEN!)
   const now = new Date()
   const results = { sent: 0, followups: 0, skipped: 0, errors: 0 }
 
@@ -123,7 +123,7 @@ export async function GET(req: NextRequest) {
   for (const row of pendingFollowups) {
     try {
       const msg = await generateFollowUp(row.habit_name || 'your goal', row.coach_style || 'direct')
-      await twilioClient.messages.create({ body: msg, from: process.env.TWILIO_PHONE_NUMBER!, to: row.phone })
+      await sendSms({ body: msg, to: row.phone })
       await db.query(`UPDATE messages SET follow_up_sent = true WHERE id = $1`, [row.id])
       results.followups++
     } catch (err) {
@@ -180,9 +180,8 @@ export async function GET(req: NextRequest) {
         schedule.coach_style || 'direct'
       )
 
-      await twilioClient.messages.create({
+      await sendSms({
         body: message,
-        from: process.env.TWILIO_PHONE_NUMBER!,
         to: schedule.phone,
       })
 

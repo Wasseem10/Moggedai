@@ -127,13 +127,11 @@ export default function LandingPage() {
         }
 
         .hero {
-          min-height: 980px;
+          min-height: 900px;
           position: relative;
           overflow: hidden;
-          padding: 24px 20px 0;
-          background:
-            radial-gradient(circle at 50% 22%, rgba(255, 255, 255, 0.18), transparent 32%),
-            linear-gradient(180deg, #3d78d2 0%, #4b96e3 46%, #8fdbf3 100%);
+          padding: 28px 20px 0;
+          background: #f5f1ea;
         }
 
         .hero::before,
@@ -145,29 +143,24 @@ export default function LandingPage() {
         }
 
         .hero::before {
-          opacity: 0.28;
-          background-image:
-            linear-gradient(rgba(255, 255, 255, 0.28) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.24) 1px, transparent 1px);
-          background-size: 86px 86px;
-          mask-image: linear-gradient(180deg, #000 0%, transparent 72%);
-          -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 72%);
+          opacity: 0;
         }
 
         .hero::after {
           background:
-            linear-gradient(180deg, transparent 0%, rgba(234, 249, 255, 0.1) 58%, #eaf9ff 91%, #ffffff 100%);
+            radial-gradient(circle at 76% 42%, rgba(255, 255, 255, 0.95), transparent 24%),
+            linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.2) 78%, #ffffff 100%);
         }
 
         .shell {
-          width: min(1120px, 100%);
+          width: min(1440px, 100%);
           margin: 0 auto;
           position: relative;
           z-index: 2;
         }
 
         .nav {
-          width: min(1000px, 100%);
+          width: min(740px, 100%);
           height: 64px;
           margin: 0 auto;
           display: flex;
@@ -177,8 +170,8 @@ export default function LandingPage() {
           padding: 9px 10px 9px 22px;
           border-radius: 999px;
           background: rgba(255, 255, 255, 0.92);
-          border: 1px solid rgba(255, 255, 255, 0.76);
-          box-shadow: 0 24px 70px rgba(4, 68, 164, 0.2);
+          border: 1px solid rgba(25, 20, 14, 0.08);
+          box-shadow: 0 24px 70px rgba(45, 37, 28, 0.12);
           backdrop-filter: blur(24px);
         }
 
@@ -270,15 +263,15 @@ export default function LandingPage() {
 
         .btn-primary {
           color: #ffffff;
-          background: linear-gradient(135deg, #0d6bff, #155cff);
-          box-shadow: 0 16px 34px rgba(7, 91, 220, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+          background: #171512;
+          box-shadow: 0 16px 34px rgba(23, 21, 18, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.16);
         }
 
         .btn-ghost {
-          color: #ffffff;
-          background: rgba(255, 255, 255, 0.16);
-          border-color: rgba(255, 255, 255, 0.38);
-          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+          color: #1b1916;
+          background: transparent;
+          border-color: rgba(27, 25, 22, 0.42);
+          box-shadow: none;
         }
 
         .btn-light {
@@ -288,10 +281,19 @@ export default function LandingPage() {
           box-shadow: 0 16px 34px rgba(7, 91, 220, 0.18);
         }
 
+        .hero-layout {
+          min-height: 760px;
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(420px, 560px);
+          gap: clamp(40px, 6vw, 96px);
+          align-items: center;
+          padding: 64px 0 0;
+        }
+
         .hero-copy {
-          width: min(1220px, 100%);
-          margin: 80px auto 0;
-          text-align: center;
+          width: min(720px, 100%);
+          margin: 0;
+          text-align: left;
         }
 
         .badge {
@@ -299,18 +301,16 @@ export default function LandingPage() {
           align-items: center;
           justify-content: center;
           min-height: 28px;
-          padding: 0 18px;
+          padding: 0;
           border-radius: 999px;
-          background: rgba(255, 255, 255, 0.18);
-          border: 1px solid rgba(255, 255, 255, 0.24);
-          color: #ffffff;
-          font-size: 15px;
+          background: transparent;
+          border: 0;
+          color: #6b6761;
+          font-size: 18px;
           line-height: 1;
-          font-weight: 650;
+          font-weight: 700;
           letter-spacing: 0;
-          box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.22),
-            0 12px 28px rgba(31, 83, 150, 0.18);
+          box-shadow: none;
         }
 
         .section-badge {
@@ -328,17 +328,24 @@ export default function LandingPage() {
         }
 
         .hero h1 {
-          margin-top: 42px;
-          color: rgba(255, 255, 255, 0.92);
-          font-size: clamp(70px, 7vw, 104px);
-          line-height: 1.15;
-          font-weight: 800;
+          margin-top: 34px;
+          color: #171512;
+          font-family: Georgia, "Times New Roman", serif;
+          font-size: clamp(66px, 6.1vw, 108px);
+          line-height: 0.98;
+          font-weight: 500;
           letter-spacing: 0;
           text-shadow: none;
         }
 
         .hero h1 span {
-          color: rgba(255, 255, 255, 0.92);
+          color: #171512;
+        }
+
+        .hero h1 em {
+          color: #c67250;
+          font-style: italic;
+          font-weight: 500;
         }
 
         .mobile-hero-title {
@@ -347,29 +354,29 @@ export default function LandingPage() {
 
         .hero-sub {
           width: min(720px, 100%);
-          margin: 36px auto 0;
-          color: rgba(255, 255, 255, 0.9);
+          margin: 44px 0 0;
+          color: #706b64;
           font-family: var(--mono);
-          font-size: 22px;
-          line-height: 1.65;
+          font-size: clamp(22px, 1.8vw, 30px);
+          line-height: 1.42;
           font-weight: 400;
         }
 
         .hero-actions {
-          margin-top: 30px;
+          margin-top: 46px;
           display: flex;
-          justify-content: center;
-          gap: 12px;
+          justify-content: flex-start;
+          gap: 16px;
           flex-wrap: wrap;
         }
 
         .proof {
           max-width: 100%;
-          margin-top: 30px;
-          color: rgba(255, 255, 255, 0.84);
+          margin-top: 38px;
+          color: #27231e;
           font-family: var(--mono);
-          font-size: 13px;
-          font-weight: 700;
+          font-size: 17px;
+          font-weight: 500;
         }
 
         .message-strip {
@@ -397,28 +404,22 @@ export default function LandingPage() {
         }
 
         .phone-stage {
-          width: min(1040px, 100%);
-          min-height: 720px;
-          margin: 72px auto 0;
+          width: 100%;
+          min-height: 760px;
+          margin: 0;
           position: relative;
-          border-radius: 28px;
-          overflow: hidden;
-          background:
-            radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.9), transparent 14%),
-            linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.82));
-          border: 1px solid rgba(255, 255, 255, 0.62);
-          box-shadow: 0 30px 90px rgba(4, 68, 164, 0.16);
+          border-radius: 0;
+          overflow: visible;
+          background: transparent;
+          border: 0;
+          box-shadow: none;
         }
 
         .phone-stage::before {
           content: "";
           position: absolute;
           inset: 0;
-          opacity: 0.5;
-          background-image:
-            linear-gradient(rgba(15, 85, 160, 0.15) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(15, 85, 160, 0.15) 1px, transparent 1px);
-          background-size: 80px 80px;
+          opacity: 0;
         }
 
         .phone-stage::after {
@@ -440,17 +441,16 @@ export default function LandingPage() {
         .iphone {
           position: absolute;
           z-index: 2;
-          left: 82px;
-          top: 42px;
-          width: 318px;
-          height: 650px;
-          border-radius: 58px;
-          padding: 10px;
-          background: linear-gradient(145deg, #ffffff, #d8dde4 50%, #f9fafb);
+          right: 0;
+          top: 10px;
+          width: 430px;
+          height: 820px;
+          border-radius: 72px;
+          padding: 13px;
+          background: #12110f;
           box-shadow:
-            0 48px 110px rgba(15, 65, 117, 0.34),
-            inset 0 0 0 1px rgba(9, 11, 22, 0.08),
-            inset 0 2px 0 rgba(255, 255, 255, 0.86);
+            0 44px 120px rgba(48, 40, 30, 0.24),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.08);
         }
 
         .iphone::before,
@@ -459,7 +459,7 @@ export default function LandingPage() {
           position: absolute;
           width: 4px;
           border-radius: 4px;
-          background: linear-gradient(180deg, #d4d9df, #ffffff);
+          background: #12110f;
           box-shadow: 0 0 0 1px rgba(9, 11, 22, 0.05);
         }
 
@@ -477,12 +477,11 @@ export default function LandingPage() {
 
         .iphone-screen {
           height: 100%;
-          border-radius: 48px;
+          border-radius: 60px;
           position: relative;
           overflow: hidden;
           background:
-            radial-gradient(circle at 50% 32%, rgba(18, 104, 255, 0.04), transparent 26%),
-            linear-gradient(180deg, #fbfcff 0%, #f4f7fb 100%);
+            linear-gradient(180deg, #ffffff 0%, #f8f8f8 100%);
           border: 1px solid rgba(9, 11, 22, 0.06);
           font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
         }
@@ -1135,6 +1134,26 @@ export default function LandingPage() {
             padding-bottom: 120px;
           }
 
+          .hero-layout {
+            grid-template-columns: 1fr;
+            gap: 42px;
+            padding-top: 58px;
+          }
+
+          .hero-copy {
+            margin: 0 auto;
+            text-align: center;
+          }
+
+          .hero-sub {
+            margin-left: auto;
+            margin-right: auto;
+          }
+
+          .hero-actions {
+            justify-content: center;
+          }
+
           .who-grid,
           .feature-overview,
           .steps-grid {
@@ -1143,7 +1162,8 @@ export default function LandingPage() {
 
           .phone-stage {
             min-height: 720px;
-            margin-top: 54px;
+            width: min(560px, 100%);
+            margin: 0 auto;
           }
 
           .phone-stage::after {
@@ -1153,6 +1173,7 @@ export default function LandingPage() {
           }
 
           .iphone {
+            right: auto;
             left: 50%;
             transform: translateX(-50%);
             top: 46px;
@@ -1186,7 +1207,7 @@ export default function LandingPage() {
           }
 
           .hero-copy {
-            margin-top: 58px;
+            margin-top: 0;
             width: min(330px, 100%);
           }
 
@@ -1222,7 +1243,7 @@ export default function LandingPage() {
           .phone-stage {
             width: calc(100vw - 24px);
             min-height: 620px;
-            margin-top: 42px;
+            margin-top: 0;
             border-radius: 22px;
           }
 
@@ -1350,86 +1371,89 @@ export default function LandingPage() {
             </div>
           </nav>
 
-          <div className="hero-copy">
-            <div className="badge">Win the day. Everyday.</div>
-            <h1>
-              <span className="desktop-hero-title">
-                Beautiful AI coaching
-                <br />
-                <span>for modern lives</span>
-              </span>
-              <span className="mobile-hero-title">
-                Beautiful AI
-                <br />
-                coaching
-                <br />
-                <span>for modern lives</span>
-              </span>
-            </h1>
-            <p className="hero-sub">
-              An AI coach that checks in through Telegram, holds you accountable,
-              and won&apos;t let you make excuses. Set it once. Stay on track forever.
-            </p>
-            <div className="hero-actions">
-              <a
-                className="btn btn-primary"
-                href={telegramHref}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <TelegramIcon />
-                Start on Telegram
-              </a>
-              <a className="btn btn-ghost" href="#how">
-                See How It Works
-              </a>
+          <div className="hero-layout">
+            <div className="hero-copy">
+              <div className="badge">Built for accountability</div>
+              <h1>
+                <span className="desktop-hero-title">
+                  <em>MoggedAI:</em> win
+                  <br />
+                  the day by text.
+                </span>
+                <span className="mobile-hero-title">
+                  <em>MoggedAI:</em>
+                  <br />
+                  win the day
+                  <br />
+                  by text.
+                </span>
+              </h1>
+              <p className="hero-sub">
+                Your AI coach checks in through Telegram, holds you accountable,
+                and won&apos;t let you make excuses. Set the goal once and keep
+                moving all day.
+              </p>
+              <div className="hero-actions">
+                <a
+                  className="btn btn-primary"
+                  href={telegramHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <TelegramIcon />
+                  Start on Telegram
+                </a>
+                <a className="btn btn-ghost" href="#how">
+                  See How It Works
+                </a>
+              </div>
+              <p className="proof">✓ No app download · Works in Telegram · Live in under 5 minutes</p>
             </div>
-            <p className="proof">🔥🔥🔥🔥🔥 Join people hitting their goals daily</p>
-          </div>
 
-          <div className="phone-stage" aria-label="MoggedAI iPhone conversation preview">
-            <div className="iphone">
-              <div className="iphone-screen">
-                <div className="dynamic-island" />
-                <div className="ios-status">
-                  <span>2:03 PM</span>
-                  <div className="ios-icons">
-                    <span />
-                    <span />
-                    <span />
+            <div className="phone-stage" aria-label="MoggedAI iPhone conversation preview">
+              <div className="iphone">
+                <div className="iphone-screen">
+                  <div className="dynamic-island" />
+                  <div className="ios-status">
+                    <span>2:03 PM</span>
+                    <div className="ios-icons">
+                      <span />
+                      <span />
+                      <span />
+                    </div>
                   </div>
+                  <div className="ios-header">
+                    <div className="ios-back">
+                      ‹ <b>3</b>
+                    </div>
+                    <div className="ios-contact">
+                      <div className="bot-avatar">🤖</div>
+                      <span>MoggedAI ›</span>
+                    </div>
+                    <div className="ios-camera">▭</div>
+                  </div>
+                  <div className="ios-date">📚 STUDY · Today 2:03 PM</div>
+                  <div className="iphone-messages">
+                    <div className="ios-bubble">
+                      how many pages have you actually read today. be honest
+                    </div>
+                    <div className="ios-bubble user">..like 3 lol</div>
+                    <div className="ios-bubble">
+                      3 pages. you said 30 by tonight. put the phone down and start now.
+                    </div>
+                    <div className="ios-bubble user ios-typing">
+                      <span />
+                      <span />
+                      <span />
+                    </div>
+                  </div>
+                  <div className="ios-input">
+                    <div className="ios-plus">+</div>
+                    <div className="ios-field">iMessage</div>
+                    <div className="ios-mic">◉</div>
+                  </div>
+                  <div className="home-indicator" />
                 </div>
-                <div className="ios-header">
-                  <div className="ios-back">
-                    ‹ <b>3</b>
-                  </div>
-                  <div className="ios-contact">
-                    <div className="bot-avatar">🤖</div>
-                    <span>MoggedAI ›</span>
-                  </div>
-                  <div className="ios-camera">▭</div>
-                </div>
-                <div className="ios-date">📚 STUDY · Today 2:03 PM</div>
-                <div className="iphone-messages">
-                  <div className="ios-bubble">
-                    how many pages have you actually read today. be honest
-                  </div>
-                  <div className="ios-bubble user">..like 3 lol</div>
-                  <div className="ios-bubble">
-                    3 pages. you said 30 by tonight. put the phone down and start now.
-                  </div>
-                  <div className="ios-bubble user ios-typing">
-                    <span />
-                    <span />
-                    <span />
-                  </div>
-                </div>
-                <div className="ios-input">
-                  <div className="ios-plus">+</div>
-                  <div className="ios-field">iMessage</div>
-                  <div className="ios-mic">◉</div>
-                </div>
-                <div className="home-indicator" />
               </div>
             </div>
           </div>

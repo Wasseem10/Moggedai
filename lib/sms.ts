@@ -5,13 +5,18 @@ type SendSmsArgs = {
   body: string
 }
 
+export type SendSmsResult = {
+  provider: 'telnyx' | 'twilio'
+  response?: unknown
+}
+
 function requireEnv(name: string): string {
   const value = process.env[name]
   if (!value) throw new Error(`${name} is not set`)
   return value
 }
 
-export async function sendSms({ to, body }: SendSmsArgs): Promise<void> {
+export async function sendSms({ to, body }: SendSmsArgs): Promise<SendSmsResult> {
   if (process.env.SMS_PROVIDER === 'telnyx') {
     const res = await fetch('https://api.telnyx.com/v2/messages', {
       method: 'POST',
@@ -27,12 +32,19 @@ export async function sendSms({ to, body }: SendSmsArgs): Promise<void> {
       }),
     })
 
-    if (!res.ok) {
-      const text = await res.text()
-      throw new Error(`Telnyx send failed (${res.status}): ${text}`)
+    const responseText = await res.text()
+    let response: unknown = responseText
+    try {
+      response = responseText ? JSON.parse(responseText) : null
+    } catch {
+      response = responseText
     }
 
-    return
+    if (!res.ok) {
+      throw new Error(`Telnyx send failed (${res.status}): ${responseText}`)
+    }
+
+    return { provider: 'telnyx', response }
   }
 
   const twilioClient = twilio(
@@ -40,9 +52,11 @@ export async function sendSms({ to, body }: SendSmsArgs): Promise<void> {
     requireEnv('TWILIO_AUTH_TOKEN')
   )
 
-  await twilioClient.messages.create({
+  const message = await twilioClient.messages.create({
     body,
     from: requireEnv('TWILIO_PHONE_NUMBER'),
     to,
   })
+
+  return { provider: 'twilio', response: { sid: message.sid, status: message.status } }
 }

@@ -24,14 +24,14 @@ export async function POST(req: NextRequest) {
     const message = body.message?.trim() ||
       'MoggedAI test: your SMS setup is connected. Reply DONE and I should text you back.'
 
-    await sendSms({ to: rows[0].phone, body: message })
+    const sendResult = await sendSms({ to: rows[0].phone, body: message })
     await db.query(
       `INSERT INTO messages (user_id, message_text, sent_at, follow_up_sent)
        VALUES ($1, $2, NOW(), true)`,
       [rows[0].id, message]
     )
 
-    return NextResponse.json({ success: true, to: rows[0].phone })
+    return NextResponse.json({ success: true, to: rows[0].phone, sendResult })
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)
     console.error('[POST /api/sms/test] error:', message)

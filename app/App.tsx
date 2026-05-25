@@ -1,5 +1,4 @@
 import { ChevronRight } from "lucide-react";
-import DashboardPreview from "./components/DashboardPreview";
 import Navbar from "./components/Navbar";
 
 const telegramHref =
@@ -160,10 +159,6 @@ export default function App() {
                 <ChevronRight className="h-4 w-4" strokeWidth={2} />
               </span>
             </a>
-
-            <div className="mt-8 w-full px-3 sm:mt-10 sm:px-4">
-              <DashboardPreview />
-            </div>
           </div>
         </div>
       </section>

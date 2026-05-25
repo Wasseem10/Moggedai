@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "../src/styles/fonts.css";
 
 @theme inline {
   --color-background: var(--background);
@@ -107,5 +108,4 @@ body {
 @media (max-width: 640px) {
   .who-grid    { grid-template-columns: repeat(2, 1fr); }
   .footer-grid { grid-template-columns: 1fr 1fr 1fr; }
-  .footer-brand { grid-column: 1 / -1; }
-}
+  .foote

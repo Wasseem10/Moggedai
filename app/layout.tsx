@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MoggedAI — AI Accountability via SMS",
-  description: "Stop slacking. MoggedAI texts you throughout the day to get you back to work.",
+  title: "Staypinged — AI Accountability in Telegram",
+  description: "A Telegram AI coach that keeps you honest about the goals you said mattered.",
 };
 
 export default function RootLayout({

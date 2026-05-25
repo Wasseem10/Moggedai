@@ -70,7 +70,7 @@ export default function DashboardPreview() {
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
         <article className="rounded-2xl bg-white p-5 text-left shadow-sm">
           <div className="flex items-center justify-between text-[13px] font-medium">
-            <span className="text-[#ef4d23]">Clicks</span>
+            <span className="text-[#ef4d23]">Check-ins</span>
             <span className="text-neutral-500">This Month</span>
           </div>
 
@@ -86,17 +86,17 @@ export default function DashboardPreview() {
 
           <p className="mt-2 text-[12px] text-neutral-500">Compared to yesterday</p>
           <p className="mt-5 text-center text-[13px] font-medium text-neutral-700">
-            Month Target achieved
+            Monthly target achieved
           </p>
           <Gauge value={92} showLabels min="389K" max="425K" />
-          <TogglePill active="Impressions" inactive="Clicks" />
+          <TogglePill active="Goals" inactive="Check-ins" />
         </article>
 
         <article className="flex flex-col gap-3 rounded-2xl bg-white p-5 text-left shadow-sm">
-          <DropdownField label="Show figures for" value="This month" />
+          <DropdownField label="Show goals for" value="This month" />
           <DropdownField label="Compare period by" value="Month-to-date (MTD)" />
-          <InputField label="Ste targets (This month)" value="10" />
-          <InputField label="Ste targets (This year)" value="100" />
+          <InputField label="Set targets (This month)" value="10" />
+          <InputField label="Set targets (This year)" value="100" />
 
           <div className="mt-1 flex items-center gap-4">
             <button className="rounded-lg bg-[#ef4d23] px-5 py-2 text-[13px] font-semibold text-white">
@@ -113,16 +113,16 @@ export default function DashboardPreview() {
 
         <article className="rounded-2xl bg-white p-5 text-left shadow-sm sm:col-span-2 lg:col-span-1">
           <div className="flex items-center justify-between text-[13px] font-medium">
-            <span className="text-[#ef4d23]">Video Starts</span>
+            <span className="text-[#ef4d23]">Streak</span>
             <span className="text-neutral-500">today</span>
           </div>
 
           <div className="mt-4 flex items-center gap-2">
             <strong className="text-[28px] leading-none font-semibold text-neutral-950">
-              0
+              12
             </strong>
             <span className="inline-flex items-center gap-1 rounded-full bg-neutral-100 px-2 py-0.5 text-[11px] font-semibold text-neutral-600">
-              <TrendingUp className="h-3 w-3" strokeWidth={2} />0
+              <TrendingUp className="h-3 w-3" strokeWidth={2} />3
             </span>
           </div>
 
@@ -130,7 +130,7 @@ export default function DashboardPreview() {
           <div className="mt-5">
             <Gauge value={68} color="#9ca3af" />
           </div>
-          <TogglePill active="Video Clicks" inactive="Video Starts" />
+          <TogglePill active="Completed" inactive="Missed" />
         </article>
       </div>
     </div>

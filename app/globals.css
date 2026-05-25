@@ -4,6 +4,45 @@
 :root {
   --background: #ededed;
   --foreground: #0b0f1a;
+  --c-bg: #0c0c0c;
+  --c-root: #080808;
+  --c-s1: #131313;
+  --c-s2: #191919;
+  --c-border: #1f1f1f;
+  --c-border2: #1a1a1a;
+  --c-text: #f0f0f0;
+  --c-text2: #b0b0b0;
+  --c-text3: #707070;
+  --c-text4: #aaaaaa;
+  --c-text5: #555555;
+  --c-accent: #0ea5e9;
+  --c-accent-dim: rgba(14, 165, 233, 0.08);
+  --c-accent-bdr: rgba(14, 165, 233, 0.2);
+  --c-grid: rgba(14, 165, 233, 0.04);
+  --c-nav: rgba(8, 8, 8, 0.95);
+  --c-input: #111111;
+  --c-input-bdr: #222222;
+}
+
+[data-theme="light"] {
+  --c-bg: #eef0f3;
+  --c-root: #f5f7fa;
+  --c-s1: #ffffff;
+  --c-s2: #ececec;
+  --c-border: #a0a0a0;
+  --c-border2: #b0b0b0;
+  --c-text: #111111;
+  --c-text2: #444444;
+  --c-text3: #888888;
+  --c-text4: #555555;
+  --c-text5: #999999;
+  --c-accent: #0ea5e9;
+  --c-accent-dim: rgba(14, 165, 233, 0.08);
+  --c-accent-bdr: rgba(14, 165, 233, 0.25);
+  --c-grid: rgba(14, 165, 233, 0.05);
+  --c-nav: rgba(245, 247, 250, 0.85);
+  --c-input: #f5f5f5;
+  --c-input-bdr: #d0d0d0;
 }
 
 * {
@@ -16,6 +55,7 @@ body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
+  scroll-behavior: smooth;
 }
 
 body {

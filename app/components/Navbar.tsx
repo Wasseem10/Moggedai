@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  ChevronDown,
   ChevronRight,
   Menu,
   ShoppingCart,
@@ -34,22 +33,28 @@ function FlowerLogo() {
 
 function NavLink({ item, mobile = false }: { item: string; mobile?: boolean }) {
   const isHome = item === "Home";
-  const isPages = item === "Pages";
+  const href =
+    item === "Home"
+      ? "#"
+      : item === "Features"
+        ? "#how-it-works"
+        : item === "About"
+          ? "#dashboard"
+          : "#faq";
 
   return (
     <a
-      href="#"
+      href={href}
       className={[
         "inline-flex items-center gap-1.5 font-medium",
         mobile ? "justify-between rounded-xl px-3 py-2 text-[14px]" : "text-[14px]",
-        isPages ? "text-[#ef4d23]" : "text-neutral-950",
+        item === "Pages" ? "text-[#ef4d23]" : "text-neutral-950",
       ].join(" ")}
     >
       <span className="inline-flex items-center gap-2">
         {isHome && <span className="h-1.5 w-1.5 rounded-full bg-neutral-950" />}
-        {item}
+        {item === "Features" ? "How it works" : item === "About" ? "Dashboard" : item === "Pages" ? "FAQ" : item}
       </span>
-      {isPages && <ChevronDown className="h-3.5 w-3.5" strokeWidth={2} />}
     </a>
   );
 }
@@ -76,13 +81,16 @@ export default function Navbar() {
             <ShoppingCart className="h-4 w-4" strokeWidth={2} />
           </button>
 
-          <button className="inline-flex items-center gap-2 rounded-full bg-[#ef4d23] py-1.5 pr-1.5 pl-4 text-[13px] font-semibold text-white sm:text-[14px] md:pl-5">
-            <span className="hidden md:inline">Get early access</span>
-            <span className="md:hidden">Early access</span>
+          <a
+            href="/dashboard"
+            className="inline-flex items-center gap-2 rounded-full bg-[#ef4d23] py-1.5 pr-1.5 pl-4 text-[13px] font-semibold text-white sm:text-[14px] md:pl-5"
+          >
+            <span className="hidden md:inline">Open dashboard</span>
+            <span className="md:hidden">Dashboard</span>
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/20">
               <ChevronRight className="h-4 w-4" strokeWidth={2} />
             </span>
-          </button>
+          </a>
 
           <button
             aria-label="Toggle navigation menu"

@@ -5,12 +5,6 @@ const telegramHref =
   process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL ||
   "https://t.me/StaypingedBot?start=website";
 
-const videoProps = {
-  disableRemotePlayback: true,
-  "webkit-playsinline": "true",
-  "x5-playsinline": "true",
-};
-
 const steps = [
   {
     label: "01",
@@ -124,18 +118,15 @@ export default function App() {
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
       <section className="relative h-[calc(100vh-24px)] w-full overflow-hidden rounded-2xl bg-[#d9d9d9] sm:h-[calc(100vh-32px)] sm:rounded-3xl">
-        <video
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260424_064411_9e9d7f84-9277-41f4-ab10-59172d89e6be.mp4"
-          poster="https://images.unsplash.com/photo-1557683316-973673baf926?w=1600&q=60"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          {...videoProps}
+        <div
+          className="pointer-events-none absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=2400&q=85')",
+          }}
         />
-        <div className="absolute inset-0 bg-white/10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/15 via-white/35 to-white/70" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,rgba(255,255,255,0.12),transparent_38%)]" />
 
         <div className="relative z-10 flex h-full flex-col">
           <Navbar />

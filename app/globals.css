@@ -1,111 +1,39 @@
-@import "tailwindcss";
 @import "../src/styles/fonts.css";
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-/* ─── Theme Variables ──────────────────────────────────────────────────────── */
+@import "tailwindcss";
 
 :root {
-  --c-bg:           #0c0c0c;
-  --c-root:         #080808;
-  --c-s1:           #131313;
-  --c-s2:           #191919;
-  --c-border:       #1f1f1f;
-  --c-border2:      #1a1a1a;
-  --c-text:         #f0f0f0;
-  --c-text2:        #b0b0b0;
-  --c-text3:        #707070;
-  --c-text4:        #aaaaaa;
-  --c-text5:        #555555;
-  --c-accent:       #0ea5e9;
-  --c-accent-dim:   rgba(14,165,233,0.08);
-  --c-accent-bdr:   rgba(14,165,233,0.2);
-  --c-grid:         rgba(14,165,233,0.04);
-  --c-nav:          rgba(8,8,8,0.95);
-  --c-input:        #111111;
-  --c-input-bdr:    #222222;
+  --background: #ededed;
+  --foreground: #0b0f1a;
 }
 
-[data-theme="light"] {
-  --c-bg:           #eef0f3;
-  --c-root:         #f5f7fa;
-  --c-s1:           #ffffff;
-  --c-s2:           #ececec;
-  --c-border:       #a0a0a0;
-  --c-border2:      #b0b0b0;
-  --c-text:         #111111;
-  --c-text2:        #444444;
-  --c-text3:        #888888;
-  --c-text4:        #555555;
-  --c-text5:        #999999;
-  --c-accent:       #0ea5e9;
-  --c-accent-dim:   rgba(14,165,233,0.08);
-  --c-accent-bdr:   rgba(14,165,233,0.25);
-  --c-grid:         rgba(14,165,233,0.05);
-  --c-nav:          rgba(245,247,250,0.85);
-  --c-input:        #f5f5f5;
-  --c-input-bdr:    #d0d0d0;
+* {
+  box-sizing: border-box;
 }
 
-/* Soft aurora bloom on light mode — gives the white background depth
-   without being distracting. Pure CSS, fixed to viewport, behind everything. */
-[data-theme="light"] body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background:
-    radial-gradient(ellipse 60vw 50vh at 12% 8%,  rgba(14,165,233,0.13) 0%, transparent 60%),
-    radial-gradient(ellipse 55vw 45vh at 92% 18%, rgba(168,85,247,0.10) 0%, transparent 65%),
-    radial-gradient(ellipse 70vw 55vh at 80% 95%, rgba(56,189,248,0.10) 0%, transparent 60%),
-    radial-gradient(ellipse 50vw 40vh at 18% 92%, rgba(244,114,182,0.06) 0%, transparent 65%);
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
 }
-[data-theme="light"] body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background-image:
-    radial-gradient(rgba(14,165,233,0.045) 1px, transparent 1px);
-  background-size: 22px 22px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 80%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 80%);
-}
-
-/* ─── Base ─────────────────────────────────────────────────────────────────── */
 
 body {
-  margin: 0;
-  padding: 0;
+  font-family: "Inter", sans-serif;
 }
 
-/* ─── Mobile ───────────────────────────────────────────────────────────────── */
-
-@media (max-width: 480px) {
-  nav button {
-    padding: 0.35rem 0.6rem !important;
-    font-size: 0.6rem !important;
-    letter-spacing: 0.05em !important;
-    white-space: nowrap;
-  }
-  .hero-section {
-    padding-top: 4rem !important;
-  }
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
-/* ─── Who-grid / Footer responsive ────────────────────────────────────────── */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
 
-.who-grid  { grid-template-columns: repeat(4, 1fr); }
-.footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
-
-@media (max-width: 640px) {
-  .who-grid    { grid-template-columns: repeat(2, 1fr); }
-  .footer-grid { grid-template-columns: 1fr 1fr 1fr; }
-  .foote
+button {
+  cursor: pointer;
+}

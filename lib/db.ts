@@ -86,6 +86,18 @@ export async function ensureSchema(): Promise<void> {
       follow_up_sent BOOLEAN   NOT NULL DEFAULT false,
       responded_at TIMESTAMPTZ
     );
+
+    CREATE TABLE IF NOT EXISTS telegram_users (
+      chat_id     BIGINT      PRIMARY KEY,
+      username    TEXT,
+      first_name  TEXT,
+      goal        TEXT,
+      coach_style TEXT        NOT NULL DEFAULT 'direct',
+      state       TEXT        NOT NULL DEFAULT 'awaiting_goal',
+      active      BOOLEAN     NOT NULL DEFAULT true,
+      created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
   `)
 
   // Safe column migrations — handles databases that pre-existed before these
@@ -101,6 +113,13 @@ export async function ensureSchema(): Promise<void> {
     `ALTER TABLE schedules ADD COLUMN IF NOT EXISTS last_texted_at TIMESTAMPTZ`,
     `ALTER TABLE messages ADD COLUMN IF NOT EXISTS follow_up_at TIMESTAMPTZ`,
     `ALTER TABLE messages ADD COLUMN IF NOT EXISTS follow_up_sent BOOLEAN NOT NULL DEFAULT false`,
+    `ALTER TABLE telegram_users ADD COLUMN IF NOT EXISTS username TEXT`,
+    `ALTER TABLE telegram_users ADD COLUMN IF NOT EXISTS first_name TEXT`,
+    `ALTER TABLE telegram_users ADD COLUMN IF NOT EXISTS goal TEXT`,
+    `ALTER TABLE telegram_users ADD COLUMN IF NOT EXISTS coach_style TEXT NOT NULL DEFAULT 'direct'`,
+    `ALTER TABLE telegram_users ADD COLUMN IF NOT EXISTS state TEXT NOT NULL DEFAULT 'awaiting_goal'`,
+    `ALTER TABLE telegram_users ADD COLUMN IF NOT EXISTS active BOOLEAN NOT NULL DEFAULT true`,
+    `ALTER TABLE telegram_users ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()`,
     `ALTER TABLE users  ADD COLUMN IF NOT EXISTS stripe_customer_id      TEXT`,
     `ALTER TABLE users  ADD COLUMN IF NOT EXISTS stripe_subscription_id  TEXT`,
     `ALTER TABLE users  ADD COLUMN IF NOT EXISTS plan TEXT NOT NULL DEFAULT 'free'`,

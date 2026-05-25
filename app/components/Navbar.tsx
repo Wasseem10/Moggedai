@@ -39,7 +39,7 @@ function NavLink({ item, mobile = false }: { item: string; mobile?: boolean }) {
       : item === "Features"
         ? "#how-it-works"
         : item === "About"
-          ? "#dashboard"
+          ? "#who"
           : "#faq";
 
   return (
@@ -53,7 +53,13 @@ function NavLink({ item, mobile = false }: { item: string; mobile?: boolean }) {
     >
       <span className="inline-flex items-center gap-2">
         {isHome && <span className="h-1.5 w-1.5 rounded-full bg-neutral-950" />}
-        {item === "Features" ? "How it works" : item === "About" ? "Dashboard" : item === "Pages" ? "FAQ" : item}
+        {item === "Features"
+          ? "How it works"
+          : item === "About"
+            ? "Who it's for"
+            : item === "Pages"
+              ? "FAQ"
+              : item}
       </span>
     </a>
   );

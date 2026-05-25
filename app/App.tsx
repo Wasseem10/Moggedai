@@ -30,6 +30,30 @@ const steps = [
   },
 ];
 
+const whoCards = [
+  {
+    number: "01 / 03",
+    title: "Students",
+    body: "For the study sessions that turn into TikTok breaks. We quiz you, keep you off your phone, and get you through finals week without the all-nighter.",
+    quote: "Check in on my studying every hour from 4-9pm.",
+    tags: "USE CASE - EXAMS - ESSAYS - LOCK-IN",
+  },
+  {
+    number: "02 / 03",
+    title: "Builders",
+    body: "For the side project collecting dust. We text you to ship one thing every day because momentum beats motivation.",
+    quote: "Make sure I push code before bed.",
+    tags: "USE CASE - STARTUPS - PROJECTS - SHIPPING",
+  },
+  {
+    number: "03 / 03",
+    title: "Athletes",
+    body: "For the 6am workouts you keep sleeping through. We wake you up, hold your streak, and call you out when you try to skip.",
+    quote: "Text me at 5:45. Don't let me snooze.",
+    tags: "USE CASE - GYM - RUNS - NUTRITION",
+  },
+];
+
 const faqs = [
   {
     question: "How does Mogged AI work?",
@@ -163,40 +187,74 @@ export default function App() {
       </section>
 
       <section
-        id="dashboard"
-        className="mx-auto grid w-full max-w-6xl items-center gap-8 rounded-3xl bg-[#0b0f1a] px-6 py-10 text-white sm:px-8 lg:grid-cols-[0.9fr_1.1fr]"
+        id="who"
+        className="mx-auto w-full max-w-6xl rounded-3xl bg-[#f5f2ee] px-5 py-12 sm:px-8 sm:py-16"
       >
-        <div>
-          <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-[#ef4d23]">
-            Dashboard
+        <div className="max-w-3xl">
+          <p className="text-[12px] font-semibold uppercase tracking-[0.24em] text-[#ef4d23]">
+            Who it's for
           </p>
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">
-            Manage goals, streaks, and check-ins.
+          <h2 className="mt-4 text-4xl font-semibold leading-[0.95] tracking-tight text-[#0b0f1a] sm:text-6xl">
+            Built for anyone who{" "}
+            <span
+              className="text-[#ef4d23]"
+              style={{
+                fontFamily: "'Instrument Serif', serif",
+                fontStyle: "italic",
+                fontWeight: 400,
+              }}
+            >
+              follows through.
+            </span>
           </h2>
-          <p className="mt-4 max-w-xl text-sm leading-6 text-white/70 sm:text-base">
-            Your dashboard is still here. Use it to add goals, tune your coach
-            style, review recent messages, and track completion history.
+          <p className="mt-5 max-w-2xl text-base leading-7 text-neutral-600">
+            People already using Mogged AI to stop missing the thing that
+            actually matters.
           </p>
-          <div className="mt-7 flex flex-wrap gap-3">
-            <a
-              href="/dashboard"
-              className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#0b0f1a]"
-            >
-              Open dashboard
-              <ChevronRight className="h-4 w-4" strokeWidth={2} />
-            </a>
-            <a
-              href={telegramHref}
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-3 text-sm font-semibold text-white"
-            >
-              Open Telegram
-              <ChevronRight className="h-4 w-4" strokeWidth={2} />
-            </a>
-          </div>
         </div>
 
-        <div className="rounded-3xl bg-[#f5f2ee] p-3 text-[#0b0f1a] sm:p-5">
-          <DashboardPreview />
+        <div className="mt-10 grid gap-4 lg:grid-cols-3">
+          {whoCards.map((card) => (
+            <article
+              key={card.title}
+              className="relative rounded-3xl border border-neutral-200 bg-white p-6 text-[#0b0f1a] shadow-sm"
+            >
+              <span className="absolute top-0 left-6 h-1 w-12 rounded-b-full bg-[#ef4d23]" />
+              <p className="text-[12px] font-semibold tracking-[0.18em] text-neutral-400">
+                {card.number}
+              </p>
+              <h3 className="mt-5 text-3xl font-semibold tracking-tight">
+                {card.title}
+              </h3>
+              <p className="mt-5 text-sm leading-7 text-neutral-600">{card.body}</p>
+              <blockquote className="mt-6 border-l-2 border-[#ef4d23] pl-4 text-[15px] italic leading-7 text-neutral-900">
+                "{card.quote}"
+              </blockquote>
+              <div className="mt-5 border-t border-neutral-200 pt-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-neutral-400">
+                {card.tags}
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="mt-9 flex flex-wrap items-center gap-3">
+          <p className="mr-auto max-w-xl text-sm leading-6 text-neutral-500">
+            One hits too close? Good. That's exactly who we built this for.
+          </p>
+          <a
+            href={telegramHref}
+            className="inline-flex items-center gap-2 rounded-full bg-[#229ED9] px-5 py-3 text-sm font-semibold text-white shadow-sm"
+          >
+            <TelegramLogo />
+            Start on Telegram
+          </a>
+          <a
+            href="/dashboard"
+            className="inline-flex items-center gap-2 rounded-full bg-[#0b0f1a] px-5 py-3 text-sm font-semibold text-white shadow-sm"
+          >
+            Open dashboard
+            <ChevronRight className="h-4 w-4" strokeWidth={2} />
+          </a>
         </div>
       </section>
 

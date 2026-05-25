@@ -155,7 +155,14 @@ export default function App() {
                 letterSpacing: "-0.02em",
               }}
             >
-              Shaping Discipline
+              Shaping{" "}
+              <span className="relative inline-block font-semibold text-[#0b0f1a]">
+                Discipline
+                <span
+                  aria-hidden="true"
+                  className="absolute right-0 -bottom-1 left-0 h-2 rounded-full bg-[#ef4d23]/25"
+                />
+              </span>
               <br />
               of tomorrow
             </h1>

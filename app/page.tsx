@@ -111,8 +111,8 @@ export default function LandingPage() {
         }
 
         .landing {
-          --blue: #1268ff;
-          --blue-2: #34b8ff;
+          --blue: #1768f2;
+          --blue-2: #55b7ec;
           --cyan: #9be8ff;
           --ink: #090b16;
           --muted: #5b6475;
@@ -132,10 +132,8 @@ export default function LandingPage() {
           overflow: hidden;
           padding: 24px 20px 0;
           background:
-            radial-gradient(circle at 50% 26%, rgba(255, 255, 255, 0.3), transparent 26%),
-            radial-gradient(circle at 20% 6%, rgba(72, 191, 255, 0.65), transparent 28%),
-            radial-gradient(circle at 80% 12%, rgba(37, 111, 255, 0.52), transparent 28%),
-            linear-gradient(180deg, #075bdc 0%, #158cff 36%, #8edcff 72%, #eaf9ff 100%);
+            radial-gradient(circle at 50% 22%, rgba(255, 255, 255, 0.18), transparent 32%),
+            linear-gradient(180deg, #3d78d2 0%, #4b96e3 46%, #8fdbf3 100%);
         }
 
         .hero::before,
@@ -291,8 +289,8 @@ export default function LandingPage() {
         }
 
         .hero-copy {
-          width: min(820px, 100%);
-          margin: 82px auto 0;
+          width: min(1220px, 100%);
+          margin: 80px auto 0;
           text-align: center;
         }
 
@@ -301,16 +299,18 @@ export default function LandingPage() {
           align-items: center;
           justify-content: center;
           min-height: 28px;
-          padding: 0 13px;
+          padding: 0 18px;
           border-radius: 999px;
-          background: rgba(255, 255, 255, 0.24);
-          border: 1px solid rgba(255, 255, 255, 0.22);
+          background: rgba(255, 255, 255, 0.18);
+          border: 1px solid rgba(255, 255, 255, 0.24);
           color: #ffffff;
-          font-size: 12px;
+          font-size: 15px;
           line-height: 1;
-          font-weight: 900;
+          font-weight: 650;
           letter-spacing: 0;
-          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+          box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.22),
+            0 12px 28px rgba(31, 83, 150, 0.18);
         }
 
         .section-badge {
@@ -328,17 +328,17 @@ export default function LandingPage() {
         }
 
         .hero h1 {
-          margin-top: 24px;
-          color: #ffffff;
-          font-size: clamp(54px, 7vw, 92px);
-          line-height: 0.95;
-          font-weight: 900;
+          margin-top: 42px;
+          color: rgba(255, 255, 255, 0.92);
+          font-size: clamp(70px, 7vw, 104px);
+          line-height: 1.15;
+          font-weight: 800;
           letter-spacing: 0;
-          text-shadow: 0 2px 0 rgba(255, 255, 255, 0.08);
+          text-shadow: none;
         }
 
         .hero h1 span {
-          color: #dbf7ff;
+          color: rgba(255, 255, 255, 0.92);
         }
 
         .mobile-hero-title {
@@ -347,11 +347,12 @@ export default function LandingPage() {
 
         .hero-sub {
           width: min(720px, 100%);
-          margin: 22px auto 0;
-          color: rgba(255, 255, 255, 0.84);
+          margin: 36px auto 0;
+          color: rgba(255, 255, 255, 0.9);
           font-family: var(--mono);
-          font-size: 15px;
-          line-height: 1.8;
+          font-size: 22px;
+          line-height: 1.65;
+          font-weight: 400;
         }
 
         .hero-actions {
@@ -738,7 +739,9 @@ export default function LandingPage() {
         }
 
         .section-soft {
-          background: linear-gradient(180deg, #f6fbff 0%, #ffffff 100%);
+          background: #e8f7ff;
+          padding-top: 82px;
+          padding-bottom: 96px;
         }
 
         .section-head {
@@ -751,9 +754,9 @@ export default function LandingPage() {
           margin-top: 20px;
           color: #070a16;
           font-size: clamp(42px, 5vw, 70px);
-          line-height: 1;
+          line-height: 1.08;
           letter-spacing: 0;
-          font-weight: 900;
+          font-weight: 800;
         }
 
         .section-head h2 span {
@@ -767,6 +770,41 @@ export default function LandingPage() {
           font-family: var(--mono);
           font-size: 14px;
           line-height: 1.75;
+        }
+
+        .section-soft .section-head {
+          width: min(1280px, 100%);
+          margin-bottom: 58px;
+        }
+
+        .section-soft .section-badge {
+          min-height: 54px;
+          padding: 0 30px;
+          background: #ffffff;
+          color: #070a16;
+          border: 0;
+          border-radius: 999px;
+          font-size: 22px;
+          font-weight: 500;
+          box-shadow: 0 12px 28px rgba(25, 64, 105, 0.08);
+        }
+
+        .section-soft .section-head h2 {
+          width: min(1220px, 100%);
+          margin-top: 54px;
+          font-size: clamp(58px, 7.4vw, 112px);
+          line-height: 1.28;
+          color: #080819;
+          font-weight: 500;
+        }
+
+        .section-soft .section-head p {
+          width: min(1180px, 100%);
+          margin-top: 54px;
+          color: #080819;
+          font-size: clamp(22px, 2vw, 35px);
+          line-height: 1.75;
+          font-weight: 400;
         }
 
         .who-grid {
@@ -1153,8 +1191,8 @@ export default function LandingPage() {
           }
 
           .hero h1 {
-            font-size: 43px;
-            line-height: 0.98;
+            font-size: 52px;
+            line-height: 1.08;
           }
 
           .desktop-hero-title {
@@ -1166,7 +1204,7 @@ export default function LandingPage() {
           }
 
           .hero-sub {
-            font-size: 13px;
+            font-size: 16px;
             width: min(320px, 100%);
           }
 
@@ -1313,19 +1351,19 @@ export default function LandingPage() {
           </nav>
 
           <div className="hero-copy">
-            <div className="badge">100% TELEGRAM ACCOUNTABILITY COACH</div>
+            <div className="badge">Win the day. Everyday.</div>
             <h1>
               <span className="desktop-hero-title">
-                WIN THE DAY.
+                Beautiful AI coaching
                 <br />
-                <span>EVERYDAY.</span>
+                <span>for modern lives</span>
               </span>
               <span className="mobile-hero-title">
-                WIN THE
+                Beautiful AI
                 <br />
-                DAY.
+                coaching
                 <br />
-                <span>EVERYDAY.</span>
+                <span>for modern lives</span>
               </span>
             </h1>
             <p className="hero-sub">
@@ -1409,44 +1447,14 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="section" id="who">
-        <div className="section-head">
-          <div className="badge section-badge">Built For Locking In</div>
-          <h2>
-            Accountability for <span>real life</span>.
-          </h2>
-          <p>
-            MoggedAI is for people who know what they need to do, but need a coach
-            in their pocket keeping pressure on throughout the day.
-          </p>
-        </div>
-
-        <div className="who-grid">
-          {whoCards.map((card, index) => (
-            <article className="who-card" key={card.title}>
-              <div className="card-icon">{index + 1}</div>
-              <h3>{card.title}</h3>
-              <p>{card.body}</p>
-              <div className="quote">&quot;{card.quote}&quot;</div>
-              <div className="tag-row">
-                {card.tags.map((tag) => (
-                  <span className="tag" key={tag}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
       <section className="section section-soft" id="how">
         <div className="section-head">
           <div className="badge section-badge">Platform Overview</div>
-          <h2>Set it once. Works all day.</h2>
+          <h2>The most personal and fastest AI coach.</h2>
           <p>
-            The loop is simple: set the goal, choose the pressure, reply when you
-            move. MoggedAI handles the rest.
+            Avoid the headaches of motivation apps and generic reminders. Build
+            a coach that checks in through Telegram, adapts to your day, and
+            keeps following up.
           </p>
         </div>
 
@@ -1487,6 +1495,37 @@ export default function LandingPage() {
               <div className="step-number">{step.number}</div>
               <h3>{step.title}</h3>
               <p>{step.body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="section" id="who">
+        <div className="section-head">
+          <div className="badge section-badge">Built For Locking In</div>
+          <h2>
+            Accountability for <span>real life</span>.
+          </h2>
+          <p>
+            MoggedAI is for people who know what they need to do, but need a coach
+            in their pocket keeping pressure on throughout the day.
+          </p>
+        </div>
+
+        <div className="who-grid">
+          {whoCards.map((card, index) => (
+            <article className="who-card" key={card.title}>
+              <div className="card-icon">{index + 1}</div>
+              <h3>{card.title}</h3>
+              <p>{card.body}</p>
+              <div className="quote">&quot;{card.quote}&quot;</div>
+              <div className="tag-row">
+                {card.tags.map((tag) => (
+                  <span className="tag" key={tag}>
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </article>
           ))}
         </div>

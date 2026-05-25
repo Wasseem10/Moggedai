@@ -155,16 +155,7 @@ export default function App() {
                 letterSpacing: "-0.02em",
               }}
             >
-              Shaping{" "}
-              <span
-                style={{
-                  fontFamily: "'Instrument Serif', serif",
-                  fontStyle: "italic",
-                  fontWeight: 400,
-                }}
-              >
-                Discipline
-              </span>
+              Shaping Discipline
               <br />
               of tomorrow
             </h1>

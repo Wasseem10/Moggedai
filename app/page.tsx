@@ -7,19 +7,165 @@ const telegramHref =
   process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL ||
   "https://t.me/StaypingedBot?start=website";
 
-const chat = [
-  { from: "bot", text: "what are we working on today?" },
-  { from: "user", text: "i need to study python every day until i get good" },
-  { from: "bot", text: "got you. i'll keep you honest about python, not just motivated for one afternoon." },
-  { from: "user", text: "i don't feel like doing it today" },
-  { from: "bot", text: "that's exactly when it counts. open the lesson for 15 minutes and send me proof after." },
+const steps = [
+  {
+    title: "Start in Telegram",
+    text: "No new account flow. Open the bot, say the goal, and Staypinged remembers the context.",
+  },
+  {
+    title: "Set the standard",
+    text: "Tell it what counts as a real win: study time, gym sessions, shipping work, or anything else.",
+  },
+  {
+    title: "Get kept honest",
+    text: "When you drift, it brings the conversation back to the next concrete action.",
+  },
 ];
 
-const routines = [
-  { title: "Study Python", detail: "Daily session", status: "active" },
-  { title: "Gym", detail: "4x this week", status: "on track" },
-  { title: "Ship project", detail: "One small commit", status: "waiting" },
+const commitments = [
+  { label: "Python study", value: "Daily", tone: "blue" },
+  { label: "Gym", value: "4x/week", tone: "black" },
+  { label: "Ship project", value: "One commit", tone: "green" },
 ];
+
+function AppIcon() {
+  return (
+    <div className="app-icon" aria-hidden="true">
+      <div className="app-icon-mark">
+        <span />
+        <span />
+        <span />
+      </div>
+    </div>
+  );
+}
+
+function PhonePreview() {
+  return (
+    <div className="phone-wrap" aria-label="Staypinged iPhone preview">
+      <div className="phone">
+        <div className="phone-bezel">
+          <div className="phone-island" />
+          <div className="phone-screen">
+            <div className="phone-status">
+              <span>9:41</span>
+              <div className="status-icons">
+                <span />
+                <span />
+                <span />
+              </div>
+            </div>
+
+            <div className="phone-header">
+              <div>
+                <p>Staypinged</p>
+                <h3>Daily check-in</h3>
+              </div>
+              <div className="header-dot" />
+            </div>
+
+            <div className="goal-card">
+              <span>Active goal</span>
+              <strong>Study Python every day until it feels automatic.</strong>
+              <div className="goal-row">
+                <p>Next check-in</p>
+                <b>Tonight</b>
+              </div>
+            </div>
+
+            <div className="commitment-list">
+              {commitments.map((item) => (
+                <div className={`commitment ${item.tone}`} key={item.label}>
+                  <div className="commitment-dot" />
+                  <div>
+                    <strong>{item.label}</strong>
+                    <span>{item.value}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="phone-note">
+              <span />
+              <p>Keep the promise small enough to do today.</p>
+            </div>
+
+            <div className="phone-input">
+              <span>Send an update...</span>
+              <button type="button" aria-label="Send preview message">
+                <svg viewBox="0 0 18 18" aria-hidden="true">
+                  <path d="M9 2.4 15.3 15 9 12.7 2.7 15 9 2.4Z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProductPanel() {
+  return (
+    <div className="product-panel" aria-label="Staypinged product preview">
+      <div className="browser-shell">
+        <div className="browser-top">
+          <div className="browser-dots">
+            <span />
+            <span />
+            <span />
+          </div>
+          <p>Private beta</p>
+          <button type="button">Live</button>
+        </div>
+        <div className="browser-body">
+          <div className="dashboard-side">
+            <div className="side-brand">
+              <AppIcon />
+              <strong>Staypinged</strong>
+            </div>
+            <div className="side-item active">Goals</div>
+            <div className="side-item">Check-ins</div>
+            <div className="side-item">Friends</div>
+          </div>
+          <div className="dashboard-main">
+            <div className="dashboard-title">
+              <div>
+                <p>Accountability</p>
+                <h3>Keep the next step visible.</h3>
+              </div>
+              <span>Telegram ready</span>
+            </div>
+            <div className="metrics">
+              <div>
+                <span>Active goals</span>
+                <strong>3</strong>
+              </div>
+              <div>
+                <span>Streak</span>
+                <strong>6</strong>
+              </div>
+              <div>
+                <span>Next ping</span>
+                <strong>8 PM</strong>
+              </div>
+            </div>
+            <div className="progress-card">
+              <div>
+                <p>Python study</p>
+                <strong>20 minutes is enough to keep the streak alive.</strong>
+              </div>
+              <div className="progress-line">
+                <span />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <PhonePreview />
+    </div>
+  );
+}
 
 export default function LandingPage() {
   const router = useRouter();
@@ -27,457 +173,1180 @@ export default function LandingPage() {
   const { signOut } = useClerk();
 
   return (
-    <main className="min-h-screen bg-[#fbfaf7] text-[#171514]">
+    <main className="min-h-screen bg-[#f7f8fa] text-[#111318]">
       <style>{`
-        .hero-shell {
+        *,
+        *::before,
+        *::after {
+          box-sizing: border-box;
+        }
+
+        main {
+          overflow-x: hidden;
+        }
+
+        .page {
           min-height: 100vh;
-          padding: 28px;
+          overflow: hidden;
           background:
-            radial-gradient(circle at 10% 28%, rgba(255,255,255,0.78) 0 80px, transparent 82px),
-            radial-gradient(circle at 92% 22%, rgba(255,255,255,0.82) 0 76px, transparent 78px),
-            linear-gradient(180deg, #bfe2fb 0%, #d9ecfb 48%, #fbfaf7 100%);
+            linear-gradient(180deg, rgba(176, 215, 255, 0.92) 0%, rgba(229, 242, 255, 0.92) 48%, #f7f8fa 100%);
         }
-        .grain {
-          position: fixed;
-          inset: 0;
-          pointer-events: none;
-          opacity: .18;
-          background-image:
-            radial-gradient(rgba(23,21,20,.18) .7px, transparent .8px);
-          background-size: 5px 5px;
-          mix-blend-mode: multiply;
+
+        .nav-wrap {
+          position: relative;
+          z-index: 5;
+          padding: 28px 20px 0;
         }
-        .nav-pill {
-          width: min(720px, calc(100vw - 40px));
+
+        .nav {
+          width: min(730px, 100%);
+          height: 60px;
           margin: 0 auto;
-          height: 54px;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: 22px;
-          padding: 7px 8px 7px 20px;
-          background: rgba(255,255,255,.72);
-          border: 1px solid rgba(23,21,20,.08);
+          gap: 18px;
+          padding: 8px 9px 8px 20px;
           border-radius: 999px;
-          box-shadow: 0 18px 50px rgba(54,72,91,.14);
+          background: rgba(255, 255, 255, 0.78);
+          border: 1px solid rgba(17, 19, 24, 0.08);
+          box-shadow: 0 24px 70px rgba(42, 86, 130, 0.14);
           backdrop-filter: blur(18px);
         }
+
+        .brand {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          border: 0;
+          background: transparent;
+          color: #111318;
+          font: inherit;
+          font-weight: 800;
+          cursor: pointer;
+        }
+
+        .mini-mark {
+          width: 28px;
+          height: 28px;
+          border-radius: 8px;
+          background: #111318;
+          display: grid;
+          place-items: center;
+          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+        }
+
+        .mini-mark span {
+          width: 13px;
+          height: 13px;
+          border-radius: 4px;
+          background: #78bfff;
+          box-shadow: 6px 0 0 #ffffff;
+          transform: rotate(-8deg);
+        }
+
         .nav-links {
           display: flex;
           align-items: center;
           gap: 24px;
-          font-size: 13px;
-          color: rgba(23,21,20,.66);
+          font-size: 14px;
+          font-weight: 650;
+          color: rgba(17, 19, 24, 0.58);
           white-space: nowrap;
         }
-        .hero-copy {
-          width: min(760px, calc(100vw - 40px));
-          margin: 104px auto 0;
+
+        .nav-link {
+          transition: color 160ms ease;
+        }
+
+        .nav-link:hover {
+          color: #111318;
+        }
+
+        .nav-actions {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .button {
+          min-height: 44px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 999px;
+          padding: 0 18px;
+          border: 1px solid rgba(17, 19, 24, 0.1);
+          background: rgba(255, 255, 255, 0.72);
+          color: #111318;
+          font-weight: 750;
+          text-decoration: none;
+          cursor: pointer;
+          transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+          font-family: inherit;
+        }
+
+        .button:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 18px 40px rgba(17, 19, 24, 0.1);
+        }
+
+        .button.primary {
+          border-color: #111318;
+          background: #111318;
+          color: #ffffff;
+          box-shadow: 0 18px 46px rgba(17, 19, 24, 0.24);
+        }
+
+        .button.blue {
+          border-color: rgba(25, 112, 225, 0.22);
+          background: #1970e1;
+          color: #ffffff;
+          box-shadow: 0 18px 46px rgba(25, 112, 225, 0.28);
+        }
+
+        .hero {
+          width: min(1180px, calc(100vw - 40px));
+          margin: 0 auto;
+          padding: 54px 0 0;
           text-align: center;
           position: relative;
           z-index: 2;
         }
+
+        .app-icon {
+          width: 64px;
+          height: 64px;
+          margin: 0 auto;
+          border-radius: 18px;
+          background: linear-gradient(145deg, #111318, #1a2d55);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          box-shadow: 0 24px 60px rgba(17, 19, 24, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+          display: grid;
+          place-items: center;
+        }
+
+        .app-icon-mark {
+          width: 34px;
+          height: 29px;
+          position: relative;
+        }
+
+        .app-icon-mark span {
+          position: absolute;
+          width: 16px;
+          height: 22px;
+          border-radius: 5px;
+          background: #72b9ff;
+        }
+
+        .app-icon-mark span:nth-child(1) {
+          left: 0;
+          bottom: 0;
+          background: #ffffff;
+          transform: rotate(-8deg);
+        }
+
+        .app-icon-mark span:nth-child(2) {
+          left: 10px;
+          top: 0;
+          background: #72b9ff;
+          transform: rotate(8deg);
+        }
+
+        .app-icon-mark span:nth-child(3) {
+          right: 0;
+          bottom: 2px;
+          width: 12px;
+          height: 15px;
+          background: #0b5bd3;
+          transform: rotate(-6deg);
+        }
+
         .eyebrow {
+          margin: 18px auto 18px;
           display: inline-flex;
           align-items: center;
-          gap: 8px;
-          padding: 7px 11px;
-          background: rgba(255,255,255,.56);
-          border: 1px solid rgba(23,21,20,.08);
+          gap: 9px;
+          padding: 8px 13px;
           border-radius: 999px;
-          color: rgba(23,21,20,.58);
+          border: 1px solid rgba(17, 19, 24, 0.08);
+          background: rgba(255, 255, 255, 0.62);
+          color: rgba(17, 19, 24, 0.62);
           font-size: 14px;
-          font-weight: 600;
-          box-shadow: 0 12px 30px rgba(54,72,91,.08);
+          font-weight: 750;
         }
-        .hero-title {
-          margin: 28px 0 18px;
-          font-family: Georgia, "Times New Roman", serif;
-          font-size: clamp(50px, 6.7vw, 94px);
-          line-height: .92;
-          letter-spacing: -0.055em;
-          font-weight: 600;
+
+        .eyebrow span {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #0fa36b;
         }
-        .hero-subtitle {
-          width: min(600px, 100%);
+
+        .hero h1 {
+          max-width: 780px;
           margin: 0 auto;
-          color: rgba(23,21,20,.58);
-          font-size: clamp(16px, 1.5vw, 20px);
-          line-height: 1.55;
+          color: #111318;
+          font-size: clamp(50px, 6.1vw, 86px);
+          line-height: 0.96;
+          font-weight: 850;
+          letter-spacing: 0;
         }
+
+        .mobile-title {
+          display: none;
+        }
+
+        .hero p.lead {
+          max-width: 650px;
+          margin: 18px auto 0;
+          color: rgba(17, 19, 24, 0.62);
+          font-size: clamp(17px, 1.6vw, 21px);
+          line-height: 1.55;
+          font-weight: 520;
+        }
+
         .hero-actions {
+          margin-top: 24px;
           display: flex;
           justify-content: center;
           gap: 12px;
-          margin-top: 28px;
           flex-wrap: wrap;
         }
-        .primary-cta, .secondary-cta, .nav-cta {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          border: 0;
-          cursor: pointer;
-          text-decoration: none;
-          font-weight: 700;
-          font-family: inherit;
-          transition: transform .18s ease, box-shadow .18s ease;
+
+        .proof-row {
+          width: min(760px, 100%);
+          margin: 40px auto 0;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 16px;
+          color: rgba(17, 19, 24, 0.52);
+          font-size: 13px;
+          font-weight: 750;
+          text-transform: uppercase;
         }
-        .primary-cta {
-          min-height: 50px;
-          padding: 0 22px;
-          border-radius: 999px;
-          color: white;
-          background: #171514;
-          box-shadow: 0 18px 42px rgba(23,21,20,.22);
+
+        .proof-row span {
+          border-top: 1px solid rgba(17, 19, 24, 0.12);
+          padding-top: 13px;
         }
-        .secondary-cta {
-          min-height: 50px;
-          padding: 0 20px;
-          border-radius: 999px;
-          color: rgba(23,21,20,.74);
-          background: rgba(255,255,255,.58);
-          border: 1px solid rgba(23,21,20,.08);
-        }
-        .nav-cta {
-          height: 40px;
-          padding: 0 18px;
-          border-radius: 999px;
-          color: white;
-          background: #171514;
-        }
-        .primary-cta:hover, .secondary-cta:hover, .nav-cta:hover {
-          transform: translateY(-1px);
-        }
-        .product-scene {
-          width: min(980px, calc(100vw - 44px));
-          margin: 24px auto 0;
-          height: 430px;
+
+        .product-panel {
+          width: min(1180px, calc(100vw - 40px));
+          min-height: 560px;
+          margin: 38px auto 0;
           position: relative;
-          z-index: 1;
+          display: flex;
+          justify-content: center;
+          align-items: flex-end;
+          padding: 38px 40px 0;
+          border-radius: 8px 8px 0 0;
+          background:
+            radial-gradient(circle at 24% 12%, rgba(255, 255, 255, 0.92), transparent 32%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.92));
+          border: 1px solid rgba(17, 19, 24, 0.08);
+          border-bottom: 0;
+          box-shadow: 0 45px 120px rgba(42, 86, 130, 0.15);
         }
-        .paper {
-          position: absolute;
-          border: 1px solid rgba(23,21,20,.08);
-          box-shadow: 0 30px 80px rgba(54,72,91,.16);
-        }
-        .paper.one {
-          left: 0;
-          bottom: 14px;
-          width: 36%;
-          height: 190px;
-          background: #f7edb6;
-          transform: rotate(-7deg);
-        }
-        .paper.two {
-          right: 4%;
-          bottom: 22px;
-          width: 34%;
-          height: 210px;
-          background: #dfeccf;
-          transform: rotate(6deg);
-        }
-        .paper.three {
-          left: 14%;
-          bottom: 92px;
-          width: 23%;
-          height: 120px;
-          background: #bfcffa;
-          transform: rotate(-13deg);
-          opacity: .9;
-        }
-        .app-window {
-          position: absolute;
-          left: 50%;
-          bottom: 0;
-          transform: translateX(-50%);
-          width: min(760px, 86vw);
-          height: 360px;
-          background: rgba(255,255,255,.86);
-          border: 1px solid rgba(23,21,20,.09);
+
+        .browser-shell {
+          width: min(820px, 70vw);
+          height: 420px;
           border-radius: 8px;
+          background: #ffffff;
+          border: 1px solid rgba(17, 19, 24, 0.1);
+          box-shadow: 0 34px 90px rgba(17, 19, 24, 0.12);
           overflow: hidden;
-          box-shadow: 0 38px 120px rgba(54,72,91,.24);
-          backdrop-filter: blur(20px);
+          transform: translateX(58px);
         }
-        .window-top {
-          height: 42px;
+
+        .browser-top {
+          height: 46px;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 0 14px;
-          border-bottom: 1px solid rgba(23,21,20,.08);
-          background: rgba(255,255,255,.72);
+          padding: 0 16px;
+          border-bottom: 1px solid rgba(17, 19, 24, 0.08);
+          color: rgba(17, 19, 24, 0.45);
+          font-size: 13px;
+          font-weight: 750;
         }
-        .dots {
+
+        .browser-dots {
           display: flex;
           gap: 7px;
         }
-        .dot {
+
+        .browser-dots span {
           width: 10px;
           height: 10px;
+          border-radius: 50%;
+          background: rgba(17, 19, 24, 0.16);
+        }
+
+        .browser-top button {
+          height: 28px;
+          padding: 0 12px;
           border-radius: 999px;
+          border: 1px solid rgba(15, 163, 107, 0.2);
+          background: rgba(15, 163, 107, 0.08);
+          color: #0f7b53;
+          font-weight: 800;
         }
-        .window-body {
+
+        .browser-body {
+          height: calc(100% - 46px);
           display: grid;
-          grid-template-columns: 230px 1fr;
-          height: calc(100% - 42px);
+          grid-template-columns: 210px 1fr;
         }
-        .side {
-          padding: 18px;
-          border-right: 1px solid rgba(23,21,20,.08);
-          background: rgba(250,250,250,.72);
+
+        .dashboard-side {
+          border-right: 1px solid rgba(17, 19, 24, 0.08);
+          background: #f8f9fb;
+          padding: 20px;
         }
-        .routine {
-          padding: 13px;
-          border: 1px solid rgba(23,21,20,.08);
+
+        .side-brand {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 26px;
+        }
+
+        .side-brand .app-icon {
+          width: 34px;
+          height: 34px;
+          border-radius: 10px;
+          margin: 0;
+        }
+
+        .side-brand .app-icon-mark {
+          width: 18px;
+          height: 16px;
+        }
+
+        .side-brand .app-icon-mark span {
+          width: 9px;
+          height: 13px;
+          border-radius: 3px;
+        }
+
+        .side-brand .app-icon-mark span:nth-child(2) {
+          left: 6px;
+        }
+
+        .side-brand .app-icon-mark span:nth-child(3) {
+          width: 7px;
+          height: 9px;
+        }
+
+        .side-item {
+          height: 38px;
+          display: flex;
+          align-items: center;
+          padding: 0 12px;
           border-radius: 8px;
-          background: rgba(255,255,255,.68);
-          margin-top: 10px;
+          color: rgba(17, 19, 24, 0.56);
+          font-size: 14px;
+          font-weight: 700;
         }
-        .chat {
-          padding: 18px;
+
+        .side-item.active {
+          background: #111318;
+          color: #ffffff;
+        }
+
+        .dashboard-main {
+          padding: 28px;
+        }
+
+        .dashboard-title {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 18px;
+        }
+
+        .dashboard-title p {
+          margin: 0 0 7px;
+          color: rgba(17, 19, 24, 0.45);
+          font-size: 13px;
+          font-weight: 800;
+          text-transform: uppercase;
+        }
+
+        .dashboard-title h3 {
+          margin: 0;
+          max-width: 360px;
+          color: #111318;
+          font-size: 34px;
+          line-height: 1.06;
+          font-weight: 850;
+        }
+
+        .dashboard-title span {
+          padding: 8px 11px;
+          border-radius: 999px;
+          background: rgba(25, 112, 225, 0.09);
+          color: #175fc2;
+          font-size: 12px;
+          font-weight: 850;
+          white-space: nowrap;
+        }
+
+        .metrics {
+          margin-top: 28px;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 12px;
+        }
+
+        .metrics div {
+          min-height: 96px;
+          border-radius: 8px;
+          border: 1px solid rgba(17, 19, 24, 0.08);
+          background: #f8f9fb;
+          padding: 16px;
+        }
+
+        .metrics span {
+          display: block;
+          color: rgba(17, 19, 24, 0.45);
+          font-size: 12px;
+          font-weight: 800;
+          text-transform: uppercase;
+        }
+
+        .metrics strong {
+          display: block;
+          margin-top: 11px;
+          color: #111318;
+          font-size: 34px;
+          line-height: 1;
+        }
+
+        .progress-card {
+          margin-top: 14px;
+          border-radius: 8px;
+          background: #111318;
+          color: #ffffff;
+          padding: 22px;
+        }
+
+        .progress-card p {
+          margin: 0 0 7px;
+          color: rgba(255, 255, 255, 0.5);
+          font-size: 13px;
+          font-weight: 800;
+          text-transform: uppercase;
+        }
+
+        .progress-card strong {
+          display: block;
+          max-width: 420px;
+          font-size: 22px;
+          line-height: 1.25;
+        }
+
+        .progress-line {
+          height: 8px;
+          margin-top: 18px;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.12);
+          overflow: hidden;
+        }
+
+        .progress-line span {
+          display: block;
+          width: 64%;
+          height: 100%;
+          border-radius: inherit;
+          background: #72b9ff;
+        }
+
+        .phone-wrap {
+          position: absolute;
+          left: 68px;
+          bottom: -18px;
+          width: 286px;
+          filter: drop-shadow(0 38px 70px rgba(17, 19, 24, 0.28));
+        }
+
+        .phone {
+          width: 286px;
+          height: 580px;
+          border-radius: 44px;
+          padding: 10px;
+          background: #0c0d10;
+          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+        }
+
+        .phone-bezel {
+          height: 100%;
+          border-radius: 36px;
+          padding: 12px;
+          background: #111318;
+          position: relative;
+        }
+
+        .phone-island {
+          position: absolute;
+          top: 18px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 86px;
+          height: 26px;
+          border-radius: 999px;
+          background: #050608;
+          z-index: 4;
+        }
+
+        .phone-screen {
+          height: 100%;
+          border-radius: 28px;
+          background:
+            linear-gradient(180deg, #f9fbff 0%, #eef5ff 48%, #ffffff 100%);
+          overflow: hidden;
+          padding: 16px 16px 14px;
           display: flex;
           flex-direction: column;
-          gap: 10px;
-          background:
-            linear-gradient(180deg, rgba(245,247,255,.78), rgba(255,255,255,.76));
+          color: #111318;
         }
-        .bubble {
-          max-width: 78%;
-          padding: 11px 13px;
+
+        .phone-status {
+          height: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 6px;
+          font-size: 13px;
+          font-weight: 800;
+        }
+
+        .status-icons {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+        }
+
+        .status-icons span {
+          display: block;
+          width: 13px;
+          height: 7px;
+          border-radius: 2px;
+          background: rgba(17, 19, 24, 0.65);
+        }
+
+        .status-icons span:nth-child(2) {
+          width: 9px;
+        }
+
+        .status-icons span:nth-child(3) {
+          width: 16px;
+          height: 8px;
+          border-radius: 3px;
+        }
+
+        .phone-header {
+          margin-top: 28px;
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+        }
+
+        .phone-header p {
+          margin: 0 0 4px;
+          color: rgba(17, 19, 24, 0.48);
+          font-size: 12px;
+          font-weight: 850;
+          text-transform: uppercase;
+        }
+
+        .phone-header h3 {
+          margin: 0;
+          font-size: 27px;
+          line-height: 1.04;
+          font-weight: 850;
+        }
+
+        .header-dot {
+          width: 34px;
+          height: 34px;
+          border-radius: 11px;
+          background: #111318;
+          position: relative;
+        }
+
+        .header-dot:after {
+          content: "";
+          position: absolute;
+          inset: 10px;
+          border-radius: 5px;
+          background: #72b9ff;
+        }
+
+        .goal-card {
+          margin-top: 20px;
           border-radius: 8px;
+          background: #111318;
+          color: #ffffff;
+          padding: 18px;
+          box-shadow: 0 16px 36px rgba(17, 19, 24, 0.18);
+        }
+
+        .goal-card span {
+          display: block;
+          color: rgba(255, 255, 255, 0.52);
+          font-size: 12px;
+          font-weight: 850;
+          text-transform: uppercase;
+        }
+
+        .goal-card strong {
+          display: block;
+          margin-top: 10px;
+          font-size: 18px;
+          line-height: 1.24;
+        }
+
+        .goal-row {
+          margin-top: 18px;
+          padding-top: 14px;
+          border-top: 1px solid rgba(255, 255, 255, 0.14);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .goal-row p {
+          margin: 0;
+          color: rgba(255, 255, 255, 0.55);
+          font-size: 12px;
+          font-weight: 750;
+        }
+
+        .goal-row b {
+          font-size: 13px;
+        }
+
+        .commitment-list {
+          margin-top: 14px;
+          display: grid;
+          gap: 10px;
+        }
+
+        .commitment {
+          min-height: 58px;
+          border-radius: 8px;
+          background: #ffffff;
+          border: 1px solid rgba(17, 19, 24, 0.08);
+          display: flex;
+          align-items: center;
+          gap: 11px;
+          padding: 12px;
+        }
+
+        .commitment-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: #1970e1;
+        }
+
+        .commitment.black .commitment-dot {
+          background: #111318;
+        }
+
+        .commitment.green .commitment-dot {
+          background: #0fa36b;
+        }
+
+        .commitment strong,
+        .commitment span {
+          display: block;
+        }
+
+        .commitment strong {
           font-size: 14px;
+          line-height: 1.1;
+        }
+
+        .commitment span {
+          margin-top: 3px;
+          color: rgba(17, 19, 24, 0.48);
+          font-size: 12px;
+          font-weight: 700;
+        }
+
+        .phone-note {
+          margin-top: 14px;
+          border-radius: 8px;
+          background: rgba(25, 112, 225, 0.08);
+          border: 1px solid rgba(25, 112, 225, 0.12);
+          padding: 12px;
+          display: flex;
+          gap: 10px;
+          align-items: flex-start;
+        }
+
+        .phone-note span {
+          width: 8px;
+          height: 8px;
+          margin-top: 5px;
+          border-radius: 50%;
+          background: #1970e1;
+          flex: none;
+        }
+
+        .phone-note p {
+          margin: 0;
+          color: rgba(17, 19, 24, 0.62);
+          font-size: 12px;
           line-height: 1.35;
+          font-weight: 730;
         }
-        .bubble.bot {
-          align-self: flex-start;
-          background: white;
-          border: 1px solid rgba(23,21,20,.08);
-          color: rgba(23,21,20,.82);
+
+        .phone-input {
+          margin-top: auto;
+          height: 44px;
+          border-radius: 999px;
+          background: #ffffff;
+          border: 1px solid rgba(17, 19, 24, 0.1);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 4px 5px 4px 15px;
+          color: rgba(17, 19, 24, 0.36);
+          font-size: 13px;
+          font-weight: 700;
         }
-        .bubble.user {
-          align-self: flex-end;
-          background: #171514;
-          color: white;
+
+        .phone-input button {
+          width: 34px;
+          height: 34px;
+          border-radius: 50%;
+          border: 0;
+          background: #1970e1;
+          display: grid;
+          place-items: center;
         }
-        .band {
-          padding: 82px 28px;
-          background: #fbfaf7;
+
+        .phone-input svg {
+          width: 17px;
+          height: 17px;
+          fill: #ffffff;
         }
+
         .section {
-          width: min(1080px, calc(100vw - 44px));
+          background: #f7f8fa;
+          padding: 96px 20px;
+        }
+
+        .section-inner {
+          width: min(1120px, 100%);
           margin: 0 auto;
         }
-        .section-title {
-          font-family: Georgia, "Times New Roman", serif;
-          font-size: clamp(38px, 5vw, 68px);
-          line-height: .98;
-          letter-spacing: -0.045em;
-          margin: 0;
-          max-width: 720px;
+
+        .section-eyebrow {
+          margin: 0 0 16px;
+          color: rgba(17, 19, 24, 0.46);
+          font-size: 13px;
+          font-weight: 850;
+          text-transform: uppercase;
         }
-        .feature-grid {
+
+        .section-title {
+          margin: 0;
+          max-width: 760px;
+          color: #111318;
+          font-size: clamp(42px, 5vw, 74px);
+          line-height: 1;
+          font-weight: 850;
+          letter-spacing: 0;
+        }
+
+        .steps {
+          margin-top: 38px;
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           gap: 14px;
-          margin-top: 34px;
         }
-        .feature {
-          min-height: 190px;
-          padding: 24px;
-          border: 1px solid rgba(23,21,20,.08);
+
+        .step {
+          min-height: 210px;
           border-radius: 8px;
-          background: white;
-          box-shadow: 0 18px 60px rgba(54,72,91,.08);
+          background: #ffffff;
+          border: 1px solid rgba(17, 19, 24, 0.08);
+          padding: 24px;
+          box-shadow: 0 20px 70px rgba(17, 19, 24, 0.06);
         }
-        .feature strong {
-          display: block;
-          font-size: 18px;
-          margin-bottom: 12px;
+
+        .step-number {
+          width: 34px;
+          height: 34px;
+          border-radius: 50%;
+          display: grid;
+          place-items: center;
+          background: #111318;
+          color: #ffffff;
+          font-size: 13px;
+          font-weight: 850;
         }
-        .feature p {
+
+        .step h3 {
+          margin: 24px 0 10px;
+          color: #111318;
+          font-size: 22px;
+          line-height: 1.1;
+          font-weight: 820;
+        }
+
+        .step p {
           margin: 0;
-          color: rgba(23,21,20,.58);
-          line-height: 1.6;
+          color: rgba(17, 19, 24, 0.58);
           font-size: 15px;
+          line-height: 1.58;
+          font-weight: 520;
         }
-        .final {
-          width: min(1080px, calc(100vw - 44px));
-          margin: 0 auto 28px;
-          padding: 70px 28px;
-          text-align: center;
+
+        .cta-band {
+          padding: 0 20px 36px;
+          background: #f7f8fa;
+        }
+
+        .cta-inner {
+          width: min(1120px, 100%);
+          margin: 0 auto;
           border-radius: 8px;
           background:
-            radial-gradient(circle at 50% 100%, rgba(191,207,250,.58), transparent 46%),
-            linear-gradient(180deg, #ffffff, #f0f4ff);
-          border: 1px solid rgba(23,21,20,.08);
+            radial-gradient(circle at 82% 18%, rgba(114, 185, 255, 0.34), transparent 36%),
+            linear-gradient(135deg, #111318, #17233a);
+          color: #ffffff;
+          padding: 58px;
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 28px;
+          align-items: center;
         }
-        @media (max-width: 760px) {
-          .hero-shell { padding: 18px; }
-          .nav-pill { width: 100%; justify-content: center; }
-          .nav-links { display: none; }
-          .hero-copy { margin-top: 86px; }
-          .product-scene { height: 520px; margin-top: 34px; }
-          .paper.one, .paper.two, .paper.three { display: none; }
-          .app-window { height: 500px; width: 100%; }
-          .window-body { grid-template-columns: 1fr; }
-          .side { display: none; }
-          .feature-grid { grid-template-columns: 1fr; }
-          .band { padding: 58px 20px; }
+
+        .cta-inner h2 {
+          margin: 0;
+          max-width: 620px;
+          font-size: clamp(36px, 4.5vw, 66px);
+          line-height: 1;
+          font-weight: 850;
+          letter-spacing: 0;
+        }
+
+        .cta-inner p {
+          margin: 16px 0 0;
+          max-width: 560px;
+          color: rgba(255, 255, 255, 0.64);
+          font-size: 17px;
+          line-height: 1.55;
+        }
+
+        .cta-inner .button {
+          background: #ffffff;
+          color: #111318;
+          border-color: #ffffff;
+          white-space: nowrap;
+        }
+
+        @media (max-width: 980px) {
+          .hero {
+            padding-top: 50px;
+          }
+
+          .product-panel {
+            min-height: 720px;
+            align-items: flex-start;
+            padding: 28px 24px 0;
+          }
+
+          .browser-shell {
+            width: 100%;
+            transform: none;
+          }
+
+          .phone-wrap {
+            left: 50%;
+            bottom: -28px;
+            transform: translateX(-50%);
+          }
+
+          .steps {
+            grid-template-columns: 1fr;
+          }
+
+          .cta-inner {
+            grid-template-columns: 1fr;
+            padding: 38px 24px;
+          }
+        }
+
+        @media (max-width: 720px) {
+          .nav-wrap {
+            padding: 28px 14px 0;
+          }
+
+          .nav {
+            height: auto;
+            min-height: 58px;
+            width: 100%;
+            padding-left: 14px;
+          }
+
+          .nav-links {
+            display: none;
+          }
+
+          .nav-actions .button:not(.primary) {
+            display: none;
+          }
+
+          .nav-actions {
+            display: none;
+          }
+
+          .hero {
+            width: min(100%, 260px);
+            padding-top: 62px;
+          }
+
+          .hero h1 {
+            font-size: 40px;
+            line-height: 1;
+            max-width: 100%;
+          }
+
+          .desktop-title {
+            display: none;
+          }
+
+          .mobile-title {
+            display: inline;
+          }
+
+          .hero p.lead {
+            max-width: 260px;
+            font-size: 16px;
+            line-height: 1.5;
+          }
+
+          .hero-actions {
+            width: min(250px, 100%);
+            margin-left: auto;
+            margin-right: auto;
+          }
+
+          .hero-actions .button {
+            width: 100%;
+          }
+
+          .product-panel {
+            width: calc(100vw - 24px);
+            min-height: 690px;
+            margin-top: 34px;
+            padding: 16px 14px 0;
+          }
+
+          .browser-shell {
+            height: 330px;
+          }
+
+          .browser-body {
+            grid-template-columns: 1fr;
+          }
+
+          .dashboard-side {
+            display: none;
+          }
+
+          .dashboard-main {
+            padding: 20px;
+          }
+
+          .dashboard-title h3 {
+            font-size: 28px;
+          }
+
+          .dashboard-title span {
+            display: none;
+          }
+
+          .metrics {
+            grid-template-columns: 1fr;
+            gap: 8px;
+          }
+
+          .metrics div {
+            min-height: 66px;
+            padding: 12px;
+          }
+
+          .metrics strong {
+            font-size: 26px;
+          }
+
+          .progress-card {
+            display: none;
+          }
+
+          .phone-wrap {
+            width: 252px;
+          }
+
+          .phone {
+            width: 252px;
+            height: 512px;
+            border-radius: 38px;
+          }
+
+          .phone-bezel {
+            border-radius: 31px;
+          }
+
+          .phone-screen {
+            border-radius: 24px;
+            padding: 14px;
+          }
+
+          .phone-header h3 {
+            font-size: 23px;
+          }
+
+          .goal-card strong {
+            font-size: 16px;
+          }
+
+          .commitment {
+            min-height: 52px;
+          }
+
+          .section {
+            padding: 72px 14px;
+          }
+
+          .step {
+            min-height: auto;
+          }
         }
       `}</style>
-      <div className="grain" />
 
-      <section className="hero-shell">
-        <nav className="nav-pill">
-          <button
-            type="button"
-            onClick={() => router.push("/?home=1")}
-            className="font-black tracking-[-0.04em] text-[20px]"
-          >
-            Staypinged
-          </button>
-          <div className="nav-links">
-            <a href="#how">How it works</a>
-            <a href="#why">Why it works</a>
-            <a href="mailto:wasseem800@gmail.com">Support</a>
-          </div>
-          {isSignedIn ? (
-            <div className="flex items-center gap-2">
-              <button className="secondary-cta !min-h-10 !px-4" onClick={() => router.push("/dashboard")}>
-                Dashboard
-              </button>
-              <button className="nav-cta" onClick={() => signOut({ redirectUrl: "/" })}>
-                Sign out
-              </button>
+      <div className="page">
+        <div className="nav-wrap">
+          <nav className="nav" aria-label="Main navigation">
+            <button
+              type="button"
+              className="brand"
+              onClick={() => router.push("/?home=1")}
+            >
+              <span className="mini-mark">
+                <span />
+              </span>
+              Staypinged
+            </button>
+            <div className="nav-links">
+              <a className="nav-link" href="#how">How it works</a>
+              <a className="nav-link" href="#beta">Beta</a>
+              <a className="nav-link" href="mailto:wasseem800@gmail.com">Support</a>
             </div>
-          ) : (
-            <a className="nav-cta" href={telegramHref} target="_blank" rel="noopener noreferrer">
-              Start
-            </a>
-          )}
-        </nav>
+            <div className="nav-actions">
+              {isSignedIn ? (
+                <>
+                  <button
+                    type="button"
+                    className="button"
+                    onClick={() => router.push("/dashboard")}
+                  >
+                    Dashboard
+                  </button>
+                  <button
+                    type="button"
+                    className="button primary"
+                    onClick={() => signOut({ redirectUrl: "/" })}
+                  >
+                    Sign out
+                  </button>
+                </>
+              ) : (
+                <a
+                  className="button primary"
+                  href={telegramHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Start
+                </a>
+              )}
+            </div>
+          </nav>
+        </div>
 
-        <div className="hero-copy">
+        <section className="hero">
+          <AppIcon />
           <div className="eyebrow">
-            <span className="inline-block h-2 w-2 rounded-full bg-[#8d86ff]" />
-            Telegram accountability coach
+            <span />
+            Telegram beta is live
           </div>
-          <h1 className="hero-title">The friend who keeps you honest.</h1>
-          <p className="hero-subtitle">
-            Staypinged is an AI coach that checks in through Telegram, remembers your goal, and pushes back when you start negotiating with yourself.
+          <h1>
+            <span className="desktop-title">Accountability that checks in.</span>
+            <span className="mobile-title">AI coach that checks in.</span>
+          </h1>
+          <p className="lead">
+            Staypinged is an AI coach for the goals you keep putting off. Start in Telegram, say what you are trying to stick to, and keep the next step in front of you.
           </p>
           <div className="hero-actions">
-            <a className="primary-cta" href={telegramHref} target="_blank" rel="noopener noreferrer">
+            <a
+              className="button primary"
+              href={telegramHref}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Start in Telegram
             </a>
-            <a className="secondary-cta" href="#how">
+            <a className="button" href="#how">
               See how it works
             </a>
           </div>
-        </div>
+        </section>
 
-        <div className="product-scene" aria-label="Staypinged Telegram accountability preview">
-          <div className="paper one" />
-          <div className="paper two" />
-          <div className="paper three" />
-          <div className="app-window">
-            <div className="window-top">
-              <div className="dots">
-                <span className="dot bg-[#ff6b5f]" />
-                <span className="dot bg-[#f6c85f]" />
-                <span className="dot bg-[#61c77b]" />
-              </div>
-              <div className="text-sm font-semibold text-black/55">Staypinged</div>
-              <div className="text-xs text-black/35">live</div>
-            </div>
-            <div className="window-body">
-              <aside className="side">
-                <div className="text-xs font-bold uppercase tracking-[0.18em] text-black/35">Goals</div>
-                {routines.map((routine) => (
-                  <div className="routine" key={routine.title}>
-                    <div className="flex items-center justify-between gap-3">
-                      <strong className="text-sm">{routine.title}</strong>
-                      <span className="h-2 w-2 rounded-full bg-[#8d86ff]" />
-                    </div>
-                    <div className="mt-1 text-xs text-black/45">{routine.detail}</div>
-                    <div className="mt-3 text-[11px] uppercase tracking-[0.14em] text-black/35">{routine.status}</div>
-                  </div>
-                ))}
-              </aside>
-              <section className="chat">
-                <div className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-black/35">
-                  Today
-                </div>
-                {chat.map((message, index) => (
-                  <div className={`bubble ${message.from}`} key={`${message.from}-${index}`}>
-                    {message.text}
-                  </div>
-                ))}
-              </section>
-            </div>
+        <ProductPanel />
+      </div>
+
+      <section className="section" id="how">
+        <div className="section-inner">
+          <p className="section-eyebrow">How it works</p>
+          <h2 className="section-title">A simple loop for staying consistent.</h2>
+          <div className="steps">
+            {steps.map((step, index) => (
+              <article className="step" key={step.title}>
+                <div className="step-number">{index + 1}</div>
+                <h3>{step.title}</h3>
+                <p>{step.text}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="band" id="how">
-        <div className="section">
-          <p className="mb-4 text-sm font-bold uppercase tracking-[0.22em] text-black/35">How it works</p>
-          <h2 className="section-title">No dashboards. No fake motivation. Just a conversation.</h2>
-          <div className="feature-grid">
-            <div className="feature">
-              <strong>Start with one goal</strong>
-              <p>Open the Telegram bot and say what you are trying to stay consistent with. It saves the goal and keeps the context.</p>
-            </div>
-            <div className="feature">
-              <strong>Talk normally</strong>
-              <p>Say you did it, skipped it, or are making excuses. The bot responds like a real coach, not a command menu.</p>
-            </div>
-            <div className="feature">
-              <strong>Keep the pressure on</strong>
-              <p>It remembers what you said mattered and pushes you back toward the next small action when you drift.</p>
-            </div>
+      <section className="cta-band" id="beta">
+        <div className="cta-inner">
+          <div>
+            <h2>Send it to a friend when you are ready.</h2>
+            <p>
+              Anyone with the Telegram link can start their own conversation with the bot. Keep it small, test with real people, and improve the coach from actual use.
+            </p>
           </div>
-        </div>
-      </section>
-
-      <section className="band pt-0" id="why">
-        <div className="section">
-          <div className="grid gap-4 md:grid-cols-[1.2fr_.8fr]">
-            <div className="feature min-h-[280px]">
-              <p className="mb-4 text-sm font-bold uppercase tracking-[0.22em] text-black/35">Why Telegram first</p>
-              <h2 className="section-title !text-[clamp(36px,4.2vw,60px)]">
-                Fast enough to use today.
-              </h2>
-              <p className="mt-6 max-w-[620px] text-[17px] leading-8 text-black/55">
-                SMS carrier approval can wait. Telegram lets friends start instantly, reply naturally, and use the coach while the rest of the product evolves.
-              </p>
-            </div>
-            <div className="feature min-h-[280px] bg-[#171514] text-white">
-              <strong>Private beta ready</strong>
-              <p className="!text-white/62">
-                Share your bot link with friends, let them set their own goal, and keep improving the coach from real conversations.
-              </p>
-              <a className="primary-cta mt-8 !bg-white !text-[#171514]" href={telegramHref} target="_blank" rel="noopener noreferrer">
-                Open the bot
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="final">
-        <p className="mb-4 text-sm font-bold uppercase tracking-[0.22em] text-black/35">Ready</p>
-        <h2 className="hero-title !my-0 !text-[clamp(44px,6vw,84px)]">
-          Say the goal out loud.
-        </h2>
-        <p className="hero-subtitle mt-5">
-          Staypinged will meet you in Telegram and keep the next step in front of you.
-        </p>
-        <div className="hero-actions">
-          <a className="primary-cta" href={telegramHref} target="_blank" rel="noopener noreferrer">
-            Start in Telegram
+          <a
+            className="button"
+            href={telegramHref}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Open Telegram
           </a>
         </div>
       </section>

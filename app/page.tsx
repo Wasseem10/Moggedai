@@ -581,19 +581,9 @@ export default function MoggedAI() {
     return () => clearInterval(t);
   }, []);
 
-  // ── Mobile detection — for iMessage / SMS deeplink ───────────────────────
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    if (typeof navigator === "undefined") return;
-    setIsMobile(/iphone|ipad|ipod|android/i.test(navigator.userAgent));
-  }, []);
-
-  // SMS deeplink — opens Messages on iOS / Android with number + body prefilled.
-  // iOS expects `&body=`, Android expects `?body=`. The form below works on both
-  // because iOS treats the leading `?` as a no-op separator.
-  const SMS_NUMBER = "+18449911147";
-  const SMS_BODY  = "Hey! I want to try MoggedAI - can you help me get started?";
-  const smsHref   = `sms:${SMS_NUMBER}?&body=${encodeURIComponent(SMS_BODY)}`;
+  // Telegram bot deeplink. Telegram bots do not support a normal prefilled
+  // message body like SMS, but the `start` payload starts the bot flow.
+  const telegramHref = process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL || "https://t.me/StaypingedBot?start=website";
 
   const noise = Math.sin(ticker * 0.3) * 2;
 
@@ -690,7 +680,7 @@ export default function MoggedAI() {
           ) : (
             <>
               <button style={navBtn} onClick={() => router.push("/sign-in")}>LOG IN</button>
-              <button style={navBtn} onClick={() => router.push("/sign-up")}>GET STARTED</button>
+              <button style={navBtn} onClick={() => window.open(telegramHref, "_blank", "noopener,noreferrer")}>GET STARTED</button>
             </>
           )}
         </div>
@@ -702,18 +692,20 @@ export default function MoggedAI() {
 
           {/* Left: copy */}
           <div className="hero-left">
-            <div style={tag}>AI ACCOUNTABILITY · SMS · BUILT FOR RESULTS</div>
+            <div style={tag}>AI ACCOUNTABILITY · TELEGRAM · BUILT FOR RESULTS</div>
             <h1 style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:"clamp(4rem,8vw,7.5rem)", fontWeight:"400", lineHeight:0.95, letterSpacing:"0.02em", margin:"0 0 1.5rem", transform:`translateX(${noise*0.3}px)` }}>
               WIN THE DAY.<br/>
               <span style={{ color:"#0ea5e9" }}>EVERYDAY.</span>
             </h1>
             <p style={{ fontSize:"clamp(0.88rem,1.6vw,1rem)", color:"var(--c-text4)", maxWidth:"420px", lineHeight:"1.85", margin:0 }}>
-              An AI coach that texts you throughout the day, holds you accountable, and won&apos;t let you make excuses. Set it once. Stay on track forever.
+              An AI coach that checks in through Telegram, holds you accountable, and won&apos;t let you make excuses. Set it once. Stay on track forever.
             </p>
-            {/* iMessage CTA — primary action */}
+            {/* Telegram CTA — primary action */}
             <div className="hero-btns">
               <a
-                href={smsHref}
+                href={telegramHref}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="imsg-cta"
                 style={{
                   display:"inline-flex",
@@ -734,20 +726,20 @@ export default function MoggedAI() {
                   boxShadow:"0 1px 0 rgba(255,255,255,0.5) inset, 0 -1px 1px rgba(0,0,0,0.12) inset, 0 8px 22px rgba(61,139,245,0.4), 0 2px 6px rgba(0,0,0,0.08)",
                 }}
               >
-                {/* iMessage app icon */}
+                {/* Telegram app icon */}
                 <span aria-hidden style={{
                   width:42, height:42, borderRadius:"10px",
-                  background:"linear-gradient(180deg,#5DF07A 0%,#3DCB5E 55%,#28B048 100%)",
+                  background:"linear-gradient(180deg,#35B8FF 0%,#229ED9 58%,#188AC0 100%)",
                   display:"flex", alignItems:"center", justifyContent:"center",
                   flexShrink:0,
                   boxShadow:"0 1px 0 rgba(255,255,255,0.45) inset, 0 -1px 1px rgba(0,0,0,0.12) inset, 0 2px 5px rgba(0,0,0,0.18)",
                   position:"relative",
                 }}>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style={{ filter:"drop-shadow(0 1px 1px rgba(0,0,0,0.15))" }}>
-                    <path d="M12 3.2c-5.06 0-9.16 3.43-9.16 7.66 0 2.27 1.18 4.31 3.05 5.7-.13.95-.5 2.06-1.14 2.97-.13.18.04.42.25.36 1.83-.5 3.13-1.17 3.94-1.7.95.27 1.97.42 3.06.42 5.06 0 9.16-3.43 9.16-7.66S17.06 3.2 12 3.2z"/>
+                    <path d="M21.56 3.87c.29-1.2-.45-1.67-1.31-1.32L2.6 9.35c-1.2.48-1.18 1.15-.2 1.45l4.53 1.41L17.42 5.6c.5-.3.95-.14.58.19l-8.5 7.67-.33 4.86c.48 0 .69-.22.96-.48l2.3-2.24 4.79 3.54c.88.49 1.52.24 1.74-.82l2.6-14.45z"/>
                   </svg>
                 </span>
-                <span style={{ position:"relative", textShadow:"0 1px 1px rgba(0,0,0,0.15)" }}>Get Started</span>
+                <span style={{ position:"relative", textShadow:"0 1px 1px rgba(0,0,0,0.15)" }}>Start on Telegram</span>
               </a>
             </div>
 
@@ -985,13 +977,13 @@ export default function MoggedAI() {
 
             <div style={{ display:"flex", flexDirection:"column", borderTop:"1px solid var(--c-border)" }}>
               {[
-                { q:"How does MoggedAI work?",                     a:"You sign up, add your goals (gym, studying, side project — whatever you're trying to stay on top of), and set a schedule. From there, your AI coach texts you throughout the day to check in. You reply back naturally and the AI responds like a real person — not a bot." },
-                { q:"Do I need to open the app every day?",        a:"No. That's the whole point. Everything happens over text. The AI reaches out to you. You reply. You might not open the dashboard for weeks — and that's fine." },
+                { q:"How does MoggedAI work?",                     a:"You open the Telegram bot, tell it your goal, and chat with it like a real accountability coach. It remembers what you're working on and pushes you when you start making excuses." },
+                { q:"Do I need to open the app every day?",        a:"No. That's the whole point. Everything happens in Telegram. You say what's going on, and the AI responds like a real person — not a dashboard chore." },
                 { q:"What do I text back?",                         a:"Whatever you'd text a friend. 'just did it', 'not today', 'i'm tired bro' — the AI understands normal replies. You don't need to say specific commands." },
-                { q:"How often will I get texts?",                  a:"You choose during setup — every 30 minutes, every hour, every 2 hours, or every 3 hours. You also set active hours so you're not getting texts at 3am." },
+                { q:"How often will I get messages?",               a:"Right now you can message the Telegram bot anytime. Scheduled check-ins are the next piece we're adding." },
                 { q:"What are the different coach styles?",         a:"Direct — no fluff. Brutal — tough love that calls out your excuses. Savage — maximum pressure, no filter. Motivating — hype energy, reminds you of your why. You set this per goal." },
-                { q:"Will it cost me anything to receive texts?",   a:"MoggedAI does not charge for text messages. Standard message and data rates from your mobile carrier may apply." },
-                { q:"How do I stop getting texts?",                 a:"Text STOP to +1 (844) 991-1147 at any time. You'll get one confirmation and nothing after. You can re-enable from your dashboard or by texting START." },
+                { q:"Will it cost me anything to receive messages?", a:"Telegram messages are free to receive. You just need the Telegram app or Telegram web." },
+                { q:"How do I stop getting messages?",              a:"Send pause to the bot anytime. Send /start again when you want to pick it back up." },
                 { q:"Is my information safe?",                      a:"Yes. Your data is stored on secure servers. We don't sell your phone number or personal information to anyone. Read our full Privacy Policy for details." },
               ].map((item, i) => {
                 const isOpen = openFaq === i;
@@ -1036,12 +1028,12 @@ export default function MoggedAI() {
           <span style={{ color:"#0ea5e9" }}>Right now.</span>
         </h2>
         <p style={{ fontSize:"0.88rem", color:"var(--c-text4)", marginBottom:"2rem", lineHeight:1.8 }}>
-          Takes 2 minutes to set up. No app download needed.
+          Takes 2 minutes to set up in Telegram.
         </p>
-        <button className="cta-btn" style={{ background:"#0ea5e9", border:"none", color:"#fff", padding:"1.1rem 3.5rem", fontSize:"0.88rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700" }} onClick={() => isSignedIn ? router.push("/dashboard") : router.push("/sign-up")}>
-          GET STARTED — IT&apos;S FREE →
-        </button>
-        <p style={{ fontSize:"0.6rem", color:"var(--c-text5)", marginTop:"1rem" }}>US numbers only · Reply STOP to unsubscribe anytime</p>
+        <a className="cta-btn" href={telegramHref} target="_blank" rel="noopener noreferrer" style={{ display:"inline-block", background:"#0ea5e9", border:"none", color:"#fff", padding:"1.1rem 3.5rem", fontSize:"0.88rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700", textDecoration:"none" }}>
+          START ON TELEGRAM →
+        </a>
+        <p style={{ fontSize:"0.6rem", color:"var(--c-text5)", marginTop:"1rem" }}>Opens Telegram · Web and mobile supported</p>
       </div>
 
       {/* Footer */}
@@ -1057,7 +1049,7 @@ export default function MoggedAI() {
                 MOGGED<span style={{ color:"#0ea5e9" }}>AI</span>
               </div>
               <p style={{ fontSize:"0.72rem", color:"var(--c-text4)", lineHeight:"1.8", margin:"0 0 1.25rem" }}>
-                The AI accountability coach that texts you all day and doesn&apos;t let you make excuses. Set it once. Stay accountable forever.
+                The AI accountability coach that keeps you honest in Telegram. Set your goal once and stay accountable.
               </p>
               <div style={{ display:"flex", gap:"0.75rem", marginBottom:"1rem" }}>
                 {[
@@ -1084,7 +1076,7 @@ export default function MoggedAI() {
               {[
                 { label:"How It Works", href:"/how-it-works" },
                 { label:"FAQ",          href:"/faq" },
-                { label:"Get Started",  href:"/#get-started" },
+                { label:"Get Started",  href:telegramHref },
               ].map(l => (
                 <div key={l.label} style={{ marginBottom:"0.6rem" }}>
                   <a href={l.href}
@@ -1102,7 +1094,7 @@ export default function MoggedAI() {
               {[
                 { label:"FAQ",             href:"/faq" },
                 { label:"Contact Us",      href:"mailto:wasseem800@gmail.com" },
-                { label:"SMS Help",        href:"mailto:wasseem800@gmail.com" },
+                { label:"Support",         href:"mailto:wasseem800@gmail.com" },
                 { label:"Report a Bug",    href:"mailto:wasseem800@gmail.com?subject=Bug Report" },
               ].map(l => (
                 <div key={l.label} style={{ marginBottom:"0.6rem" }}>
@@ -1121,8 +1113,8 @@ export default function MoggedAI() {
               {[
                 { label:"Privacy Policy",    href:"/privacy" },
                 { label:"Terms of Service",  href:"/terms" },
-                { label:"SMS Consent",       href:"/consent" },
-                { label:"Unsubscribe",       href:"mailto:wasseem800@gmail.com?subject=Unsubscribe" },
+                { label:"Support",           href:"mailto:wasseem800@gmail.com" },
+                { label:"Telegram Bot",      href:telegramHref },
               ].map(l => (
                 <div key={l.label} style={{ marginBottom:"0.6rem" }}>
                   <a href={l.href}
@@ -1141,7 +1133,7 @@ export default function MoggedAI() {
               © 2026 MOGGEDAI · ALL RIGHTS RESERVED
             </div>
             <div style={{ fontSize:"0.55rem", color:"#555", letterSpacing:"0.08em" }}>
-              US NUMBERS ONLY · TEXT STOP TO UNSUBSCRIBE ANYTIME
+              TELEGRAM BOT · PRIVATE BETA
             </div>
           </div>
 

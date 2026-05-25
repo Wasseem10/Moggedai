@@ -53,6 +53,18 @@ const faqs = [
   },
 ];
 
+function TelegramLogo() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-5 w-5 shrink-0 fill-current"
+    >
+      <path d="M21.8 3.4 18.5 20c-.2 1.2-.9 1.5-1.8.9l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.1 9.3-8.4c.4-.4-.1-.6-.6-.2L5.8 13.6.8 12c-1.1-.3-1.1-1.1.2-1.6L20.5 2.9c.9-.3 1.7.2 1.3.5Z" />
+    </svg>
+  );
+}
+
 export default function App() {
   return (
     <main
@@ -114,9 +126,12 @@ export default function App() {
 
             <a
               href={telegramHref}
-              className="mt-6 inline-flex items-center gap-3 rounded-full bg-[#0b0f1a] py-2 pr-2 pl-6 text-[14px] font-medium text-white shadow-sm sm:mt-8 sm:py-2.5 sm:pl-7"
+              className="mt-6 inline-flex min-w-[220px] items-center justify-between gap-3 rounded-full bg-[#229ED9] py-2 pr-2 pl-5 text-[14px] font-semibold text-white shadow-sm shadow-sky-900/15 sm:mt-8 sm:py-2.5 sm:pl-6"
             >
-              Start on Telegram
+              <span className="inline-flex items-center gap-2 text-white">
+                <TelegramLogo />
+                Start on Telegram
+              </span>
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/15 sm:h-7 sm:w-7">
                 <ChevronRight className="h-4 w-4" strokeWidth={2} />
               </span>

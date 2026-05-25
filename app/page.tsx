@@ -157,14 +157,14 @@ function PhoneMockup({ theme = "dark" }: { theme?: "dark" | "light" }) {
         {/* Multi-layer ambient glow */}
         <div style={{
           position:"absolute", inset:"-44px",
-          background:"radial-gradient(ellipse at 50% 56%, rgba(14,165,233,0.24) 0%, rgba(99,102,241,0.07) 45%, transparent 70%)",
+          background:"radial-gradient(ellipse at 50% 56%, rgba(16,185,129,0.24) 0%, rgba(99,102,241,0.07) 45%, transparent 70%)",
           borderRadius:"110px",
           animation:"ambientPulse 5s ease-in-out infinite",
           pointerEvents:"none",
         }}/>
         <div style={{
           position:"absolute", inset:"-20px",
-          background:"radial-gradient(ellipse at 50% 72%, rgba(14,165,233,0.13) 0%, transparent 62%)",
+          background:"radial-gradient(ellipse at 50% 72%, rgba(16,185,129,0.13) 0%, transparent 62%)",
           borderRadius:"90px",
           animation:"ambientPulse 5s ease-in-out infinite 1.2s",
           pointerEvents:"none",
@@ -183,7 +183,7 @@ function PhoneMockup({ theme = "dark" }: { theme?: "dark" | "light" }) {
             0 0 0 1px rgba(0,0,0,0.12),
             0 72px 140px rgba(0,0,0,0.22),
             0 32px 64px rgba(0,0,0,0.12),
-            0 0 100px rgba(14,165,233,0.10),
+            0 0 100px rgba(16,185,129,0.10),
             inset 0 1.5px 0 rgba(255,255,255,0.95),
             inset 0 -1px 0 rgba(0,0,0,0.08),
             inset 1px 0 0 rgba(255,255,255,0.7),
@@ -193,7 +193,7 @@ function PhoneMockup({ theme = "dark" }: { theme?: "dark" | "light" }) {
             0 0 0 1px rgba(0,0,0,0.9),
             0 72px 140px rgba(0,0,0,0.95),
             0 32px 64px rgba(0,0,0,0.65),
-            0 0 100px rgba(14,165,233,0.15),
+            0 0 100px rgba(16,185,129,0.15),
             inset 0 1.5px 0 rgba(255,255,255,0.16),
             inset 0 -1px 0 rgba(0,0,0,0.6),
             inset 1px 0 0 rgba(255,255,255,0.07),
@@ -291,10 +291,10 @@ function PhoneMockup({ theme = "dark" }: { theme?: "dark" | "light" }) {
               }}>
                 <div style={{
                   width:38, height:38, borderRadius:9,
-                  background:"linear-gradient(145deg,#0ea5e9,#0369a1)",
+                  background:"linear-gradient(145deg,#10b981,#047857)",
                   display:"flex", alignItems:"center", justifyContent:"center",
                   fontSize:20, flexShrink:0,
-                  boxShadow:"0 3px 10px rgba(14,165,233,0.45)",
+                  boxShadow:"0 3px 10px rgba(16,185,129,0.45)",
                 }}>🤖</div>
                 <div style={{ flex:1, minWidth:0 }}>
                   <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:3 }}>
@@ -370,9 +370,9 @@ function PhoneMockup({ theme = "dark" }: { theme?: "dark" | "light" }) {
               <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:2 }}>
                 <div style={{
                   width:30, height:30, borderRadius:"50%",
-                  background:"linear-gradient(145deg,#0ea5e9,#0369a1)",
+                  background:"linear-gradient(145deg,#10b981,#047857)",
                   display:"flex", alignItems:"center", justifyContent:"center",
-                  fontSize:16, boxShadow:"0 2px 6px rgba(14,165,233,0.4)",
+                  fontSize:16, boxShadow:"0 2px 6px rgba(16,185,129,0.4)",
                 }}>🤖</div>
                 <div style={{ display:"flex", alignItems:"center", gap:3 }}>
                   <span style={{ fontSize:10, color: theme==="light" ? "#1c1c1e" : "#fff", fontWeight:500, letterSpacing:"-0.1px" }}>MoggedAI</span>
@@ -592,11 +592,11 @@ export default function MoggedAI() {
   const grid: React.CSSProperties  = { position:"fixed", inset:0, backgroundImage:`linear-gradient(var(--c-grid) 1px,transparent 1px),linear-gradient(90deg,var(--c-grid) 1px,transparent 1px)`, backgroundSize:"48px 48px", pointerEvents:"none" };
   const nav: React.CSSProperties   = { position:"fixed", top:0, left:0, right:0, zIndex:100, display:"flex", justifyContent:"space-between", alignItems:"center", padding:"1rem 1.5rem", borderBottom:"1px solid var(--c-accent-bdr)", background:"var(--c-nav)", backdropFilter:"blur(8px)" };
   const logoS: React.CSSProperties = { fontSize:"1.1rem", fontWeight:"700", letterSpacing:"0.15em", color:"var(--c-text)", cursor:"pointer" };
-  const navBtn: React.CSSProperties = { background:"transparent", border:"1px solid #0ea5e9", color:"#0ea5e9", padding:"0.4rem 1rem", fontSize:"0.7rem", letterSpacing:"0.1em", cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap" };
-  const primaryBtn = (disabled=false): React.CSSProperties => ({ width:"100%", background:"#0ea5e9", border:"none", color:"#fff", padding:"1rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:disabled?"not-allowed":"pointer", fontFamily:"inherit", fontWeight:"700", marginTop:"1rem", opacity:disabled?0.4:1 });
+  const navBtn: React.CSSProperties = { background:"transparent", border:"1px solid #10b981", color:"#10b981", padding:"0.4rem 1rem", fontSize:"0.7rem", letterSpacing:"0.1em", cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap" };
+  const primaryBtn = (disabled=false): React.CSSProperties => ({ width:"100%", background:"#10b981", border:"none", color:"#fff", padding:"1rem", fontSize:"0.85rem", letterSpacing:"0.15em", cursor:disabled?"not-allowed":"pointer", fontFamily:"inherit", fontWeight:"700", marginTop:"1rem", opacity:disabled?0.4:1 });
   const backBtn: React.CSSProperties = { background:"transparent", border:"none", color:"var(--c-text3)", fontSize:"0.7rem", cursor:"pointer", fontFamily:"inherit", padding:"0.5rem 0", letterSpacing:"0.1em", marginTop:"0.5rem", display:"block" };
   const inputS: React.CSSProperties = { width:"100%", background:"var(--c-input)", border:"1px solid var(--c-input-bdr)", color:"var(--c-text)", padding:"0.9rem 1rem", fontSize:"1rem", fontFamily:"inherit", outline:"none", boxSizing:"border-box" };
-  const tag: React.CSSProperties = { fontSize:"0.6rem", letterSpacing:"0.25em", color:"#0ea5e9", border:"1px solid rgba(14,165,233,0.4)", padding:"0.3rem 0.8rem", marginBottom:"1.5rem", display:"inline-block" };
+  const tag: React.CSSProperties = { fontSize:"0.6rem", letterSpacing:"0.25em", color:"#10b981", border:"1px solid rgba(16,185,129,0.4)", padding:"0.3rem 0.8rem", marginBottom:"1.5rem", display:"inline-block" };
   const lbl: React.CSSProperties = { fontSize:"0.6rem", letterSpacing:"0.2em", color:"var(--c-text3)", display:"block", marginBottom:"0.5rem" };
 
   // ── LANDING PAGE ──────────────────────────────────────────────────────────
@@ -612,7 +612,7 @@ export default function MoggedAI() {
         * { box-sizing: border-box; }
         .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
         .who-row { transition: all 0.18s; cursor: default; }
-        .who-row:hover { background: rgba(14,165,233,0.05) !important; padding-left: 1.5rem !important; }
+        .who-row:hover { background: rgba(16,185,129,0.05) !important; padding-left: 1.5rem !important; }
         .who-row:hover .who-emoji { transform: scale(1.2); }
         .who-emoji { transition: transform 0.18s; display:inline-block; }
         .step-line { transition: background 0.3s; }
@@ -622,7 +622,7 @@ export default function MoggedAI() {
         .imsg-cta:hover {
           transform: translateY(-2px) scale(1.015);
           filter: brightness(1.05);
-          box-shadow: 0 1px 0 rgba(255,255,255,0.55) inset, 0 -1px 1px rgba(0,0,0,0.14) inset, 0 14px 32px rgba(61,139,245,0.5), 0 4px 10px rgba(0,0,0,0.1) !important;
+          box-shadow: 0 1px 0 rgba(255,255,255,0.55) inset, 0 -1px 1px rgba(0,0,0,0.14) inset, 0 14px 32px rgba(16,185,129,0.5), 0 4px 10px rgba(0,0,0,0.1) !important;
         }
         .imsg-cta:active { transform: translateY(0) scale(1); }
 
@@ -667,10 +667,10 @@ export default function MoggedAI() {
       `}</style>
       <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
       <div style={grid}/>
-      <div style={{ position:"fixed", top:`${(ticker*2)%100}%`, left:0, right:0, height:"2px", background:"rgba(14,165,233,0.08)", pointerEvents:"none", transition:"none" }}/>
+      <div style={{ position:"fixed", top:`${(ticker*2)%100}%`, left:0, right:0, height:"2px", background:"rgba(16,185,129,0.08)", pointerEvents:"none", transition:"none" }}/>
 
       <nav style={nav}>
-        <div style={logoS}>MOGGED<span style={{ color:"#0ea5e9" }}>AI</span></div>
+        <div style={logoS}>MOGGED<span style={{ color:"#10b981" }}>AI</span></div>
         <div className="nav-btns" style={{ display:"flex", gap:"0.5rem" }}>
           {isSignedIn ? (
             <>
@@ -695,7 +695,7 @@ export default function MoggedAI() {
             <div style={tag}>AI ACCOUNTABILITY · TELEGRAM · BUILT FOR RESULTS</div>
             <h1 style={{ fontFamily:"'Bebas Neue', sans-serif", fontSize:"clamp(4rem,8vw,7.5rem)", fontWeight:"400", lineHeight:0.95, letterSpacing:"0.02em", margin:"0 0 1.5rem", transform:`translateX(${noise*0.3}px)` }}>
               WIN THE DAY.<br/>
-              <span style={{ color:"#0ea5e9" }}>EVERYDAY.</span>
+              <span style={{ color:"#10b981" }}>EVERYDAY.</span>
             </h1>
             <p style={{ fontSize:"clamp(0.88rem,1.6vw,1rem)", color:"var(--c-text4)", maxWidth:"420px", lineHeight:"1.85", margin:0 }}>
               An AI coach that checks in through Telegram, holds you accountable, and won&apos;t let you make excuses. Set it once. Stay on track forever.
@@ -711,7 +711,7 @@ export default function MoggedAI() {
                   display:"inline-flex",
                   alignItems:"center",
                   gap:"0.85rem",
-                  background:"linear-gradient(180deg,#5BA8FF 0%,#3D8BF5 55%,#2F7AE6 100%)",
+                  background:"linear-gradient(180deg,#34d399 0%,#10b981 55%,#059669 100%)",
                   color:"#fff",
                   padding:"0.7rem 1.6rem 0.7rem 0.7rem",
                   fontSize:"1.05rem",
@@ -723,13 +723,13 @@ export default function MoggedAI() {
                   borderRadius:"999px",
                   position:"relative",
                   overflow:"hidden",
-                  boxShadow:"0 1px 0 rgba(255,255,255,0.5) inset, 0 -1px 1px rgba(0,0,0,0.12) inset, 0 8px 22px rgba(61,139,245,0.4), 0 2px 6px rgba(0,0,0,0.08)",
+                  boxShadow:"0 1px 0 rgba(255,255,255,0.5) inset, 0 -1px 1px rgba(0,0,0,0.12) inset, 0 8px 22px rgba(16,185,129,0.4), 0 2px 6px rgba(0,0,0,0.08)",
                 }}
               >
                 {/* Telegram app icon */}
                 <span aria-hidden style={{
                   width:42, height:42, borderRadius:"10px",
-                  background:"linear-gradient(180deg,#35B8FF 0%,#229ED9 58%,#188AC0 100%)",
+                  background:"linear-gradient(180deg,#34d399 0%,#10b981 58%,#059669 100%)",
                   display:"flex", alignItems:"center", justifyContent:"center",
                   flexShrink:0,
                   boxShadow:"0 1px 0 rgba(255,255,255,0.45) inset, 0 -1px 1px rgba(0,0,0,0.12) inset, 0 2px 5px rgba(0,0,0,0.18)",
@@ -767,7 +767,7 @@ export default function MoggedAI() {
         <div className="section-inner" style={{ maxWidth:"1080px" }}>
 
           <div style={{ marginBottom:"3rem", maxWidth:"640px" }}>
-            <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.75rem" }}>
+            <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#10b981", fontWeight:"700", marginBottom:"0.75rem" }}>
               WHO IT&apos;S FOR
             </div>
             <h2 style={{
@@ -778,7 +778,7 @@ export default function MoggedAI() {
               letterSpacing:"0.01em",
               margin:"0 0 1rem",
             }}>
-              Built for anyone who <span style={{ color:"#0ea5e9" }}>follows through.</span>
+              Built for anyone who <span style={{ color:"#10b981" }}>follows through.</span>
             </h2>
             <p style={{ fontSize:"1rem", color:"var(--c-text3)", lineHeight:1.7, margin:0 }}>
               People already using MoggedAI to stop missing the thing that actually matters.
@@ -834,7 +834,7 @@ export default function MoggedAI() {
                   position:"absolute",
                   top:0, left:0,
                   width:"40px", height:"2px",
-                  background:"#0ea5e9",
+                  background:"#10b981",
                 }}/>
 
                 {/* Number */}
@@ -876,7 +876,7 @@ export default function MoggedAI() {
                   fontStyle:"italic",
                   lineHeight:1.5,
                   paddingLeft:"0.85rem",
-                  borderLeft:"2px solid #0ea5e9",
+                  borderLeft:"2px solid #10b981",
                 }}>
                   {c.quote}
                 </div>
@@ -908,7 +908,7 @@ export default function MoggedAI() {
         </div>
 
         <style>{`
-          .who-card:hover { border-color: #0ea5e9 !important; transform: translateY(-2px); }
+          .who-card:hover { border-color: #10b981 !important; transform: translateY(-2px); }
           @media (max-width: 860px) {
             .who-cards { grid-template-columns: 1fr 1fr !important; }
           }
@@ -923,9 +923,9 @@ export default function MoggedAI() {
       <div style={{ padding:"5rem 0 5rem" }}>
         <div className="section-inner">
           <div style={{ marginBottom:"2.5rem" }}>
-            <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.5rem" }}>HOW IT WORKS</div>
+            <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#10b981", fontWeight:"700", marginBottom:"0.5rem" }}>HOW IT WORKS</div>
             <h2 style={{ fontSize:"clamp(1.9rem,4vw,2.6rem)", fontWeight:"800", lineHeight:1.05, margin:0, letterSpacing:"-0.025em" }}>
-              Set it once. <span style={{ color:"#0ea5e9" }}>Works all day.</span>
+              Set it once. <span style={{ color:"#10b981" }}>Works all day.</span>
             </h2>
           </div>
 
@@ -933,7 +933,7 @@ export default function MoggedAI() {
           <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(280px, 1fr))", gap:"0" }}>
           <div style={{ display:"flex", flexDirection:"column", gap:0 }}>
           {[
-            { n:"01", title:"Set your goals",        desc:"Pick what you need to stay on top of — gym, studying, work, anything.", color:"#0ea5e9" },
+            { n:"01", title:"Set your goals",        desc:"Pick what you need to stay on top of — gym, studying, work, anything.", color:"#10b981" },
             { n:"02", title:"Pick your coach style", desc:"Brutal, direct, or motivating. Every single message adapts to you.",    color:"#8b5cf6" },
             { n:"03", title:"Get texted all day",    desc:"We check in throughout the day. Every message is unique and personal.", color:"#10b981" },
             { n:"04", title:'Reply "done"',          desc:'Mark it complete. We track your streak. No reply? We follow up.',      color:"#f59e0b" },
@@ -969,7 +969,7 @@ export default function MoggedAI() {
         <div style={{ padding:"5rem 0 5rem" }}>
           <div className="section-inner">
             <div style={{ marginBottom:"2.5rem" }}>
-              <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"0.5rem" }}>FAQ</div>
+              <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#10b981", fontWeight:"700", marginBottom:"0.5rem" }}>FAQ</div>
               <h2 style={{ fontSize:"clamp(1.4rem,3vw,2rem)", fontWeight:"700", lineHeight:1.1, margin:0, letterSpacing:"-0.02em" }}>
                 Questions? We got you.
               </h2>
@@ -999,7 +999,7 @@ export default function MoggedAI() {
                       }}
                     >
                       <span>{item.q}</span>
-                      <span style={{ color:"#0ea5e9", fontSize:"1.25rem", lineHeight:1, flexShrink:0, transform: isOpen ? "rotate(45deg)" : "none", transition:"transform 0.2s" }}>+</span>
+                      <span style={{ color:"#10b981", fontSize:"1.25rem", lineHeight:1, flexShrink:0, transform: isOpen ? "rotate(45deg)" : "none", transition:"transform 0.2s" }}>+</span>
                     </button>
                     {isOpen && (
                       <div style={{ padding:"0 0 1.25rem", fontSize:"0.88rem", color:"var(--c-text4)", lineHeight:1.75, maxWidth:"640px" }}>
@@ -1022,15 +1022,15 @@ export default function MoggedAI() {
 
       {/* CTA */}
       <div className="cta-section">
-        <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#0ea5e9", fontWeight:"700", marginBottom:"1rem" }}>READY TO WIN?</div>
+        <div style={{ fontSize:"0.6rem", letterSpacing:"0.3em", color:"#10b981", fontWeight:"700", marginBottom:"1rem" }}>READY TO WIN?</div>
         <h2 style={{ fontSize:"clamp(1.6rem,4vw,2.6rem)", fontWeight:"700", letterSpacing:"-0.02em", lineHeight:1.1, marginBottom:"0.75rem" }}>
           Start winning your days.<br/>
-          <span style={{ color:"#0ea5e9" }}>Right now.</span>
+          <span style={{ color:"#10b981" }}>Right now.</span>
         </h2>
         <p style={{ fontSize:"0.88rem", color:"var(--c-text4)", marginBottom:"2rem", lineHeight:1.8 }}>
           Takes 2 minutes to set up in Telegram.
         </p>
-        <a className="cta-btn" href={telegramHref} target="_blank" rel="noopener noreferrer" style={{ display:"inline-block", background:"#0ea5e9", border:"none", color:"#fff", padding:"1.1rem 3.5rem", fontSize:"0.88rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700", textDecoration:"none" }}>
+        <a className="cta-btn" href={telegramHref} target="_blank" rel="noopener noreferrer" style={{ display:"inline-block", background:"#10b981", border:"none", color:"#fff", padding:"1.1rem 3.5rem", fontSize:"0.88rem", letterSpacing:"0.15em", cursor:"pointer", fontFamily:"inherit", fontWeight:"700", textDecoration:"none" }}>
           START ON TELEGRAM →
         </a>
         <p style={{ fontSize:"0.6rem", color:"var(--c-text5)", marginTop:"1rem" }}>Opens Telegram · Web and mobile supported</p>
@@ -1046,7 +1046,7 @@ export default function MoggedAI() {
             {/* Brand */}
             <div className="footer-brand">
               <div style={{ fontSize:"1.1rem", fontWeight:"700", letterSpacing:"0.15em", color:"var(--c-text)", marginBottom:"0.75rem" }}>
-                MOGGED<span style={{ color:"#0ea5e9" }}>AI</span>
+                MOGGED<span style={{ color:"#10b981" }}>AI</span>
               </div>
               <p style={{ fontSize:"0.72rem", color:"var(--c-text4)", lineHeight:"1.8", margin:"0 0 1.25rem" }}>
                 The AI accountability coach that keeps you honest in Telegram. Set your goal once and stay accountable.
@@ -1058,14 +1058,14 @@ export default function MoggedAI() {
                 ].map(s => (
                   <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
                     style={{ display:"flex", alignItems:"center", justifyContent:"center", width:"32px", height:"32px", border:"1px solid var(--c-border2)", color:"var(--c-text3)", fontSize:"0.65rem", fontWeight:"700", textDecoration:"none", letterSpacing:"0.05em" }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor="#0ea5e9"; (e.currentTarget as HTMLAnchorElement).style.color="#0ea5e9"; }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor="#10b981"; (e.currentTarget as HTMLAnchorElement).style.color="#10b981"; }}
                     onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor="var(--c-border2)"; (e.currentTarget as HTMLAnchorElement).style.color="var(--c-text3)"; }}
                   >{s.label}</a>
                 ))}
               </div>
               <a href="mailto:wasseem800@gmail.com"
                 style={{ fontSize:"0.68rem", color:"var(--c-text3)", textDecoration:"none", letterSpacing:"0.05em" }}
-                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color="#0ea5e9"; }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color="#10b981"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color="var(--c-text3)"; }}
               >wasseem800@gmail.com</a>
             </div>

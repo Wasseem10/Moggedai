@@ -76,6 +76,35 @@ const faqs = [
   },
 ];
 
+const footerColumns = [
+  {
+    title: "Product",
+    links: [
+      { label: "How it works", href: "#how-it-works" },
+      { label: "Who it's for", href: "#who" },
+      { label: "Dashboard", href: "/dashboard" },
+      { label: "Get started", href: telegramHref },
+    ],
+  },
+  {
+    title: "Support",
+    links: [
+      { label: "FAQ", href: "#faq" },
+      { label: "Contact us", href: "mailto:wasseem800@gmail.com" },
+      { label: "Telegram bot", href: telegramHref },
+      { label: "Report a bug", href: "mailto:wasseem800@gmail.com" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { label: "Privacy policy", href: "/privacy" },
+      { label: "Terms of service", href: "/terms" },
+      { label: "Consent", href: "/consent" },
+    ],
+  },
+];
+
 function TelegramLogo() {
   return (
     <svg
@@ -255,29 +284,121 @@ export default function App() {
 
       <section
         id="faq"
-        className="mx-auto w-full max-w-5xl px-2 py-12 sm:px-4 sm:py-16"
+        className="mx-auto w-full max-w-6xl px-2 py-14 sm:px-4 sm:py-20"
       >
-        <div className="text-center">
-          <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-[#ef4d23]">
-            FAQ
-          </p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#0b0f1a] sm:text-5xl">
-            Questions before you lock in.
-          </h2>
-        </div>
-
-        <div className="mt-8 grid gap-3">
-          {faqs.map((faq) => (
-            <article
-              key={faq.question}
-              className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm"
+        <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+          <div>
+            <p className="text-[12px] font-semibold uppercase tracking-[0.24em] text-[#ef4d23]">
+              FAQ
+            </p>
+            <h2 className="mt-4 max-w-xl text-4xl font-semibold leading-[0.96] tracking-tight text-[#0b0f1a] sm:text-6xl">
+              Clean answers before you commit.
+            </h2>
+            <p className="mt-5 max-w-md text-base leading-7 text-neutral-600">
+              Mogged AI is built to stay quiet when you are moving and direct
+              when you are slipping.
+            </p>
+            <a
+              href={telegramHref}
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#0b0f1a] px-5 py-3 text-sm font-semibold text-white shadow-sm"
             >
-              <h3 className="text-lg font-semibold text-[#0b0f1a]">{faq.question}</h3>
-              <p className="mt-2 text-sm leading-6 text-neutral-600">{faq.answer}</p>
-            </article>
-          ))}
+              <TelegramLogo />
+              Start on Telegram
+            </a>
+          </div>
+
+          <div className="overflow-hidden rounded-[28px] border border-neutral-200 bg-white/80 shadow-sm backdrop-blur">
+            {faqs.map((faq, index) => (
+              <details
+                key={faq.question}
+                className="group border-t border-neutral-200 px-5 py-5 first:border-t-0 sm:px-7"
+                open={index === 0}
+              >
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-left text-lg font-semibold tracking-tight text-[#0b0f1a] [&::-webkit-details-marker]:hidden">
+                  {faq.question}
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-xl font-light text-neutral-500 transition-transform group-open:rotate-45">
+                    +
+                  </span>
+                </summary>
+                <p className="max-w-2xl pt-3 text-sm leading-7 text-neutral-600">
+                  {faq.answer}
+                </p>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
+
+      <footer className="mx-auto mb-3 w-full max-w-6xl rounded-[32px] border border-neutral-200 bg-[#f5f2ee] px-5 py-10 shadow-sm sm:mb-4 sm:px-8 sm:py-12">
+        <div className="grid gap-10 lg:grid-cols-[1.25fr_2fr]">
+          <div>
+            <a
+              href="#"
+              className="inline-flex items-center text-xl font-bold tracking-[0.2em] text-[#0b0f1a]"
+            >
+              MOGGED<span className="text-[#229ED9]">AI</span>
+            </a>
+            <p className="mt-5 max-w-sm text-sm leading-7 text-neutral-600">
+              The AI accountability coach that keeps you honest in Telegram.
+              Set the goal once and stay accountable.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-2">
+              <a
+                href={telegramHref}
+                className="inline-flex h-11 items-center gap-2 rounded-full bg-[#229ED9] px-4 text-sm font-semibold text-white"
+              >
+                <TelegramLogo />
+                Telegram
+              </a>
+              <a
+                href="mailto:wasseem800@gmail.com"
+                className="inline-flex h-11 items-center rounded-full border border-neutral-300 px-4 text-sm font-semibold text-[#0b0f1a]"
+              >
+                Email
+              </a>
+            </div>
+          </div>
+
+          <div className="grid gap-8 sm:grid-cols-3">
+            {footerColumns.map((column) => (
+              <div key={column.title}>
+                <h3 className="text-[12px] font-semibold uppercase tracking-[0.24em] text-neutral-400">
+                  {column.title}
+                </h3>
+                <ul className="mt-5 space-y-3">
+                  {column.links.map((link) => (
+                    <li key={link.label}>
+                      <a
+                        href={link.href}
+                        className="text-sm font-medium text-neutral-600 transition-colors hover:text-[#0b0f1a]"
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-10 border-t border-neutral-300/70 pt-6 sm:mt-12">
+          <div className="flex flex-col gap-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-neutral-400 sm:flex-row sm:items-center sm:justify-between">
+            <p>&copy; 2026 MoggedAI. All rights reserved.</p>
+            <div className="flex flex-wrap gap-x-5 gap-y-2">
+              <a href="https://www.instagram.com/" className="hover:text-[#0b0f1a]">
+                IG
+              </a>
+              <a href="https://www.tiktok.com/" className="hover:text-[#0b0f1a]">
+                TT
+              </a>
+              <a href={telegramHref} className="hover:text-[#0b0f1a]">
+                Telegram bot
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }

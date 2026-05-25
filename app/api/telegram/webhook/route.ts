@@ -45,12 +45,12 @@ async function generateCoachReply(goal: string, userMessage: string): Promise<st
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
   const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
 
-  const prompt = `you're an accountability coach texting inside telegram. write like a real person: short, direct, casual, lowercase.
+  const prompt = `you're an accountability coach texting inside telegram. write like a real person: short, calm, natural, lowercase. you feel like a sharp friend who remembers what they said they wanted, not a bot.
 
 their goal: "${goal || 'stay consistent with their goal'}"
 they just said: "${userMessage}"
 
-reply in 1-2 sentences max. if they are making an excuse, call it out. if they completed it, acknowledge it and push them to keep the streak. if they are confused, help them. do not sound corporate. reply only with the message.`
+reply in 1-2 sentences max. no command instructions. no "reply done". no corporate language. if they are making an excuse, push back without sounding cringe. if they completed it, acknowledge it naturally. reply only with the message.`
 
   const result = await model.generateContent(prompt)
   return result.response.text().trim()
@@ -94,7 +94,7 @@ export async function POST(req: NextRequest) {
       )
       await sendTelegramMessage(
         chatId,
-        "you're in. what goal do you want me to keep you accountable for? keep it simple, like: gym 4x/week, study daily, ship my app."
+        "alright, what are we working on? say it the way you'd say it to a friend."
       )
       return NextResponse.json({ success: true })
     }
@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
         `UPDATE telegram_users SET active = false, updated_at = NOW() WHERE chat_id = $1`,
         [chatId]
       )
-      await sendTelegramMessage(chatId, "paused. send /start when you want to lock back in.")
+      await sendTelegramMessage(chatId, "got it. i'll chill for now.")
       return NextResponse.json({ success: true })
     }
 
@@ -113,7 +113,7 @@ export async function POST(req: NextRequest) {
         `UPDATE telegram_users SET goal = NULL, state = 'awaiting_goal', active = true, updated_at = NOW() WHERE chat_id = $1`,
         [chatId]
       )
-      await sendTelegramMessage(chatId, "what's the new goal?")
+      await sendTelegramMessage(chatId, "okay, what are we switching the focus to?")
       return NextResponse.json({ success: true })
     }
 
@@ -122,17 +122,17 @@ export async function POST(req: NextRequest) {
         `UPDATE telegram_users SET goal = $1, state = 'ready', active = true, updated_at = NOW() WHERE chat_id = $2`,
         [text, chatId]
       )
-      await sendTelegramMessage(chatId, `locked in: ${text}\n\nreply DONE when you do it, SKIP if you're dodging it, or just text me what's going on.`)
+      await sendTelegramMessage(chatId, `got you. i'll keep you honest about ${text}.`)
       return NextResponse.json({ success: true })
     }
 
     if (/^(done|finished|completed|did it|i did it)$/i.test(text)) {
-      await sendTelegramMessage(chatId, `good. ${user.goal} stays alive today. don't let this be a one-time thing.`)
+      await sendTelegramMessage(chatId, `good. that's one real rep toward ${user.goal}.`)
       return NextResponse.json({ success: true })
     }
 
     if (/^skip$/i.test(text)) {
-      await sendTelegramMessage(chatId, `skipping ${user.goal} is still a choice. own it, then get back on track next check-in.`)
+      await sendTelegramMessage(chatId, `alright. not ideal, but don't let one miss turn into the whole pattern.`)
       return NextResponse.json({ success: true })
     }
 
@@ -145,4 +145,3 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }
-

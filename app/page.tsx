@@ -100,8 +100,6 @@ export default function LandingPage() {
   return (
     <main className="landing">
       <style>{`
-        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap");
-
         *,
         *::before,
         *::after {
@@ -119,12 +117,12 @@ export default function LandingPage() {
           --ink: #090b16;
           --muted: #5b6475;
           --line: rgba(25, 104, 255, 0.14);
-          --mono: "SFMono-Regular", "Roboto Mono", "Cascadia Mono", "Liberation Mono", monospace;
+          --mono: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
           min-height: 100vh;
           overflow-x: hidden;
           background: #ffffff;
           color: var(--ink);
-          font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+          font-family: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
           letter-spacing: 0;
         }
 
@@ -195,7 +193,7 @@ export default function LandingPage() {
           color: #111827;
           font: inherit;
           font-weight: 900;
-          letter-spacing: -0.02em;
+          letter-spacing: 0;
           cursor: pointer;
         }
 
@@ -311,7 +309,7 @@ export default function LandingPage() {
           font-size: 12px;
           line-height: 1;
           font-weight: 900;
-          letter-spacing: -0.01em;
+          letter-spacing: 0;
           box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
         }
 
@@ -335,7 +333,7 @@ export default function LandingPage() {
           font-size: clamp(54px, 7vw, 92px);
           line-height: 0.95;
           font-weight: 900;
-          letter-spacing: -0.055em;
+          letter-spacing: 0;
           text-shadow: 0 2px 0 rgba(255, 255, 255, 0.08);
         }
 
@@ -373,129 +371,6 @@ export default function LandingPage() {
           font-weight: 700;
         }
 
-        .hero-cards {
-          width: min(940px, 100%);
-          min-height: 360px;
-          margin: 70px auto 0;
-          position: relative;
-          display: grid;
-          grid-template-columns: 1fr 1.35fr 1fr;
-          gap: 22px;
-          align-items: start;
-        }
-
-        .social-card,
-        .coach-card,
-        .mini-card {
-          border-radius: 20px;
-          background: rgba(255, 255, 255, 0.92);
-          border: 1px solid rgba(255, 255, 255, 0.76);
-          box-shadow: 0 24px 70px rgba(4, 68, 164, 0.18);
-          backdrop-filter: blur(22px);
-        }
-
-        .social-card {
-          padding: 18px;
-          transform: translateY(18px);
-        }
-
-        .coach-card {
-          padding: 20px;
-        }
-
-        .social-top,
-        .coach-top {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          color: #667085;
-          font-family: var(--mono);
-          font-size: 12px;
-          font-weight: 800;
-        }
-
-        .avatar {
-          width: 100%;
-          aspect-ratio: 1 / 0.86;
-          margin-top: 13px;
-          border-radius: 16px;
-          overflow: hidden;
-          background:
-            radial-gradient(circle at 30% 22%, #ffffff 0 7%, transparent 8%),
-            linear-gradient(145deg, #07152d, #186dff 52%, #9be8ff);
-          position: relative;
-        }
-
-        .avatar::before,
-        .avatar::after {
-          content: "";
-          position: absolute;
-          border-radius: 999px;
-          background: rgba(255, 255, 255, 0.82);
-        }
-
-        .avatar::before {
-          width: 66px;
-          height: 66px;
-          left: 50%;
-          top: 42%;
-          transform: translate(-50%, -50%);
-        }
-
-        .avatar::after {
-          width: 118px;
-          height: 80px;
-          left: 50%;
-          bottom: -24px;
-          transform: translateX(-50%);
-          background: rgba(255, 255, 255, 0.56);
-        }
-
-        .social-card p {
-          margin-top: 14px;
-          color: #344054;
-          font-family: var(--mono);
-          font-size: 12px;
-          line-height: 1.55;
-        }
-
-        .stat-row {
-          margin-top: 14px;
-          display: flex;
-          gap: 14px;
-          color: #7a8698;
-          font-family: var(--mono);
-          font-size: 11px;
-          font-weight: 800;
-        }
-
-        .coach-card {
-          margin-top: 0;
-        }
-
-        .stars {
-          color: #ffc247;
-          letter-spacing: 0.14em;
-          font-size: 17px;
-        }
-
-        .coach-card h3 {
-          margin-top: 16px;
-          color: #101828;
-          font-size: 24px;
-          line-height: 1.1;
-          letter-spacing: -0.04em;
-          font-weight: 900;
-        }
-
-        .coach-card p {
-          margin-top: 12px;
-          color: #475467;
-          font-family: var(--mono);
-          font-size: 13px;
-          line-height: 1.7;
-        }
-
         .message-strip {
           margin-top: 18px;
           display: grid;
@@ -520,58 +395,308 @@ export default function LandingPage() {
           width: 76%;
         }
 
-        .coach-footer {
-          margin-top: 18px;
+        .phone-stage {
+          width: min(1040px, 100%);
+          min-height: 720px;
+          margin: 72px auto 0;
+          position: relative;
+          border-radius: 28px;
+          overflow: hidden;
+          background:
+            radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.9), transparent 14%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.82));
+          border: 1px solid rgba(255, 255, 255, 0.62);
+          box-shadow: 0 30px 90px rgba(4, 68, 164, 0.16);
+        }
+
+        .phone-stage::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          opacity: 0.5;
+          background-image:
+            linear-gradient(rgba(15, 85, 160, 0.15) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(15, 85, 160, 0.15) 1px, transparent 1px);
+          background-size: 80px 80px;
+        }
+
+        .phone-stage::after {
+          content: "";
+          position: absolute;
+          display: none;
+          right: 6%;
+          top: 15%;
+          width: 48%;
+          height: 54%;
+          border-radius: 28px;
+          background:
+            radial-gradient(circle at 18% 24%, rgba(18, 104, 255, 0.14), transparent 18%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.12));
+          border: 1px solid rgba(255, 255, 255, 0.32);
+          filter: blur(0.2px);
+        }
+
+        .iphone {
+          position: absolute;
+          z-index: 2;
+          left: 82px;
+          top: 42px;
+          width: 318px;
+          height: 650px;
+          border-radius: 58px;
+          padding: 10px;
+          background: linear-gradient(145deg, #ffffff, #d8dde4 50%, #f9fafb);
+          box-shadow:
+            0 48px 110px rgba(15, 65, 117, 0.34),
+            inset 0 0 0 1px rgba(9, 11, 22, 0.08),
+            inset 0 2px 0 rgba(255, 255, 255, 0.86);
+        }
+
+        .iphone::before,
+        .iphone::after {
+          content: "";
+          position: absolute;
+          width: 4px;
+          border-radius: 4px;
+          background: linear-gradient(180deg, #d4d9df, #ffffff);
+          box-shadow: 0 0 0 1px rgba(9, 11, 22, 0.05);
+        }
+
+        .iphone::before {
+          left: -4px;
+          top: 154px;
+          height: 48px;
+        }
+
+        .iphone::after {
+          right: -4px;
+          top: 196px;
+          height: 76px;
+        }
+
+        .iphone-screen {
+          height: 100%;
+          border-radius: 48px;
+          position: relative;
+          overflow: hidden;
+          background:
+            radial-gradient(circle at 50% 32%, rgba(18, 104, 255, 0.04), transparent 26%),
+            linear-gradient(180deg, #fbfcff 0%, #f4f7fb 100%);
+          border: 1px solid rgba(9, 11, 22, 0.06);
+          font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+        }
+
+        .iphone-screen::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          opacity: 0.3;
+          background-image: radial-gradient(rgba(18, 104, 255, 0.16) 1px, transparent 1px);
+          background-size: 18px 18px;
+        }
+
+        .dynamic-island {
+          position: absolute;
+          z-index: 5;
+          top: 20px;
+          left: 50%;
+          width: 120px;
+          height: 36px;
+          transform: translateX(-50%);
+          border-radius: 999px;
+          background: #252525;
+          box-shadow: 0 12px 26px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .ios-status {
+          position: relative;
+          z-index: 4;
+          height: 76px;
+          padding: 32px 32px 0;
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           justify-content: space-between;
-          border-top: 1px solid #edf2f7;
-          padding-top: 15px;
-          color: #6b7280;
-          font-family: var(--mono);
-          font-size: 12px;
+          color: rgba(9, 11, 22, 0.58);
+          font-size: 15px;
           font-weight: 800;
         }
 
-        .mini-stack {
+        .ios-icons {
+          display: flex;
+          gap: 6px;
+          padding-top: 2px;
+        }
+
+        .ios-icons span {
+          width: 14px;
+          height: 8px;
+          border-radius: 2px;
+          background: rgba(9, 11, 22, 0.56);
+        }
+
+        .ios-header {
+          position: relative;
+          z-index: 2;
+          height: 92px;
           display: grid;
-          gap: 18px;
-          transform: translateY(28px);
-        }
-
-        .mini-card {
-          min-height: 128px;
-          padding: 16px;
-          background: rgba(255, 255, 255, 0.82);
-        }
-
-        .mini-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 10px;
-        }
-
-        .mini-tile {
-          height: 58px;
-          border-radius: 14px;
-          border: 1px solid rgba(18, 104, 255, 0.15);
-          background:
-            radial-gradient(circle at 28% 30%, rgba(255, 255, 255, 0.9), transparent 24%),
-            linear-gradient(135deg, rgba(18, 104, 255, 0.2), rgba(155, 232, 255, 0.46));
-        }
-
-        .mini-card h4 {
-          margin: 0 0 10px;
-          color: #101828;
-          font-size: 16px;
-          letter-spacing: -0.03em;
-        }
-
-        .mini-card p {
-          color: #64748b;
-          font-family: var(--mono);
+          grid-template-columns: 44px 1fr 44px;
+          align-items: start;
+          padding: 0 26px;
+          border-bottom: 1px solid rgba(9, 11, 22, 0.08);
+          text-align: center;
+          color: rgba(9, 11, 22, 0.48);
           font-size: 12px;
-          line-height: 1.55;
+        }
+
+        .ios-back {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          color: #0b84ff;
+          font-size: 22px;
+          font-weight: 600;
+        }
+
+        .ios-back b {
+          width: 18px;
+          height: 18px;
+          display: grid;
+          place-items: center;
+          border-radius: 50%;
+          background: #ff605b;
+          color: #ffffff;
+          font-size: 11px;
+        }
+
+        .ios-contact {
+          display: grid;
+          justify-items: center;
+          gap: 4px;
+        }
+
+        .bot-avatar {
+          width: 34px;
+          height: 34px;
+          display: grid;
+          place-items: center;
+          border-radius: 50%;
+          background: linear-gradient(145deg, #d7f0ff, #0b84ff);
+          box-shadow: 0 8px 16px rgba(11, 132, 255, 0.22);
+        }
+
+        .ios-camera {
+          color: #0b84ff;
+          font-size: 19px;
+          justify-self: end;
+          padding-top: 8px;
+        }
+
+        .ios-date {
+          position: relative;
+          z-index: 2;
+          margin-top: 10px;
+          color: rgba(9, 11, 22, 0.3);
+          text-align: center;
+          font-size: 12px;
+          font-weight: 700;
+        }
+
+        .iphone-messages {
+          position: relative;
+          z-index: 2;
+          height: 360px;
+          padding: 100px 22px 0;
+          display: flex;
+          flex-direction: column;
+          gap: 9px;
+        }
+
+        .ios-bubble {
+          width: fit-content;
+          max-width: 80%;
+          padding: 12px 14px;
+          border-radius: 20px;
+          color: #1d1d1f;
+          background: #e7e7ec;
+          font-size: 14px;
+          line-height: 1.35;
+          letter-spacing: 0;
+          box-shadow: 0 2px 6px rgba(9, 11, 22, 0.06);
+        }
+
+        .ios-bubble.user {
+          margin-left: auto;
+          color: #ffffff;
+          background: linear-gradient(180deg, #0f94ff, #007aff);
+          box-shadow: 0 8px 18px rgba(0, 122, 255, 0.28);
+        }
+
+        .ios-typing {
+          width: 62px;
+          display: flex;
+          justify-content: center;
+          gap: 5px;
+        }
+
+        .ios-typing span {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.6);
+        }
+
+        .ios-input {
+          position: absolute;
+          z-index: 3;
+          left: 18px;
+          right: 18px;
+          bottom: 34px;
+          height: 42px;
+          display: grid;
+          grid-template-columns: 32px 1fr 32px;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .ios-plus,
+        .ios-mic {
+          width: 30px;
+          height: 30px;
+          display: grid;
+          place-items: center;
+          border-radius: 50%;
+          color: rgba(9, 11, 22, 0.42);
+          background: rgba(9, 11, 22, 0.06);
+          font-size: 24px;
+          font-weight: 400;
+        }
+
+        .ios-mic {
+          font-size: 16px;
+        }
+
+        .ios-field {
+          height: 38px;
+          display: flex;
+          align-items: center;
+          padding: 0 16px;
+          border-radius: 999px;
+          color: rgba(9, 11, 22, 0.28);
+          background: #e9ebef;
+          border: 1px solid rgba(9, 11, 22, 0.08);
+          font-size: 14px;
+        }
+
+        .home-indicator {
+          position: absolute;
+          z-index: 3;
+          left: 50%;
+          bottom: 14px;
+          width: 132px;
+          height: 5px;
+          transform: translateX(-50%);
+          border-radius: 999px;
+          background: rgba(9, 11, 22, 0.78);
         }
 
         .logo-strip {
@@ -600,7 +725,7 @@ export default function LandingPage() {
           color: rgba(9, 11, 22, 0.58);
           font-size: 17px;
           font-weight: 900;
-          letter-spacing: -0.05em;
+          letter-spacing: 0;
         }
 
         .logos span:nth-child(odd) {
@@ -627,7 +752,7 @@ export default function LandingPage() {
           color: #070a16;
           font-size: clamp(42px, 5vw, 70px);
           line-height: 1;
-          letter-spacing: -0.06em;
+          letter-spacing: 0;
           font-weight: 900;
         }
 
@@ -684,7 +809,7 @@ export default function LandingPage() {
           margin-top: 26px;
           color: #080b15;
           font-size: 28px;
-          letter-spacing: -0.05em;
+          letter-spacing: 0;
           font-weight: 900;
           text-transform: uppercase;
         }
@@ -727,7 +852,7 @@ export default function LandingPage() {
           color: #1268ff;
           font-size: 11px;
           font-weight: 900;
-          letter-spacing: 0.02em;
+          letter-spacing: 0;
         }
 
         .feature-overview {
@@ -764,7 +889,7 @@ export default function LandingPage() {
           border: 1px solid rgba(18, 104, 255, 0.12);
           color: #101828;
           font-weight: 900;
-          letter-spacing: -0.03em;
+          letter-spacing: 0;
           box-shadow: 0 14px 34px rgba(12, 86, 180, 0.06);
         }
 
@@ -772,7 +897,7 @@ export default function LandingPage() {
           color: #080b15;
           font-size: 26px;
           line-height: 1.1;
-          letter-spacing: -0.05em;
+          letter-spacing: 0;
           font-weight: 900;
         }
 
@@ -834,7 +959,7 @@ export default function LandingPage() {
           color: #080b15;
           font-size: 22px;
           line-height: 1.1;
-          letter-spacing: -0.05em;
+          letter-spacing: 0;
           font-weight: 900;
           text-transform: uppercase;
         }
@@ -935,7 +1060,7 @@ export default function LandingPage() {
           color: #ffffff;
           font-size: clamp(42px, 5vw, 72px);
           line-height: 1;
-          letter-spacing: -0.06em;
+          letter-spacing: 0;
           font-weight: 900;
         }
 
@@ -972,20 +1097,27 @@ export default function LandingPage() {
             padding-bottom: 120px;
           }
 
-          .hero-cards,
           .who-grid,
           .feature-overview,
           .steps-grid {
             grid-template-columns: 1fr;
           }
 
-          .hero-cards {
-            width: min(520px, 100%);
+          .phone-stage {
+            min-height: 720px;
+            margin-top: 54px;
           }
 
-          .social-card,
-          .mini-stack {
-            transform: none;
+          .phone-stage::after {
+            right: -12%;
+            top: 10%;
+            width: 70%;
+          }
+
+          .iphone {
+            left: 50%;
+            transform: translateX(-50%);
+            top: 46px;
           }
 
           .logo-strip {
@@ -1049,8 +1181,51 @@ export default function LandingPage() {
             line-height: 1.6;
           }
 
-          .hero-cards {
-            margin-top: 44px;
+          .phone-stage {
+            width: calc(100vw - 24px);
+            min-height: 620px;
+            margin-top: 42px;
+            border-radius: 22px;
+          }
+
+          .phone-stage::after {
+            display: none;
+          }
+
+          .iphone {
+            width: 276px;
+            height: 564px;
+            border-radius: 50px;
+            padding: 8px;
+          }
+
+          .iphone-screen {
+            border-radius: 42px;
+          }
+
+          .dynamic-island {
+            width: 104px;
+            height: 31px;
+            top: 17px;
+          }
+
+          .ios-status {
+            height: 66px;
+            padding: 28px 28px 0;
+          }
+
+          .ios-header {
+            height: 82px;
+            padding: 0 22px;
+          }
+
+          .iphone-messages {
+            height: 320px;
+            padding-top: 84px;
+          }
+
+          .ios-bubble {
+            font-size: 13px;
           }
 
           .section {
@@ -1174,57 +1349,50 @@ export default function LandingPage() {
             <p className="proof">🔥🔥🔥🔥🔥 Join people hitting their goals daily</p>
           </div>
 
-          <div className="hero-cards" aria-label="MoggedAI product preview">
-            <article className="social-card">
-              <div className="social-top">
-                <span>@lockedin</span>
-                <span>TELEGRAM</span>
-              </div>
-              <div className="avatar" />
-              <p>Goal: study Python every day until it feels automatic.</p>
-              <div className="stat-row">
-                <span>6 day streak</span>
-                <span>3 check-ins</span>
-              </div>
-            </article>
-
-            <article className="coach-card">
-              <div className="coach-top">
-                <span className="stars">★★★★★</span>
-                <span>COACH MODE</span>
-              </div>
-              <h3>Accountability that actually follows up.</h3>
-              <p>
-                MoggedAI remembers the goal, reads the excuse, and pushes the next
-                action instead of giving generic motivation.
-              </p>
-              <div className="message-strip">
-                <div className="message">
-                  You said Python before bed. Open the lesson for 20 minutes.
+          <div className="phone-stage" aria-label="MoggedAI iPhone conversation preview">
+            <div className="iphone">
+              <div className="iphone-screen">
+                <div className="dynamic-island" />
+                <div className="ios-status">
+                  <span>2:03 PM</span>
+                  <div className="ios-icons">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
                 </div>
-                <div className="message user">DONE. Finished the functions section.</div>
-                <div className="message">Good. Same time tomorrow. Keep the streak alive.</div>
-              </div>
-              <div className="coach-footer">
-                <span>Direct style</span>
-                <span>Next ping 8:00 PM</span>
-              </div>
-            </article>
-
-            <div className="mini-stack">
-              <article className="mini-card">
-                <h4>Goal types</h4>
-                <div className="mini-grid">
-                  <div className="mini-tile" />
-                  <div className="mini-tile" />
-                  <div className="mini-tile" />
-                  <div className="mini-tile" />
+                <div className="ios-header">
+                  <div className="ios-back">
+                    ‹ <b>3</b>
+                  </div>
+                  <div className="ios-contact">
+                    <div className="bot-avatar">🤖</div>
+                    <span>MoggedAI ›</span>
+                  </div>
+                  <div className="ios-camera">▭</div>
                 </div>
-              </article>
-              <article className="mini-card">
-                <h4>Coach styles</h4>
-                <p>Brutal, direct, or motivating. Messages adapt to the goal and your replies.</p>
-              </article>
+                <div className="ios-date">📚 STUDY · Today 2:03 PM</div>
+                <div className="iphone-messages">
+                  <div className="ios-bubble">
+                    how many pages have you actually read today. be honest
+                  </div>
+                  <div className="ios-bubble user">..like 3 lol</div>
+                  <div className="ios-bubble">
+                    3 pages. you said 30 by tonight. put the phone down and start now.
+                  </div>
+                  <div className="ios-bubble user ios-typing">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                </div>
+                <div className="ios-input">
+                  <div className="ios-plus">+</div>
+                  <div className="ios-field">iMessage</div>
+                  <div className="ios-mic">◉</div>
+                </div>
+                <div className="home-indicator" />
+              </div>
             </div>
           </div>
         </div>

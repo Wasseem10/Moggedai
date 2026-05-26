@@ -69,8 +69,8 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="flex justify-center px-3 pt-8 sm:px-4 sm:pt-10">
-      <nav className="relative flex w-full max-w-[820px] items-center gap-4 rounded-[24px] border border-white/80 bg-white py-2.5 pr-2.5 pl-2.5 shadow-[0_4px_24px_rgba(20,50,100,0.08)]">
+    <header className="flex justify-center px-3 pt-4 sm:px-4 sm:pt-6">
+      <nav className="relative flex w-full max-w-[820px] items-center gap-4 rounded-full border border-neutral-200 bg-white py-2.5 pr-2.5 pl-2.5 shadow-sm">
         <FlowerLogo />
 
         <div className="hidden items-center gap-7 md:flex">
@@ -89,7 +89,7 @@ export default function Navbar() {
 
           <a
             href="/dashboard"
-            className="inline-flex items-center gap-2 rounded-[14px] bg-[#FF5A1F] py-2 pr-1.5 pl-5 text-[15px] font-semibold leading-6 tracking-[-0.02em] text-white shadow-[inset_0_-1px_0_rgba(0,0,0,0.12),0_6px_18px_rgba(255,90,31,0.18)] md:pl-5"
+            className="inline-flex items-center gap-2 rounded-full bg-[#ef4d23] py-2 pr-1.5 pl-5 text-[15px] font-semibold leading-6 tracking-[-0.02em] text-white md:pl-5"
           >
             <span className="hidden md:inline">Open dashboard</span>
             <span className="md:hidden">Dashboard</span>

@@ -123,13 +123,13 @@ export default function App() {
           className="pointer-events-none absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "linear-gradient(180deg, rgba(0, 113, 206, 0.68), rgba(0, 203, 235, 0.58) 42%, rgba(74, 225, 244, 0.44) 70%, rgba(235, 252, 255, 0.24)), url('https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=2400&q=95&sat=52')",
+              "linear-gradient(180deg, rgba(72, 159, 224, 0.62) 0%, rgba(111, 190, 230, 0.46) 42%, rgba(198, 234, 232, 0.38) 72%, rgba(255, 248, 226, 0.24) 100%), url('https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=2400&q=94&sat=34')",
           }}
         />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_45%,rgba(34,211,238,0.46),transparent_35%),radial-gradient(circle_at_58%_22%,rgba(103,232,249,0.48),transparent_38%),radial-gradient(circle_at_18%_18%,rgba(14,165,233,0.28),transparent_42%)] blur-2xl" />
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-500/18 via-cyan-300/20 to-white/46" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_48%,rgba(255,255,255,0.28),transparent_34%),radial-gradient(circle_at_50%_28%,rgba(255,255,255,0.16),transparent_48%)]" />
-        <div className="absolute inset-0 bg-cyan-200/12" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_78%,rgba(255,255,255,0.7),transparent_18%),radial-gradient(circle_at_78%_78%,rgba(255,248,226,0.42),transparent_34%),radial-gradient(circle_at_36%_18%,rgba(112,184,235,0.32),transparent_46%)] blur-2xl" />
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-400/18 via-sky-200/16 to-[#fff8e7]/30" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_52%_28%,rgba(255,255,255,0.13),transparent_45%),radial-gradient(circle_at_76%_76%,rgba(255,255,255,0.52),transparent_22%)]" />
+        <div className="absolute inset-0 bg-[#eaf8ff]/10" />
 
         <div className="relative z-10 flex h-full flex-col">
           <Navbar />

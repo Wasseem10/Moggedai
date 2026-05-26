@@ -340,7 +340,7 @@ export default function App() {
 
       <section
         id="faq"
-        className="mx-auto w-full max-w-6xl px-2 py-14 sm:px-4 sm:py-20"
+        className="mx-auto w-full max-w-6xl px-2 pt-14 pb-18 sm:px-4 sm:pt-20 sm:pb-24"
       >
         <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           <div>
@@ -385,7 +385,11 @@ export default function App() {
         </div>
       </section>
 
-      <footer className="mx-auto mb-3 w-full max-w-6xl rounded-[32px] border border-neutral-200 bg-[#f5f2ee] px-5 py-10 shadow-sm sm:mb-4 sm:px-8 sm:py-12">
+      <div className="mx-auto w-full max-w-6xl px-2 sm:px-4">
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent" />
+      </div>
+
+      <footer className="mx-auto mt-10 mb-3 w-full max-w-6xl rounded-[32px] border border-neutral-200 bg-[#f5f2ee] px-5 py-10 shadow-[0_18px_60px_rgba(15,23,42,0.05)] sm:mt-14 sm:mb-4 sm:px-8 sm:py-12">
         <div className="grid gap-10 lg:grid-cols-[1.25fr_2fr]">
           <div>
             <a

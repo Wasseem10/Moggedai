@@ -6,21 +6,26 @@ const telegramHref =
   process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL ||
   "https://t.me/StaypingedBot?start=website";
 
-const steps = [
+const assistantRows = [
   {
-    label: "01",
-    title: "Tell it what matters",
-    body: "Drop in reminders, tasks, follow-ups, deadlines, ideas, and small details you do not want to keep in your head.",
+    label: "1",
+    title: "Capture reminders, tasks, and loose thoughts",
+    color: "#77F0BE",
   },
   {
-    label: "02",
-    title: "It remembers the context",
-    body: "StayPinged keeps the thread of what you said, when it matters, and what needs to happen next.",
+    label: "2",
+    title: "Keep context attached to every follow-up",
+    color: "#D8FFA3",
   },
   {
-    label: "03",
-    title: "It pings you back",
-    body: "Telegram check-ins show up when they are useful, so your assistant brain follows up without you reopening an app.",
+    label: "3",
+    title: "Get pinged before details slip",
+    color: "#E8DCFF",
+  },
+  {
+    label: "4",
+    title: "Manage everything from Telegram",
+    color: "#DDE8FF",
   },
 ];
 
@@ -185,20 +190,50 @@ export default function App() {
 
       <section
         id="how-it-works"
-        className="mx-auto grid w-full max-w-6xl gap-4 px-2 py-12 sm:grid-cols-3 sm:px-4 sm:py-16"
+        className="mx-auto w-full max-w-6xl px-2 py-14 sm:px-4 sm:py-24"
       >
-        {steps.map((step) => (
-          <article
-            key={step.label}
-            className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm"
-          >
-            <p className="text-[13px] font-semibold leading-5 tracking-[-0.02em] text-[#ef4d23]">{step.label}</p>
-            <h2 className="mt-4 text-[28px] font-bold leading-[1.08] tracking-[-0.04em] text-[#0b0f1a]">
-              {step.title}
+        <div className="grid items-center gap-10 lg:grid-cols-[0.86fr_1.34fr] lg:gap-16">
+          <div className="lg:pr-4">
+            <h2 className="max-w-xl text-[50px] font-bold leading-[0.94] tracking-[-0.065em] text-[#050505] sm:text-[70px] lg:text-[76px]">
+              Remember more. Follow up faster. Stay in the loop.
             </h2>
-            <p className="mt-3 text-[16px] font-medium leading-7 tracking-[-0.015em] text-neutral-600">{step.body}</p>
-          </article>
-        ))}
+            <p className="mt-6 max-w-md text-[17px] font-medium leading-7 tracking-[-0.02em] text-neutral-600">
+              StayPinged turns scattered thoughts into useful Telegram
+              follow-ups, so your assistant brain keeps the important things
+              moving.
+            </p>
+            <a
+              href={telegramHref}
+              className="mt-8 inline-flex items-center gap-2 rounded-[18px] bg-[#3F6DF6] px-5 py-3 text-[16px] font-semibold leading-6 tracking-[-0.025em] text-white shadow-[0_12px_32px_rgba(63,109,246,0.22)]"
+            >
+              <TelegramLogo />
+              Start on Telegram
+            </a>
+          </div>
+
+          <div className="space-y-4">
+            {assistantRows.map((row) => (
+              <article
+                key={row.label}
+                className="flex min-h-[92px] items-center gap-5 rounded-[28px] px-7 shadow-[0_18px_50px_rgba(15,23,42,0.06)] ring-1 ring-black/[0.03] sm:min-h-[108px] sm:gap-8 sm:px-10"
+                style={{ backgroundColor: row.color }}
+              >
+                <span
+                  className="w-20 shrink-0 text-center text-[58px] font-semibold leading-none tracking-[-0.09em] text-black sm:text-[74px]"
+                  style={{
+                    fontFamily: "'Instrument Serif', serif",
+                    fontStyle: "italic",
+                  }}
+                >
+                  {row.label}
+                </span>
+                <h3 className="text-[20px] font-bold leading-7 tracking-[-0.045em] text-black sm:text-[24px]">
+                  {row.title}
+                </h3>
+              </article>
+            ))}
+          </div>
+        </div>
       </section>
 
       <section
@@ -206,13 +241,13 @@ export default function App() {
         className="mx-auto w-full max-w-6xl rounded-3xl bg-[#f5f2ee] px-5 py-12 sm:px-8 sm:py-16"
       >
         <div className="max-w-3xl">
-          <p className="text-[12px] font-semibold uppercase tracking-[0.24em] text-[#ef4d23]">
+          <p className="text-[12px] font-semibold uppercase tracking-[0.24em] text-[#3F6DF6]">
             Who it's for
           </p>
           <h2 className="mt-4 text-[44px] font-bold leading-[1.02] tracking-[-0.045em] text-[#0b0f1a] sm:text-[64px]">
             Built for people with{" "}
             <span
-              className="text-[#ef4d23]"
+              className="text-[#0b0f1a]"
               style={{
                 fontFamily: "'Instrument Serif', serif",
                 fontStyle: "italic",
@@ -234,7 +269,7 @@ export default function App() {
               key={card.title}
               className="relative rounded-3xl border border-neutral-200 bg-white p-6 text-[#0b0f1a] shadow-sm"
             >
-              <span className="absolute top-0 left-6 h-1 w-12 rounded-b-full bg-[#ef4d23]" />
+              <span className="absolute top-0 left-6 h-1 w-12 rounded-b-full bg-[#3F6DF6]" />
               <p className="text-[12px] font-semibold tracking-[0.18em] text-neutral-400">
                 {card.number}
               </p>
@@ -242,7 +277,7 @@ export default function App() {
                 {card.title}
               </h3>
               <p className="mt-5 text-[16px] font-medium leading-7 tracking-[-0.015em] text-neutral-600">{card.body}</p>
-              <blockquote className="mt-6 border-l-2 border-[#ef4d23] pl-4 text-[16px] italic leading-7 tracking-[-0.015em] text-neutral-900">
+              <blockquote className="mt-6 border-l-2 border-[#3F6DF6] pl-4 text-[16px] italic leading-7 tracking-[-0.015em] text-neutral-900">
                 "{card.quote}"
               </blockquote>
               <div className="mt-5 border-t border-neutral-200 pt-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-neutral-400">
@@ -280,7 +315,7 @@ export default function App() {
       >
         <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           <div>
-            <p className="text-[12px] font-semibold uppercase tracking-[0.24em] text-[#ef4d23]">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.24em] text-[#3F6DF6]">
               FAQ
             </p>
             <h2 className="mt-4 max-w-xl text-[44px] font-bold leading-[1.02] tracking-[-0.045em] text-[#0b0f1a] sm:text-[64px]">

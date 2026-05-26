@@ -238,10 +238,11 @@ export default function App() {
 
       <section
         id="who"
-        className="mx-auto w-full max-w-6xl rounded-[28px] bg-[#f5f2ee] px-5 py-12 sm:rounded-3xl sm:px-8 sm:py-16"
+        className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-[28px] border border-white/70 bg-[#f7fbff] px-5 py-12 shadow-[0_24px_80px_rgba(20,50,100,0.08)] sm:rounded-3xl sm:px-8 sm:py-16"
       >
-        <div className="max-w-3xl">
-          <p className="text-[12px] font-semibold uppercase tracking-[0.24em] text-[#3F6DF6]">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_0%,rgba(135,206,250,0.34),transparent_34%),radial-gradient(circle_at_86%_12%,rgba(255,255,255,0.92),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.86),rgba(235,247,255,0.7))]" />
+        <div className="relative max-w-3xl">
+          <p className="text-[12px] font-semibold uppercase tracking-[0.24em] text-[#229ED9]">
             Who it's for
           </p>
           <h2 className="mt-4 text-[40px] font-bold leading-[1.02] tracking-[-0.045em] text-[#0b0f1a] sm:text-[64px]">
@@ -263,45 +264,46 @@ export default function App() {
           </p>
         </div>
 
-        <div className="mt-10 grid gap-4 lg:grid-cols-3">
+        <div className="relative mt-10 grid gap-4 lg:grid-cols-3">
           {whoCards.map((card) => (
             <article
               key={card.title}
-              className="relative rounded-3xl border border-neutral-200 bg-white p-6 text-[#0b0f1a] shadow-sm"
+              className="relative overflow-hidden rounded-3xl border border-white/80 bg-white/78 p-6 text-[#0b0f1a] shadow-[0_18px_55px_rgba(20,50,100,0.08)] backdrop-blur"
             >
-              <span className="absolute top-0 left-6 h-1 w-12 rounded-b-full bg-[#3F6DF6]" />
-              <p className="text-[12px] font-semibold tracking-[0.18em] text-neutral-400">
+              <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#7ccfff]/80 to-transparent" />
+              <span className="absolute top-0 left-6 h-1 w-12 rounded-b-full bg-[#7ccfff]" />
+              <p className="text-[12px] font-semibold tracking-[0.18em] text-slate-400">
                 {card.number}
               </p>
               <h3 className="mt-5 text-[32px] font-bold leading-[1.08] tracking-[-0.04em]">
                 {card.title}
               </h3>
-              <p className="mt-5 text-[16px] font-medium leading-7 tracking-[-0.015em] text-neutral-600">{card.body}</p>
-              <blockquote className="mt-6 border-l-2 border-[#3F6DF6] pl-4 text-[16px] italic leading-7 tracking-[-0.015em] text-neutral-900">
+              <p className="mt-5 text-[16px] font-medium leading-7 tracking-[-0.015em] text-slate-600">{card.body}</p>
+              <blockquote className="mt-6 border-l-2 border-[#229ED9] pl-4 text-[16px] italic leading-7 tracking-[-0.015em] text-slate-900">
                 "{card.quote}"
               </blockquote>
-              <div className="mt-5 border-t border-neutral-200 pt-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-neutral-400">
+              <div className="mt-5 border-t border-sky-100 pt-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
                 {card.tags}
               </div>
             </article>
           ))}
         </div>
 
-        <div className="mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-          <p className="mr-auto max-w-xl text-sm leading-6 text-neutral-500">
+        <div className="relative mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+          <p className="mr-auto max-w-xl text-sm leading-6 text-slate-500">
             If it is important enough to remember, it is important enough to
             get pinged back at the right time.
           </p>
           <a
             href={telegramHref}
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#229ED9] px-5 py-3 text-sm font-semibold text-white shadow-sm"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#229ED9] px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(34,158,217,0.24)]"
           >
             <TelegramLogo />
             Start on Telegram
           </a>
           <a
             href="/dashboard"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#0b0f1a] px-5 py-3 text-sm font-semibold text-white shadow-sm"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-sky-100 bg-white/80 px-5 py-3 text-sm font-semibold text-[#0b0f1a] shadow-[0_12px_30px_rgba(20,50,100,0.08)] backdrop-blur"
           >
             Open dashboard
             <ChevronRight className="h-4 w-4" strokeWidth={2} />
@@ -327,7 +329,7 @@ export default function App() {
             </p>
             <a
               href={telegramHref}
-              className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#0b0f1a] px-5 py-3 text-sm font-semibold text-white shadow-sm sm:w-auto"
+              className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#229ED9] px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(34,158,217,0.24)] sm:w-auto"
             >
               <TelegramLogo />
               Start on Telegram

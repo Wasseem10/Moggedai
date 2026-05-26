@@ -123,13 +123,13 @@ export default function App() {
           className="pointer-events-none absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "linear-gradient(180deg, rgba(0, 139, 255, 0.72), rgba(0, 191, 255, 0.42) 46%, rgba(232, 247, 255, 0.22)), url('https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=2400&q=96&sat=45')",
+              "linear-gradient(180deg, rgba(142, 205, 247, 0.58), rgba(189, 230, 255, 0.36) 48%, rgba(246, 251, 255, 0.2)), url('https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=2400&q=94&sat=28')",
           }}
         />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_45%,rgba(0,224,255,0.52),transparent_34%),radial-gradient(circle_at_58%_22%,rgba(56,189,248,0.48),transparent_36%),radial-gradient(circle_at_18%_18%,rgba(14,165,233,0.32),transparent_40%)] blur-2xl" />
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-400/35 via-cyan-200/18 to-white/54" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_48%,rgba(255,255,255,0.28),transparent_34%),radial-gradient(circle_at_50%_28%,rgba(255,255,255,0.14),transparent_48%)]" />
-        <div className="absolute inset-0 bg-sky-300/10" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_45%,rgba(186,230,253,0.42),transparent_35%),radial-gradient(circle_at_58%_22%,rgba(224,242,254,0.52),transparent_38%),radial-gradient(circle_at_18%_18%,rgba(125,211,252,0.2),transparent_42%)] blur-2xl" />
+        <div className="absolute inset-0 bg-gradient-to-b from-sky-200/24 via-cyan-50/18 to-white/58" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_48%,rgba(255,255,255,0.34),transparent_34%),radial-gradient(circle_at_50%_28%,rgba(255,255,255,0.2),transparent_48%)]" />
+        <div className="absolute inset-0 bg-sky-100/14" />
 
         <div className="relative z-10 flex h-full flex-col">
           <Navbar />

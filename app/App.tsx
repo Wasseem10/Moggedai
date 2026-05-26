@@ -123,11 +123,13 @@ export default function App() {
           className="pointer-events-none absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "linear-gradient(180deg, rgba(80, 170, 255, 0.22), rgba(255, 255, 255, 0.04)), url('https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=2400&q=88')",
+              "linear-gradient(180deg, rgba(37, 166, 255, 0.42), rgba(111, 210, 255, 0.22) 44%, rgba(255, 255, 255, 0.08)), url('https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=2400&q=92&sat=25')",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-200/20 via-white/25 to-white/62" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,0.1),transparent_42%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_45%,rgba(34,211,238,0.36),transparent_32%),radial-gradient(circle_at_58%_24%,rgba(125,211,252,0.34),transparent_34%),radial-gradient(circle_at_18%_18%,rgba(186,230,253,0.28),transparent_38%)] blur-2xl" />
+        <div className="absolute inset-0 bg-gradient-to-b from-sky-300/24 via-cyan-100/20 to-white/64" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_48%,rgba(255,255,255,0.36),transparent_34%),radial-gradient(circle_at_50%_28%,rgba(255,255,255,0.18),transparent_48%)]" />
+        <div className="absolute inset-0 bg-white/10" />
 
         <div className="relative z-10 flex h-full flex-col">
           <Navbar />

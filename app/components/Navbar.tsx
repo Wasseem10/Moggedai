@@ -26,7 +26,7 @@ function NavLink({ item, mobile = false }: { item: string; mobile?: boolean }) {
       className={[
         "inline-flex items-center gap-1.5 font-medium",
         mobile ? "justify-between rounded-xl px-3 py-2 text-[15px]" : "text-[15px]",
-        item === "Pages" ? "text-[#ef4d23]" : "text-neutral-950",
+        item === "Pages" ? "text-[#3F6DF6]" : "text-neutral-950",
       ].join(" ")}
     >
       <span className="inline-flex items-center gap-2">
@@ -47,11 +47,11 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="flex justify-center px-3 pt-4 sm:px-4 sm:pt-6">
-      <nav className="relative flex w-full max-w-[820px] items-center gap-4 rounded-full border border-neutral-200 bg-white py-2.5 pr-2.5 pl-2.5 shadow-sm">
+    <header className="flex justify-center px-2 pt-3 sm:px-4 sm:pt-6">
+      <nav className="relative flex w-full max-w-[820px] items-center gap-2 rounded-full border border-neutral-200 bg-white py-2 pr-2 pl-3 shadow-sm sm:gap-4 sm:py-2.5 sm:pr-2.5 sm:pl-2.5">
         <a
           href="#"
-          className="shrink-0 text-[22px] font-bold leading-none tracking-[-0.04em] text-neutral-950"
+          className="shrink-0 text-[19px] font-bold leading-none tracking-[-0.04em] text-neutral-950 sm:text-[22px]"
         >
           StayPinged
         </a>
@@ -72,7 +72,7 @@ export default function Navbar() {
 
           <a
             href="/dashboard"
-            className="inline-flex items-center gap-2 rounded-full border border-white/45 bg-white/28 py-2 pr-1.5 pl-5 text-[15px] font-semibold leading-6 tracking-[-0.02em] text-neutral-950 shadow-[inset_0_1px_0_rgba(255,255,255,0.75),inset_0_-1px_0_rgba(255,255,255,0.22),0_12px_34px_rgba(20,50,100,0.12)] backdrop-blur-xl md:pl-5"
+            className="inline-flex min-h-10 items-center gap-2 rounded-full border border-white/45 bg-white/28 py-1.5 pr-1.5 pl-4 text-[14px] font-semibold leading-6 tracking-[-0.02em] text-neutral-950 shadow-[inset_0_1px_0_rgba(255,255,255,0.75),inset_0_-1px_0_rgba(255,255,255,0.22),0_12px_34px_rgba(20,50,100,0.12)] backdrop-blur-xl sm:py-2 sm:pl-5 md:pl-5"
           >
             <span className="hidden md:inline">Open dashboard</span>
             <span className="md:hidden">Dashboard</span>

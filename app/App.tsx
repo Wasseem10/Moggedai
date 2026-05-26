@@ -120,10 +120,10 @@ function TelegramLogo() {
 export default function App() {
   return (
     <main
-      className="min-h-screen w-full bg-[#ededed] p-3 sm:p-4"
+      className="min-h-screen w-full bg-[#ededed] p-2 sm:p-4"
       style={{ fontFamily: "'Host Grotesk', 'Inter', sans-serif" }}
     >
-      <section className="relative h-[calc(100vh-24px)] w-full overflow-hidden rounded-2xl bg-[#d9d9d9] sm:h-[calc(100vh-32px)] sm:rounded-3xl">
+      <section className="relative h-[calc(100svh-16px)] min-h-[620px] w-full overflow-hidden rounded-2xl bg-[#d9d9d9] sm:h-[calc(100vh-32px)] sm:min-h-0 sm:rounded-3xl">
         <div
           className="pointer-events-none absolute inset-0 bg-cover bg-center"
           style={{
@@ -139,14 +139,14 @@ export default function App() {
         <div className="relative z-10 flex h-full flex-col">
           <Navbar />
 
-          <div className="flex flex-1 items-center justify-center px-4 py-8 sm:px-8 lg:py-10">
-            <div className="grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[1fr_360px] lg:gap-12">
-              <div className="-translate-y-14 text-center lg:-translate-y-24 lg:text-left xl:-translate-y-28">
+          <div className="flex flex-1 items-center justify-center px-4 py-6 sm:px-8 sm:py-8 lg:py-10">
+            <div className="grid w-full max-w-6xl items-center gap-7 sm:gap-8 lg:grid-cols-[1fr_360px] lg:gap-12">
+              <div className="-translate-y-8 text-center sm:-translate-y-12 lg:-translate-y-24 lg:text-left xl:-translate-y-28">
                 <h1
                   className="max-w-4xl text-[#050505]"
                   style={{
                     fontFamily: "'Host Grotesk', 'Inter', sans-serif",
-                    fontSize: "clamp(52px, 6.4vw, 92px)",
+                    fontSize: "clamp(42px, 12vw, 92px)",
                     lineHeight: 1.02,
                     fontWeight: 700,
                     letterSpacing: "-0.045em",
@@ -168,7 +168,7 @@ export default function App() {
 
                 <a
                   href={telegramHref}
-                  className="mt-7 inline-flex min-w-[232px] items-center justify-between gap-3 rounded-full bg-[#229ED9] py-2.5 pr-2 pl-5 text-[16px] font-semibold leading-6 tracking-[-0.02em] text-white shadow-sm shadow-sky-900/15 sm:mt-8 sm:pl-6"
+                  className="mt-7 inline-flex min-h-12 w-full max-w-[260px] items-center justify-between gap-3 rounded-full bg-[#229ED9] py-2.5 pr-2 pl-5 text-[16px] font-semibold leading-6 tracking-[-0.02em] text-white shadow-sm shadow-sky-900/15 sm:mt-8 sm:w-auto sm:min-w-[232px] sm:pl-6"
                 >
                   <span className="inline-flex items-center gap-2 text-white">
                     <TelegramLogo />
@@ -190,11 +190,11 @@ export default function App() {
 
       <section
         id="how-it-works"
-        className="mx-auto w-full max-w-6xl px-2 py-14 sm:px-4 sm:py-24"
+        className="mx-auto w-full max-w-6xl px-2 py-12 sm:px-4 sm:py-24"
       >
         <div className="grid items-center gap-10 lg:grid-cols-[0.86fr_1.34fr] lg:gap-16">
           <div className="lg:pr-4">
-            <h2 className="max-w-xl text-[50px] font-bold leading-[0.94] tracking-[-0.065em] text-[#050505] sm:text-[70px] lg:text-[76px]">
+            <h2 className="max-w-xl text-[42px] font-bold leading-[0.98] tracking-[-0.055em] text-[#050505] sm:text-[70px] sm:leading-[0.94] sm:tracking-[-0.065em] lg:text-[76px]">
               Remember more. Follow up faster. Stay in the loop.
             </h2>
             <p className="mt-6 max-w-md text-[17px] font-medium leading-7 tracking-[-0.02em] text-neutral-600">
@@ -215,11 +215,11 @@ export default function App() {
             {assistantRows.map((row) => (
               <article
                 key={row.label}
-                className="flex min-h-[92px] items-center gap-5 rounded-[28px] px-7 shadow-[0_18px_50px_rgba(15,23,42,0.06)] ring-1 ring-black/[0.03] sm:min-h-[108px] sm:gap-8 sm:px-10"
+                className="flex min-h-[84px] items-center gap-4 rounded-[24px] px-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)] ring-1 ring-black/[0.03] sm:min-h-[108px] sm:gap-8 sm:rounded-[28px] sm:px-10"
                 style={{ backgroundColor: row.color }}
               >
                 <span
-                  className="w-20 shrink-0 text-center text-[58px] font-semibold leading-none tracking-[-0.09em] text-black sm:text-[74px]"
+                  className="w-12 shrink-0 text-center text-[50px] font-semibold leading-none tracking-[-0.09em] text-black sm:w-20 sm:text-[74px]"
                   style={{
                     fontFamily: "'Instrument Serif', serif",
                     fontStyle: "italic",
@@ -227,7 +227,7 @@ export default function App() {
                 >
                   {row.label}
                 </span>
-                <h3 className="text-[20px] font-bold leading-7 tracking-[-0.045em] text-black sm:text-[24px]">
+                <h3 className="text-[18px] font-bold leading-6 tracking-[-0.04em] text-black sm:text-[24px] sm:leading-7 sm:tracking-[-0.045em]">
                   {row.title}
                 </h3>
               </article>
@@ -238,13 +238,13 @@ export default function App() {
 
       <section
         id="who"
-        className="mx-auto w-full max-w-6xl rounded-3xl bg-[#f5f2ee] px-5 py-12 sm:px-8 sm:py-16"
+        className="mx-auto w-full max-w-6xl rounded-[28px] bg-[#f5f2ee] px-5 py-12 sm:rounded-3xl sm:px-8 sm:py-16"
       >
         <div className="max-w-3xl">
           <p className="text-[12px] font-semibold uppercase tracking-[0.24em] text-[#3F6DF6]">
             Who it's for
           </p>
-          <h2 className="mt-4 text-[44px] font-bold leading-[1.02] tracking-[-0.045em] text-[#0b0f1a] sm:text-[64px]">
+          <h2 className="mt-4 text-[40px] font-bold leading-[1.02] tracking-[-0.045em] text-[#0b0f1a] sm:text-[64px]">
             Built for people with{" "}
             <span
               className="text-[#0b0f1a]"
@@ -287,21 +287,21 @@ export default function App() {
           ))}
         </div>
 
-        <div className="mt-9 flex flex-wrap items-center gap-3">
+        <div className="mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <p className="mr-auto max-w-xl text-sm leading-6 text-neutral-500">
             If it is important enough to remember, it is important enough to
             get pinged back at the right time.
           </p>
           <a
             href={telegramHref}
-            className="inline-flex items-center gap-2 rounded-full bg-[#229ED9] px-5 py-3 text-sm font-semibold text-white shadow-sm"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#229ED9] px-5 py-3 text-sm font-semibold text-white shadow-sm"
           >
             <TelegramLogo />
             Start on Telegram
           </a>
           <a
             href="/dashboard"
-            className="inline-flex items-center gap-2 rounded-full bg-[#0b0f1a] px-5 py-3 text-sm font-semibold text-white shadow-sm"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#0b0f1a] px-5 py-3 text-sm font-semibold text-white shadow-sm"
           >
             Open dashboard
             <ChevronRight className="h-4 w-4" strokeWidth={2} />
@@ -318,7 +318,7 @@ export default function App() {
             <p className="text-[12px] font-semibold uppercase tracking-[0.24em] text-[#3F6DF6]">
               FAQ
             </p>
-            <h2 className="mt-4 max-w-xl text-[44px] font-bold leading-[1.02] tracking-[-0.045em] text-[#0b0f1a] sm:text-[64px]">
+            <h2 className="mt-4 max-w-xl text-[40px] font-bold leading-[1.02] tracking-[-0.045em] text-[#0b0f1a] sm:text-[64px]">
               Clean answers before you hand it your memory.
             </h2>
             <p className="mt-5 max-w-md text-[16px] font-medium leading-7 tracking-[-0.015em] text-neutral-600">
@@ -327,7 +327,7 @@ export default function App() {
             </p>
             <a
               href={telegramHref}
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#0b0f1a] px-5 py-3 text-sm font-semibold text-white shadow-sm"
+              className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#0b0f1a] px-5 py-3 text-sm font-semibold text-white shadow-sm sm:w-auto"
             >
               <TelegramLogo />
               Start on Telegram

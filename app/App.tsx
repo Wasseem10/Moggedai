@@ -122,11 +122,11 @@ export default function App() {
           className="pointer-events-none absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=2400&q=85')",
+              "linear-gradient(180deg, rgba(52, 152, 255, 0.2), rgba(255, 255, 255, 0.08)), url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2400&q=90')",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/15 via-white/35 to-white/70" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,rgba(255,255,255,0.12),transparent_38%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-sky-300/15 via-white/20 to-white/60" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,0.08),transparent_42%)]" />
 
         <div className="relative z-10 flex h-full flex-col">
           <Navbar />

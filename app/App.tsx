@@ -116,26 +116,42 @@ export default function App() {
   return (
     <main
       className="min-h-screen w-full bg-[#ededed] p-3 sm:p-4"
-      style={{ fontFamily: "'Host Grotesk', 'Inter', sans-serif" }}
+      style={{ fontFamily: "var(--font-geist-sans), -apple-system, system-ui, sans-serif" }}
     >
-      <section className="relative h-[calc(100vh-24px)] w-full overflow-hidden rounded-2xl bg-[#d9d9d9] sm:h-[calc(100vh-32px)] sm:rounded-3xl">
-        <div
-          className="pointer-events-none absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage:
-              "linear-gradient(180deg, rgba(37, 166, 255, 0.42), rgba(111, 210, 255, 0.22) 44%, rgba(255, 255, 255, 0.08)), url('https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=2400&q=92&sat=25')",
-          }}
-        />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_45%,rgba(34,211,238,0.36),transparent_32%),radial-gradient(circle_at_58%_24%,rgba(125,211,252,0.34),transparent_34%),radial-gradient(circle_at_18%_18%,rgba(186,230,253,0.28),transparent_38%)] blur-2xl" />
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-300/24 via-cyan-100/20 to-white/64" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_48%,rgba(255,255,255,0.36),transparent_34%),radial-gradient(circle_at_50%_28%,rgba(255,255,255,0.18),transparent_48%)]" />
-        <div className="absolute inset-0 bg-white/10" />
+      <section className="relative h-[calc(100vh-24px)] w-full overflow-hidden rounded-2xl bg-[#EEF3F8] sm:h-[calc(100vh-32px)] sm:rounded-3xl">
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,#9FC0E0_0%,#BFD8EC_42%,#EEF3F8_78%,#F4F7FA_100%)]" />
+        <div className="pointer-events-none absolute -top-40 right-[-10%] h-[640px] w-[640px] rounded-full bg-[#FFF8E7]/15 blur-3xl" />
+        <div className="pointer-events-none absolute right-[2%] top-[18%] h-[560px] w-[560px] rounded-full bg-cyan-200/18 blur-3xl" />
+        <div className="pointer-events-none absolute right-[6%] top-[31%] hidden h-[420px] w-[420px] rounded-full bg-sky-300/20 blur-3xl lg:block" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_74%_43%,rgba(255,255,255,0.34),transparent_34%),radial-gradient(circle_at_58%_16%,rgba(255,255,255,0.18),transparent_44%)]" />
+        <svg
+          aria-hidden="true"
+          className="pointer-events-none absolute right-[30%] top-[28%] hidden h-[280px] w-[380px] text-[#648CC8]/[0.08] lg:block"
+          viewBox="0 0 380 280"
+          fill="none"
+        >
+          <path d="M10 118h95c22 0 22-22 22-22V56c0-22 22-22 22-22h114" stroke="currentColor" />
+          <path d="M74 166h104c24 0 24-24 24-24v-20c0-24 24-24 24-24h140" stroke="currentColor" />
+          <path d="M172 230v-54c0-22 22-22 22-22h92c22 0 22-22 22-22V74" stroke="currentColor" />
+          <path d="M106 118v74c0 20 20 20 20 20h58" stroke="currentColor" />
+        </svg>
+        <svg
+          aria-hidden="true"
+          className="pointer-events-none absolute bottom-[9%] left-[-3%] hidden h-[190px] w-[260px] text-[#648CC8]/[0.08] md:block"
+          viewBox="0 0 260 190"
+          fill="none"
+        >
+          <path d="M0 70h76c20 0 20 20 20 20v34c0 20 20 20 20 20h118" stroke="currentColor" />
+          <path d="M38 24h86c18 0 18 18 18 18v72" stroke="currentColor" />
+          <path d="M0 132h54c18 0 18-18 18-18V88" stroke="currentColor" />
+        </svg>
+        <div className="pointer-events-none absolute inset-0 bg-white/14" />
 
         <div className="relative z-10 flex h-full flex-col">
           <Navbar />
 
           <div className="flex flex-1 items-center justify-center px-4 py-8 sm:px-8 lg:py-10">
-            <div className="grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[1fr_360px] lg:gap-12">
+            <div className="grid w-full max-w-[1280px] items-center gap-8 lg:grid-cols-[1fr_360px] lg:gap-12">
               <div className="-translate-y-6 text-center lg:-translate-y-12 lg:text-left xl:-translate-y-16">
                 <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-[14px] font-semibold leading-5 tracking-[-0.02em] text-neutral-900 shadow-sm">
                   <span className="h-2 w-2 rounded-full bg-[#ef4d23]" />
@@ -145,19 +161,20 @@ export default function App() {
                 <h1
                   className="mt-5 max-w-4xl text-neutral-800 sm:mt-6"
                   style={{
-                    fontFamily: "'Host Grotesk', 'Inter', sans-serif",
-                    fontSize: "clamp(52px, 6.4vw, 92px)",
-                    lineHeight: 1.02,
+                    fontFamily: "var(--font-geist-sans), -apple-system, system-ui, sans-serif",
+                    fontSize: "clamp(56px, 7vw, 96px)",
+                    lineHeight: 1,
                     fontWeight: 700,
-                    letterSpacing: "-0.045em",
+                    letterSpacing: "-0.04em",
+                    color: "#0A0A0A",
                   }}
                 >
                   Shaping{" "}
-                  <span className="relative inline-block font-semibold text-neutral-800">
+                  <span className="relative inline-block font-semibold text-[#0A0A0A]">
                     Discipline
                     <span
                       aria-hidden="true"
-                      className="absolute right-0 -bottom-1 left-0 h-2 rounded-full bg-[#ef4d23]/25"
+                      className="absolute right-0 bottom-1 left-0 h-1 rounded-full bg-[#E8806B]/80"
                     />
                   </span>
                   <br />
@@ -166,14 +183,14 @@ export default function App() {
 
                 <p
                   className="mx-auto mt-5 max-w-xl px-2 font-medium leading-7 tracking-[-0.015em] text-neutral-700 sm:mt-6 lg:mx-0 lg:px-0"
-                  style={{ fontSize: "clamp(16px, 1.5vw, 18px)" }}
+                  style={{ fontSize: "clamp(18px, 1.55vw, 20px)", lineHeight: 1.5, fontWeight: 400, color: "#3A3A3A" }}
                 >
                   The AI accountability coach that checks in through Telegram.
                 </p>
 
                 <a
                   href={telegramHref}
-                  className="mt-7 inline-flex min-w-[232px] items-center justify-between gap-3 rounded-full bg-[#229ED9] py-2.5 pr-2 pl-5 text-[16px] font-semibold leading-6 tracking-[-0.02em] text-white shadow-sm shadow-sky-900/15 sm:mt-8 sm:pl-6"
+                  className="mt-7 inline-flex min-w-[232px] items-center justify-between gap-3 rounded-2xl bg-[#229ED9] py-3 pr-2.5 pl-5 text-[17px] font-semibold leading-6 tracking-[-0.02em] text-white shadow-[0_8px_24px_rgba(34,158,217,0.25)] sm:mt-8 sm:pl-6"
                 >
                   <span className="inline-flex items-center gap-2 text-white">
                     <TelegramLogo />
@@ -185,7 +202,7 @@ export default function App() {
                 </a>
               </div>
 
-              <div className="hidden justify-center lg:flex">
+              <div className="hidden justify-center drop-shadow-[0_30px_80px_rgba(20,50,100,0.15)] lg:flex">
                 <MoggedAIPhoneMockup />
               </div>
             </div>

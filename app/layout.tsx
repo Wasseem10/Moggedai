@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MoggedAI - AI Accountability in Telegram",
-  description: "An AI coach that checks in through Telegram, holds you accountable, and keeps you on track.",
+  title: "StayPinged - Your Assistant Brain in Telegram",
+  description: "A personal AI memory for reminders, follow-ups, and the details you do not want to carry alone.",
 };
 
 export default function RootLayout({

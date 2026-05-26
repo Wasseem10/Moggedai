@@ -15,28 +15,28 @@ const messages: Bubble[] = [
   {
     id: "m1",
     from: "bot",
-    text: "yo it's 7am. you said gym before work today. clock's running ⏰",
+    text: "quick memory check: you wanted to follow up with Alex before noon.",
   },
   {
     id: "m2",
     from: "user",
-    text: "walking in right now",
+    text: "push it to 2pm and remind me what it's about",
   },
   {
     id: "m3",
     from: "bot",
-    text: "let's go 🔥 6 day streak. don't you dare break it.",
+    text: "done. it's about the beta invite, pricing note, and Friday demo.",
   },
   {
     id: "m4",
     from: "user",
-    text: "done. PR on bench too 💪",
+    text: "also remember to book the dentist this week",
   },
   {
     id: "m5",
     from: "bot",
-    text: "GOAT behavior. 7 days = legendary 🏆",
-    badge: "🔥 6 day streak",
+    text: "saved. I'll ping you tomorrow morning with both.",
+    badge: "🧠 2 things remembered",
   },
 ];
 
@@ -92,7 +92,7 @@ function MicIcon() {
 
 function TypingIndicator() {
   return (
-    <div className="typing-bubble" aria-label="MoggedAI is typing">
+    <div className="typing-bubble" aria-label="StayPinged is typing">
       <span />
       <span />
       <span />
@@ -110,7 +110,7 @@ function MessageBubble({ message }: { message: Bubble }) {
         <div className={`bubble ${isUser ? "user-bubble" : "bot-bubble"}`}>
           {message.text}
         </div>
-        {message.badge && <div className="streak-badge">{message.badge}</div>}
+        {message.badge && <div className="memory-badge">{message.badge}</div>}
       </div>
     </div>
   );
@@ -130,7 +130,7 @@ export default function MoggedAIPhoneMockup() {
   const visibleMessages = step >= 5 ? messages : messages.slice(0, step);
 
   return (
-    <div className="phone-stage" aria-label="Animated MoggedAI iMessage preview">
+    <div className="phone-stage" aria-label="Animated StayPinged iMessage preview">
       <div className="side-button mute" />
       <div className="side-button volume volume-up" />
       <div className="side-button volume volume-down" />
@@ -154,7 +154,7 @@ export default function MoggedAIPhoneMockup() {
                 <span className="back">‹</span>
                 <div className="avatar">🤖</div>
                 <div>
-                  <p>MoggedAI</p>
+                  <p>StayPinged</p>
                   <span>iMessage</span>
                 </div>
               </div>
@@ -442,7 +442,7 @@ export default function MoggedAIPhoneMockup() {
           color: #ffffff;
         }
 
-        .streak-badge {
+        .memory-badge {
           display: inline-flex;
           margin-top: 6px;
           margin-left: 2px;

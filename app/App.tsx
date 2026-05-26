@@ -9,18 +9,18 @@ const telegramHref =
 const steps = [
   {
     label: "01",
-    title: "Set your goals",
-    body: "Pick what you need to stay accountable to: gym, studying, work, diet, or your own custom target.",
+    title: "Tell it what matters",
+    body: "Drop in reminders, tasks, follow-ups, deadlines, ideas, and small details you do not want to keep in your head.",
   },
   {
     label: "02",
-    title: "Choose the pressure",
-    body: "Direct, brutal, or savage. Mogged AI adapts the check-ins to the style that actually moves you.",
+    title: "It remembers the context",
+    body: "StayPinged keeps the thread of what you said, when it matters, and what needs to happen next.",
   },
   {
     label: "03",
-    title: "Get checked on",
-    body: "Telegram reminders come to you throughout the day. Reply DONE, explain what happened, or keep the coach updated.",
+    title: "It pings you back",
+    body: "Telegram check-ins show up when they are useful, so your assistant brain follows up without you reopening an app.",
   },
 ];
 
@@ -28,46 +28,46 @@ const whoCards = [
   {
     number: "01 / 03",
     title: "Students",
-    body: "For the study sessions that turn into TikTok breaks. We quiz you, keep you off your phone, and get you through finals week without the all-nighter.",
-    quote: "Check in on my studying every hour from 4-9pm.",
-    tags: "USE CASE - EXAMS - ESSAYS - LOCK-IN",
+    body: "Remember exams, essays, office hours, forms, and the small admin tasks that always slip until the last minute.",
+    quote: "Remind me tomorrow to email my professor and start the econ outline.",
+    tags: "USE CASE - CLASSES - DEADLINES - ADMIN",
   },
   {
     number: "02 / 03",
     title: "Builders",
-    body: "For the side project collecting dust. We text you to ship one thing every day because momentum beats motivation.",
-    quote: "Make sure I push code before bed.",
-    tags: "USE CASE - STARTUPS - PROJECTS - SHIPPING",
+    body: "Keep product ideas, bug follow-ups, launch tasks, and customer promises from getting buried in your notes.",
+    quote: "Ping me Friday to follow up with the beta users and ship the pricing fix.",
+    tags: "USE CASE - STARTUPS - FOLLOW-UPS - LAUNCHES",
   },
   {
     number: "03 / 03",
-    title: "Athletes",
-    body: "For the 6am workouts you keep sleeping through. We wake you up, hold your streak, and call you out when you try to skip.",
-    quote: "Text me at 5:45. Don't let me snooze.",
-    tags: "USE CASE - GYM - RUNS - NUTRITION",
+    title: "Busy people",
+    body: "Handle errands, appointments, renewals, people to reply to, and the life logistics your calendar never fully catches.",
+    quote: "Remind me after lunch to book the appointment and text Sam back.",
+    tags: "USE CASE - ERRANDS - PEOPLE - LIFE ADMIN",
   },
 ];
 
 const faqs = [
   {
-    question: "How does Mogged AI work?",
+    question: "How does StayPinged work?",
     answer:
-      "You connect through Telegram, set the goals you care about, and Mogged AI checks in with you so you stay accountable.",
+      "You send it what you need remembered, and it turns that into useful Telegram follow-ups with the context still attached.",
   },
   {
     question: "Do I need to open the website every day?",
     answer:
-      "No. The dashboard is there when you want to manage goals, but the accountability happens in Telegram.",
+      "No. The website is for setup and managing things. The actual assistant brain lives where you already check messages.",
   },
   {
     question: "Where is my dashboard?",
     answer:
-      "Use the Dashboard link in the navbar or the dashboard section below. Signed-in users go straight to their goal tracker.",
+      "Use the Dashboard link in the navbar to review, edit, and manage the things StayPinged is remembering for you.",
   },
   {
     question: "What do I reply in Telegram?",
     answer:
-      "Reply DONE when you complete a goal, or answer naturally if you missed it. The coach uses that context for future check-ins.",
+      "Reply naturally. Add more context, reschedule, mark something done, or ask it to remember a new detail.",
   },
 ];
 
@@ -147,23 +147,24 @@ export default function App() {
                     letterSpacing: "-0.045em",
                   }}
                 >
-                  Shaping{" "}
+                  Your{" "}
                   <span className="relative inline-block font-semibold text-neutral-800">
-                    Discipline
+                    Assistant Brain
                     <span
                       aria-hidden="true"
                       className="absolute right-0 -bottom-1 left-0 h-2 rounded-full bg-[#ef4d23]/25"
                     />
                   </span>
                   <br />
-                  of tomorrow
+                  in Telegram
                 </h1>
 
                 <p
                   className="mx-auto mt-5 max-w-xl px-2 font-medium leading-7 tracking-[-0.015em] text-neutral-700 sm:mt-6 lg:mx-0 lg:px-0"
                   style={{ fontSize: "clamp(16px, 1.5vw, 18px)" }}
                 >
-                  The AI accountability coach that checks in through Telegram.
+                  A personal AI memory that remembers what matters and pings
+                  you before it slips.
                 </p>
 
                 <a
@@ -215,7 +216,7 @@ export default function App() {
             Who it's for
           </p>
           <h2 className="mt-4 text-[44px] font-bold leading-[1.02] tracking-[-0.045em] text-[#0b0f1a] sm:text-[64px]">
-            Built for anyone who{" "}
+            Built for people with{" "}
             <span
               className="text-[#ef4d23]"
               style={{
@@ -224,12 +225,12 @@ export default function App() {
                 fontWeight: 400,
               }}
             >
-              follows through.
+              too many tabs open.
             </span>
           </h2>
           <p className="mt-5 max-w-2xl text-[16px] font-medium leading-7 tracking-[-0.015em] text-neutral-600">
-            People already using Mogged AI to stop missing the thing that
-            actually matters.
+            StayPinged acts like an external brain for the details, follow-ups,
+            and tiny commitments that are easy to lose.
           </p>
         </div>
 
@@ -259,7 +260,8 @@ export default function App() {
 
         <div className="mt-9 flex flex-wrap items-center gap-3">
           <p className="mr-auto max-w-xl text-sm leading-6 text-neutral-500">
-            One hits too close? Good. That's exactly who we built this for.
+            If it is important enough to remember, it is important enough to
+            get pinged back at the right time.
           </p>
           <a
             href={telegramHref}
@@ -288,11 +290,11 @@ export default function App() {
               FAQ
             </p>
             <h2 className="mt-4 max-w-xl text-[44px] font-bold leading-[1.02] tracking-[-0.045em] text-[#0b0f1a] sm:text-[64px]">
-              Clean answers before you commit.
+              Clean answers before you hand it your memory.
             </h2>
             <p className="mt-5 max-w-md text-[16px] font-medium leading-7 tracking-[-0.015em] text-neutral-600">
-              Mogged AI is built to stay quiet when you are moving and direct
-              when you are slipping.
+              StayPinged is built to feel like a lightweight personal assistant
+              in Telegram, not another dashboard you have to babysit.
             </p>
             <a
               href={telegramHref}
@@ -332,11 +334,11 @@ export default function App() {
               href="#"
               className="inline-flex items-center text-[24px] font-bold leading-none tracking-[-0.035em] text-[#0b0f1a]"
             >
-              MOGGED<span className="text-[#229ED9]">AI</span>
+              Stay<span className="text-[#229ED9]">Pinged</span>
             </a>
             <p className="mt-5 max-w-sm text-[16px] font-medium leading-7 tracking-[-0.015em] text-neutral-600">
-              The AI accountability coach that keeps you honest in Telegram.
-              Set the goal once and stay accountable.
+              A personal assistant brain in Telegram for reminders, follow-ups,
+              and the details you do not want to carry alone.
             </p>
             <div className="mt-6 flex flex-wrap gap-2">
               <a
@@ -380,7 +382,7 @@ export default function App() {
 
         <div className="mt-10 border-t border-neutral-300/70 pt-6 sm:mt-12">
           <div className="flex flex-col gap-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-neutral-400 sm:flex-row sm:items-center sm:justify-between">
-            <p>&copy; 2026 MoggedAI. All rights reserved.</p>
+            <p>&copy; 2026 StayPinged. All rights reserved.</p>
             <div className="flex flex-wrap gap-x-5 gap-y-2">
               <a href="https://www.instagram.com/" className="hover:text-[#0b0f1a]">
                 IG

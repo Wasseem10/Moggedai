@@ -136,7 +136,7 @@ export default function App() {
 
           <div className="flex flex-1 items-center justify-center px-4 py-8 sm:px-8 lg:py-10">
             <div className="grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[1fr_360px] lg:gap-12">
-              <div className="-translate-y-6 text-center lg:-translate-y-12 lg:text-left xl:-translate-y-16">
+              <div className="-translate-y-14 text-center lg:-translate-y-24 lg:text-left xl:-translate-y-28">
                 <h1
                   className="max-w-4xl text-neutral-800"
                   style={{

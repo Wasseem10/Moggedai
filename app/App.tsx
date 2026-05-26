@@ -150,10 +150,6 @@ export default function App() {
                   The AI That Keeps{" "}
                   <span className="relative inline-block font-semibold text-neutral-800">
                     You On Track.
-                    <span
-                      aria-hidden="true"
-                      className="absolute right-0 -bottom-1 left-0 h-2 rounded-full bg-[#ef4d23]/25"
-                    />
                   </span>
                 </h1>
 

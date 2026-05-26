@@ -53,7 +53,7 @@ export default function Navbar() {
           href="#"
           className="shrink-0 text-[22px] font-bold leading-none tracking-[-0.04em] text-neutral-950"
         >
-          Stay<span className="text-[#229ED9]">Pinged</span>
+          StayPinged
         </a>
 
         <div className="hidden items-center gap-7 md:flex">

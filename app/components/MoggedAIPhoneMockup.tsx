@@ -191,13 +191,9 @@ export default function MoggedAIPhoneMockup() {
         .phone-stage {
           position: relative;
           width: min(336px, 78vw);
-          padding: 18px;
+          padding: 0;
           border-radius: 60px;
-          background:
-            radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.95), transparent 28%),
-            radial-gradient(circle at 80% 20%, rgba(34, 158, 217, 0.18), transparent 34%),
-            radial-gradient(circle at 50% 100%, rgba(239, 77, 35, 0.14), transparent 42%),
-            linear-gradient(145deg, rgba(255,255,255,0.54), rgba(255,255,255,0.18));
+          background: transparent;
         }
 
         .phone-frame {
@@ -261,13 +257,13 @@ export default function MoggedAIPhoneMockup() {
         }
 
         .mute {
-          left: 10px;
+          left: -5px;
           top: 122px;
           height: 34px;
         }
 
         .volume {
-          left: 10px;
+          left: -5px;
           height: 58px;
         }
 
@@ -280,7 +276,7 @@ export default function MoggedAIPhoneMockup() {
         }
 
         .power {
-          right: 10px;
+          right: -5px;
           top: 204px;
           height: 86px;
         }
@@ -557,7 +553,6 @@ export default function MoggedAIPhoneMockup() {
         @media (max-width: 640px) {
           .phone-stage {
             width: min(310px, 88vw);
-            padding: 12px;
           }
 
           .phone-screen {

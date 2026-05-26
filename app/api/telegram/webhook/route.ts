@@ -23,10 +23,30 @@ type RecentTelegramMessage = {
   message_text: string
 }
 
+const memoryIntentPattern =
+  /\b(remember|remind|ping|follow up|track|goal|goals|study|gym|deadline|appointment|errand|todo|to-do|task|don't let me forget|dont let me forget|keep me on track)\b/i
+
 function requireEnv(name: string): string {
   const value = process.env[name]
   if (!value) throw new Error(`${name} is not set`)
   return value
+}
+
+function getCurrentDateLabel(): string {
+  return new Intl.DateTimeFormat('en-US', {
+    dateStyle: 'full',
+    timeZone: 'America/New_York',
+  }).format(new Date())
+}
+
+function shouldSaveToMemory(text: string): boolean {
+  return memoryIntentPattern.test(text)
+}
+
+function mergeMemory(currentMemory: string | null, userMessage: string): string {
+  if (!currentMemory) return userMessage
+  if (currentMemory.toLowerCase().includes(userMessage.toLowerCase())) return currentMemory
+  return `${currentMemory}\n- ${userMessage}`
 }
 
 async function sendTelegramMessage(chatId: number, text: string) {
@@ -82,20 +102,32 @@ async function generateAssistantReply(memory: string, userMessage: string, recen
     .map((message) => `${message.role}: ${message.message_text}`)
     .join('\n')
 
-  const prompt = `you are StayPinged, a personal assistant brain inside Telegram.
+  const prompt = `you are StayPinged, a friendly personal assistant inside Telegram.
 
-your job:
-- remember small details, tasks, follow-ups, dates, people, errands, ideas, and context
-- help the user offload mental clutter
-- be concise, useful, calm, and natural
-- sound like a smart personal assistant texting, not a motivational coach
-- if they ask you to remember something, confirm what you saved
-- if they ask to move/reschedule something, acknowledge the new timing
-- if they ask what something was about, summarize from memory/context
+today is ${getCurrentDateLabel()}.
+
+core identity:
+- you help with questions, reminders, goals, errands, studying, gym plans, follow-ups, and everyday decisions
+- you are useful first: answer normal questions directly, even if they are not about reminders
+- you are also an assistant brain: if the user wants help staying on track, help them pick the first thing to tackle
+
+style:
+- text like a sharp, warm assistant, not a corporate chatbot
+- casual and natural, like: "yeah, absolutely — both of those are right in my wheelhouse"
+- use lowercase most of the time, but keep names, places, titles, and acronyms properly capitalized
+- keep it short: usually 1-3 text-message sized sentences
+- occasional light personality is okay, but do not overdo emojis
+- do not hype, shame, pressure, or sound like a motivational coach
+
+behavior rules:
+- if the user asks a factual question, answer it directly
+- if they ask who the current president of the united states is, answer: "Donald Trump is the current president of the United States."
+- if they ask "what can you do?" explain by asking for something they'd normally google, text a friend about, or need reminded about
+- if they ask about goals/studying/gym, say yes and ask which goal they want to tackle first
+- if they ask you to remember/remind/ping/track something, confirm briefly and ask for timing if needed
 - if timing is vague, ask one short clarifying question
-- do not hype them up, shame them, pressure them, or talk about streaks
-- do not say you completed actions outside Telegram unless the system can actually do them
-- write in lowercase unless a name/title needs capitalization
+- if you cannot actually complete an external action, be honest and offer the next useful step
+- do not say "as an AI language model"
 
 saved memory / current focus:
 "${memory || 'nothing saved yet'}"
@@ -106,7 +138,7 @@ ${conversation || '(none)'}
 latest user message:
 "${userMessage}"
 
-reply in 1-2 short sentences. reply only with the message.`
+reply only with the message.`
 
   const result = await model.generateContent(prompt)
   return result.response.text().trim()
@@ -152,7 +184,7 @@ export async function POST(req: NextRequest) {
       )
       await sendAndRemember(
         chatId,
-        "i'm here. send me anything you want me to remember, track, or ping you about."
+        "i'm a friendly personal assistant here to take things off your plate. ask me anything, or send me something you want remembered.\n\nbtw, what's your name?"
       )
       return NextResponse.json({ success: true })
     }
@@ -176,17 +208,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true })
     }
 
-    if (!user.goal || user.state === 'awaiting_goal' || user.state === 'awaiting_memory') {
+    if (shouldSaveToMemory(text)) {
+      const nextMemory = mergeMemory(user.goal, text)
       await db.query(
         `UPDATE telegram_users SET goal = $1, state = 'ready', active = true, updated_at = NOW() WHERE chat_id = $2`,
-        [text, chatId]
+        [nextMemory, chatId]
       )
-      await sendAndRemember(chatId, `saved. i'll keep track of: ${text}`)
-      return NextResponse.json({ success: true })
     }
 
     const recentMessages = await getRecentMessages(chatId)
-    const reply = await generateAssistantReply(user.goal, text, recentMessages)
+    const { rows: freshRows } = await db.query(
+      `SELECT goal FROM telegram_users WHERE chat_id = $1`,
+      [chatId]
+    )
+    const memory = freshRows[0]?.goal || user.goal || ''
+    const reply = await generateAssistantReply(memory, text, recentMessages)
     await sendAndRemember(chatId, reply)
     return NextResponse.json({ success: true })
   } catch (err) {

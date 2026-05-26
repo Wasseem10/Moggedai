@@ -6,6 +6,8 @@ const telegramHref =
   process.env.NEXT_PUBLIC_TELEGRAM_BOT_URL ||
   "https://t.me/StaypingedBot?start=website";
 
+const imessageHref = "sms:";
+
 const assistantRows = [
   {
     label: "1",
@@ -117,6 +119,22 @@ function TelegramLogo() {
   );
 }
 
+function IMessageLogo() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-5 w-5 shrink-0"
+    >
+      <circle cx="12" cy="12" r="11" fill="#34C759" />
+      <path
+        d="M6.8 11.7c0-3 2.5-5.3 5.7-5.3s5.7 2.3 5.7 5.3-2.5 5.3-5.7 5.3c-.5 0-1-.1-1.5-.2l-3.1 1.3.8-2.4c-1.2-1-1.9-2.4-1.9-4Z"
+        fill="white"
+      />
+    </svg>
+  );
+}
+
 export default function App() {
   return (
     <main
@@ -166,18 +184,27 @@ export default function App() {
                   you before it slips.
                 </p>
 
-                <a
-                  href={telegramHref}
-                  className="mt-7 inline-flex min-h-12 w-full max-w-[260px] items-center justify-between gap-3 rounded-full bg-[#229ED9] py-2.5 pr-2 pl-5 text-[16px] font-semibold leading-6 tracking-[-0.02em] text-white shadow-sm shadow-sky-900/15 sm:mt-8 sm:w-auto sm:min-w-[232px] sm:pl-6"
-                >
-                  <span className="inline-flex items-center gap-2 text-white">
-                    <TelegramLogo />
-                    Start on Telegram
-                  </span>
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/15 sm:h-7 sm:w-7">
-                    <ChevronRight className="h-4 w-4" strokeWidth={2} />
-                  </span>
-                </a>
+                <div className="mt-7 flex flex-col items-center gap-3 sm:mt-8 sm:flex-row sm:justify-center lg:justify-start">
+                  <a
+                    href={telegramHref}
+                    className="inline-flex min-h-12 w-full max-w-[260px] items-center justify-between gap-3 rounded-full bg-[#229ED9] py-2.5 pr-2 pl-5 text-[16px] font-semibold leading-6 tracking-[-0.02em] text-white shadow-sm shadow-sky-900/15 sm:w-auto sm:min-w-[232px] sm:pl-6"
+                  >
+                    <span className="inline-flex items-center gap-2 text-white">
+                      <TelegramLogo />
+                      Start on Telegram
+                    </span>
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/15 sm:h-7 sm:w-7">
+                      <ChevronRight className="h-4 w-4" strokeWidth={2} />
+                    </span>
+                  </a>
+                  <a
+                    href={imessageHref}
+                    className="inline-flex min-h-12 w-full max-w-[260px] items-center justify-center gap-2 rounded-full border border-white/70 bg-white/72 px-5 py-2.5 text-[16px] font-semibold leading-6 tracking-[-0.02em] text-[#0b0f1a] shadow-[0_12px_34px_rgba(20,50,100,0.12)] backdrop-blur-xl sm:w-auto sm:min-w-[164px]"
+                  >
+                    <IMessageLogo />
+                    iMessage
+                  </a>
+                </div>
               </div>
 
               <div className="hidden justify-center lg:flex">

@@ -116,7 +116,7 @@ export default function App() {
   return (
     <main
       className="min-h-screen w-full bg-[#ededed] p-3 sm:p-4"
-      style={{ fontFamily: "'Inter', sans-serif" }}
+      style={{ fontFamily: "'Host Grotesk', 'Inter', sans-serif" }}
     >
       <section className="relative h-[calc(100vh-24px)] w-full overflow-hidden rounded-2xl bg-[#d9d9d9] sm:h-[calc(100vh-32px)] sm:rounded-3xl">
         <div
@@ -137,7 +137,7 @@ export default function App() {
           <div className="flex flex-1 items-center justify-center px-4 py-8 sm:px-8 lg:py-10">
             <div className="grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[1fr_360px] lg:gap-12">
               <div className="-translate-y-6 text-center lg:-translate-y-12 lg:text-left xl:-translate-y-16">
-                <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-[13px] font-medium text-neutral-900 shadow-sm">
+                <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-[14px] font-semibold leading-5 tracking-[-0.02em] text-neutral-900 shadow-sm">
                   <span className="h-2 w-2 rounded-full bg-[#ef4d23]" />
                   Mogged AI
                 </div>
@@ -145,11 +145,11 @@ export default function App() {
                 <h1
                   className="mt-5 max-w-4xl text-neutral-800 sm:mt-6"
                   style={{
-                    fontFamily: "var(--font-geist-sans), Inter, sans-serif",
-                    fontSize: "clamp(40px, 7vw, 86px)",
-                    lineHeight: 0.98,
-                    fontWeight: 600,
-                    letterSpacing: "-0.02em",
+                    fontFamily: "'Host Grotesk', 'Inter', sans-serif",
+                    fontSize: "clamp(52px, 6.4vw, 92px)",
+                    lineHeight: 1.02,
+                    fontWeight: 700,
+                    letterSpacing: "-0.045em",
                   }}
                 >
                   Shaping{" "}
@@ -165,15 +165,15 @@ export default function App() {
                 </h1>
 
                 <p
-                  className="mx-auto mt-4 max-w-xl px-2 text-neutral-700 sm:mt-6 lg:mx-0 lg:px-0"
-                  style={{ fontSize: "clamp(14px, 2vw, 17px)" }}
+                  className="mx-auto mt-5 max-w-xl px-2 font-medium leading-7 tracking-[-0.015em] text-neutral-700 sm:mt-6 lg:mx-0 lg:px-0"
+                  style={{ fontSize: "clamp(16px, 1.5vw, 18px)" }}
                 >
                   The AI accountability coach that checks in through Telegram.
                 </p>
 
                 <a
                   href={telegramHref}
-                  className="mt-6 inline-flex min-w-[220px] items-center justify-between gap-3 rounded-full bg-[#229ED9] py-2 pr-2 pl-5 text-[14px] font-semibold text-white shadow-sm shadow-sky-900/15 sm:mt-8 sm:py-2.5 sm:pl-6"
+                  className="mt-7 inline-flex min-w-[232px] items-center justify-between gap-3 rounded-full bg-[#229ED9] py-2.5 pr-2 pl-5 text-[16px] font-semibold leading-6 tracking-[-0.02em] text-white shadow-sm shadow-sky-900/15 sm:mt-8 sm:pl-6"
                 >
                   <span className="inline-flex items-center gap-2 text-white">
                     <TelegramLogo />
@@ -202,11 +202,11 @@ export default function App() {
             key={step.label}
             className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm"
           >
-            <p className="text-[13px] font-semibold text-[#ef4d23]">{step.label}</p>
-            <h2 className="mt-4 text-2xl font-semibold tracking-tight text-[#0b0f1a]">
+            <p className="text-[13px] font-semibold leading-5 tracking-[-0.02em] text-[#ef4d23]">{step.label}</p>
+            <h2 className="mt-4 text-[28px] font-bold leading-[1.08] tracking-[-0.04em] text-[#0b0f1a]">
               {step.title}
             </h2>
-            <p className="mt-3 text-sm leading-6 text-neutral-600">{step.body}</p>
+            <p className="mt-3 text-[16px] font-medium leading-7 tracking-[-0.015em] text-neutral-600">{step.body}</p>
           </article>
         ))}
       </section>
@@ -219,7 +219,7 @@ export default function App() {
           <p className="text-[12px] font-semibold uppercase tracking-[0.24em] text-[#ef4d23]">
             Who it's for
           </p>
-          <h2 className="mt-4 text-4xl font-semibold leading-[0.95] tracking-tight text-[#0b0f1a] sm:text-6xl">
+          <h2 className="mt-4 text-[44px] font-bold leading-[1.02] tracking-[-0.045em] text-[#0b0f1a] sm:text-[64px]">
             Built for anyone who{" "}
             <span
               className="text-[#ef4d23]"
@@ -232,7 +232,7 @@ export default function App() {
               follows through.
             </span>
           </h2>
-          <p className="mt-5 max-w-2xl text-base leading-7 text-neutral-600">
+          <p className="mt-5 max-w-2xl text-[16px] font-medium leading-7 tracking-[-0.015em] text-neutral-600">
             People already using Mogged AI to stop missing the thing that
             actually matters.
           </p>
@@ -248,11 +248,11 @@ export default function App() {
               <p className="text-[12px] font-semibold tracking-[0.18em] text-neutral-400">
                 {card.number}
               </p>
-              <h3 className="mt-5 text-3xl font-semibold tracking-tight">
+              <h3 className="mt-5 text-[32px] font-bold leading-[1.08] tracking-[-0.04em]">
                 {card.title}
               </h3>
-              <p className="mt-5 text-sm leading-7 text-neutral-600">{card.body}</p>
-              <blockquote className="mt-6 border-l-2 border-[#ef4d23] pl-4 text-[15px] italic leading-7 text-neutral-900">
+              <p className="mt-5 text-[16px] font-medium leading-7 tracking-[-0.015em] text-neutral-600">{card.body}</p>
+              <blockquote className="mt-6 border-l-2 border-[#ef4d23] pl-4 text-[16px] italic leading-7 tracking-[-0.015em] text-neutral-900">
                 "{card.quote}"
               </blockquote>
               <div className="mt-5 border-t border-neutral-200 pt-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-neutral-400">
@@ -292,10 +292,10 @@ export default function App() {
             <p className="text-[12px] font-semibold uppercase tracking-[0.24em] text-[#ef4d23]">
               FAQ
             </p>
-            <h2 className="mt-4 max-w-xl text-4xl font-semibold leading-[0.96] tracking-tight text-[#0b0f1a] sm:text-6xl">
+            <h2 className="mt-4 max-w-xl text-[44px] font-bold leading-[1.02] tracking-[-0.045em] text-[#0b0f1a] sm:text-[64px]">
               Clean answers before you commit.
             </h2>
-            <p className="mt-5 max-w-md text-base leading-7 text-neutral-600">
+            <p className="mt-5 max-w-md text-[16px] font-medium leading-7 tracking-[-0.015em] text-neutral-600">
               Mogged AI is built to stay quiet when you are moving and direct
               when you are slipping.
             </p>
@@ -315,13 +315,13 @@ export default function App() {
                 className="group border-t border-neutral-200 px-5 py-5 first:border-t-0 sm:px-7"
                 open={index === 0}
               >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-left text-lg font-semibold tracking-tight text-[#0b0f1a] [&::-webkit-details-marker]:hidden">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-left text-[20px] font-bold leading-7 tracking-[-0.035em] text-[#0b0f1a] [&::-webkit-details-marker]:hidden">
                   {faq.question}
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-xl font-light text-neutral-500 transition-transform group-open:rotate-45">
                     +
                   </span>
                 </summary>
-                <p className="max-w-2xl pt-3 text-sm leading-7 text-neutral-600">
+                <p className="max-w-2xl pt-3 text-[16px] font-medium leading-7 tracking-[-0.015em] text-neutral-600">
                   {faq.answer}
                 </p>
               </details>
@@ -335,11 +335,11 @@ export default function App() {
           <div>
             <a
               href="#"
-              className="inline-flex items-center text-xl font-bold tracking-[0.2em] text-[#0b0f1a]"
+              className="inline-flex items-center text-[24px] font-bold leading-none tracking-[-0.035em] text-[#0b0f1a]"
             >
               MOGGED<span className="text-[#229ED9]">AI</span>
             </a>
-            <p className="mt-5 max-w-sm text-sm leading-7 text-neutral-600">
+            <p className="mt-5 max-w-sm text-[16px] font-medium leading-7 tracking-[-0.015em] text-neutral-600">
               The AI accountability coach that keeps you honest in Telegram.
               Set the goal once and stay accountable.
             </p>

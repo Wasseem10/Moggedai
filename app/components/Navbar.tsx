@@ -47,7 +47,7 @@ function NavLink({ item, mobile = false }: { item: string; mobile?: boolean }) {
       href={href}
       className={[
         "inline-flex items-center gap-1.5 font-medium",
-        mobile ? "justify-between rounded-xl px-3 py-2 text-[14px]" : "text-[14px]",
+        mobile ? "justify-between rounded-xl px-3 py-2 text-[15px]" : "text-[15px]",
         item === "Pages" ? "text-[#ef4d23]" : "text-neutral-950",
       ].join(" ")}
     >
@@ -70,10 +70,10 @@ export default function Navbar() {
 
   return (
     <header className="flex justify-center px-3 pt-4 sm:px-4 sm:pt-6">
-      <nav className="relative flex w-full max-w-[760px] items-center gap-3 rounded-full border border-neutral-200 bg-white py-2 pr-2 pl-2 shadow-sm">
+      <nav className="relative flex w-full max-w-[820px] items-center gap-4 rounded-full border border-neutral-200 bg-white py-2.5 pr-2.5 pl-2.5 shadow-sm">
         <FlowerLogo />
 
-        <div className="hidden items-center gap-6 md:flex">
+        <div className="hidden items-center gap-7 md:flex">
           {navItems.map((item) => (
             <NavLink key={item} item={item} />
           ))}
@@ -89,7 +89,7 @@ export default function Navbar() {
 
           <a
             href="/dashboard"
-            className="inline-flex items-center gap-2 rounded-full bg-[#ef4d23] py-1.5 pr-1.5 pl-4 text-[13px] font-semibold text-white sm:text-[14px] md:pl-5"
+            className="inline-flex items-center gap-2 rounded-full bg-[#ef4d23] py-2 pr-1.5 pl-5 text-[15px] font-semibold leading-6 tracking-[-0.02em] text-white md:pl-5"
           >
             <span className="hidden md:inline">Open dashboard</span>
             <span className="md:hidden">Dashboard</span>

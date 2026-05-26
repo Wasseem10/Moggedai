@@ -1,4 +1,5 @@
 import { ChevronRight } from "lucide-react";
+import MoggedAIPhoneMockup from "./components/MoggedAIPhoneMockup";
 import Navbar from "./components/Navbar";
 
 const telegramHref =
@@ -131,52 +132,60 @@ export default function App() {
         <div className="relative z-10 flex h-full flex-col">
           <Navbar />
 
-          <div className="flex flex-1 flex-col items-center px-4 pt-10 pb-8 text-center sm:pt-16 sm:pb-12">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-[13px] font-medium text-neutral-900 shadow-sm">
-              <span className="h-2 w-2 rounded-full bg-[#ef4d23]" />
-              Mogged AI
+          <div className="flex flex-1 items-center justify-center px-4 py-8 sm:px-8 lg:py-10">
+            <div className="grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[1fr_360px] lg:gap-12">
+              <div className="text-center lg:text-left">
+                <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-[13px] font-medium text-neutral-900 shadow-sm">
+                  <span className="h-2 w-2 rounded-full bg-[#ef4d23]" />
+                  Mogged AI
+                </div>
+
+                <h1
+                  className="mt-5 max-w-4xl text-neutral-950 sm:mt-6"
+                  style={{
+                    fontSize: "clamp(40px, 7vw, 86px)",
+                    lineHeight: 0.98,
+                    fontWeight: 600,
+                    letterSpacing: "-0.02em",
+                  }}
+                >
+                  Shaping{" "}
+                  <span className="relative inline-block font-semibold text-[#0b0f1a]">
+                    Discipline
+                    <span
+                      aria-hidden="true"
+                      className="absolute right-0 -bottom-1 left-0 h-2 rounded-full bg-[#ef4d23]/25"
+                    />
+                  </span>
+                  <br />
+                  of tomorrow
+                </h1>
+
+                <p
+                  className="mx-auto mt-4 max-w-xl px-2 text-neutral-700 sm:mt-6 lg:mx-0 lg:px-0"
+                  style={{ fontSize: "clamp(14px, 2vw, 17px)" }}
+                >
+                  The AI accountability coach that checks in through Telegram.
+                </p>
+
+                <a
+                  href={telegramHref}
+                  className="mt-6 inline-flex min-w-[220px] items-center justify-between gap-3 rounded-full bg-[#229ED9] py-2 pr-2 pl-5 text-[14px] font-semibold text-white shadow-sm shadow-sky-900/15 sm:mt-8 sm:py-2.5 sm:pl-6"
+                >
+                  <span className="inline-flex items-center gap-2 text-white">
+                    <TelegramLogo />
+                    Start on Telegram
+                  </span>
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/15 sm:h-7 sm:w-7">
+                    <ChevronRight className="h-4 w-4" strokeWidth={2} />
+                  </span>
+                </a>
+              </div>
+
+              <div className="hidden justify-center lg:flex">
+                <MoggedAIPhoneMockup />
+              </div>
             </div>
-
-            <h1
-              className="mt-5 max-w-4xl text-neutral-950 sm:mt-6"
-              style={{
-                fontSize: "clamp(36px, 8vw, 72px)",
-                lineHeight: 1.05,
-                fontWeight: 500,
-                letterSpacing: "-0.02em",
-              }}
-            >
-              Shaping{" "}
-              <span className="relative inline-block font-semibold text-[#0b0f1a]">
-                Discipline
-                <span
-                  aria-hidden="true"
-                  className="absolute right-0 -bottom-1 left-0 h-2 rounded-full bg-[#ef4d23]/25"
-                />
-              </span>
-              <br />
-              of tomorrow
-            </h1>
-
-            <p
-              className="mt-4 px-2 text-neutral-700 sm:mt-6"
-              style={{ fontSize: "clamp(13px, 3.5vw, 16px)" }}
-            >
-              The AI accountability coach that checks in through Telegram.
-            </p>
-
-            <a
-              href={telegramHref}
-              className="mt-6 inline-flex min-w-[220px] items-center justify-between gap-3 rounded-full bg-[#229ED9] py-2 pr-2 pl-5 text-[14px] font-semibold text-white shadow-sm shadow-sky-900/15 sm:mt-8 sm:py-2.5 sm:pl-6"
-            >
-              <span className="inline-flex items-center gap-2 text-white">
-                <TelegramLogo />
-                Start on Telegram
-              </span>
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/15 sm:h-7 sm:w-7">
-                <ChevronRight className="h-4 w-4" strokeWidth={2} />
-              </span>
-            </a>
           </div>
         </div>
       </section>

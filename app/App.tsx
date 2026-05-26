@@ -137,13 +137,8 @@ export default function App() {
           <div className="flex flex-1 items-center justify-center px-4 py-8 sm:px-8 lg:py-10">
             <div className="grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[1fr_360px] lg:gap-12">
               <div className="-translate-y-6 text-center lg:-translate-y-12 lg:text-left xl:-translate-y-16">
-                <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-[14px] font-semibold leading-5 tracking-[-0.02em] text-neutral-900 shadow-sm">
-                  <span className="h-2 w-2 rounded-full bg-[#ef4d23]" />
-                  Mogged AI
-                </div>
-
                 <h1
-                  className="mt-5 max-w-4xl text-neutral-800 sm:mt-6"
+                  className="max-w-4xl text-neutral-800"
                   style={{
                     fontFamily: "'Host Grotesk', 'Inter', sans-serif",
                     fontSize: "clamp(52px, 6.4vw, 92px)",

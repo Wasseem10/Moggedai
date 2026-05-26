@@ -89,11 +89,11 @@ export default function Navbar() {
 
           <a
             href="/dashboard"
-            className="inline-flex items-center gap-2 rounded-full bg-[#ef4d23] py-2 pr-1.5 pl-5 text-[15px] font-semibold leading-6 tracking-[-0.02em] text-white md:pl-5"
+            className="inline-flex items-center gap-2 rounded-full border border-white/45 bg-white/28 py-2 pr-1.5 pl-5 text-[15px] font-semibold leading-6 tracking-[-0.02em] text-neutral-950 shadow-[inset_0_1px_0_rgba(255,255,255,0.75),inset_0_-1px_0_rgba(255,255,255,0.22),0_12px_34px_rgba(20,50,100,0.12)] backdrop-blur-xl md:pl-5"
           >
             <span className="hidden md:inline">Open dashboard</span>
             <span className="md:hidden">Dashboard</span>
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/20">
+            <span className="flex h-7 w-7 items-center justify-center rounded-full border border-white/45 bg-white/35 shadow-[inset_0_1px_0_rgba(255,255,255,0.72)]">
               <ChevronRight className="h-4 w-4" strokeWidth={2} />
             </span>
           </a>

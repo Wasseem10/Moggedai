@@ -138,7 +138,7 @@ export default function App() {
             <div className="grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[1fr_360px] lg:gap-12">
               <div className="-translate-y-14 text-center lg:-translate-y-24 lg:text-left xl:-translate-y-28">
                 <h1
-                  className="max-w-4xl text-neutral-900"
+                  className="max-w-4xl text-[#050505]"
                   style={{
                     fontFamily: "'Host Grotesk', 'Inter', sans-serif",
                     fontSize: "clamp(52px, 6.4vw, 92px)",
@@ -148,7 +148,7 @@ export default function App() {
                   }}
                 >
                   The AI That Keeps{" "}
-                  <span className="relative inline-block font-semibold text-neutral-900">
+                  <span className="relative inline-block font-semibold text-[#050505]">
                     You On Track.
                   </span>
                 </h1>

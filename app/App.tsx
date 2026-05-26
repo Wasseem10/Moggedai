@@ -295,7 +295,7 @@ export default function App() {
           {whoCards.map((card) => (
             <article
               key={card.title}
-              className="relative overflow-hidden rounded-3xl border border-neutral-200/80 bg-white/86 p-6 text-[#0b0f1a] shadow-[0_18px_55px_rgba(15,23,42,0.055)] backdrop-blur"
+              className="relative overflow-hidden rounded-3xl border border-[#e8e6e1] bg-[#fbfaf8] p-6 text-[#0b0f1a] shadow-[0_18px_55px_rgba(15,23,42,0.045)]"
             >
               <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
               <span className="absolute top-0 left-6 h-1 w-12 rounded-b-full bg-neutral-300" />

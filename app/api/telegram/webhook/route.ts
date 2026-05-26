@@ -23,6 +23,11 @@ type RecentTelegramMessage = {
   message_text: string
 }
 
+type ExtractedReminder = {
+  reminder_text: string
+  due_at: string
+}
+
 const memoryIntentPattern =
   /\b(remember|remind|ping|follow up|track|goal|goals|study|gym|deadline|appointment|errand|todo|to-do|task|don't let me forget|dont let me forget|keep me on track)\b/i
 
@@ -47,6 +52,16 @@ function mergeMemory(currentMemory: string | null, userMessage: string): string 
   if (!currentMemory) return userMessage
   if (currentMemory.toLowerCase().includes(userMessage.toLowerCase())) return currentMemory
   return `${currentMemory}\n- ${userMessage}`
+}
+
+function safeJsonFromText(text: string): unknown {
+  const cleaned = text
+    .trim()
+    .replace(/^```json\s*/i, '')
+    .replace(/^```\s*/i, '')
+    .replace(/```$/i, '')
+    .trim()
+  return JSON.parse(cleaned)
 }
 
 async function sendTelegramMessage(chatId: number, text: string) {
@@ -144,6 +159,60 @@ reply only with the message.`
   return result.response.text().trim()
 }
 
+async function extractReminder(userMessage: string, recentMessages: RecentTelegramMessage[]): Promise<ExtractedReminder | null> {
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+
+  const conversation = recentMessages
+    .slice(-6)
+    .map((message) => `${message.role}: ${message.message_text}`)
+    .join('\n')
+
+  const prompt = `extract a reminder from this Telegram conversation.
+
+today is ${getCurrentDateLabel()}.
+the user's timezone is America/New_York.
+
+return ONLY valid JSON in one of these exact shapes:
+{"has_reminder":true,"reminder_text":"...","due_at":"2026-05-26T14:00:00.000-04:00"}
+{"has_reminder":false}
+
+rules:
+- only return has_reminder true when the user clearly asks to be reminded, pinged, followed up with, or checked in at a future time
+- if they mention a task or goal but no future time, return has_reminder false
+- due_at must be an ISO datetime with timezone offset
+- reminder_text should be short and human, like "study for bio exam" or "go to the gym"
+
+recent conversation:
+${conversation || '(none)'}
+
+latest user message:
+"${userMessage}"`
+
+  const result = await model.generateContent(prompt)
+  let parsed: Partial<ExtractedReminder> & { has_reminder?: boolean }
+  try {
+    parsed = safeJsonFromText(result.response.text()) as Partial<ExtractedReminder> & {
+      has_reminder?: boolean
+    }
+  } catch (err) {
+    console.warn('[extractReminder] failed to parse reminder JSON:', err)
+    return null
+  }
+
+  if (!parsed.has_reminder || !parsed.reminder_text || !parsed.due_at) return null
+
+  const due = new Date(parsed.due_at)
+  if (Number.isNaN(due.getTime()) || due.getTime() <= Date.now()) {
+    return null
+  }
+
+  return {
+    reminder_text: parsed.reminder_text,
+    due_at: due.toISOString(),
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const update = await req.json() as TelegramUpdate
@@ -208,21 +277,39 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true })
     }
 
+    const recentMessages = await getRecentMessages(chatId)
+    let savedReminder: ExtractedReminder | null = null
+
     if (shouldSaveToMemory(text)) {
       const nextMemory = mergeMemory(user.goal, text)
       await db.query(
         `UPDATE telegram_users SET goal = $1, state = 'ready', active = true, updated_at = NOW() WHERE chat_id = $2`,
         [nextMemory, chatId]
       )
+
+      savedReminder = await extractReminder(text, recentMessages)
+      if (savedReminder) {
+        await db.query(
+          `INSERT INTO telegram_reminders (chat_id, reminder_text, due_at)
+           VALUES ($1, $2, $3)`,
+          [chatId, savedReminder.reminder_text, savedReminder.due_at]
+        )
+      }
     }
 
-    const recentMessages = await getRecentMessages(chatId)
     const { rows: freshRows } = await db.query(
       `SELECT goal FROM telegram_users WHERE chat_id = $1`,
       [chatId]
     )
     const memory = freshRows[0]?.goal || user.goal || ''
-    const reply = await generateAssistantReply(memory, text, recentMessages)
+    const baseReply = await generateAssistantReply(memory, text, recentMessages)
+    const reply = savedReminder
+      ? `${baseReply}\n\nsaved reminder for ${new Intl.DateTimeFormat('en-US', {
+          dateStyle: 'medium',
+          timeStyle: 'short',
+          timeZone: 'America/New_York',
+        }).format(new Date(savedReminder.due_at))}.`
+      : baseReply
     await sendAndRemember(chatId, reply)
     return NextResponse.json({ success: true })
   } catch (err) {

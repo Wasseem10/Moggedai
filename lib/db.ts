@@ -106,6 +106,19 @@ export async function ensureSchema(): Promise<void> {
       message_text TEXT       NOT NULL,
       created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
+
+    CREATE TABLE IF NOT EXISTS telegram_reminders (
+      id          UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+      chat_id     BIGINT      NOT NULL REFERENCES telegram_users(chat_id) ON DELETE CASCADE,
+      reminder_text TEXT      NOT NULL,
+      due_at      TIMESTAMPTZ NOT NULL,
+      sent_at     TIMESTAMPTZ,
+      created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+
+    CREATE INDEX IF NOT EXISTS telegram_reminders_due_idx
+      ON telegram_reminders (due_at)
+      WHERE sent_at IS NULL;
   `)
 
   // Safe column migrations — handles databases that pre-existed before these
@@ -128,6 +141,9 @@ export async function ensureSchema(): Promise<void> {
     `ALTER TABLE telegram_users ADD COLUMN IF NOT EXISTS state TEXT NOT NULL DEFAULT 'awaiting_goal'`,
     `ALTER TABLE telegram_users ADD COLUMN IF NOT EXISTS active BOOLEAN NOT NULL DEFAULT true`,
     `ALTER TABLE telegram_users ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()`,
+    `ALTER TABLE telegram_reminders ADD COLUMN IF NOT EXISTS reminder_text TEXT`,
+    `ALTER TABLE telegram_reminders ADD COLUMN IF NOT EXISTS due_at TIMESTAMPTZ`,
+    `ALTER TABLE telegram_reminders ADD COLUMN IF NOT EXISTS sent_at TIMESTAMPTZ`,
     `ALTER TABLE users  ADD COLUMN IF NOT EXISTS stripe_customer_id      TEXT`,
     `ALTER TABLE users  ADD COLUMN IF NOT EXISTS stripe_subscription_id  TEXT`,
     `ALTER TABLE users  ADD COLUMN IF NOT EXISTS plan TEXT NOT NULL DEFAULT 'free'`,

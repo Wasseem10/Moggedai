@@ -3,6 +3,25 @@ import { ensureSchema, getDb } from '@/lib/db'
 import { sendSms } from '@/lib/sms'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
+async function sendTelegramMessage(chatId: number, text: string) {
+  const token = process.env.TELEGRAM_BOT_TOKEN
+  if (!token) throw new Error('TELEGRAM_BOT_TOKEN is not set')
+
+  const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text,
+      disable_web_page_preview: true,
+    }),
+  })
+
+  if (!res.ok) {
+    throw new Error(`Telegram send failed (${res.status}): ${await res.text()}`)
+  }
+}
+
 function getLocalTime(timezone: string): string {
   try {
     const now = new Date()
@@ -105,7 +124,39 @@ export async function GET(req: NextRequest) {
   await ensureSchema()
   const db = getDb()
   const now = new Date()
-  const results = { sent: 0, followups: 0, skipped: 0, errors: 0 }
+  const results = { sent: 0, followups: 0, telegramReminders: 0, skipped: 0, errors: 0 }
+
+  // ── 0. Send due Telegram reminders ───────────────────────────────────────
+  const { rows: dueTelegramReminders } = await db.query(`
+    SELECT tr.id, tr.chat_id, tr.reminder_text
+    FROM telegram_reminders tr
+    JOIN telegram_users tu ON tu.chat_id = tr.chat_id
+    WHERE tr.due_at <= $1
+      AND tr.sent_at IS NULL
+      AND tu.active = true
+    ORDER BY tr.due_at ASC
+    LIMIT 50
+  `, [now.toISOString()])
+
+  for (const reminder of dueTelegramReminders) {
+    try {
+      const text = `ping: ${reminder.reminder_text}`
+      await sendTelegramMessage(Number(reminder.chat_id), text)
+      await db.query(
+        `UPDATE telegram_reminders SET sent_at = $1 WHERE id = $2`,
+        [now.toISOString(), reminder.id]
+      )
+      await db.query(
+        `INSERT INTO telegram_messages (chat_id, role, message_text)
+         VALUES ($1, 'assistant', $2)`,
+        [reminder.chat_id, text]
+      )
+      results.telegramReminders++
+    } catch (err) {
+      console.error('Telegram reminder error:', err)
+      results.errors++
+    }
+  }
 
   // ── 1. Send follow-ups for unanswered messages ────────────────────────────
   const { rows: pendingFollowups } = await db.query(`

@@ -9,28 +9,6 @@ import { useState } from "react";
 
 const navItems = ["Home", "Features", "About", "Pages"];
 
-function FlowerLogo() {
-  const petals = Array.from({ length: 8 }, (_, index) => {
-    const angle = (index / 8) * Math.PI * 2;
-    const cx = 16 + Math.cos(angle) * 10;
-    const cy = 16 + Math.sin(angle) * 10;
-
-    return <circle key={index} cx={cx} cy={cy} r="3.5" />;
-  });
-
-  return (
-    <svg
-      aria-hidden="true"
-      className="h-7 w-7 shrink-0 text-[#ef4d23] sm:h-8 sm:w-8"
-      viewBox="0 0 32 32"
-      fill="currentColor"
-    >
-      {petals}
-      <circle cx="16" cy="16" r="3.5" />
-    </svg>
-  );
-}
-
 function NavLink({ item, mobile = false }: { item: string; mobile?: boolean }) {
   const isHome = item === "Home";
   const href =
@@ -71,7 +49,12 @@ export default function Navbar() {
   return (
     <header className="flex justify-center px-3 pt-4 sm:px-4 sm:pt-6">
       <nav className="relative flex w-full max-w-[820px] items-center gap-4 rounded-full border border-neutral-200 bg-white py-2.5 pr-2.5 pl-2.5 shadow-sm">
-        <FlowerLogo />
+        <a
+          href="#"
+          className="shrink-0 text-[22px] font-bold leading-none tracking-[-0.04em] text-neutral-950"
+        >
+          Stay<span className="text-[#229ED9]">Pinged</span>
+        </a>
 
         <div className="hidden items-center gap-7 md:flex">
           {navItems.map((item) => (

@@ -98,6 +98,14 @@ export async function ensureSchema(): Promise<void> {
       created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
+
+    CREATE TABLE IF NOT EXISTS telegram_messages (
+      id          UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+      chat_id     BIGINT      NOT NULL REFERENCES telegram_users(chat_id) ON DELETE CASCADE,
+      role        TEXT        NOT NULL,
+      message_text TEXT       NOT NULL,
+      created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
   `)
 
   // Safe column migrations — handles databases that pre-existed before these

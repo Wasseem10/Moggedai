@@ -18,6 +18,11 @@ type TelegramUpdate = {
   message?: TelegramMessage
 }
 
+type RecentTelegramMessage = {
+  role: 'user' | 'assistant'
+  message_text: string
+}
+
 function requireEnv(name: string): string {
   const value = process.env[name]
   if (!value) throw new Error(`${name} is not set`)
@@ -41,16 +46,67 @@ async function sendTelegramMessage(chatId: number, text: string) {
   }
 }
 
-async function generateCoachReply(goal: string, userMessage: string): Promise<string> {
+async function rememberMessage(chatId: number, role: 'user' | 'assistant', text: string) {
+  const db = getDb()
+  await db.query(
+    `INSERT INTO telegram_messages (chat_id, role, message_text)
+     VALUES ($1, $2, $3)`,
+    [chatId, role, text]
+  )
+}
+
+async function getRecentMessages(chatId: number): Promise<RecentTelegramMessage[]> {
+  const db = getDb()
+  const { rows } = await db.query(
+    `SELECT role, message_text
+     FROM telegram_messages
+     WHERE chat_id = $1
+     ORDER BY created_at DESC
+     LIMIT 10`,
+    [chatId]
+  )
+
+  return rows.reverse() as RecentTelegramMessage[]
+}
+
+async function sendAndRemember(chatId: number, text: string) {
+  await sendTelegramMessage(chatId, text)
+  await rememberMessage(chatId, 'assistant', text)
+}
+
+async function generateAssistantReply(memory: string, userMessage: string, recentMessages: RecentTelegramMessage[]): Promise<string> {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
   const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
 
-  const prompt = `you're an accountability coach texting inside telegram. write like a real person: short, calm, natural, lowercase. you feel like a sharp friend who remembers what they said they wanted, not a bot.
+  const conversation = recentMessages
+    .map((message) => `${message.role}: ${message.message_text}`)
+    .join('\n')
 
-their goal: "${goal || 'stay consistent with their goal'}"
-they just said: "${userMessage}"
+  const prompt = `you are StayPinged, a personal assistant brain inside Telegram.
 
-reply in 1-2 sentences max. no command instructions. no "reply done". no corporate language. if they are making an excuse, push back without sounding cringe. if they completed it, acknowledge it naturally. reply only with the message.`
+your job:
+- remember small details, tasks, follow-ups, dates, people, errands, ideas, and context
+- help the user offload mental clutter
+- be concise, useful, calm, and natural
+- sound like a smart personal assistant texting, not a motivational coach
+- if they ask you to remember something, confirm what you saved
+- if they ask to move/reschedule something, acknowledge the new timing
+- if they ask what something was about, summarize from memory/context
+- if timing is vague, ask one short clarifying question
+- do not hype them up, shame them, pressure them, or talk about streaks
+- do not say you completed actions outside Telegram unless the system can actually do them
+- write in lowercase unless a name/title needs capitalization
+
+saved memory / current focus:
+"${memory || 'nothing saved yet'}"
+
+recent conversation:
+${conversation || '(none)'}
+
+latest user message:
+"${userMessage}"
+
+reply in 1-2 short sentences. reply only with the message.`
 
   const result = await model.generateContent(prompt)
   return result.response.text().trim()
@@ -87,14 +143,16 @@ export async function POST(req: NextRequest) {
     )
     const user = rows[0] as { goal: string | null; state: string }
 
+    await rememberMessage(chatId, 'user', text)
+
     if (/^\/start/i.test(text)) {
       await db.query(
-        `UPDATE telegram_users SET state = 'awaiting_goal', active = true, updated_at = NOW() WHERE chat_id = $1`,
+        `UPDATE telegram_users SET state = 'awaiting_memory', active = true, updated_at = NOW() WHERE chat_id = $1`,
         [chatId]
       )
-      await sendTelegramMessage(
+      await sendAndRemember(
         chatId,
-        "alright, what are we working on? say it the way you'd say it to a friend."
+        "i'm here. send me anything you want me to remember, track, or ping you about."
       )
       return NextResponse.json({ success: true })
     }
@@ -104,40 +162,32 @@ export async function POST(req: NextRequest) {
         `UPDATE telegram_users SET active = false, updated_at = NOW() WHERE chat_id = $1`,
         [chatId]
       )
-      await sendTelegramMessage(chatId, "got it. i'll chill for now.")
+      await sendAndRemember(chatId, "got it. i'll stay quiet for now.")
       return NextResponse.json({ success: true })
     }
 
-    if (/^\/?(reset|goal)$/i.test(text)) {
+    if (/^\/?(reset|forget|clear)$/i.test(text)) {
       await db.query(
-        `UPDATE telegram_users SET goal = NULL, state = 'awaiting_goal', active = true, updated_at = NOW() WHERE chat_id = $1`,
+        `UPDATE telegram_users SET goal = NULL, state = 'awaiting_memory', active = true, updated_at = NOW() WHERE chat_id = $1`,
         [chatId]
       )
-      await sendTelegramMessage(chatId, "okay, what are we switching the focus to?")
+      await db.query(`DELETE FROM telegram_messages WHERE chat_id = $1`, [chatId])
+      await sendAndRemember(chatId, "memory cleared. what should i keep track of now?")
       return NextResponse.json({ success: true })
     }
 
-    if (!user.goal || user.state === 'awaiting_goal') {
+    if (!user.goal || user.state === 'awaiting_goal' || user.state === 'awaiting_memory') {
       await db.query(
         `UPDATE telegram_users SET goal = $1, state = 'ready', active = true, updated_at = NOW() WHERE chat_id = $2`,
         [text, chatId]
       )
-      await sendTelegramMessage(chatId, `got you. i'll keep you honest about ${text}.`)
+      await sendAndRemember(chatId, `saved. i'll keep track of: ${text}`)
       return NextResponse.json({ success: true })
     }
 
-    if (/^(done|finished|completed|did it|i did it)$/i.test(text)) {
-      await sendTelegramMessage(chatId, `good. that's one real rep toward ${user.goal}.`)
-      return NextResponse.json({ success: true })
-    }
-
-    if (/^skip$/i.test(text)) {
-      await sendTelegramMessage(chatId, `alright. not ideal, but don't let one miss turn into the whole pattern.`)
-      return NextResponse.json({ success: true })
-    }
-
-    const reply = await generateCoachReply(user.goal, text)
-    await sendTelegramMessage(chatId, reply)
+    const recentMessages = await getRecentMessages(chatId)
+    const reply = await generateAssistantReply(user.goal, text, recentMessages)
+    await sendAndRemember(chatId, reply)
     return NextResponse.json({ success: true })
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)

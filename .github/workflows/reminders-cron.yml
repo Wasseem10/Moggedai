@@ -1,0 +1,17 @@
+name: Reminder Cron
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping-reminders:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run reminder job
+        run: |
+          curl --fail --silent --show-error \
+            --request GET \
+            --header "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            "https://moggedai.com/api/cron/send-texts"
